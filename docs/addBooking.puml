@@ -1,0 +1,18 @@
+@startuml
+hide footbox
+
+actor User
+ref over User, Gateway, SSO, BookingService, DB
+ getAvailableSlots
+end ref
+
+User -> Gateway: POST /booking/room/{id}/slot/{ids}
+Gateway -> SSO: authenticateUser(token)
+SSO -> Gateway: userDetails
+Gateway -> BookingService: POST /booking/room/{id}/user/{id}/slot/{ids}/
+BookingService -> DB: updateSlot(userId, roomId, slotId)
+DB -> BookingService: slotUpdated
+BookingService -> Gateway: 204
+Gateway -> User: 204
+
+@enduml

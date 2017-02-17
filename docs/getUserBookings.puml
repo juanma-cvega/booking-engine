@@ -1,0 +1,13 @@
+@startuml
+    hide footbox
+    actor User
+    User -> Gateway: GET /booking/user/slot
+    Gateway -> SSO: authenticateUser(token)
+    SSO -> Gateway: userDetails
+    Gateway -> BookingService: GET /booking/user/{id}/slot
+    database DB
+    BookingService -> DB: getSlotsFor(userId)
+    DB -> BookingService: slots
+    BookingService -> Gateway:200 slots
+    Gateway -> User: 200 slots
+@enduml

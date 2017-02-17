@@ -1,0 +1,23 @@
+@startuml
+hide footbox
+
+alt from User bookings
+ref over User, Gateway, SSO, BookingService, DB
+    getUserBookings
+end ref
+
+else from Available slots
+ref over User, Gateway, SSO, BookingService, DB
+    getAvailableSlots
+end ref
+end
+    User -> Gateway: DELETE /booking/user/slot/{id}
+    Gateway -> SSO: authenticateUser(token)
+    SSO -> Gateway: userDetails
+    Gateway -> BookingService: DELETE /booking/user/{id}/slot/{id}
+    BookingService -> DB: deleteSlotFrom(userId, slotId)
+    DB -> BookingService: slotDeleted
+    BookingService -> Gateway: 204
+    Gateway -> User: 204
+
+@enduml

@@ -1,0 +1,16 @@
+@startuml
+hide footbox
+
+actor User
+User -> Gateway: GET /booking/room/{id}
+Gateway -> SSO: authenticateUser(token)
+SSO -> Gateway: userDetails
+Gateway -> BookingService: GET /booking/room/{id}
+database DB
+BookingService -> DB: getSlotsFor(roomId)
+DB -> BookingService: slots
+BookingService -> BookingService: addSlotAvailabilityForUser
+BookingService -> Gateway:200 slots
+Gateway -> User: 200 slots
+
+@enduml
