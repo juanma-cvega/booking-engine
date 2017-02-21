@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface SlotComponent {
 
-    void create(CreateSlotRequest createSlotRequest);
+    SlotResource create(CreateSlotRequest createSlotRequest);
 
     SlotResource find(Long slotId, Long roomId);
 

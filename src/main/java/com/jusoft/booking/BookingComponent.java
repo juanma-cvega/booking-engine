@@ -4,9 +4,11 @@ import java.util.List;
 
 public interface BookingComponent {
 
-    void add(Long userId, Long roomId, Long slotId);
+    BookingResource book(Long userId, Long roomId, Long slotId);
 
-    void remove(Long userId, Long slotId);
+    void cancel(Long userId, Long bookingId);
 
-    List<BookingResource> getBookingsFor(Long userId);
+    BookingResource find(Long userId, Long bookingId);
+
+    List<BookingResource> getFor(Long userId);
 }

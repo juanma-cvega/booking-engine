@@ -24,12 +24,14 @@ class BookingService {
     /* The code explicitly doesn't check whether the slot is booked already. That constraint is set at the database level.
     * Validating it here would cause a performance penalty as it would require a call to the database and it won't guarantee
     * consistency in a multithreaded setup*/
-    void add(CreateBookingRequest createBookingRequest) {
+    Booking book(CreateBookingRequest createBookingRequest) {
         SlotResource slotResource = slotComponent.find(createBookingRequest.getSlotId(), createBookingRequest.getRoomId());
         Slot slot = slotResourceFactory.createFrom(slotResource);
 
         validateSlotIsOpen(slot, createBookingRequest.getRequestTime());
-        bookingRepository.save(bookingFactory.create(createBookingRequest, slot));
+        Booking newBooking = bookingFactory.create(createBookingRequest, slot);
+        bookingRepository.save(newBooking);
+        return newBooking;
     }
 
     //TODO provide a better way of handling validations
@@ -48,7 +50,7 @@ class BookingService {
         }
     }
 
-    List<Booking> getBookingsFor(long userId) {
+    List<Booking> getFor(long userId) {
         return bookingRepository.getByUser(userId);
     }
 
@@ -56,5 +58,11 @@ class BookingService {
         if (slot.getStartDate().isAfter(requestTime)) {
             throw new SlotAlreadyStartedException(slot.getSlotId(), slot.getRoomId(), slot.getStartDate());
         }
+    }
+
+    //FIXME normalize validation as it's done in two places
+    public Booking find(Long userId, Long bookingId) {
+        return bookingRepository.find(bookingId)
+                .orElseThrow(() -> new BookingNotFoundException(userId, bookingId));
     }
 }

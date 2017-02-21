@@ -15,8 +15,9 @@ public class SlotComponentInProcess implements SlotComponent {
     }
 
     @Override
-    public void create(CreateSlotRequest createSlotRequest) {
-        slotService.create(createSlotRequest);
+    public SlotResource create(CreateSlotRequest createSlotRequest) {
+        Slot slotCreated = slotService.create(createSlotRequest);
+        return slotResourceFactory.createFrom(slotCreated);
     }
 
     @Override

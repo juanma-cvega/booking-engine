@@ -8,38 +8,36 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.List;
 
-import static java.time.LocalDateTime.now;
-import static java.util.stream.Collectors.toList;
-
-@RequestMapping(value = "/bookings")
+@RequestMapping(value = "/bookings", consumes = "application/json", produces = "application/json")
 public class BookingComponentRest implements BookingComponent {
-    private final BookingService bookingService;
-    private final BookingResourceFactory bookingResourceFactory;
+    private final BookingComponent bookingComponent;
 
-    BookingComponentRest(BookingService bookingService, BookingResourceFactory bookingResourceFactory) {
-        this.bookingService = bookingService;
-        this.bookingResourceFactory = bookingResourceFactory;
+    BookingComponentRest(BookingComponent bookingComponent) {
+        this.bookingComponent = bookingComponent;
     }
 
     @Override
-    @RequestMapping(consumes = "application/json", produces = "application/json", method = RequestMethod.POST, value = "/user/{userId}/room/{roomId}/slot/{slotId}")
+    @RequestMapping(method = RequestMethod.POST, value = "/user/{userId}/room/{roomId}/slot/{slotId}")
+    public BookingResource book(@PathVariable Long userId, @PathVariable Long roomId, @PathVariable Long slotId) {
+        return bookingComponent.book(userId, roomId, slotId);
+    }
+
+    @Override
+    @RequestMapping(method = RequestMethod.DELETE, value = "/user/{userId}/booking/{bookingId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void add(@PathVariable Long userId, @PathVariable Long roomId, @PathVariable Long slotId) {
-        CreateBookingRequest createBookingRequest = new CreateBookingRequest(userId, roomId, slotId, now());
-        bookingService.add(createBookingRequest);
+    public void cancel(@PathVariable Long userId, @PathVariable Long bookingId) {
+        bookingComponent.cancel(userId, bookingId);
     }
 
     @Override
-    @RequestMapping(consumes = "application/json", produces = "application/json", method = RequestMethod.DELETE, value = "/user/{userId}/slot/{slotId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void remove(@PathVariable Long userId, @PathVariable Long slotId) {
-        CancelBookingRequest cancelBookingRequest = new CancelBookingRequest(userId, slotId, now());
-        bookingService.cancel(cancelBookingRequest);
+    @RequestMapping(method = RequestMethod.GET, value = "/user/{userId}/booking/{bookingId}")
+    public BookingResource find(@PathVariable Long userId, @PathVariable Long bookingId) {
+        return bookingComponent.find(userId, bookingId);
     }
 
     @Override
-    @RequestMapping(produces = "application/json", method = RequestMethod.GET, value = "/user/{userId}")
-    public List<BookingResource> getBookingsFor(@PathVariable Long userId) {
-        return bookingService.getBookingsFor(userId).stream().map(bookingResourceFactory::createFrom).collect(toList());
+    @RequestMapping(method = RequestMethod.GET, value = "/user/{userId}")
+    public List<BookingResource> getFor(@PathVariable Long userId) {
+        return bookingComponent.getFor(userId);
     }
 }

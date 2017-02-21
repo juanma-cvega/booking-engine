@@ -16,8 +16,13 @@ public class BookingComponentConfig {
     private SlotComponent slotComponentInProcess;
 
     @Bean
-    public BookingComponent bookingComponent() {
-        return new BookingComponentRest(bookingService(), bookingResourceFactory());
+    public BookingComponent bookingComponentRest() {
+        return new BookingComponentRest(bookingComponentInProcess());
+    }
+
+    @Bean
+    public BookingComponent bookingComponentInProcess() {
+        return new BookingComponentInProcess(bookingService(), bookingResourceFactory());
     }
 
     private BookingResourceFactory bookingResourceFactory() {

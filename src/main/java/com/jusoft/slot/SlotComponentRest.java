@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequestMapping(value = "/slots")
+@RequestMapping(value = "/slots", consumes = "application/json", produces = "application/json")
 public class SlotComponentRest implements SlotComponent {
 
     private final SlotComponent slotComponent;
@@ -15,18 +15,19 @@ public class SlotComponentRest implements SlotComponent {
     }
 
     @Override
-    public void create(CreateSlotRequest createSlotRequest) {
-
+    @RequestMapping(method = RequestMethod.POST)
+    public SlotResource create(CreateSlotRequest createSlotRequest) {
+        return slotComponent.create(createSlotRequest);
     }
 
     @Override
-    @RequestMapping(consumes = "application/json", produces = "application/json", method = RequestMethod.GET, value = "/room/{roomId}/slot/{slotId}")
+    @RequestMapping(method = RequestMethod.GET, value = "/room/{roomId}/slot/{slotId}")
     public SlotResource find(@PathVariable Long roomId, @PathVariable Long slotId) {
         return slotComponent.find(slotId, roomId);
     }
 
     @Override
-    @RequestMapping(consumes = "application/json", produces = "application/json", method = RequestMethod.GET, value = "/room/{roomId}")
+    @RequestMapping(method = RequestMethod.GET, value = "/room/{roomId}")
     public List<SlotResource> getSlotsFor(@PathVariable Long roomId) {
         return slotComponent.getSlotsFor(roomId);
     }

@@ -13,8 +13,10 @@ class SlotService {
         this.slotFactory = slotFactory;
     }
 
-    void create(CreateSlotRequest createSlotRequest) {
-        slotRepository.save(slotFactory.createFrom(createSlotRequest));
+    Slot create(CreateSlotRequest createSlotRequest) {
+        Slot newSlot = slotFactory.createFrom(createSlotRequest);
+        slotRepository.save(newSlot);
+        return newSlot;
     }
 
     List<Slot> getSlotsFor(long roomId) {

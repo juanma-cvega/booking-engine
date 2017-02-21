@@ -8,7 +8,7 @@ class SlotFactory {
 
     private final Supplier<Long> idGenerator;
 
-    public SlotFactory(Supplier<Long> idGenerator) {
+    SlotFactory(Supplier<Long> idGenerator) {
         this.idGenerator = idGenerator;
     }
 
