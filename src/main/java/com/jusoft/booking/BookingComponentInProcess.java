@@ -2,30 +2,29 @@ package com.jusoft.booking;
 
 import java.util.List;
 
-import static java.time.LocalDateTime.now;
 import static java.util.stream.Collectors.toList;
 
 public class BookingComponentInProcess implements BookingComponent {
 
     private final BookingService bookingService;
     private final BookingResourceFactory bookingResourceFactory;
+    private final BookingRequestFactory bookingRequestFactory;
 
-    BookingComponentInProcess(BookingService bookingService, BookingResourceFactory bookingResourceFactory) {
+    BookingComponentInProcess(BookingService bookingService, BookingResourceFactory bookingResourceFactory, BookingRequestFactory bookingRequestFactory) {
         this.bookingService = bookingService;
         this.bookingResourceFactory = bookingResourceFactory;
+        this.bookingRequestFactory = bookingRequestFactory;
     }
 
     @Override
     public BookingResource book(Long userId, Long roomId, Long slotId) {
-        CreateBookingRequest createBookingRequest = new CreateBookingRequest(userId, roomId, slotId, now());
-        Booking newBooking = bookingService.book(createBookingRequest);
+        Booking newBooking = bookingService.book(bookingRequestFactory.createFrom(userId, roomId, slotId));
         return bookingResourceFactory.createFrom(newBooking);
     }
 
     @Override
     public void cancel(Long userId, Long bookingId) {
-        CancelBookingRequest cancelBookingRequest = new CancelBookingRequest(userId, bookingId, now());
-        bookingService.cancel(cancelBookingRequest);
+        bookingService.cancel(bookingRequestFactory.createFrom(userId, bookingId));
     }
 
     @Override

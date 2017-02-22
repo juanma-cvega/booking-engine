@@ -1,6 +1,4 @@
-package com.jusoft.holder;
-
-import com.jusoft.slot.SlotResource;
+package com.jusoft.slot;
 
 import java.util.ArrayList;
 import java.util.List;

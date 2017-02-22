@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.time.LocalDateTime;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Supplier;
@@ -15,6 +16,9 @@ public class BookingComponentConfig {
     @Autowired
     private SlotComponent slotComponentInProcess;
 
+    @Autowired
+    private Supplier<LocalDateTime> instantSupplier;
+
     @Bean
     public BookingComponent bookingComponentRest() {
         return new BookingComponentRest(bookingComponentInProcess());
@@ -22,7 +26,11 @@ public class BookingComponentConfig {
 
     @Bean
     public BookingComponent bookingComponentInProcess() {
-        return new BookingComponentInProcess(bookingService(), bookingResourceFactory());
+        return new BookingComponentInProcess(bookingService(), bookingResourceFactory(), bookingRequestFactory());
+    }
+
+    private BookingRequestFactory bookingRequestFactory() {
+        return new BookingRequestFactory(instantSupplier);
     }
 
     private BookingResourceFactory bookingResourceFactory() {

@@ -1,5 +1,7 @@
-package com.jusoft.holder;
+package com.jusoft;
 
+import com.jusoft.booking.BookingHolder;
+import com.jusoft.slot.SlotHolder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

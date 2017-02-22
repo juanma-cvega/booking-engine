@@ -1,4 +1,4 @@
-package com.jusoft;
+package com.jusoft.runner;
 
 import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;

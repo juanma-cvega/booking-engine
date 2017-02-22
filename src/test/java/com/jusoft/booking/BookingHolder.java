@@ -1,6 +1,4 @@
-package com.jusoft.holder;
-
-import com.jusoft.booking.BookingResource;
+package com.jusoft.booking;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -55,7 +55,7 @@ class BookingService {
     }
 
     private void validateSlotIsOpen(Slot slot, LocalDateTime requestTime) {
-        if (slot.getStartDate().isAfter(requestTime)) {
+        if (slot.getStartDate().isBefore(requestTime)) {
             throw new SlotAlreadyStartedException(slot.getSlotId(), slot.getRoomId(), slot.getStartDate());
         }
     }
