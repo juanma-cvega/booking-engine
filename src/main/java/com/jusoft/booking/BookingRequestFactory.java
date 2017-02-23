@@ -11,11 +11,11 @@ class BookingRequestFactory {
         this.instantSupplier = instantSupplier;
     }
 
-    public CreateBookingRequest createFrom(Long userId, Long roomId, Long slotId) {
-        return new CreateBookingRequest(userId, roomId, slotId, instantSupplier.get());
+    public CancelBookingCommand createFrom(Long userId, Long bookingId) {
+        return new CancelBookingCommand(userId, bookingId, instantSupplier.get());
     }
 
-    public CancelBookingRequest createFrom(Long userId, Long bookingId) {
-        return new CancelBookingRequest(userId, bookingId, instantSupplier.get());
+    public CreateBookingCommand createFrom(CreateBookingRequest request) {
+        return new CreateBookingCommand(request.getUserId(), request.getRoomId(), request.getSlotId(), instantSupplier.get());
     }
 }

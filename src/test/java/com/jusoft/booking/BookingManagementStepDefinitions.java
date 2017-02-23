@@ -42,7 +42,7 @@ public class BookingManagementStepDefinitions extends AbstractStepDefinitions {
         });
         Given("^all slots are booked by the same user$", () -> slotHolder.slotsCreated.forEach(slotResource ->
                 storeBooking(() -> bookSlot(USER_ID_1, slotResource.getSlotId()))));
-        When("^the user asks for his bookings$", () -> bookingHolder.bookingsFetched = bookingComponent.getFor(USER_ID_1));
+        When("^the user asks for his bookings$", () -> bookingHolder.bookingsFetched = bookingComponent.getFor(USER_ID_1).getBookings());
         Then("^the user should see all slots booked by him$", () -> assertThat(bookingHolder.bookingsFetched).hasSameElementsAs(bookingHolder.bookingsCreated));
         When("^a new user books the slot$", () -> storeException(() -> bookingHolder.bookingCreated = bookSlot(USER_ID_2, slotHolder.slotCreated.getSlotId())));
         Then("^the user should get a notification that the slot is already booked$", () -> assertThat(exceptionThrown).isInstanceOf(SlotAlreadyBookedException.class));
@@ -54,11 +54,11 @@ public class BookingManagementStepDefinitions extends AbstractStepDefinitions {
                 .isNotNull()
                 .isInstanceOf(SlotAlreadyStartedException.class));
         When("^a different user cancels the booking$", () -> storeException(() -> bookingComponent.cancel(USER_ID_2, bookingHolder.bookingCreated.getBookingId())));
-        And("^the user should be notified the booking does belong to other user$", () -> assertThat(exceptionThrown).isNotNull().isInstanceOf(WrongUserForSlotException.class));
+        And("^the user should be notified the booking does belong to other user$", () -> assertThat(exceptionThrown).isNotNull().isInstanceOf(WrongBookingUserException.class));
     }
 
     private BookingResource bookSlot(Long userId, long slotId) {
-        return bookingComponent.book(userId, ROOM_ID, slotId);
+        return bookingComponent.book(new CreateBookingRequest(userId, ROOM_ID, slotId));
     }
 
     private void storeBooking(Supplier<BookingResource> supplier) {

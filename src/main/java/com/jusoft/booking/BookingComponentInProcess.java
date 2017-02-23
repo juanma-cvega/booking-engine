@@ -1,9 +1,5 @@
 package com.jusoft.booking;
 
-import java.util.List;
-
-import static java.util.stream.Collectors.toList;
-
 public class BookingComponentInProcess implements BookingComponent {
 
     private final BookingService bookingService;
@@ -17,8 +13,8 @@ public class BookingComponentInProcess implements BookingComponent {
     }
 
     @Override
-    public BookingResource book(Long userId, Long roomId, Long slotId) {
-        Booking newBooking = bookingService.book(bookingRequestFactory.createFrom(userId, roomId, slotId));
+    public BookingResource book(CreateBookingRequest createBookingRequest) {
+        Booking newBooking = bookingService.book(bookingRequestFactory.createFrom(createBookingRequest));
         return bookingResourceFactory.createFrom(newBooking);
     }
 
@@ -33,7 +29,7 @@ public class BookingComponentInProcess implements BookingComponent {
     }
 
     @Override
-    public List<BookingResource> getFor(Long userId) {
-        return bookingService.getFor(userId).stream().map(bookingResourceFactory::createFrom).collect(toList());
+    public BookingResources getFor(Long userId) {
+        return bookingResourceFactory.createFrom(bookingService.getFor(userId));
     }
 }

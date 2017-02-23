@@ -29,7 +29,7 @@ public class SlotManagementStepDefinitions extends AbstractStepDefinitions {
         When("^the slot is retrieved$", () -> slotHolder.slotFetched = slotComponent.find(slotHolder.slotCreated.getSlotId(), slotHolder.slotCreated.getRoomId()));
         Then("^the user should see the slot created$", () -> assertThat(slotHolder.slotFetched).isEqualTo(slotHolder.slotCreated));
         Given("^a slot is created for room (\\d+)$", (Long roomId) -> slotHolder.slotsCreated.add(slotComponent.create(createSlotRequestWith(roomId))));
-        When("^the list of slots is fetched for room (\\d+)$", (Long roomId) -> slotHolder.slotsFetched = slotComponent.getSlotsFor(roomId));
+        When("^the list of slots is fetched for room (\\d+)$", (Long roomId) -> slotHolder.slotsFetched = slotComponent.getSlotsFor(roomId).getSlots());
         Then("^the list should contain the created rooms$", () -> assertThat(slotHolder.slotsFetched).hasSameElementsAs(slotHolder.slotsCreated));
         When("^a non existent slot is retrieved$", () -> storeException(() -> slotComponent.find(ANY_SLOT_ID, ROOM_ID)));
         Then("^the user should be notified the slot does not exist$", () -> assertThat(exceptionThrown).isNotNull().isInstanceOf(SlotNotFoundException.class));

@@ -11,7 +11,7 @@ class BookingFactory {
         this.idGenerator = idGenerator;
     }
 
-    Booking create(CreateBookingRequest createBookingRequest, Slot slot) {
-        return new Booking(idGenerator.get(), createBookingRequest.getUserId(), createBookingRequest.getRequestTime(), slot);
+    Booking create(CreateBookingCommand createBookingCommand, Slot slot) {
+        return new Booking(idGenerator.get(), createBookingCommand.getUserId(), createBookingCommand.getRequestTime(), slot);
     }
 }

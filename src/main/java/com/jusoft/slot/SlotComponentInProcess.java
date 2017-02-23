@@ -1,9 +1,5 @@
 package com.jusoft.slot;
 
-import java.util.List;
-
-import static java.util.stream.Collectors.toList;
-
 public class SlotComponentInProcess implements SlotComponent {
 
     private final SlotService slotService;
@@ -22,11 +18,11 @@ public class SlotComponentInProcess implements SlotComponent {
 
     @Override
     public SlotResource find(Long slotId, Long roomId) {
-        return slotService.find(slotId, roomId).map(slotResourceFactory::createFrom).orElseThrow(() -> new SlotNotFoundException(slotId));
+        return slotService.find(slotId, roomId).map(slotResourceFactory::createFrom).orElseThrow(() -> new SlotNotFoundException(slotId, roomId));
     }
 
     @Override
-    public List<SlotResource> getSlotsFor(Long roomId) {
-        return slotService.getSlotsFor(roomId).stream().map(slotResourceFactory::createFrom).collect(toList());
+    public SlotResources getSlotsFor(Long roomId) {
+        return slotResourceFactory.createFrom(slotService.getSlotsFor(roomId));
     }
 }

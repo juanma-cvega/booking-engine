@@ -24,29 +24,29 @@ class BookingService {
     /* The code explicitly doesn't check whether the slot is booked already. That constraint is set at the database level.
     * Validating it here would cause a performance penalty as it would require a call to the database and it won't guarantee
     * consistency in a multithreaded setup*/
-    Booking book(CreateBookingRequest createBookingRequest) {
-        SlotResource slotResource = slotComponent.find(createBookingRequest.getSlotId(), createBookingRequest.getRoomId());
+    Booking book(CreateBookingCommand createBookingCommand) {
+        SlotResource slotResource = slotComponent.find(createBookingCommand.getSlotId(), createBookingCommand.getRoomId());
         Slot slot = slotResourceFactory.createFrom(slotResource);
 
-        validateSlotIsOpen(slot, createBookingRequest.getRequestTime());
-        Booking newBooking = bookingFactory.create(createBookingRequest, slot);
+        validateSlotIsOpen(slot, createBookingCommand.getRequestTime());
+        Booking newBooking = bookingFactory.create(createBookingCommand, slot);
         bookingRepository.save(newBooking);
         return newBooking;
     }
 
     //TODO provide a better way of handling validations
-    void cancel(CancelBookingRequest cancelBookingRequest) {
-        Booking booking = bookingRepository.find(cancelBookingRequest.getBookingId())
-                .orElseThrow(() -> new BookingNotFoundException(cancelBookingRequest.getUserId(), cancelBookingRequest.getBookingId()));
+    void cancel(CancelBookingCommand cancelBookingCommand) {
+        Booking booking = bookingRepository.find(cancelBookingCommand.getBookingId())
+                .orElseThrow(() -> new BookingNotFoundException(cancelBookingCommand.getUserId(), cancelBookingCommand.getBookingId()));
 
-        validateSlotIsOpen(booking.getSlot(), cancelBookingRequest.getRequestTime());
-        validateUserOwnsBooking(cancelBookingRequest.getUserId(), booking);
+        validateSlotIsOpen(booking.getSlot(), cancelBookingCommand.getRequestTime());
+        validateUserOwnsBooking(cancelBookingCommand.getUserId(), booking);
         bookingRepository.delete(booking.getBookingId());
     }
 
     private void validateUserOwnsBooking(long userId, Booking booking) {
         if (Long.compare(userId, booking.getUserId()) != 0) {
-            throw new WrongUserForSlotException(userId, booking.getUserId(), booking.getSlot().getSlotId());
+            throw new WrongBookingUserException(userId, booking.getUserId(), booking.getBookingId());
         }
     }
 
