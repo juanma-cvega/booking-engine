@@ -1,45 +1,48 @@
 package com.jusoft.component.booking;
 
+import com.jusoft.component.slot.Slot;
 import com.jusoft.component.slot.SlotComponent;
-import com.jusoft.component.slot.SlotResource;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.function.Supplier;
 
-class BookingService {
+class BookingComponentImpl implements BookingComponent {
 
     private final SlotComponent slotComponent;
-    private final SlotResourceFactory slotResourceFactory;
     private final BookingRepository bookingRepository;
     private final BookingFactory bookingFactory;
+    private final Supplier<LocalDateTime> instantSupplier;
 
-    BookingService(SlotComponent slotComponent, SlotResourceFactory slotResourceFactory, BookingRepository bookingRepository, BookingFactory bookingFactory) {
+    BookingComponentImpl(SlotComponent slotComponent,
+                         BookingRepository bookingRepository,
+                         BookingFactory bookingFactory,
+                         Supplier<LocalDateTime> instantSupplier) {
         this.slotComponent = slotComponent;
-        this.slotResourceFactory = slotResourceFactory;
         this.bookingRepository = bookingRepository;
         this.bookingFactory = bookingFactory;
+        this.instantSupplier = instantSupplier;
     }
 
     //TODO provide more fluent implementation of the validations. Different approach for the exceptions?
     /* The code explicitly doesn't check whether the slot is booked already. That constraint is set at the database level.
     * Validating it here would cause a performance penalty as it would require a call to the database and it won't guarantee
     * consistency in a multithreaded setup*/
-    Booking book(CreateBookingCommand createBookingCommand) {
-        SlotResource slotResource = slotComponent.find(createBookingCommand.getSlotId(), createBookingCommand.getRoomId());
-        Slot slot = slotResourceFactory.createFrom(slotResource);
+    public Booking book(CreateBookingCommand createBookingCommand) {
+        Slot slot = slotComponent.find(createBookingCommand.getSlotId(), createBookingCommand.getRoomId());
 
-        validateSlotIsOpen(slot, createBookingCommand.getRequestTime());
+        validateSlotIsOpen(slot, instantSupplier.get());
         Booking newBooking = bookingFactory.create(createBookingCommand, slot);
         bookingRepository.save(newBooking);
         return newBooking;
     }
 
     //TODO provide a better way of handling validations
-    void cancel(CancelBookingCommand cancelBookingCommand) {
+    public void cancel(CancelBookingCommand cancelBookingCommand) {
         Booking booking = bookingRepository.find(cancelBookingCommand.getBookingId())
                 .orElseThrow(() -> new BookingNotFoundException(cancelBookingCommand.getUserId(), cancelBookingCommand.getBookingId()));
 
-        validateSlotIsOpen(booking.getSlot(), cancelBookingCommand.getRequestTime());
+        validateSlotIsOpen(booking.getSlot(), instantSupplier.get());
         validateUserOwnsBooking(cancelBookingCommand.getUserId(), booking);
         bookingRepository.delete(booking.getBookingId());
     }
@@ -50,7 +53,7 @@ class BookingService {
         }
     }
 
-    List<Booking> getFor(long userId) {
+    public List<Booking> getFor(long userId) {
         return bookingRepository.getByUser(userId);
     }
 
@@ -61,8 +64,9 @@ class BookingService {
     }
 
     //FIXME normalize validation as it's done in two places
-    public Booking find(Long userId, Long bookingId) {
+    public Booking find(long userId, long bookingId) {
         return bookingRepository.find(bookingId)
                 .orElseThrow(() -> new BookingNotFoundException(userId, bookingId));
     }
+
 }

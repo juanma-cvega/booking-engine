@@ -1,12 +1,14 @@
 package com.jusoft.component.booking;
 
+import java.util.List;
+
 public interface BookingComponent {
 
-    BookingResource book(CreateBookingRequest createBookingCommand);
+    Booking book(CreateBookingCommand createBookingCommand);
 
-    void cancel(Long userId, Long bookingId);
+    void cancel(CancelBookingCommand cancelBookingCommand);
 
-    BookingResource find(Long userId, Long bookingId);
+    Booking find(long userId, long bookingId);
 
-    BookingResources getFor(Long userId);
+    List<Booking> getFor(long userId);
 }

@@ -12,11 +12,7 @@ public class SlotComponentConfig {
 
     @Bean
     public SlotComponent slotComponent() {
-        return new SlotComponentInProcess(slotService(), slotResourceFactory());
-    }
-
-    private SlotService slotService() {
-        return new SlotService(slotRepository(), slotFactory());
+        return new SlotComponentImpl(slotRepository(), slotFactory());
     }
 
     private SlotRepository slotRepository() {
@@ -30,9 +26,5 @@ public class SlotComponentConfig {
     private Supplier<Long> idGenerator() {
         AtomicLong generator = new AtomicLong(1);
         return generator::getAndIncrement;
-    }
-
-    private SlotResourceFactory slotResourceFactory() {
-        return new SlotResourceFactory();
     }
 }

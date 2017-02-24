@@ -1,9 +1,9 @@
 package com.jusoft.app;
 
-import com.jusoft.component.ControllerConfig;
 import com.jusoft.component.booking.BookingComponentConfig;
 import com.jusoft.component.slot.SlotComponentConfig;
 import com.jusoft.component.timer.TimerConfig;
+import com.jusoft.controller.ControllerConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;

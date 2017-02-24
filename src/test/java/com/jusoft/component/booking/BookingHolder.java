@@ -5,8 +5,7 @@ import java.util.List;
 
 public class BookingHolder {
 
-    public BookingResource bookingCreated;
-    public BookingResource bookingFetched;
-    public List<BookingResource> bookingsCreated = new ArrayList<>();
-    public List<BookingResource> bookingsFetched = new ArrayList<>();
+    public Booking bookingCreated;
+    public List<Booking> bookingsCreated = new ArrayList<>();
+    public List<Booking> bookingsFetched = new ArrayList<>();
 }

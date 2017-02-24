@@ -21,27 +21,11 @@ public class BookingComponentConfig {
 
     @Bean
     public BookingComponent bookingComponent() {
-        return new BookingComponentInProcess(bookingService(), bookingResourceFactory(), bookingRequestFactory());
-    }
-
-    private BookingRequestFactory bookingRequestFactory() {
-        return new BookingRequestFactory(instantSupplier);
-    }
-
-    private BookingResourceFactory bookingResourceFactory() {
-        return new BookingResourceFactory(slotResourceFactory());
-    }
-
-    private SlotResourceFactory slotResourceFactory() {
-        return new SlotResourceFactory();
-    }
-
-    private BookingService bookingService() {
-        return new BookingService(slotComponent, slotResourceFactory(), bookingRepository(), bookingFactory());
+        return new BookingComponentImpl(slotComponent, bookingRepository(), bookingFactory(), instantSupplier);
     }
 
     private BookingFactory bookingFactory() {
-        return new BookingFactory(idGenerator());
+        return new BookingFactory(idGenerator(), instantSupplier);
     }
 
     private Supplier<Long> idGenerator() {

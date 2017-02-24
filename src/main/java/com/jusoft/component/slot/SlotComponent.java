@@ -1,10 +1,12 @@
 package com.jusoft.component.slot;
 
+import java.util.List;
+
 public interface SlotComponent {
 
-    SlotResource create(CreateSlotRequest createSlotRequest);
+    Slot create(CreateSlotCommand createSlotCommand);
 
-    SlotResource find(Long slotId, Long roomId);
+    Slot find(long slotId, long roomId);
 
-    SlotResources getSlotsFor(Long roomId);
+    List<Slot> getSlotsFor(long roomId);
 }

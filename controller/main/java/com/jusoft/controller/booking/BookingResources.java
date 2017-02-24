@@ -1,5 +1,6 @@
-package com.jusoft.component.slot;
+package com.jusoft.controller.booking;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -8,20 +9,21 @@ import java.util.List;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.JSON_STYLE;
 
-public class SlotResources {
+public class BookingResources {
 
-    private final List<SlotResource> slots;
+    private final List<BookingResource> bookings;
 
-    public SlotResources(List<SlotResource> slots) {
-        this.slots = slots;
+    public BookingResources(List<BookingResource> bookings) {
+        this.bookings = bookings;
     }
 
-    private SlotResources() {
-        this.slots = null;
+    @JsonCreator
+    private BookingResources() {
+        this.bookings = null;
     }
 
-    public List<SlotResource> getSlots() {
-        return slots;
+    public List<BookingResource> getBookings() {
+        return bookings;
     }
 
     @Override

@@ -5,9 +5,9 @@ import java.util.List;
 
 public class SlotHolder {
 
-    public SlotResource slotCreated;
-    public SlotResource slotFetched;
-    public List<SlotResource> slotsCreated = new ArrayList<>();
-    public List<SlotResource> slotsFetched = new ArrayList<>();
+    public Slot slotCreated;
+    public Slot slotFetched;
+    public List<Slot> slotsCreated = new ArrayList<>();
+    public List<Slot> slotsFetched = new ArrayList<>();
 
 }

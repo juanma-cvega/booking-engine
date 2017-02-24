@@ -1,6 +1,7 @@
-package com.jusoft.component.booking;
+package com.jusoft.controller.booking;
 
-import com.jusoft.component.slot.SlotResource;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.jusoft.controller.slot.SlotResource;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -19,6 +20,7 @@ public class BookingResource {
         this.slot = slot;
     }
 
+    @JsonCreator
     private BookingResource() {
         this.bookingId = 0;
         this.bookingTime = 0;

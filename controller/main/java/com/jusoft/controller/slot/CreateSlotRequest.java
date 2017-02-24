@@ -1,46 +1,41 @@
-package com.jusoft.component.slot;
+package com.jusoft.controller.slot;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.JSON_STYLE;
 
-public class SlotResource {
+public class CreateSlotRequest {
 
-    private final long slotId;
     private final long roomId;
-    private final long startDate;
-    private final long endDate;
+    private final long startTime;
+    private final long endTime;
 
-    public SlotResource(long slotId, long roomId, long startDate, long endDate) {
-        this.slotId = slotId;
+    public CreateSlotRequest(long roomId, long startTime, long endTime) {
         this.roomId = roomId;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.startTime = startTime;
+        this.endTime = endTime;
     }
 
-    private SlotResource() {
-        this.slotId = 0;
+    @JsonCreator
+    private CreateSlotRequest() {
         this.roomId = 0;
-        this.startDate = 0;
-        this.endDate = 0;
-    }
-
-    public long getSlotId() {
-        return slotId;
+        this.startTime = 0;
+        this.endTime = 0;
     }
 
     public long getRoomId() {
         return roomId;
     }
 
-    public long getStartDate() {
-        return startDate;
+    public long getStartTime() {
+        return startTime;
     }
 
-    public long getEndDate() {
-        return endDate;
+    public long getEndTime() {
+        return endTime;
     }
 
     @Override

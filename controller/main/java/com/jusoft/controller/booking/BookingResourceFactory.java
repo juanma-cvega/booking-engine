@@ -1,4 +1,7 @@
-package com.jusoft.component.booking;
+package com.jusoft.controller.booking;
+
+import com.jusoft.component.booking.Booking;
+import com.jusoft.controller.slot.SlotResourceFactory;
 
 import java.util.List;
 
@@ -18,7 +21,7 @@ class BookingResourceFactory {
     }
 
     BookingResources createFrom(List<Booking> bookings) {
-        List<BookingResource> bookingResources = bookings.stream().map(this::createFrom).collect(toList());
-        return new BookingResources(bookingResources);
+        List<BookingResource> bookingViews = bookings.stream().map(this::createFrom).collect(toList());
+        return new BookingResources(bookingViews);
     }
 }

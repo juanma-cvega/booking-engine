@@ -1,57 +1,63 @@
-package com.jusoft.component;
+package com.jusoft.controller.booking;
 
 import com.jusoft.component.booking.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @RequestMapping(value = "/bookings", consumes = "application/json", produces = "application/json")
-class BookingComponentRest implements BookingComponent {
-    private final BookingComponent bookingComponent;
+public class BookingComponentRest {
 
-    BookingComponentRest(BookingComponent bookingComponent) {
+    private final BookingComponent bookingComponent;
+    private final BookingCommandFactory bookingCommandFactory;
+    private final BookingResourceFactory bookingResourceFactory;
+
+    public BookingComponentRest(BookingComponent bookingComponent, BookingCommandFactory bookingCommandFactory, BookingResourceFactory bookingResourceFactory) {
         this.bookingComponent = bookingComponent;
+        this.bookingCommandFactory = bookingCommandFactory;
+        this.bookingResourceFactory = bookingResourceFactory;
     }
 
-    @Override
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public BookingResource book(@RequestBody CreateBookingRequest createBookingRequest) {
         log.info("Create booking request received: createBookingRequest={}", createBookingRequest);
-        BookingResource booking = bookingComponent.book(createBookingRequest);
-        log.info("Create booking request finished: booking={}", booking);
-        return booking;
+        Booking booking = bookingComponent.book(bookingCommandFactory.createFrom(createBookingRequest));
+        BookingResource bookingResource = bookingResourceFactory.createFrom(booking);
+        log.info("Create booking request finished: booking={}", bookingResource);
+        return bookingResource;
     }
 
-    @Override
     @RequestMapping(method = RequestMethod.DELETE, value = "/user/{userId}/booking/{bookingId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void cancel(@PathVariable Long userId, @PathVariable Long bookingId) {
         log.info("Cancel booking request received: userId={}, bookingId={}", userId, bookingId);
-        bookingComponent.cancel(userId, bookingId);
+        bookingComponent.cancel(bookingCommandFactory.createFrom(userId, bookingId));
         log.info("Cancel booking request finished");
     }
 
-    @Override
     @RequestMapping(method = RequestMethod.GET, value = "/user/{userId}/booking/{bookingId}")
     @ResponseBody
     public BookingResource find(@PathVariable Long userId, @PathVariable Long bookingId) {
         log.info("Find booking request received: userId={}, bookingId={}", userId, bookingId);
-        BookingResource booking = bookingComponent.find(userId, bookingId);
-        log.info("Find booking request finished: booking={}", booking);
-        return booking;
+        Booking booking = bookingComponent.find(userId, bookingId);
+        BookingResource bookingResource = bookingResourceFactory.createFrom(booking);
+        log.info("Find booking request finished: booking={}", bookingResource);
+        return bookingResource;
     }
 
-    @Override
     @RequestMapping(method = RequestMethod.GET, value = "/user/{userId}")
     @ResponseBody
     public BookingResources getFor(@PathVariable Long userId) {
         log.info("Create booking request received: userId={}", userId);
-        BookingResources bookings = bookingComponent.getFor(userId);
-        log.info("Create booking request finished: userId={}, bookings={}", userId, bookings.getBookings().size());
-        return bookings;
+        List<Booking> bookings = bookingComponent.getFor(userId);
+        BookingResources bookingResources = bookingResourceFactory.createFrom(bookings);
+        log.info("Create booking request finished: userId={}, bookings={}", userId, bookingResources.getBookings().size());
+        return bookingResources;
     }
 
     @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Booking not found")

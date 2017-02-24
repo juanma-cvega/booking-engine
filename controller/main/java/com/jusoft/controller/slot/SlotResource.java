@@ -1,39 +1,48 @@
-package com.jusoft.component.booking;
+package com.jusoft.controller.slot;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.JSON_STYLE;
 
-public class CreateBookingRequest {
+public class SlotResource {
 
-    private final long userId;
-    private final long roomId;
     private final long slotId;
+    private final long roomId;
+    private final long startDate;
+    private final long endDate;
 
-    public CreateBookingRequest(long userId, long roomId, long slotId) {
-        this.userId = userId;
-        this.roomId = roomId;
+    public SlotResource(long slotId, long roomId, long startDate, long endDate) {
         this.slotId = slotId;
+        this.roomId = roomId;
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 
-    private CreateBookingRequest() {
-        this.userId = 0;
-        this.roomId = 0;
+    @JsonCreator
+    private SlotResource() {
         this.slotId = 0;
+        this.roomId = 0;
+        this.startDate = 0;
+        this.endDate = 0;
     }
 
-    public long getUserId() {
-        return userId;
+    public long getSlotId() {
+        return slotId;
     }
 
     public long getRoomId() {
         return roomId;
     }
 
-    public long getSlotId() {
-        return slotId;
+    public long getStartDate() {
+        return startDate;
+    }
+
+    public long getEndDate() {
+        return endDate;
     }
 
     @Override
