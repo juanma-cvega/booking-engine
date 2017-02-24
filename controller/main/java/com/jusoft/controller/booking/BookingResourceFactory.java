@@ -12,7 +12,7 @@ class BookingResourceFactory {
 
     private final SlotResourceFactory slotResourceFactory;
 
-    public BookingResourceFactory(SlotResourceFactory slotResourceFactory) {
+    BookingResourceFactory(SlotResourceFactory slotResourceFactory) {
         this.slotResourceFactory = slotResourceFactory;
     }
 
