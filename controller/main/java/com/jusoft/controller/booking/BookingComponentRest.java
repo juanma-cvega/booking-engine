@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Slf4j
-@RequestMapping(value = "/bookings", consumes = "application/json", produces = "application/json")
+@RequestMapping(value = "/bookings")
 class BookingComponentRest {
 
     private final BookingComponent bookingComponent;
@@ -21,7 +21,7 @@ class BookingComponentRest {
         this.bookingResourceFactory = bookingResourceFactory;
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public BookingResource book(@RequestBody CreateBookingRequest createBookingRequest) {
@@ -40,7 +40,7 @@ class BookingComponentRest {
         log.info("Cancel booking request finished");
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/user/{userId}/booking/{bookingId}")
+    @RequestMapping(method = RequestMethod.GET, value = "/user/{userId}/booking/{bookingId}", produces = "application/json")
     @ResponseBody
     public BookingResource find(@PathVariable Long userId, @PathVariable Long bookingId) {
         log.info("Find booking request received: userId={}, bookingId={}", userId, bookingId);
@@ -50,7 +50,7 @@ class BookingComponentRest {
         return bookingResource;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/user/{userId}")
+    @RequestMapping(method = RequestMethod.GET, value = "/user/{userId}", produces = "application/json")
     @ResponseBody
     public BookingResources getFor(@PathVariable Long userId) {
         log.info("Create booking request received: userId={}", userId);

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequestMapping(value = "/slots", consumes = "application/json", produces = "application/json")
+@RequestMapping(value = "/slots")
 @Slf4j
 class SlotComponentRest {
 
@@ -23,7 +23,7 @@ class SlotComponentRest {
         this.slotResourceFactory = slotResourceFactory;
     }
 
-    @RequestMapping(method = RequestMethod.POST, consumes = "application/json")
+    @RequestMapping(method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
     public SlotResource create(@RequestBody CreateSlotRequest createSlotCommand) {
@@ -33,7 +33,7 @@ class SlotComponentRest {
         return createSlotResourceFactoryFrom(slot);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/room/{roomId}/slot/{slotId}")
+    @RequestMapping(method = RequestMethod.GET, value = "/room/{roomId}/slot/{slotId}", produces = "application/json")
     @ResponseBody
     public SlotResource find(@PathVariable Long roomId, @PathVariable Long slotId) {
         log.info("Get slot request received: roomId={}, slotId={}", roomId, slotId);
@@ -42,7 +42,7 @@ class SlotComponentRest {
         return createSlotResourceFactoryFrom(slot);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/room/{roomId}")
+    @RequestMapping(method = RequestMethod.GET, value = "/room/{roomId}", produces = "application/json")
     @ResponseBody
     public SlotResources getSlotsFor(@PathVariable Long roomId) {
         log.info("Get slots for room request received: roomId={}", roomId);

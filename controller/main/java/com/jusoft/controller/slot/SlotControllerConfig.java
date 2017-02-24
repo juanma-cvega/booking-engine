@@ -20,7 +20,8 @@ public class SlotControllerConfig {
         return new SlotCommandFactory();
     }
 
-    private SlotResourceFactory slotResourceFactory() {
+    @Bean
+    public SlotResourceFactory slotResourceFactory() {
         return new SlotResourceFactory();
     }
 }

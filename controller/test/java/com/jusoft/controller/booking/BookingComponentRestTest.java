@@ -62,7 +62,7 @@ public class BookingComponentRestTest {
         when(mockBookingComponent.book(CREATE_BOOKING_COMMAND)).thenReturn(BOOKING_1);
         when(mockBookingResourceFactory.createFrom(BOOKING_1)).thenReturn(BOOKING_RESOURCE_1);
 
-        mockMvc.perform(post(BOOKINGS_URL).contentType(APPLICATION_JSON).content(objectMapper.writeValueAsString(CREATE_BOOKING_COMMAND)))
+        mockMvc.perform(post(BOOKINGS_URL).contentType(APPLICATION_JSON).content(objectMapper.writeValueAsString(CREATE_BOOKING_REQUEST)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.bookingId", is(Long.valueOf(BOOKING_ID_1).intValue())))
                 .andExpect(jsonPath("$.bookingTime", is(Long.valueOf(BookingControllerFixtures.BOOKING_TIME).intValue())))
@@ -140,7 +140,7 @@ public class BookingComponentRestTest {
         when(mockBookingCommandFactory.createFrom(CREATE_BOOKING_REQUEST)).thenReturn(CREATE_BOOKING_COMMAND);
         when(mockBookingComponent.book(CREATE_BOOKING_COMMAND)).thenThrow(new SlotAlreadyBookedException(ROOM_ID, SLOT_ID_1));
 
-        mockMvc.perform(post(BOOKINGS_URL).contentType(APPLICATION_JSON).content(objectMapper.writeValueAsString(CREATE_BOOKING_COMMAND)))
+        mockMvc.perform(post(BOOKINGS_URL).contentType(APPLICATION_JSON).content(objectMapper.writeValueAsString(CREATE_BOOKING_REQUEST)))
                 .andExpect(status().isConflict())
                 .andExpect(status().reason("Slot already booked"));
     }
@@ -150,7 +150,7 @@ public class BookingComponentRestTest {
         when(mockBookingCommandFactory.createFrom(CREATE_BOOKING_REQUEST)).thenReturn(CREATE_BOOKING_COMMAND);
         when(mockBookingComponent.book(CREATE_BOOKING_COMMAND)).thenThrow(new SlotAlreadyStartedException(SLOT_ID_1, ROOM_ID, LocalDateTime.now()));
 
-        mockMvc.perform(post(BOOKINGS_URL).contentType(APPLICATION_JSON).content(objectMapper.writeValueAsString(CREATE_BOOKING_COMMAND)))
+        mockMvc.perform(post(BOOKINGS_URL).contentType(APPLICATION_JSON).content(objectMapper.writeValueAsString(CREATE_BOOKING_REQUEST)))
                 .andExpect(status().isPreconditionRequired())
                 .andExpect(status().reason("Slot already started"));
     }
@@ -160,7 +160,7 @@ public class BookingComponentRestTest {
         when(mockBookingCommandFactory.createFrom(CREATE_BOOKING_REQUEST)).thenReturn(CREATE_BOOKING_COMMAND);
         when(mockBookingComponent.book(CREATE_BOOKING_COMMAND)).thenThrow(new WrongBookingUserException(USER_ID_1, USER_ID_2, BOOKING_ID_1));
 
-        mockMvc.perform(post(BOOKINGS_URL).contentType(APPLICATION_JSON).content(objectMapper.writeValueAsString(CREATE_BOOKING_COMMAND)))
+        mockMvc.perform(post(BOOKINGS_URL).contentType(APPLICATION_JSON).content(objectMapper.writeValueAsString(CREATE_BOOKING_REQUEST)))
                 .andExpect(status().isUnauthorized())
                 .andExpect(status().reason("Booking does not belong to user"));
     }
