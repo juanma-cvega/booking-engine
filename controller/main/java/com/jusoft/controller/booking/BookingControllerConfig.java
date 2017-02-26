@@ -16,8 +16,8 @@ public class BookingControllerConfig {
     private SlotResourceFactory slotResourceFactory;
 
     @Bean
-    public BookingComponentRest bookingComponentRest() {
-        return new BookingComponentRest(bookingComponent, bookingCommandFactory(), bookingResourceFactory());
+    public BookingControllerRest bookingComponentRest() {
+        return new BookingControllerRest(bookingComponent, bookingCommandFactory(), bookingResourceFactory());
     }
 
     private BookingCommandFactory bookingCommandFactory() {

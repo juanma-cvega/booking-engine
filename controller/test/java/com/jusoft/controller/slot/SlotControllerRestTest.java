@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(MockitoJUnitRunner.class)
-public class SlotComponentRestTest {
+public class SlotControllerRestTest {
 
     private static final String SLOTS_URL = "/slots";
     private static final String FIND_URL_TEMPLATE = "/room/%s/slot/%s";
@@ -42,14 +42,14 @@ public class SlotComponentRestTest {
     private SlotResourceFactory mockSlotResourceFactory;
 
     @InjectMocks
-    private SlotComponentRest slotComponentRest;
+    private SlotControllerRest slotControllerRest;
 
     private MockMvc mockMvc;
     private ObjectMapper objectMapper;
 
     @Before
     public void setup() {
-        this.mockMvc = MockMvcBuilders.standaloneSetup(slotComponentRest).build();
+        this.mockMvc = MockMvcBuilders.standaloneSetup(slotControllerRest).build();
         this.objectMapper = new ObjectMapper();
     }
 

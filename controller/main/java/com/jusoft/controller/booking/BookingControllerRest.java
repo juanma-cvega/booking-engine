@@ -9,13 +9,13 @@ import java.util.List;
 
 @Slf4j
 @RequestMapping(value = "/bookings")
-class BookingComponentRest {
+class BookingControllerRest {
 
     private final BookingComponent bookingComponent;
     private final BookingCommandFactory bookingCommandFactory;
     private final BookingResourceFactory bookingResourceFactory;
 
-    BookingComponentRest(BookingComponent bookingComponent, BookingCommandFactory bookingCommandFactory, BookingResourceFactory bookingResourceFactory) {
+    BookingControllerRest(BookingComponent bookingComponent, BookingCommandFactory bookingCommandFactory, BookingResourceFactory bookingResourceFactory) {
         this.bookingComponent = bookingComponent;
         this.bookingCommandFactory = bookingCommandFactory;
         this.bookingResourceFactory = bookingResourceFactory;

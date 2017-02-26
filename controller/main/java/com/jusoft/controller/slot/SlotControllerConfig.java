@@ -12,8 +12,8 @@ public class SlotControllerConfig {
     private SlotComponent slotComponent;
 
     @Bean
-    public SlotComponentRest slotComponentRest() {
-        return new SlotComponentRest(slotComponent, slotCommandFactory(), slotResourceFactory());
+    public SlotControllerRest slotComponentRest() {
+        return new SlotControllerRest(slotComponent, slotCommandFactory(), slotResourceFactory());
     }
 
     private SlotCommandFactory slotCommandFactory() {

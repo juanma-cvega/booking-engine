@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(MockitoJUnitRunner.class)
-public class BookingComponentRestTest {
+public class BookingControllerRestTest {
 
     private static final CharSequence FORTHSLASH = "/";
     private static final String BOOKINGS_URL = "/bookings";
@@ -45,14 +45,14 @@ public class BookingComponentRestTest {
     private BookingResourceFactory mockBookingResourceFactory;
 
     @InjectMocks
-    private BookingComponentRest bookingComponentRest;
+    private BookingControllerRest bookingControllerRest;
 
     private MockMvc mockMvc;
     private ObjectMapper objectMapper;
 
     @Before
     public void setup() {
-        this.mockMvc = MockMvcBuilders.standaloneSetup(bookingComponentRest).build();
+        this.mockMvc = MockMvcBuilders.standaloneSetup(bookingControllerRest).build();
         this.objectMapper = new ObjectMapper();
     }
 

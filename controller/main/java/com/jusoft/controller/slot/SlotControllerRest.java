@@ -11,13 +11,13 @@ import java.util.List;
 
 @RequestMapping(value = "/slots")
 @Slf4j
-class SlotComponentRest {
+class SlotControllerRest {
 
     private final SlotComponent slotComponent;
     private final SlotCommandFactory slotCommandFactory;
     private final SlotResourceFactory slotResourceFactory;
 
-    SlotComponentRest(SlotComponent slotComponent, SlotCommandFactory slotCommandFactory, SlotResourceFactory slotResourceFactory) {
+    SlotControllerRest(SlotComponent slotComponent, SlotCommandFactory slotCommandFactory, SlotResourceFactory slotResourceFactory) {
         this.slotComponent = slotComponent;
         this.slotCommandFactory = slotCommandFactory;
         this.slotResourceFactory = slotResourceFactory;
