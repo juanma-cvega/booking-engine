@@ -27,6 +27,7 @@
         <assertj.version>3.6.2</assertj.version>
         <junit.version>4.12</junit.version>
         <mockito.version>2.7.9</mockito.version>
+        <rest-assured.version>3.0.2</rest-assured.version>
         <commons-lang3.version>3.5</commons-lang3.version>
         <maven-surefire-plugin.version>2.19.1</maven-surefire-plugin.version>
         <maven-failsafe-plugin.version>2.19.1</maven-failsafe-plugin.version>
@@ -119,6 +120,12 @@
                 <groupId>com.jayway.jsonpath</groupId>
                 <artifactId>json-path</artifactId>
                 <version>${json-path.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.rest-assured</groupId>
+                <artifactId>rest-assured</artifactId>
+                <version>${rest-assured.version}</version>
                 <scope>test</scope>
             </dependency>
 
