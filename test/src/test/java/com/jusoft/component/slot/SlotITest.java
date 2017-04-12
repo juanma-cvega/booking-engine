@@ -2,9 +2,12 @@ package com.jusoft.component.slot;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.http.HttpStatus;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -22,12 +25,23 @@ public class SlotITest {
     private static final Long END_TIME = LocalDateTime.now().plus(1, ChronoUnit.DAYS).toEpochSecond(ZoneOffset.UTC);
     private static final long ROOM_ID = 1L;
     private static final String CREATE_SLOT_REQUEST = "{\"roomId\":" + ROOM_ID + ",\"startTime\":" + START_TIME + ",\"endTime\":" + END_TIME + "}";
+    private static final String DEFAULT_HOST = "192.168.99.100";
+    private static final int DEFAULT_PORT = 8080;
+    private static final String HTTP = "http://";
+
+    private static final Logger log = LoggerFactory.getLogger(SlotITest.class);
 
     @BeforeClass
     public static void setup() {
-        RestAssured.baseURI = "http://192.168.99.100";
-        RestAssured.port = 8080;
+        String host = System.getProperty("host");
+        host = host == null ? DEFAULT_HOST : host;
+        RestAssured.baseURI = HTTP + host;
+
+        String port = System.getProperty("port");
+        RestAssured.port = port == null || !NumberUtils.isCreatable(port) ? DEFAULT_PORT : Integer.parseInt(port);
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
+
+        log.info("Host and port used http://{}:{}", host, port);
     }
 
     @Test
