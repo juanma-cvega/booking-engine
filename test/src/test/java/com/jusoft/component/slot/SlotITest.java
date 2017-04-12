@@ -33,15 +33,25 @@ public class SlotITest {
 
     @BeforeClass
     public static void setup() {
-        String host = System.getProperty("host");
-        host = host == null ? DEFAULT_HOST : host;
+        String host = getHost();
         RestAssured.baseURI = HTTP + host;
 
-        String port = System.getProperty("port");
-        RestAssured.port = port == null || !NumberUtils.isCreatable(port) ? DEFAULT_PORT : Integer.parseInt(port);
+        int port = getPort();
+        RestAssured.port = port;
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
 
         log.info("Host and port used http://{}:{}", host, port);
+    }
+
+    private static int getPort() {
+        String portProperty = System.getProperty("port");
+        return portProperty == null || !NumberUtils.isCreatable(portProperty) ? DEFAULT_PORT : Integer.parseInt(portProperty);
+    }
+
+    private static String getHost() {
+        String host = System.getProperty("host");
+        host = host == null ? DEFAULT_HOST : host;
+        return host;
     }
 
     @Test

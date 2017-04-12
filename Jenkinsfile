@@ -15,16 +15,21 @@ node {
         archive 'target/*.jar'
     }
     stage('Create image') {
-        echo 'Deleting image ' + artifactId + ':' + version
+        echo 'Creating image ' + artifactId + ':' + version
         def image = docker.build artifactId + ':' + version
     }
-    stage('Deploy image') {
+    stage('Test image') {
         echo 'Deploying image'
-        docker.image(artifactId + ':' + version).inside {
-            echo 'Inside image'
+        def app = docker.image(artifactId + ':' + version).run('-p 8080:8080')
+        docker.image('maven:3.3.9-jdk-8').inside {
+            echo 'Running integration tests'
+            git 'git@github.com:juanma-cvega/bookingservice.git'
+            sh 'cd test && mvn integration-test verify -Pintegration-tests'
         }
+        app.stop()
     }
     stage('Clean up') {
+        echo 'Deleting image ' + artifactId + ':' + version
         sh 'docker rmi ' + artifactId + ':' + version
     }
 }
