@@ -21,13 +21,15 @@ node {
     stage('Test image') {
         echo 'Deploying image'
         def app = docker.image(artifactId + ':' + version).run('-p 8080:8080')
-        docker.image('maven:3.3.9-jdk-8').inside {
-            echo 'Running integration tests'
-            git 'git@github.com:juanma-cvega/bookingservice.git'
-            sh 'cd test && mvn integration-test verify -Pintegration-tests'
+        try {
+            docker.image('maven:3.3.9-jdk-8').inside {
+                echo 'Running integration tests'
+                git 'git@github.com:juanma-cvega/bookingservice.git'
+                sh 'cd test && mvn integration-test verify -Pintegration-tests'
+            }
+        } finally {
+            app.stop()
         }
-        app.stop()
-        app.rm()
     }
     stage('Clean up') {
         echo 'Deleting image ' + artifactId + ':' + version
