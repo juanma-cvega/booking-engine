@@ -27,9 +27,10 @@ node {
             sh 'cd test && mvn integration-test verify -Pintegration-tests'
         }
         app.stop()
+        app.rm()
     }
     stage('Clean up') {
-        echo 'Deleting image ' + artifactId + ':' + version
-        sh 'docker rmi ' + artifactId + ':' + version
+        echo 'Deleting image ' + artifactId + ':' + version'
+        sh 'docker rmi ' + artifactId + ':' + version'
     }
 }
