@@ -10,14 +10,14 @@ import java.time.Clock;
 @Configuration
 public class SchedulerComponentConfig {
 
-    @Autowired
-    private Clock clock;
+  @Autowired
+  private Clock clock;
 
-    @Autowired
-    private MessagePublisher messagePublisher;
+  @Autowired
+  private MessagePublisher messagePublisher;
 
-    @Bean
-    public SchedulerComponent schedulerComponent() {
-        return new SchedulerComponentImpl(clock, messagePublisher);
-    }
+  @Bean
+  public SchedulerComponent schedulerComponent() {
+    return new SchedulerComponentImpl(clock, messagePublisher);
+  }
 }

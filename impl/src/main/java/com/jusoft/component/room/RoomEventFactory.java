@@ -8,18 +8,18 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class RoomEventFactory {
 
-    RoomCreatedEvent roomCreatedEvent(Room room) {
-        return new RoomCreatedEvent(
-                room.getId(),
-                room.getMaxSlots(),
-                room.getSlotDurationInMinutes(),
-                room.getOpenTimesPerDay(),
-                room.getAvailableDays(),
-                room.isActive());
+  RoomCreatedEvent roomCreatedEvent(Room room) {
+    return new RoomCreatedEvent(
+      room.getId(),
+      room.getMaxSlots(),
+      room.getSlotDurationInMinutes(),
+      room.getOpenTimesPerDay(),
+      room.getAvailableDays(),
+      room.isActive());
 
-    }
+  }
 
-    OpenNextSlotCommand openNextSlotCommand(long roomId) {
-        return new OpenNextSlotCommand(roomId);
-    }
+  OpenNextSlotCommand openNextSlotCommand(long roomId) {
+    return new OpenNextSlotCommand(roomId);
+  }
 }

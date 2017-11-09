@@ -14,19 +14,19 @@ import static com.jusoft.component.room.RoomFixtures.SLOT_DURATION_IN_MINUTES;
 @RunWith(MockitoJUnitRunner.class)
 public class RoomTest {
 
-    private final Room room;
+  private final Room room;
 
-    public RoomTest() {
-        room = new Room(ROOM_ID,
-                MAX_SLOTS,
-                SLOT_DURATION_IN_MINUTES,
-                OPEN_TIMES,
-                AVAILABLE_DAYS,
-                ACTIVE);
-    }
+  public RoomTest() {
+    room = new Room(ROOM_ID,
+      MAX_SLOTS,
+      SLOT_DURATION_IN_MINUTES,
+      OPEN_TIMES,
+      AVAILABLE_DAYS,
+      ACTIVE);
+  }
 
-    @Test
-    public void test() {
+  @Test
+  public void test() {
 //        room.findUpcomingSlot()
-    }
+  }
 }

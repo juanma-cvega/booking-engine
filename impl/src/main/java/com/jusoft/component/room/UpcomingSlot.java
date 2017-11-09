@@ -10,8 +10,8 @@ import java.time.ZonedDateTime;
 @Builder
 public class UpcomingSlot {
 
-    @NonNull
-    private final Long roomId;
-    @NonNull
-    private final ZonedDateTime creationTime;
+  @NonNull
+  private final Long roomId;
+  @NonNull
+  private final ZonedDateTime creationTime;
 }

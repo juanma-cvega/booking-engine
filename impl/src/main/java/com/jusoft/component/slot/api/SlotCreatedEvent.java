@@ -9,10 +9,10 @@ import java.time.ZonedDateTime;
 @Data
 public class SlotCreatedEvent implements Event {
 
-    private final long slotId;
-    private final long roomId;
-    @NonNull
-    private final ZonedDateTime startTime;
-    @NonNull
-    private final ZonedDateTime endTime;
+  private final long slotId;
+  private final long roomId;
+  @NonNull
+  private final ZonedDateTime startTime;
+  @NonNull
+  private final ZonedDateTime endTime;
 }

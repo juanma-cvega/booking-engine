@@ -9,11 +9,11 @@ import java.time.ZonedDateTime;
 @Data
 public class ComingSlotMessage implements Message {
 
-    private final long roomId;
-    @NonNull
-    private final ZonedDateTime creationTime;
-    @NonNull
-    private final ZonedDateTime startTime;
-    @NonNull
-    private final ZonedDateTime endTime;
+  private final long roomId;
+  @NonNull
+  private final ZonedDateTime creationTime;
+  @NonNull
+  private final ZonedDateTime startTime;
+  @NonNull
+  private final ZonedDateTime endTime;
 }

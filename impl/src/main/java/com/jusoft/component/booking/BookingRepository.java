@@ -7,11 +7,11 @@ import java.util.Optional;
 
 interface BookingRepository {
 
-    void save(Booking newBooking) throws SlotAlreadyBookedException;
+  void save(Booking newBooking) throws SlotAlreadyBookedException;
 
-    void delete(long bookingId);
+  void delete(long bookingId);
 
-    Optional<Booking> find(long bookingId);
+  Optional<Booking> find(long bookingId);
 
-    List<Booking> getByUser(long userId);
+  List<Booking> getByUser(long userId);
 }

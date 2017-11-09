@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 public class CancelBookingCommand implements Command {
 
-    private final long userId;
-    private final long bookingId;
+  private final long userId;
+  private final long bookingId;
 }

@@ -9,18 +9,18 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class HolderConfig {
 
-    @Bean
-    public SlotHolder slotHolder() {
-        return new SlotHolder();
-    }
+  @Bean
+  public SlotHolder slotHolder() {
+    return new SlotHolder();
+  }
 
-    @Bean
-    public BookingHolder bookingHolder() {
-        return new BookingHolder();
-    }
+  @Bean
+  public BookingHolder bookingHolder() {
+    return new BookingHolder();
+  }
 
-    @Bean
-    public RoomHolder roomHolder() {
-        return new RoomHolder();
-    }
+  @Bean
+  public RoomHolder roomHolder() {
+    return new RoomHolder();
+  }
 }

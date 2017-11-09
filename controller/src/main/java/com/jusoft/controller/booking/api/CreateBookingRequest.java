@@ -10,33 +10,33 @@ import static org.apache.commons.lang3.builder.ToStringStyle.JSON_STYLE;
 
 public class CreateBookingRequest {
 
-    @NotNull
-    private final Long userId;
+  @NotNull
+  private final Long userId;
 
-    private CreateBookingRequest() {
-        userId = null;
-    }
+  private CreateBookingRequest() {
+    userId = null;
+  }
 
-    public CreateBookingRequest(Long userId) {
-        this.userId = userId;
-    }
+  public CreateBookingRequest(Long userId) {
+    this.userId = userId;
+  }
 
-    public Long getUserId() {
-        return userId;
-    }
+  public Long getUserId() {
+    return userId;
+  }
 
-    @Override
-    public boolean equals(Object o) {
-        return o != null && EqualsBuilder.reflectionEquals(this, o);
-    }
+  @Override
+  public boolean equals(Object o) {
+    return o != null && EqualsBuilder.reflectionEquals(this, o);
+  }
 
-    @Override
-    public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
-    }
+  @Override
+  public int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this);
+  }
 
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, JSON_STYLE);
-    }
+  @Override
+  public String toString() {
+    return ToStringBuilder.reflectionToString(this, JSON_STYLE);
+  }
 }

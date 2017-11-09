@@ -6,13 +6,13 @@ import java.util.function.Supplier;
 
 class SlotFactory {
 
-    private final Supplier<Long> idGenerator;
+  private final Supplier<Long> idGenerator;
 
-    SlotFactory(Supplier<Long> idGenerator) {
-        this.idGenerator = idGenerator;
-    }
+  SlotFactory(Supplier<Long> idGenerator) {
+    this.idGenerator = idGenerator;
+  }
 
-    Slot createFrom(CreateSlotCommand request) {
-        return new Slot(idGenerator.get(), request.getRoomId(), request.getStartTime(), request.getEndTime());
-    }
+  Slot createFrom(CreateSlotCommand request) {
+    return new Slot(idGenerator.get(), request.getRoomId(), request.getStartTime(), request.getEndTime());
+  }
 }

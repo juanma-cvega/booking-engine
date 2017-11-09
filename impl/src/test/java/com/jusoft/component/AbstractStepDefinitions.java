@@ -13,15 +13,15 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 
 @ContextConfiguration(classes = {
-        TimerConfig.class,
-        MessageListenersConfig.class,
-        MessagePublisherConfig.class,
-        SchedulerComponentConfig.class,
-        BookingComponentConfig.class,
-        SlotComponentConfig.class,
-        RoomComponentConfig.class,
-        HolderConfig.class,
-        MockConfig.class})
+  TimerConfig.class,
+  MessageListenersConfig.class,
+  MessagePublisherConfig.class,
+  SchedulerComponentConfig.class,
+  BookingComponentConfig.class,
+  SlotComponentConfig.class,
+  RoomComponentConfig.class,
+  HolderConfig.class,
+  MockConfig.class})
 @DirtiesContext
 public class AbstractStepDefinitions implements En {
 }

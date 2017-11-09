@@ -9,8 +9,8 @@ import java.time.ZonedDateTime;
 @Data
 class Task {
 
-    @NonNull
-    private final ZonedDateTime executionTime;
-    @NonNull
-    private final Message message;
+  @NonNull
+  private final ZonedDateTime executionTime;
+  @NonNull
+  private final Message message;
 }

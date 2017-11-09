@@ -8,11 +8,11 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MessagePublisherConfig {
 
-    @Autowired
-    private ApplicationEventPublisher publisher;
+  @Autowired
+  private ApplicationEventPublisher publisher;
 
-    @Bean
-    public MessagePublisherImpl messagePublisher() {
-        return new MessagePublisherImpl(publisher);
-    }
+  @Bean
+  public MessagePublisherImpl messagePublisher() {
+    return new MessagePublisherImpl(publisher);
+  }
 }

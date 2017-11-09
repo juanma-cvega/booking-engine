@@ -9,10 +9,10 @@ import org.springframework.context.ApplicationEventPublisher;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class MessagePublisherImpl implements MessagePublisher {
 
-    private final ApplicationEventPublisher publisher;
+  private final ApplicationEventPublisher publisher;
 
-    @Override
-    public void publish(Message message) {
-        publisher.publishEvent(message);
-    }
+  @Override
+  public void publish(Message message) {
+    publisher.publishEvent(message);
+  }
 }

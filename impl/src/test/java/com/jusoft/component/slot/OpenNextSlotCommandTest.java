@@ -10,13 +10,13 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class OpenNextSlotCommandTest {
 
-    @Test
-    public void nullStartTimeFailsConstructor() {
-        assertThatThrownBy(() -> new CreateSlotCommand(ROOM_ID, null, END_TIME)).isInstanceOf(NullPointerException.class);
-    }
+  @Test
+  public void nullStartTimeFailsConstructor() {
+    assertThatThrownBy(() -> new CreateSlotCommand(ROOM_ID, null, END_TIME)).isInstanceOf(NullPointerException.class);
+  }
 
-    @Test
-    public void nullEndTimeFailsConstructor() {
-        assertThatThrownBy(() -> new CreateSlotCommand(ROOM_ID, START_TIME, null)).isInstanceOf(NullPointerException.class);
-    }
+  @Test
+  public void nullEndTimeFailsConstructor() {
+    assertThatThrownBy(() -> new CreateSlotCommand(ROOM_ID, START_TIME, null)).isInstanceOf(NullPointerException.class);
+  }
 }

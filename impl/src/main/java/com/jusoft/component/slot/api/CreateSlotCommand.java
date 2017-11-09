@@ -9,10 +9,10 @@ import java.time.ZonedDateTime;
 @Data
 public class CreateSlotCommand implements Command {
 
-    private final long roomId;
-    @NonNull
-    private final ZonedDateTime startTime;
-    @NonNull
-    private final ZonedDateTime endTime;
+  private final long roomId;
+  @NonNull
+  private final ZonedDateTime startTime;
+  @NonNull
+  private final ZonedDateTime endTime;
 
 }

@@ -7,25 +7,32 @@ import org.apache.http.HttpStatus;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import static com.jusoft.component.common.CommonOps.*;
+import static com.jusoft.component.common.CommonOps.CREATE_SLOT_REQUEST;
+import static com.jusoft.component.common.CommonOps.END_TIME;
+import static com.jusoft.component.common.CommonOps.ROOM_ID;
+import static com.jusoft.component.common.CommonOps.SLOTS_URL;
+import static com.jusoft.component.common.CommonOps.START_TIME;
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
 
 public class SlotITest {
 
-    private static final String FIND_SLOT_URL = SLOTS_URL + "room/{roomId}/slot/{slotId}";
-    private static final String GET_SLOTS_URL = SLOTS_URL + "room/{roomId}";
+  private static final String FIND_SLOT_URL = SLOTS_URL + "room/{roomId}/slot/{slotId}";
+  private static final String GET_SLOTS_URL = SLOTS_URL + "room/{roomId}";
 
-    @BeforeClass
-    public static void setup() {
-        RestAssured.baseURI = HostUtils.getHost();
-        RestAssured.port = HostUtils.getPort();
-        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
-    }
+  @BeforeClass
+  public static void setup() {
+    RestAssured.baseURI = HostUtils.getHost();
+    RestAssured.port = HostUtils.getPort();
+    RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
+  }
 
-    @Test
-    public void get() {
-        // @formatter:off
+  @Test
+  public void get() {
+    // @formatter:off
         int slotId = createSlot();
 
         given()
@@ -37,11 +44,11 @@ public class SlotITest {
                 .statusCode(HttpStatus.SC_OK)
                 .body("slots.slotId", hasItems(slotId));
         // @formatter:on
-    }
+  }
 
-    @Test
-    public void create() {
-        // @formatter:off
+  @Test
+  public void create() {
+    // @formatter:off
         given()
                 .body(CREATE_SLOT_REQUEST)
                 .contentType(ContentType.JSON)
@@ -55,11 +62,11 @@ public class SlotITest {
                 .body("startDate", is(START_TIME.intValue()))
                 .body("endDate", is(END_TIME.intValue()));
         // @formatter:on
-    }
+  }
 
-    @Test
-    public void find() {
-        // @formatter:off
+  @Test
+  public void find() {
+    // @formatter:off
         int slotId = createSlot();
 
         given()
@@ -72,12 +79,12 @@ public class SlotITest {
                 .statusCode(HttpStatus.SC_OK)
                 .body("slotId", is(slotId));
         // @formatter:on
-    }
+  }
 
-    private int createSlot() {
-        return given()
-                .body(CREATE_SLOT_REQUEST)
-                .contentType(ContentType.JSON)
-                .post(SLOTS_URL).path("slotId");
-    }
+  private int createSlot() {
+    return given()
+      .body(CREATE_SLOT_REQUEST)
+      .contentType(ContentType.JSON)
+      .post(SLOTS_URL).path("slotId");
+  }
 }

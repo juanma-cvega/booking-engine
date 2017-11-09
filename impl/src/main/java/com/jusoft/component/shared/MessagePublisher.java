@@ -2,5 +2,5 @@ package com.jusoft.component.shared;
 
 public interface MessagePublisher {
 
-    void publish(Message message);
+  void publish(Message message);
 }

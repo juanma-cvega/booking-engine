@@ -4,5 +4,5 @@ import java.util.function.Consumer;
 
 public interface SchedulerComponent {
 
-    void schedule(Consumer<TaskBuilder> consumer);
+  void schedule(Consumer<TaskBuilder> consumer);
 }

@@ -7,5 +7,5 @@ import java.time.ZoneId;
 @UtilityClass
 public class TimeConstants {
 
-    public static final ZoneId UTC = ZoneId.of("UTC");
+  public static final ZoneId UTC = ZoneId.of("UTC");
 }

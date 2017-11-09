@@ -11,14 +11,14 @@ import java.time.ZonedDateTime;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class Slot {
 
-    private final long id;
-    private final long roomId;
-    @NonNull
-    private final ZonedDateTime startDate;
-    @NonNull
-    private final ZonedDateTime endDate;
+  private final long id;
+  private final long roomId;
+  @NonNull
+  private final ZonedDateTime startDate;
+  @NonNull
+  private final ZonedDateTime endDate;
 
-    public boolean isOpen(ZonedDateTime requestTime) {
-        return startDate.isAfter(requestTime);
-    }
+  public boolean isOpen(ZonedDateTime requestTime) {
+    return startDate.isAfter(requestTime);
+  }
 }
