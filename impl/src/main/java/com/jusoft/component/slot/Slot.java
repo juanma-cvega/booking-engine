@@ -3,16 +3,22 @@ package com.jusoft.component.slot;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NonNull;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Data
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class Slot {
 
-    private final long slotId;
+    private final long id;
     private final long roomId;
-    private final LocalDateTime startDate;
-    private final LocalDateTime endDate;
+    @NonNull
+    private final ZonedDateTime startDate;
+    @NonNull
+    private final ZonedDateTime endDate;
 
+    public boolean isOpen(ZonedDateTime requestTime) {
+        return startDate.isAfter(requestTime);
+    }
 }

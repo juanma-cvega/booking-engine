@@ -1,6 +1,7 @@
 package com.jusoft.controller.booking;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.jusoft.controller.booking.api.BookingResource;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -19,7 +20,7 @@ public class BookingResources {
 
     @JsonCreator
     private BookingResources() {
-        this.bookings = null;
+        bookings = null;
     }
 
     public List<BookingResource> getBookings() {

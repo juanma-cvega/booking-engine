@@ -1,6 +1,7 @@
 package com.jusoft.controller.booking;
 
 import com.jusoft.component.booking.Booking;
+import com.jusoft.controller.booking.api.BookingResource;
 import com.jusoft.controller.slot.SlotResourceFactory;
 
 import java.util.List;
@@ -17,7 +18,7 @@ class BookingResourceFactory {
     }
 
     BookingResource createFrom(Booking booking) {
-        return new BookingResource(booking.getBookingId(), getTimeFrom(booking.getBookingTime()), slotResourceFactory.createFrom(booking.getSlot()));
+        return new BookingResource(booking.getId(), getTimeFrom(booking.getBookingTime()), slotResourceFactory.createFrom(booking.getSlot()));
     }
 
     BookingResources createFrom(List<Booking> bookings) {

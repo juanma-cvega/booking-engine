@@ -28,4 +28,14 @@ interface SlotRepository {
      * @param newSlot {@link Slot} to store
      */
     void save(Slot newSlot);
+
+    /**
+     * Finds the last created {@link Slot} for the provided roomId
+     *
+     * @param roomId id of the {@link com.jusoft.component.room.Room} that contains the {@link Slot}
+     * @return
+     */
+    Optional<Slot> getLastCreatedFor(long roomId);
+
+    Optional<Slot> findSlotInUseOrToStartFor(long roomId);
 }

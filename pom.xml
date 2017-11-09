@@ -16,15 +16,15 @@
     </modules>
 
     <properties>
-        <lombok.version>1.16.12</lombok.version>
+        <lombok.version>1.16.18</lombok.version>
         <maven-compiler-plugin>1.8</maven-compiler-plugin>
         <spring.version>4.3.6.RELEASE</spring.version>
         <tomcat.version>8.0.39</tomcat.version>
         <cucumber.version>1.2.5</cucumber.version>
         <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
         <tomcat7-maven-plugin.version>2.2</tomcat7-maven-plugin.version>
-        <spring-boot.version>1.5.1.RELEASE</spring-boot.version>
-        <assertj.version>3.6.2</assertj.version>
+        <spring-boot.version>1.5.6.RELEASE</spring-boot.version>
+        <assertj.version>3.8.0</assertj.version>
         <junit.version>4.12</junit.version>
         <mockito.version>2.7.9</mockito.version>
         <rest-assured.version>3.0.2</rest-assured.version>
@@ -38,6 +38,9 @@
         <java-target>1.8</java-target>
         <java-source>1.8</java-source>
         <failsafe-maven-plugin.version>2.19.1</failsafe-maven-plugin.version>
+        <commons-collections4.version>4.1</commons-collections4.version>
+        <guava.version>23.0</guava.version>
+        <jackson.version>2.9.2</jackson.version>
     </properties>
 
     <dependencyManagement>
@@ -76,6 +79,25 @@
                 <artifactId>logback-classic</artifactId>
                 <version>${logback-classic.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-collections4</artifactId>
+                <version>${commons-collections4.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+
 
             <dependency>
                 <groupId>org.springframework.boot</groupId>

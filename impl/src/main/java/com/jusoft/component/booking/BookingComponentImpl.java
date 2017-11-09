@@ -1,72 +1,64 @@
 package com.jusoft.component.booking;
 
+import com.jusoft.component.booking.api.BookingComponent;
+import com.jusoft.component.booking.api.BookingNotFoundException;
+import com.jusoft.component.booking.api.CancelBookingCommand;
+import com.jusoft.component.booking.api.CreateBookingCommand;
+import com.jusoft.component.booking.api.SlotAlreadyStartedException;
 import com.jusoft.component.slot.Slot;
-import com.jusoft.component.slot.SlotComponent;
+import com.jusoft.component.slot.api.SlotComponent;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.Clock;
+import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.function.Supplier;
 
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
 class BookingComponentImpl implements BookingComponent {
 
-    private final SlotComponent slotComponent;
-    private final BookingRepository bookingRepository;
-    private final BookingFactory bookingFactory;
-    private final Supplier<LocalDateTime> instantSupplier;
+  private final SlotComponent slotComponent;
+  private final BookingRepository bookingRepository;
+  private final BookingFactory bookingFactory;
+  private final Clock clock;
 
-    BookingComponentImpl(SlotComponent slotComponent,
-                         BookingRepository bookingRepository,
-                         BookingFactory bookingFactory,
-                         Supplier<LocalDateTime> instantSupplier) {
-        this.slotComponent = slotComponent;
-        this.bookingRepository = bookingRepository;
-        this.bookingFactory = bookingFactory;
-        this.instantSupplier = instantSupplier;
+  /* The code explicitly doesn't check whether the slot is booked already. That constraint is set at the database level.
+  * Validating it here would cause a performance penalty as it would require a call to the database and it won't guarantee
+  * consistency in a multithreaded setup*/
+  @Override
+  public Booking book(CreateBookingCommand createBookingCommand) throws SlotAlreadyStartedException {
+    Slot slot = slotComponent.find(createBookingCommand.getSlotId(), createBookingCommand.getRoomId());
+
+    if (slot.isOpen(ZonedDateTime.now(clock))) {
+      Booking newBooking = bookingFactory.create(createBookingCommand, slot);
+      bookingRepository.save(newBooking);
+      return newBooking;
+    } else {
+      throw new SlotAlreadyStartedException(slot.getId(), slot.getRoomId(), slot.getStartDate());
     }
+  }
 
-    //TODO provide more fluent implementation of the validations. Different approach for the exceptions?
-    /* The code explicitly doesn't check whether the slot is booked already. That constraint is set at the database level.
-    * Validating it here would cause a performance penalty as it would require a call to the database and it won't guarantee
-    * consistency in a multithreaded setup*/
-    public Booking book(CreateBookingCommand createBookingCommand) {
-        Slot slot = slotComponent.find(createBookingCommand.getSlotId(), createBookingCommand.getRoomId());
+  //TODO provide a better way of handling validations
+  @Override
+  public void cancel(CancelBookingCommand cancelBookingCommand) throws BookingNotFoundException {
+    Booking booking = bookingRepository.find(cancelBookingCommand.getBookingId())
+      .orElseThrow(() -> new BookingNotFoundException(cancelBookingCommand.getUserId(), cancelBookingCommand.getBookingId()));
 
-        validateSlotIsOpen(slot, instantSupplier.get());
-        Booking newBooking = bookingFactory.create(createBookingCommand, slot);
-        bookingRepository.save(newBooking);
-        return newBooking;
+    if (booking.canClose(ZonedDateTime.now(clock), cancelBookingCommand.getUserId())) {
+      bookingRepository.delete(booking.getId());
     }
+  }
 
-    //TODO provide a better way of handling validations
-    public void cancel(CancelBookingCommand cancelBookingCommand) {
-        Booking booking = bookingRepository.find(cancelBookingCommand.getBookingId())
-                .orElseThrow(() -> new BookingNotFoundException(cancelBookingCommand.getUserId(), cancelBookingCommand.getBookingId()));
+  //FIXME normalize validation as it's done in two places
+  @Override
+  public Booking find(long userId, long bookingId) throws BookingNotFoundException {
+    return bookingRepository.find(bookingId)
+      .orElseThrow(() -> new BookingNotFoundException(userId, bookingId));
+  }
 
-        validateSlotIsOpen(booking.getSlot(), instantSupplier.get());
-        validateUserOwnsBooking(cancelBookingCommand.getUserId(), booking);
-        bookingRepository.delete(booking.getBookingId());
-    }
-
-    private void validateUserOwnsBooking(long userId, Booking booking) {
-        if (Long.compare(userId, booking.getUserId()) != 0) {
-            throw new WrongBookingUserException(userId, booking.getUserId(), booking.getBookingId());
-        }
-    }
-
-    public List<Booking> getFor(long userId) {
-        return bookingRepository.getByUser(userId);
-    }
-
-    private void validateSlotIsOpen(Slot slot, LocalDateTime requestTime) {
-        if (slot.getStartDate().isBefore(requestTime)) {
-            throw new SlotAlreadyStartedException(slot.getSlotId(), slot.getRoomId(), slot.getStartDate());
-        }
-    }
-
-    //FIXME normalize validation as it's done in two places
-    public Booking find(long userId, long bookingId) {
-        return bookingRepository.find(bookingId)
-                .orElseThrow(() -> new BookingNotFoundException(userId, bookingId));
-    }
+  @Override
+  public List<Booking> getFor(long userId) {
+    return bookingRepository.getByUser(userId);
+  }
 
 }

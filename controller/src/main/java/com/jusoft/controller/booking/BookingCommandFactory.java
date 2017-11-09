@@ -1,15 +1,15 @@
 package com.jusoft.controller.booking;
 
-import com.jusoft.component.booking.CancelBookingCommand;
-import com.jusoft.component.booking.CreateBookingCommand;
+import com.jusoft.component.booking.api.CancelBookingCommand;
+import com.jusoft.component.booking.api.CreateBookingCommand;
 
 class BookingCommandFactory {
 
-    public CancelBookingCommand createFrom(Long userId, Long bookingId) {
+    public CancelBookingCommand createFrom(long userId, long bookingId) {
         return new CancelBookingCommand(userId, bookingId);
     }
 
-    public CreateBookingCommand createFrom(CreateBookingRequest request) {
-        return new CreateBookingCommand(request.getUserId(), request.getRoomId(), request.getSlotId());
+    public CreateBookingCommand createFrom(long roomId, long slotId, long userId) {
+        return new CreateBookingCommand(userId, slotId, roomId);
     }
 }

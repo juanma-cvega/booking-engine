@@ -1,16 +1,20 @@
 package com.jusoft.component.slot;
 
-import java.time.LocalDateTime;
+import com.jusoft.component.slot.api.CreateSlotCommand;
+import lombok.experimental.UtilityClass;
+
+import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import static com.jusoft.component.fixtures.CommonFixtures.ROOM_ID;
 import static java.util.Arrays.asList;
 
+@UtilityClass
 public class SlotsFixtures {
 
-    public static final LocalDateTime END_TIME = LocalDateTime.now().plus(5, ChronoUnit.DAYS);
-    public static final LocalDateTime START_TIME = LocalDateTime.now().plus(1, ChronoUnit.DAYS);
+    public static final ZonedDateTime END_TIME = ZonedDateTime.now().plus(5, ChronoUnit.DAYS);
+    public static final ZonedDateTime START_TIME = ZonedDateTime.now().plus(1, ChronoUnit.DAYS);
     public static final long SLOT_ID_1 = 2;
     public static final long SLOT_ID_2 = 6;
 

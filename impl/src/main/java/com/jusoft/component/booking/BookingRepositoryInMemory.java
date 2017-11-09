@@ -1,5 +1,7 @@
 package com.jusoft.component.booking;
 
+import com.jusoft.component.booking.api.SlotAlreadyBookedException;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -19,15 +21,16 @@ class BookingRepositoryInMemory implements BookingRepository {
      * two entries with the same slotId
      *
      * @param newBooking booking to save
-     * @throws SlotAlreadyBookedException in case there the slot is already booked
+     * @throws SlotAlreadyBookedException in case the slot is already booked
      */
+    //FIXME is repository the one who has to throw a business exception
     @Override
-    public synchronized void save(Booking newBooking) {
-        store.values().stream().filter(booking -> Long.compare(booking.getSlot().getSlotId(), newBooking.getSlot().getSlotId()) == 0).findFirst()
+    public synchronized void save(Booking newBooking) throws SlotAlreadyBookedException {
+        store.values().stream().filter(booking -> Long.compare(booking.getSlot().getId(), newBooking.getSlot().getId()) == 0).findFirst()
                 .ifPresent(booking -> {
-                    throw new SlotAlreadyBookedException(newBooking.getSlot().getRoomId(), newBooking.getSlot().getSlotId());
+                    throw new SlotAlreadyBookedException(newBooking.getSlot().getRoomId(), newBooking.getSlot().getId());
                 });
-        store.put(newBooking.getBookingId(), newBooking);
+        store.put(newBooking.getId(), newBooking);
     }
 
     @Override

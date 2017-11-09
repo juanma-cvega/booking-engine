@@ -1,5 +1,7 @@
 package com.jusoft.component.slot;
 
+import com.jusoft.component.slot.api.CreateSlotCommand;
+
 import java.util.function.Supplier;
 
 class SlotFactory {

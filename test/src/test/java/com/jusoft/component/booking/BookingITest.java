@@ -6,39 +6,45 @@ import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import static com.jusoft.component.common.CommonOps.*;
+import static com.jusoft.component.common.CommonOps.END_TIME;
+import static com.jusoft.component.common.CommonOps.ROOM_ID;
+import static com.jusoft.component.common.CommonOps.START_TIME;
+import static com.jusoft.component.common.CommonOps.createSlot;
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 
 public class BookingITest {
 
-    private static final String USER_ID = "1234";
-    private static final String CREATE_BOOKING_REQUEST = "{\"userId\":" + USER_ID + ",\"roomId\":\"1\",\"slotId\":%s}";
-    private static final String BOOKINGS_PATH = "/bookings";
-    private static final String USER_BOOKINGS_PATH = BOOKINGS_PATH + "/user/{userId}";
-    private static final String BOOKING_PATH = BOOKINGS_PATH + "/user/{userId}/booking/{bookingId}";
+  private static final String USER_ID = "1234";
+  private static final String BOOKINGS_PATH = "/bookings";
+  private static final String USER_BOOKINGS_PATH = BOOKINGS_PATH + "/user/{userId}";
+  private static final String CREATE_BOOKING_PATH = BOOKINGS_PATH + "/room/{roomId}/slot/{slotId}/booking";
+  private static final String BOOKING_PATH = BOOKINGS_PATH + "/user/{userId}/booking/{bookingId}";
+  private static final String CREATE_BOOKING_REQUEST = "{\"userId\":" + USER_ID + "}";
 
-    private static final Logger log = LoggerFactory.getLogger(BookingITest.class);
+  @BeforeClass
+  public static void setup() {
+    RestAssured.baseURI = HostUtils.getHost();
+    RestAssured.port = HostUtils.getPort();
+    RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
+  }
 
-    @BeforeClass
-    public static void setup() {
-        RestAssured.baseURI = HostUtils.getHost();
-        RestAssured.port = HostUtils.getPort();
-        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
-    }
-
-    @Test
-    public void book() {
-        // @formatter:off
+  @Test
+  public void book() {
+    // @formatter:off
         int slotId = createSlot();
         given()
                 .contentType(ContentType.JSON)
-                .body(String.format(CREATE_BOOKING_REQUEST, slotId))
+                .pathParam("roomId", ROOM_ID)
+                .pathParam("slotId", slotId)
+                .body(CREATE_BOOKING_REQUEST)
         .when()
-                .post(BOOKINGS_PATH)
+                .post(CREATE_BOOKING_PATH)
         .then()
                 .statusCode(HttpStatus.SC_CREATED)
                 .body("bookingId", notNullValue())
@@ -48,14 +54,14 @@ public class BookingITest {
                 .body("slot.startDate", is(START_TIME.intValue()))
                 .body("slot.endDate", is(END_TIME.intValue()));
         // @formatter:on
-    }
+  }
 
-    @Test
-    public void cancel() {
-        int slotId = createSlot();
-        int bookingId = createBooking(slotId);
+  @Test
+  public void cancel() {
+    int slotId = createSlot();
+    int bookingId = createBooking(slotId);
 
-        // @formatter:off
+    // @formatter:off
         given()
                 .pathParam("userId", USER_ID)
                 .pathParam("bookingId", bookingId)
@@ -64,11 +70,11 @@ public class BookingITest {
         .then()
                 .statusCode(HttpStatus.SC_NO_CONTENT);
         // @formatter:on
-    }
+  }
 
-    @Test
-    public void find() {
-        // @formatter:off
+  @Test
+  public void find() {
+    // @formatter:off
         int slotId = createSlot();
         int bookingId = createBooking(slotId);
 
@@ -82,11 +88,11 @@ public class BookingITest {
                 .statusCode(HttpStatus.SC_OK)
                 .body("bookingId", is(bookingId));
         // @formatter:on
-    }
+  }
 
-    @Test
-    public void getFor() {
-        // @formatter:off
+  @Test
+  public void getFor() {
+    // @formatter:off
         int slotId = createSlot();
         int bookingId = createBooking(slotId);
 
@@ -99,17 +105,17 @@ public class BookingITest {
                 .statusCode(HttpStatus.SC_OK)
                 .body("bookings.bookingId", hasItems(bookingId));
         // @formatter:on
-    }
+  }
 
-    private int createBooking(int slotId) {
-        // @formatter:off
-        String format = String.format(CREATE_BOOKING_REQUEST, slotId);
-        log.info(format);
+  private int createBooking(int slotId) {
+    // @formatter:off
         return given()
                 .contentType(ContentType.JSON)
-                .body(format)
-                .post(BOOKINGS_PATH)
+                .pathParam("roomId", ROOM_ID)
+                .pathParam("slotId", slotId)
+                .body(CREATE_BOOKING_REQUEST)
+                .post(CREATE_BOOKING_PATH)
                 .path("bookingId");
         // @formatter:on
-    }
+  }
 }

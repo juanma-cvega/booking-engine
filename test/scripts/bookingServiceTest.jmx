@@ -181,7 +181,7 @@
             <collectionProp name="Arguments.arguments">
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">{&quot;roomId&quot;:&quot;1&quot;,&quot;startTime&quot;:&quot;${__javaScript(new Date(new Date().setHours(new Date().getHours()+6)).getTime())}&quot;,&quot;endTime&quot;:&quot;${__javaScript(new Date(new Date().setHours(new Date().getHours()+12)).getTime())}&quot;}</stringProp>
+                <stringProp name="Argument.value">{&quot;id&quot;:&quot;1&quot;,&quot;startTime&quot;:&quot;${__javaScript(new Date(new Date().setHours(new Date().getHours()+6)).getTime())}&quot;,&quot;endTime&quot;:&quot;${__javaScript(new Date(new Date().setHours(new Date().getHours()+12)).getTime())}&quot;}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
             </collectionProp>
@@ -278,7 +278,7 @@
             <collectionProp name="Arguments.arguments">
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">{&quot;userId&quot;:&quot;1&quot;,&quot;roomId&quot;:&quot;1&quot;,&quot;slotId&quot;:&quot;${slotId}&quot;}</stringProp>
+                <stringProp name="Argument.value">{&quot;userId&quot;:&quot;1&quot;,&quot;id&quot;:&quot;1&quot;,&quot;slotId&quot;:&quot;${slotId}&quot;}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
             </collectionProp>

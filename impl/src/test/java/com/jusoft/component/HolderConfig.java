@@ -1,6 +1,7 @@
 package com.jusoft.component;
 
 import com.jusoft.component.booking.BookingHolder;
+import com.jusoft.component.room.RoomHolder;
 import com.jusoft.component.slot.SlotHolder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,5 +17,10 @@ public class HolderConfig {
     @Bean
     public BookingHolder bookingHolder() {
         return new BookingHolder();
+    }
+
+    @Bean
+    public RoomHolder roomHolder() {
+        return new RoomHolder();
     }
 }
