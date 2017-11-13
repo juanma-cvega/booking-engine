@@ -6,16 +6,16 @@
 
   <parent>
     <groupId>com.jusoft</groupId>
-    <artifactId>booking-service</artifactId>
+    <artifactId>booking-engine</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
 
-  <artifactId>booking-service-controller</artifactId>
+  <artifactId>booking-engine-controller</artifactId>
 
   <dependencies>
     <dependency>
       <groupId>com.jusoft</groupId>
-      <artifactId>booking-service-impl</artifactId>
+      <artifactId>booking-engine-impl</artifactId>
       <version>${project.version}</version>
     </dependency>
 
@@ -58,7 +58,7 @@
         <artifactId>spring-boot-maven-plugin</artifactId>
         <configuration>
           <fork>true</fork>
-          <mainClass>com.jusoft.app.AppMain</mainClass>
+          <mainClass>com.jusoft.bookingengine.app.AppMain</mainClass>
         </configuration>
         <executions>
           <execution>

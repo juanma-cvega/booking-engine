@@ -1,0 +1,10 @@
+package com.jusoft.bookingengine.component.runner;
+
+import cucumber.api.CucumberOptions;
+import cucumber.api.junit.Cucumber;
+import org.junit.runner.RunWith;
+
+@RunWith(Cucumber.class)
+@CucumberOptions(features = "src/test/resources/features/room_management.feature", glue = {"com.jusoft.bookingengine.component.room", "com.jusoft.bookingengine.component.slot"})
+public class RoomManagementCTest {
+}

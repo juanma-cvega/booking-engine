@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.jusoft</groupId>
-  <artifactId>booking-service</artifactId>
+  <artifactId>booking-engine</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 

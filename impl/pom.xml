@@ -6,11 +6,11 @@
 
   <parent>
     <groupId>com.jusoft</groupId>
-    <artifactId>booking-service</artifactId>
+    <artifactId>booking-engine</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
 
-  <artifactId>booking-service-impl</artifactId>
+  <artifactId>booking-engine-impl</artifactId>
 
   <dependencies>
     <dependency>
