@@ -6,7 +6,6 @@ import com.jusoft.bookingengine.controller.slot.SlotResourceFactory;
 
 import java.util.List;
 
-import static com.jusoft.bookingengine.util.TimeUtil.getTimeFrom;
 import static java.util.stream.Collectors.toList;
 
 class BookingResourceFactory {
@@ -18,7 +17,8 @@ class BookingResourceFactory {
   }
 
   BookingResource createFrom(Booking booking) {
-    return new BookingResource(booking.getId(), getTimeFrom(booking.getBookingTime()), slotResourceFactory.createFrom(booking.getSlot()));
+//    return new BookingResource(booking.getId(), getTimeFrom(booking.getBookingTime()), slotResourceFactory.createFrom(booking.getSlot()));
+    return null;
   }
 
   BookingResources createFrom(List<Booking> bookings) {

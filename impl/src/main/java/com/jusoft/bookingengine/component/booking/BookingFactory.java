@@ -2,7 +2,6 @@ package com.jusoft.bookingengine.component.booking;
 
 
 import com.jusoft.bookingengine.component.booking.api.CreateBookingCommand;
-import com.jusoft.bookingengine.component.slot.Slot;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
@@ -16,7 +15,11 @@ class BookingFactory {
   private final Supplier<Long> idGenerator;
   private final Clock clock;
 
-  Booking create(CreateBookingCommand createBookingCommand, Slot slot) {
-    return new Booking(idGenerator.get(), createBookingCommand.getUserId(), ZonedDateTime.now(clock), slot);
+  Booking create(CreateBookingCommand createBookingCommand) {
+    return new Booking(idGenerator.get(),
+      createBookingCommand.getUserId(),
+      ZonedDateTime.now(clock),
+      createBookingCommand.getSlotId(),
+      createBookingCommand.getRoomId());
   }
 }

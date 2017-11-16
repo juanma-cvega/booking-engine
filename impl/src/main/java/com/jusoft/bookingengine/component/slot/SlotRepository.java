@@ -18,7 +18,7 @@ interface SlotRepository {
   /**
    * Returns the {@link Slot} if it's contained in the store and if the roomId matches the one provided
    *
-   * @param slotId the id of the slot to find
+   * @param slotId the id of the slot to findBySlot
    * @param roomId the id of the room the slot belongs to
    * @return Optional containing the {@link Slot} found
    */

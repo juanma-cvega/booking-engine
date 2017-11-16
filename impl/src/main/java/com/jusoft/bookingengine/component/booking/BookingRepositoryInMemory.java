@@ -2,9 +2,15 @@ package com.jusoft.bookingengine.component.booking;
 
 import com.jusoft.bookingengine.component.booking.api.SlotAlreadyBookedException;
 
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -26,9 +32,9 @@ class BookingRepositoryInMemory implements BookingRepository {
   //FIXME is repository the one who has to throw a business exception
   @Override
   public synchronized void save(Booking newBooking) throws SlotAlreadyBookedException {
-    store.values().stream().filter(booking -> Long.compare(booking.getSlot().getId(), newBooking.getSlot().getId()) == 0).findFirst()
+    store.values().stream().filter(booking -> Long.compare(booking.getId(), newBooking.getId()) == 0).findFirst()
       .ifPresent(booking -> {
-        throw new SlotAlreadyBookedException(newBooking.getSlot().getRoomId(), newBooking.getSlot().getId());
+        throw new SlotAlreadyBookedException(newBooking.getRoomId(), newBooking.getId());
       });
     store.put(newBooking.getId(), newBooking);
   }
@@ -46,5 +52,24 @@ class BookingRepositoryInMemory implements BookingRepository {
   @Override
   public List<Booking> getByUser(long userId) {
     return store.values().stream().filter(booking -> Long.compare(userId, booking.getUserId()) == 0).collect(toList());
+  }
+
+  @Override
+  public List<Long> findUserWithLessBookingsUntil(ZonedDateTime endTime, Set<Long> users) {
+    Map<Long, Long> mapUserToNumberOfBookings = store.values().stream()
+      .filter(booking -> users.contains(booking.getUserId()))
+      .map(Booking::getUserId)
+      .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
+    return mapUserToNumberOfBookings.values().stream().min(Comparator.naturalOrder())
+      .map(maxBookings -> mapToUsersWithMinimumBookings(mapUserToNumberOfBookings, maxBookings))
+      .orElse(new ArrayList<>());
+  }
+
+  private List<Long> mapToUsersWithMinimumBookings(Map<Long, Long> mapUserToNumberOfBookings, Long minBookings) {
+    return mapUserToNumberOfBookings.entrySet().stream()
+      .filter(entry -> entry.getValue().equals(minBookings))
+      .map(Map.Entry::getKey)
+      .collect(toList());
   }
 }

@@ -17,7 +17,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.time.ZonedDateTime;
 import java.util.StringJoiner;
 
 import static com.jusoft.bookingengine.component.booking.BookingFixtures.BOOKINGS;
@@ -179,7 +178,7 @@ public class BookingControllerRestTest {
   @Test
   public void slotAlreadyStarted() throws Exception {
     when(mockBookingCommandFactory.createFrom(ROOM_ID, SlotFixtures.SLOT_ID_1, USER_ID_1)).thenReturn(CREATE_BOOKING_COMMAND);
-    when(mockBookingComponent.book(CREATE_BOOKING_COMMAND)).thenThrow(new SlotAlreadyStartedException(SlotFixtures.SLOT_ID_1, ROOM_ID, ZonedDateTime.now()));
+    when(mockBookingComponent.book(CREATE_BOOKING_COMMAND)).thenThrow(new SlotAlreadyStartedException(SlotFixtures.SLOT_ID_1, ROOM_ID));
 
     String createUrl = String.format(CREATE_BOOKING_URL_TEMPLATE, ROOM_ID, SlotFixtures.SLOT_ID_1);
     String urlTemplate = new StringJoiner(FORTHSLASH).add(BOOKINGS_URL).add(createUrl).toString();

@@ -54,7 +54,7 @@ public class BookingManagementStepDefinitions extends AbstractStepDefinitions {
     Then("^the slot should be booked by the user$", () -> {
       Booking booking = bookingComponent.find(CommonFixtures.USER_ID_1, bookingHolder.bookingCreated.getId());
       assertThat(booking).isNotNull();
-      Assertions.assertThat(booking.getSlot().getId()).isEqualTo(slotHolder.slotSelected);
+      Assertions.assertThat(booking.getId()).isEqualTo(slotHolder.slotSelected);
     });
     Given("^all slots from the room are booked by the same user$", () ->
       slotComponent.findOpenSlotsFor(roomHolder.roomCreated.getId()).forEach(slotResource ->
@@ -85,7 +85,7 @@ public class BookingManagementStepDefinitions extends AbstractStepDefinitions {
 
   private Long getSlotFrom(long roomId) {
     return slotComponent.findLastCreatedFor(roomId)
-      .orElseThrow(() -> new IllegalArgumentException(String.format("Unable to find last slot for room %s", roomId)))
+      .orElseThrow(() -> new IllegalArgumentException(String.format("Unable to findBySlot last slot for room %s", roomId)))
       .getId();
   }
 

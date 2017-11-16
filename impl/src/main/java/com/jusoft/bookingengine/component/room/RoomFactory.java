@@ -17,6 +17,9 @@ class RoomFactory {
       createRoomCommand.getSlotDurationInMinutes(),
       createRoomCommand.getOpenTimePerDay(),
       createRoomCommand.getAvailableDays(),
-      createRoomCommand.isActive());
+      createRoomCommand.isActive(),
+      createRoomCommand.getAuctionTime(),
+      createRoomCommand.getStrategy(),
+      createRoomCommand.getAuctionConfig());
   }
 }

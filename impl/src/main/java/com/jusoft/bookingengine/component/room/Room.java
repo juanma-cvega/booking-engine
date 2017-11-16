@@ -1,5 +1,7 @@
 package com.jusoft.bookingengine.component.room;
 
+import com.jusoft.bookingengine.component.auction.api.AuctionConfig;
+import com.jusoft.bookingengine.component.auction.api.AuctionWinnerStrategyType;
 import com.jusoft.bookingengine.component.slot.Slot;
 import com.jusoft.bookingengine.component.slot.api.CreateSlotCommand;
 import com.jusoft.bookingengine.component.slot.api.NoSlotsForRoomException;
@@ -32,9 +34,14 @@ public class Room {
   private final List<OpenTime> openTimesPerDay;
   private final List<DayOfWeek> availableDays;
   private final boolean active;
+  private final int auctionTime;
+  //FIXME create a single class to contain both and ensure the type matches the config class
+  private final AuctionWinnerStrategyType strategyType;
+  private final AuctionConfig auctionConfig;
 
   //TODO provide tests validation
-  Room(long id, int maxSlots, int slotDurationInMinutes, List<OpenTime> openTimesPerDay, List<DayOfWeek> availableDays, boolean active) {
+  Room(long id, int maxSlots, int slotDurationInMinutes, List<OpenTime> openTimesPerDay, List<DayOfWeek> availableDays,
+       boolean active, int auctionTime, AuctionWinnerStrategyType strategyType, AuctionConfig auctionConfig) {
     Validate.notEmpty(openTimesPerDay);
     Validate.notEmpty(availableDays);
     validateOpenTimesForSlotDuration(openTimesPerDay, slotDurationInMinutes);
@@ -45,6 +52,9 @@ public class Room {
     this.openTimesPerDay = openTimesPerDay;
     this.availableDays = availableDays;
     this.active = active;
+    this.auctionTime = auctionTime;
+    this.strategyType = strategyType;
+    this.auctionConfig = auctionConfig;
   }
 
   private void validateOpenTimesForSlotDuration(List<OpenTime> openTimesPerDay, int slotDurationInMinutes) {
@@ -58,6 +68,7 @@ public class Room {
 
   //FIXME avoid many calls to database by finding all first slots to create in one go rather than launching the
   //FIXME creation of each individual one
+  //FIXME avoid passing SlotComponent as it lets use the component to modify slots ????
   UpcomingSlot findUpcomingSlot(SlotComponent slotComponent, Clock clock) {
     ZonedDateTime creationTime = getCreationTime(slotComponent, clock);
     return UpcomingSlot.builder()
@@ -66,10 +77,11 @@ public class Room {
       .build();
   }
 
+  //FIXME avoid passing SlotComponent as it lets use the component to modify slots ????
   void openNextSlot(SlotComponent slotComponent, Clock clock) {
     ZonedDateTime lastSlotEndTime = getLastSlotEndTime(slotComponent, clock);
     ZonedDateTime nextSlotEndTime = getNextSlotEndTime(lastSlotEndTime, clock);
-    slotComponent.create(new CreateSlotCommand(id, nextSlotEndTime.minusMinutes(slotDurationInMinutes), nextSlotEndTime));
+    slotComponent.create(new CreateSlotCommand(id, nextSlotEndTime.minusMinutes(slotDurationInMinutes), nextSlotEndTime), clock);
   }
 
   private ZonedDateTime getLastSlotEndTime(SlotComponent slotComponent, Clock clock) {
@@ -183,5 +195,14 @@ public class Room {
 
   List<DayOfWeek> getAvailableDays() {
     return new ArrayList<>(availableDays);
+  }
+
+  public boolean isInAuction(Clock clock, Slot slot) {
+    ZonedDateTime now = ZonedDateTime.now(clock);
+    return now.isAfter(slot.getCreationTime()) && now.isBefore(slot.getCreationTime().plusMinutes(auctionTime));
+  }
+
+  public ZonedDateTime getAuctionEndTimeFor(Slot slot) {
+    return slot.getCreationTime().plusMinutes(auctionTime);
   }
 }

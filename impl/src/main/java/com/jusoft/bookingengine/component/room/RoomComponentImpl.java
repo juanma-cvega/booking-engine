@@ -1,15 +1,18 @@
 package com.jusoft.bookingengine.component.room;
 
+import com.jusoft.bookingengine.component.auction.api.AuctionWinnerStrategyType;
 import com.jusoft.bookingengine.component.room.api.CreateRoomCommand;
 import com.jusoft.bookingengine.component.room.api.RoomComponent;
 import com.jusoft.bookingengine.component.room.api.RoomNotFoundException;
 import com.jusoft.bookingengine.component.scheduler.SchedulerComponent;
 import com.jusoft.bookingengine.component.shared.MessagePublisher;
+import com.jusoft.bookingengine.component.slot.Slot;
 import com.jusoft.bookingengine.component.slot.api.SlotComponent;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
 import java.time.Clock;
+import java.time.ZonedDateTime;
 
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class RoomComponentImpl implements RoomComponent {
@@ -37,16 +40,32 @@ class RoomComponentImpl implements RoomComponent {
 
   @Override
   public void openNextSlotFor(long roomId) {
-    Room room = roomRepository.find(roomId).orElseThrow(() -> new RoomNotFoundException(roomId));
+    Room room = findRoom(roomId);
     room.openNextSlot(slotComponent, clock);
   }
 
   @Override
   public void scheduleComingSlotFor(long roomId) {
-    Room room = roomRepository.find(roomId).orElseThrow(() -> new RoomNotFoundException(roomId));
+    Room room = findRoom(roomId);
     UpcomingSlot upcomingSlot = room.findUpcomingSlot(slotComponent, clock);
     schedulerComponent.schedule(taskBuilder -> taskBuilder
       .executionTime(upcomingSlot.getCreationTime())
       .event(roomEventFactory.openNextSlotCommand(upcomingSlot.getRoomId())));
+  }
+
+  @Override
+  public ZonedDateTime findAuctionEndTimeFor(long roomId, long slotId) {
+    Room room = findRoom(roomId);
+    Slot slot = slotComponent.find(slotId, roomId);
+    return slot.getCreationTime().plusMinutes(room.getAuctionTime());
+  }
+
+  @Override
+  public AuctionWinnerStrategyType findAuctionWinnerStrategyTypeFor(long roomId) {
+    return findRoom(roomId).getStrategyType();
+  }
+
+  private Room findRoom(long roomId) {
+    return roomRepository.find(roomId).orElseThrow(() -> new RoomNotFoundException(roomId));
   }
 }

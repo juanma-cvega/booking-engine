@@ -1,5 +1,8 @@
 package com.jusoft.bookingengine.component.room;
 
+import com.jusoft.bookingengine.component.auction.api.AuctionConfig;
+import com.jusoft.bookingengine.component.auction.api.AuctionWinnerStrategyType;
+import com.jusoft.bookingengine.component.auction.api.LessBookingsWithinPeriodConfig;
 import com.jusoft.bookingengine.component.room.api.CreateRoomCommand;
 import com.jusoft.bookingengine.component.room.api.CreateRoomCommand.CreateRoomCommandBuilder;
 import com.jusoft.bookingengine.component.timer.OpenTime;
@@ -10,6 +13,8 @@ import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
+
+import static com.jusoft.bookingengine.component.auction.api.AuctionWinnerStrategyType.LESS_BOOKINGS_WITHIN_PERIOD;
 
 @UtilityClass
 public class RoomFixtures {
@@ -27,9 +32,12 @@ public class RoomFixtures {
   public static final boolean ACTIVE = true;
 
   public static final CreateRoomCommand CREATE_ROOM_COMMAND = createRoomCommand();
+  public static final int AUCTION_TIME = 5;
+  public static final AuctionWinnerStrategyType AUCTION_STRATEGY_TYPE = LESS_BOOKINGS_WITHIN_PERIOD;
+  public static final AuctionConfig LESS_BOOKINGS_WITHIN_PERIOD_CONFIG = new LessBookingsWithinPeriodConfig(5);
 
   private static CreateRoomCommand createRoomCommand() {
-    return new CreateRoomCommand(MAX_SLOTS, SLOT_DURATION_IN_MINUTES, OPEN_TIMES, AVAILABLE_DAYS, ACTIVE);
+    return new CreateRoomCommand(MAX_SLOTS, SLOT_DURATION_IN_MINUTES, OPEN_TIMES, AVAILABLE_DAYS, ACTIVE, AUCTION_TIME, AUCTION_STRATEGY_TYPE, LESS_BOOKINGS_WITHIN_PERIOD_CONFIG);
   }
 
   public static CreateRoomCommand createRoomCommand(Consumer<CreateRoomCommandBuilder> consumer) {

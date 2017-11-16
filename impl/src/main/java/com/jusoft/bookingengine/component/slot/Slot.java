@@ -14,6 +14,8 @@ public class Slot {
   private final long id;
   private final long roomId;
   @NonNull
+  private final ZonedDateTime creationTime;
+  @NonNull
   private final ZonedDateTime startDate;
   @NonNull
   private final ZonedDateTime endDate;

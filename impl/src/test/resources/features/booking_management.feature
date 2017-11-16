@@ -42,3 +42,22 @@ Feature: As a user, I should be able to manage bookings
     When a different user cancels the booking
     Then the slot should be booked by the user
     And the user should be notified the booking does belong to other user
+
+  Scenario: As a user, I should be able to book a slot while is open for auction
+    Given a room is to be created
+    And the room has a 10 minutes auction time
+    And a slot from the room is selected
+    And the slot is booked during auction time
+    When the auction time is finished
+    Then the slot should be booked by the user
+
+  Scenario: As a user, I shouldn't be able to book a slot after auction if there is someone with a better criteria
+    Given a room is to be created
+    And the room has a 10 minutes auction time
+    And a slot from the room is selected
+    And the slot is booked
+    And another slot from the room is selected
+    And the slot is booked during auction time
+    And another user books the same slot during auction time
+    When the auction time is finished
+    Then the slot shouldn't be booked by the user

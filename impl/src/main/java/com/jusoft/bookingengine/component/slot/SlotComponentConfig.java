@@ -22,7 +22,7 @@ public class SlotComponentConfig {
 
   @Bean
   public SlotComponent slotComponent() {
-    return new SlotComponentImpl(slotRepository(), slotFactory(), slotEventFactory(), messagePublisher);
+    return new SlotComponentImpl(slotRepository(), slotFactory(), slotEventFactory(), messagePublisher, clock);
   }
 
   private SlotEventFactory slotEventFactory() {

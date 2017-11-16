@@ -6,7 +6,7 @@ import java.time.ZonedDateTime;
 
 public class TimeUtil {
 
-  //FIXME find better serialization
+  //FIXME findBySlot better serialization
   public static long getTimeFrom(ZonedDateTime time) {
     return time.toInstant().getEpochSecond();
   }

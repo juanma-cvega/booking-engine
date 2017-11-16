@@ -7,6 +7,8 @@ import com.jusoft.bookingengine.component.slot.api.SlotNotFoundException;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
+import java.time.Clock;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,10 +19,11 @@ class SlotComponentImpl implements SlotComponent {
   private final SlotFactory slotFactory;
   private final SlotEventFactory slotEventFactory;
   private final MessagePublisher messagePublisher;
+  private final Clock clock;
 
   @Override
-  public Slot create(CreateSlotCommand createSlotCommand) {
-    Slot newSlot = slotFactory.createFrom(createSlotCommand);
+  public Slot create(CreateSlotCommand createSlotCommand, Clock clock) {
+    Slot newSlot = slotFactory.createFrom(createSlotCommand, clock);
     slotRepository.save(newSlot);
     messagePublisher.publish(slotEventFactory.slotCreatedEvent(newSlot));
     return newSlot;
@@ -44,5 +47,10 @@ class SlotComponentImpl implements SlotComponent {
   @Override
   public Slot find(long slotId, long roomId) {
     return slotRepository.find(slotId, roomId).orElseThrow(() -> new SlotNotFoundException(slotId, roomId));
+  }
+
+  @Override
+  public boolean isSlotOpen(long slotId, long roomId) {
+    return find(slotId, roomId).isOpen(ZonedDateTime.now(clock));
   }
 }

@@ -1,5 +1,6 @@
 package com.jusoft.bookingengine.component;
 
+import com.jusoft.bookingengine.component.auction.AuctionComponentConfig;
 import com.jusoft.bookingengine.component.booking.BookingComponentConfig;
 import com.jusoft.bookingengine.component.mock.MockConfig;
 import com.jusoft.bookingengine.component.room.RoomComponentConfig;
@@ -20,6 +21,7 @@ import org.springframework.test.context.ContextConfiguration;
   BookingComponentConfig.class,
   SlotComponentConfig.class,
   RoomComponentConfig.class,
+  AuctionComponentConfig.class,
   HolderConfig.class,
   MockConfig.class})
 @DirtiesContext

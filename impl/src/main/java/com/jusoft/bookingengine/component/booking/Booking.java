@@ -2,7 +2,7 @@ package com.jusoft.bookingengine.component.booking;
 
 import com.jusoft.bookingengine.component.booking.api.SlotAlreadyStartedException;
 import com.jusoft.bookingengine.component.booking.api.WrongBookingUserException;
-import com.jusoft.bookingengine.component.slot.Slot;
+import com.jusoft.bookingengine.component.slot.api.SlotComponent;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,11 +18,11 @@ public class Booking {
   private final long userId;
   @NonNull
   private final ZonedDateTime bookingTime;
-  @NonNull
-  private final Slot slot;
+  private final long slotId;
+  private final long roomId;
 
-  boolean canClose(ZonedDateTime currentTime, Long requestUserId) {
-    validateSlotIsOpen(currentTime);
+  boolean canClose(Long requestUserId, SlotComponent slotComponent) {
+    validateSlotIsOpen(slotComponent);
     validateUserOwnsBooking(requestUserId);
     return true;
   }
@@ -33,9 +33,9 @@ public class Booking {
     }
   }
 
-  private void validateSlotIsOpen(ZonedDateTime requestTime) {
-    if (slot.getStartDate().isBefore(requestTime)) {
-      throw new SlotAlreadyStartedException(slot.getId(), slot.getRoomId(), slot.getStartDate());
+  private void validateSlotIsOpen(SlotComponent slotComponent) {
+    if (slotComponent.isSlotOpen(slotId, roomId)) {
+      throw new SlotAlreadyStartedException(slotId, roomId);
     }
   }
 }
