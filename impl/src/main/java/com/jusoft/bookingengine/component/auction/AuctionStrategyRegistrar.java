@@ -1,16 +1,18 @@
 package com.jusoft.bookingengine.component.auction;
 
-import com.jusoft.bookingengine.component.auction.api.AuctionWinnerStrategyType;
+import com.jusoft.bookingengine.component.auction.api.strategy.AuctionConfigInfo;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
 import java.util.Map;
 
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
 class AuctionStrategyRegistrar {
 
-  private final Map<AuctionWinnerStrategyType, AuctionWinnerStrategy> strategies;
+  private final Map<Class<? extends AuctionConfigInfo>, AuctionWinnerStrategyFactory> factories;
 
-  AuctionWinnerStrategy findStrategyFor(AuctionWinnerStrategyType strategyType) {
-    return strategies.get(strategyType);
+  @SuppressWarnings("unchecked")
+  <T extends AuctionConfigInfo> AuctionWinnerStrategy createStrategyWith(T config) {
+    return factories.get(config.getClass()).createInstance(config);
   }
 }

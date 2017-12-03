@@ -15,6 +15,6 @@ class SlotFactory {
   }
 
   Slot createFrom(CreateSlotCommand request, Clock clock) {
-    return new Slot(idGenerator.get(), request.getRoomId(), request.getStartTime(), request.getEndTime(), ZonedDateTime.now(clock));
+    return new Slot(idGenerator.get(), request.getRoomId(), ZonedDateTime.now(clock), request.getStartTime(), request.getEndTime());
   }
 }

@@ -1,13 +1,10 @@
 package com.jusoft.bookingengine.component.room;
 
-import com.jusoft.bookingengine.component.auction.api.AuctionWinnerStrategyType;
 import com.jusoft.bookingengine.component.room.api.CreateRoomCommand;
 import com.jusoft.bookingengine.component.room.api.RoomComponent;
 import com.jusoft.bookingengine.component.room.api.RoomNotFoundException;
-import com.jusoft.bookingengine.component.scheduler.SchedulerComponent;
 import com.jusoft.bookingengine.component.shared.MessagePublisher;
-import com.jusoft.bookingengine.component.slot.Slot;
-import com.jusoft.bookingengine.component.slot.api.SlotComponent;
+import com.jusoft.bookingengine.component.timer.OpenDate;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
@@ -21,8 +18,6 @@ class RoomComponentImpl implements RoomComponent {
   private final RoomFactory roomFactory;
   private final RoomEventFactory roomEventFactory;
   private final MessagePublisher messagePublisher;
-  private final SlotComponent slotComponent;
-  private final SchedulerComponent schedulerComponent;
   private final Clock clock;
 
   @Override
@@ -39,30 +34,26 @@ class RoomComponentImpl implements RoomComponent {
   }
 
   @Override
-  public void openNextSlotFor(long roomId) {
+  public OpenDate findNextSlotOpenDate(ZonedDateTime lastSlotEndTime, long roomId) {
     Room room = findRoom(roomId);
-    room.openNextSlot(slotComponent, clock);
+    return room.findNextSlotDate(lastSlotEndTime, clock);
   }
 
   @Override
-  public void scheduleComingSlotFor(long roomId) {
+  public OpenDate findFirstSlotOpenDate(long roomId) {
     Room room = findRoom(roomId);
-    UpcomingSlot upcomingSlot = room.findUpcomingSlot(slotComponent, clock);
-    schedulerComponent.schedule(taskBuilder -> taskBuilder
-      .executionTime(upcomingSlot.getCreationTime())
-      .event(roomEventFactory.openNextSlotCommand(upcomingSlot.getRoomId())));
+    return room.findFirstSlotDate(clock);
   }
 
   @Override
-  public ZonedDateTime findAuctionEndTimeFor(long roomId, long slotId) {
+  public ZonedDateTime findNextSlotOpeningTime(long roomId, int currentNumberOfSlotsOpen, ZonedDateTime nextSlotToFinishEndDate) {
     Room room = findRoom(roomId);
-    Slot slot = slotComponent.find(slotId, roomId);
-    return slot.getCreationTime().plusMinutes(room.getAuctionTime());
+    return room.findUpcomingSlot(clock, currentNumberOfSlotsOpen, nextSlotToFinishEndDate);
   }
 
   @Override
-  public AuctionWinnerStrategyType findAuctionWinnerStrategyTypeFor(long roomId) {
-    return findRoom(roomId).getStrategyType();
+  public int getAuctionDurationFor(long roomId) {
+    return findRoom(roomId).getAuctionConfigInfo().getAuctionDuration();
   }
 
   private Room findRoom(long roomId) {

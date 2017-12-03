@@ -54,21 +54,26 @@ class SlotRepositoryInMemory implements SlotRepository {
       .findFirst()
       .orElseGet(() -> store.values().stream()
         .filter(bySlotsToStart())
-        .sorted(byStartDateDesc())
+        .sorted(byStartDateAsc())
         .findFirst()
         .orElse(null)));
   }
 
-  private Comparator<Slot> byStartDateDesc() {
-    return (slot1, slot2) -> slot1.getStartDate().isBefore(slot2.getStartDate()) ? 1 : -1;
+  private Comparator<Slot> byStartDateAsc() {
+    return Comparator.comparing(Slot::getStartDate);
   }
 
   private Predicate<Slot> bySlotInUse() {
-    return slot -> slot.getStartDate().isBefore(ZonedDateTime.now(clock)) &&
-      slot.getEndDate().isAfter(ZonedDateTime.now(clock));
+    return slot -> {
+      ZonedDateTime now = ZonedDateTime.now(clock);
+      return slot.getStartDate().isBefore(now) && slot.getEndDate().isAfter(now);
+    };
   }
 
   private Predicate<Slot> bySlotsToStart() {
-    return slot -> slot.getStartDate().isAfter(ZonedDateTime.now(clock));
+    return slot -> {
+      ZonedDateTime now = ZonedDateTime.now(clock);
+      return slot.getStartDate().isAfter(now) || slot.getStartDate().isEqual(now);
+    };
   }
 }

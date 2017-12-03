@@ -1,7 +1,7 @@
 package com.jusoft.bookingengine.listener;
 
 import com.jusoft.bookingengine.component.room.api.OpenNextSlotCommand;
-import com.jusoft.bookingengine.component.room.api.RoomComponent;
+import com.jusoft.bookingengine.usecase.SlotUseCase;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,12 +11,12 @@ import org.springframework.context.event.EventListener;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class OpenNextSlotCommandListener implements MessageListener<OpenNextSlotCommand> {
 
-  private final RoomComponent roomComponent;
+  private final SlotUseCase slotUseCase;
 
   @EventListener(OpenNextSlotCommand.class)
   @Override
   public void consume(OpenNextSlotCommand command) {
     log.info("OpenNextSlotCommand consumed: roomId={}", command.getRoomId());
-    roomComponent.openNextSlotFor(command.getRoomId());
+    slotUseCase.openNextSlotFor(command.getRoomId());
   }
 }

@@ -1,12 +1,15 @@
 package com.jusoft.bookingengine.component.auction;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
 
-public class AuctionRepositoryInMemory implements AuctionRepository {
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
+class AuctionRepositoryInMemory implements AuctionRepository {
 
-  private final Map<Long, Auction> store = new ConcurrentHashMap<>();
+  private final Map<Long, Auction> store;
 
   @Override
   public void save(Auction newAuction) {

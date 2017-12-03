@@ -1,11 +1,7 @@
 package com.jusoft.bookingengine.component.room;
 
-import com.jusoft.bookingengine.component.auction.api.AuctionConfig;
-import com.jusoft.bookingengine.component.auction.api.AuctionWinnerStrategyType;
-import com.jusoft.bookingengine.component.slot.Slot;
-import com.jusoft.bookingengine.component.slot.api.CreateSlotCommand;
-import com.jusoft.bookingengine.component.slot.api.NoSlotsForRoomException;
-import com.jusoft.bookingengine.component.slot.api.SlotComponent;
+import com.jusoft.bookingengine.component.auction.api.strategy.AuctionConfigInfo;
+import com.jusoft.bookingengine.component.timer.OpenDate;
 import com.jusoft.bookingengine.component.timer.OpenTime;
 import lombok.Data;
 import org.apache.commons.lang3.Validate;
@@ -20,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Predicate;
 
 import static com.jusoft.bookingengine.component.timer.TimeConstants.UTC;
@@ -34,14 +29,11 @@ public class Room {
   private final List<OpenTime> openTimesPerDay;
   private final List<DayOfWeek> availableDays;
   private final boolean active;
-  private final int auctionTime;
-  //FIXME create a single class to contain both and ensure the type matches the config class
-  private final AuctionWinnerStrategyType strategyType;
-  private final AuctionConfig auctionConfig;
+  private final AuctionConfigInfo auctionConfigInfo;
 
   //TODO provide tests validation
   Room(long id, int maxSlots, int slotDurationInMinutes, List<OpenTime> openTimesPerDay, List<DayOfWeek> availableDays,
-       boolean active, int auctionTime, AuctionWinnerStrategyType strategyType, AuctionConfig auctionConfig) {
+       boolean active, AuctionConfigInfo auctionConfigInfo) {
     Validate.notEmpty(openTimesPerDay);
     Validate.notEmpty(availableDays);
     validateOpenTimesForSlotDuration(openTimesPerDay, slotDurationInMinutes);
@@ -52,9 +44,7 @@ public class Room {
     this.openTimesPerDay = openTimesPerDay;
     this.availableDays = availableDays;
     this.active = active;
-    this.auctionTime = auctionTime;
-    this.strategyType = strategyType;
-    this.auctionConfig = auctionConfig;
+    this.auctionConfigInfo = auctionConfigInfo;
   }
 
   private void validateOpenTimesForSlotDuration(List<OpenTime> openTimesPerDay, int slotDurationInMinutes) {
@@ -69,34 +59,39 @@ public class Room {
   //FIXME avoid many calls to database by finding all first slots to create in one go rather than launching the
   //FIXME creation of each individual one
   //FIXME avoid passing SlotComponent as it lets use the component to modify slots ????
-  UpcomingSlot findUpcomingSlot(SlotComponent slotComponent, Clock clock) {
-    ZonedDateTime creationTime = getCreationTime(slotComponent, clock);
-    return UpcomingSlot.builder()
-      .roomId(id)
-      .creationTime(creationTime)
-      .build();
+  //FIXME provide different strategies to decide when the next slot should be created. Current one waits for the first slot to finish
+  ZonedDateTime findUpcomingSlot(Clock clock, int currentNumberOfSlotsOpen, ZonedDateTime nextSlotToFinishEndDate) {
+    ZonedDateTime creationTime = ZonedDateTime.now(clock);
+    if (currentNumberOfSlotsOpen >= maxSlots) {
+      creationTime = nextSlotToFinishEndDate;
+    }
+    return creationTime;
   }
 
-  //FIXME avoid passing SlotComponent as it lets use the component to modify slots ????
-  void openNextSlot(SlotComponent slotComponent, Clock clock) {
-    ZonedDateTime lastSlotEndTime = getLastSlotEndTime(slotComponent, clock);
-    ZonedDateTime nextSlotEndTime = getNextSlotEndTime(lastSlotEndTime, clock);
-    slotComponent.create(new CreateSlotCommand(id, nextSlotEndTime.minusMinutes(slotDurationInMinutes), nextSlotEndTime), clock);
+  OpenDate findFirstSlotDate(Clock clock) {
+    ZonedDateTime endDate = getLastSlotEndTime(clock);
+    return getNextSlotDate(endDate, clock);
   }
 
-  private ZonedDateTime getLastSlotEndTime(SlotComponent slotComponent, Clock clock) {
-    Optional<Slot> lastSlot = slotComponent.findLastCreatedFor(id);
-    return lastSlot.map(Slot::getEndDate).orElseGet(() -> {
-      ZonedDateTime lastSlotTime;
-      LocalTime currentTime = LocalTime.now(clock);
-      OpenTime openTime = findOpenTimeFor(currentTime);
-      if (isNotWithinOpenTime(currentTime, openTime)) {
-        lastSlotTime = getStartOfNextOpenTime(openTime, clock);
-      } else {
-        lastSlotTime = findSlotWithin(openTime, currentTime, clock);
-      }
-      return lastSlotTime;
-    });
+  private ZonedDateTime getLastSlotEndTime(Clock clock) {
+    ZonedDateTime endDate;
+    LocalTime currentTime = LocalTime.now(clock);
+    OpenTime openTime = findOpenTimeFor(currentTime);
+    if (isNotWithinOpenTime(currentTime, openTime)) {
+      endDate = getStartOfNextOpenTime(openTime, clock);
+    } else {
+      endDate = findSlotWithin(openTime, currentTime, clock);
+    }
+    return endDate;
+  }
+
+  OpenDate findNextSlotDate(ZonedDateTime lastSlotEndTime, Clock clock) {
+    return getNextSlotDate(lastSlotEndTime, clock);
+  }
+
+  private OpenDate getNextSlotDate(ZonedDateTime endDate, Clock clock) {
+    ZonedDateTime nextSlotEndTime = getNextSlotEndTime(endDate, clock);
+    return new OpenDate(nextSlotEndTime.minusMinutes(slotDurationInMinutes), nextSlotEndTime);
   }
 
   private OpenTime findOpenTimeFor(LocalTime localTime) {
@@ -179,30 +174,11 @@ public class Room {
     return closestOpenTimeForLastSlotEnd.getStartTime().equals(closestOpenTimeForSlotNextEnd.getStartTime());
   }
 
-  //FIXME provide different strategies to decide when the next slot should be created. Current one waits for the first slot to finish
-  private ZonedDateTime getCreationTime(SlotComponent slotComponent, Clock clock) {
-    ZonedDateTime creationTime = ZonedDateTime.now(clock);
-    if (slotComponent.findOpenSlotsFor(id).size() >= maxSlots) {
-      Slot slot = slotComponent.findSlotInUseOrToStartFor(id).orElseThrow(() -> new NoSlotsForRoomException(id));
-      creationTime = slot.getEndDate();
-    }
-    return creationTime;
-  }
-
   List<OpenTime> getOpenTimesPerDay() {
     return new ArrayList<>(openTimesPerDay);
   }
 
   List<DayOfWeek> getAvailableDays() {
     return new ArrayList<>(availableDays);
-  }
-
-  public boolean isInAuction(Clock clock, Slot slot) {
-    ZonedDateTime now = ZonedDateTime.now(clock);
-    return now.isAfter(slot.getCreationTime()) && now.isBefore(slot.getCreationTime().plusMinutes(auctionTime));
-  }
-
-  public ZonedDateTime getAuctionEndTimeFor(Slot slot) {
-    return slot.getCreationTime().plusMinutes(auctionTime);
   }
 }

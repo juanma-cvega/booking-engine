@@ -1,10 +1,7 @@
 package com.jusoft.bookingengine.component.booking;
 
-import com.jusoft.bookingengine.component.auction.api.AuctionComponent;
 import com.jusoft.bookingengine.component.booking.api.BookingComponent;
-import com.jusoft.bookingengine.component.room.api.RoomComponent;
 import com.jusoft.bookingengine.component.shared.MessagePublisher;
-import com.jusoft.bookingengine.component.slot.api.SlotComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,15 +15,6 @@ import java.util.function.Supplier;
 public class BookingComponentConfig {
 
   @Autowired
-  private SlotComponent slotComponent;
-
-  @Autowired
-  private RoomComponent roomComponent;
-
-  @Autowired
-  private AuctionComponent auctionComponent;
-
-  @Autowired
   private MessagePublisher messagePublisher;
 
   @Autowired
@@ -34,7 +22,7 @@ public class BookingComponentConfig {
 
   @Bean
   public BookingComponent bookingComponent() {
-    return new BookingComponentImpl(slotComponent, auctionComponent, bookingRepository(), bookingFactory(), clock);
+    return new BookingComponentImpl(bookingRepository(), bookingFactory(), messagePublisher);
   }
 
   private BookingFactory bookingFactory() {

@@ -41,7 +41,7 @@ Feature: As an admin, I want to manage rooms. As a user, I want to be able to se
     Then 10 slots should have been created
     And the first slot should start at 14:00
     And the last slot should start at 14:09
-    And a new slot should be scheduled to be created at 08:01
+    And a new slot should be scheduled to be created at 14:01
 
   Scenario: As an admin, I should be able to verify slots creation while current time is within an open time
     Given a room is to be created
@@ -53,7 +53,7 @@ Feature: As an admin, I want to manage rooms. As a user, I want to be able to se
     Then 10 slots should have been created
     And the first slot should start at 08:34
     And the last slot should start at 08:43
-    And a new slot should be scheduled to be created at 08:01
+    And a new slot should be scheduled to be created at 08:35
 
   Scenario: As an admin, I should be able to verify slots creation between different opening times within the same day
     Given a room is to be created
@@ -66,7 +66,7 @@ Feature: As an admin, I want to manage rooms. As a user, I want to be able to se
     Then 10 slots should have been created
     And the first slot should start at 12:22
     And the last slot should start at 14:55
-    And a new slot should be scheduled to be created at 08:01
+    And a new slot should be scheduled to be created at 12:23
 
   Scenario: As an admin, I should be able to verify slots creation between different opening times in two different days
     Given a room is to be created
@@ -79,7 +79,7 @@ Feature: As an admin, I want to manage rooms. As a user, I want to be able to se
     And the first slot should start at 12:16
     And the last slot should start at 08:14
     And the last slot should start the day after
-    And a new slot should be scheduled to be created at 08:01
+    And a new slot should be scheduled to be created at 12:17
 
 
   Scenario: As an admin, I should be able to verify slots creation starting next day
@@ -94,4 +94,4 @@ Feature: As an admin, I want to manage rooms. As a user, I want to be able to se
     And the last slot should start at 08:21
     And the first slot should start the day after
     And the last slot should start the day after
-    And a new slot should be scheduled to be created at 08:24
+    And a new slot should be scheduled to be created next day at 08:13

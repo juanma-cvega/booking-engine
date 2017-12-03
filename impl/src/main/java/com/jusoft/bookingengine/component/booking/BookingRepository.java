@@ -17,5 +17,5 @@ interface BookingRepository {
 
   List<Booking> getByUser(long userId);
 
-  List<Long> findUserWithLessBookingsUntil(ZonedDateTime endTime, Set<Long> users);
+  Set<Long> findUserWithLessBookingsUntil(ZonedDateTime endTime, Set<Long> users);
 }

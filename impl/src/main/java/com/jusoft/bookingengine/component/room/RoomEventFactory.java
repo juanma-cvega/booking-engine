@@ -1,6 +1,5 @@
 package com.jusoft.bookingengine.component.room;
 
-import com.jusoft.bookingengine.component.room.api.OpenNextSlotCommand;
 import com.jusoft.bookingengine.component.room.api.RoomCreatedEvent;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -19,7 +18,4 @@ class RoomEventFactory {
 
   }
 
-  OpenNextSlotCommand openNextSlotCommand(long roomId) {
-    return new OpenNextSlotCommand(roomId);
-  }
 }

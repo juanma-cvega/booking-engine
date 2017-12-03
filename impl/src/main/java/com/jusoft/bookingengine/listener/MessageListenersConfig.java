@@ -1,9 +1,9 @@
 package com.jusoft.bookingengine.listener;
 
-import com.jusoft.bookingengine.component.auction.api.AuctionComponent;
-import com.jusoft.bookingengine.component.booking.api.BookingComponent;
-import com.jusoft.bookingengine.component.room.api.RoomComponent;
-import com.jusoft.bookingengine.component.scheduler.SchedulerComponent;
+import com.jusoft.bookingengine.component.scheduler.api.SchedulerComponent;
+import com.jusoft.bookingengine.usecase.AuctionUseCase;
+import com.jusoft.bookingengine.usecase.BookingUseCase;
+import com.jusoft.bookingengine.usecase.SlotUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,41 +12,41 @@ import org.springframework.context.annotation.Configuration;
 public class MessageListenersConfig {
 
   @Autowired
-  private RoomComponent roomComponent;
+  private SlotUseCase slotUseCase;
   @Autowired
-  private AuctionComponent auctionComponent;
+  private AuctionUseCase auctionUseCase;
+  @Autowired
+  private BookingUseCase bookingUseCase;
   @Autowired
   private SchedulerComponent schedulerComponent;
-  @Autowired
-  private BookingComponent bookingComponent;
 
   @Bean
   public OpenNextSlotCommandListener createSlotCommandListener() {
-    return new OpenNextSlotCommandListener(roomComponent);
+    return new OpenNextSlotCommandListener(slotUseCase);
   }
 
   @Bean
   public SlotCreatedEventListener slotCreatedEventListener() {
-    return new SlotCreatedEventListener(roomComponent, auctionComponent);
+    return new SlotCreatedEventListener(slotUseCase, auctionUseCase);
   }
 
   @Bean
   public RoomCreatedEventListener roomCreatedEventListener() {
-    return new RoomCreatedEventListener(roomComponent);
+    return new RoomCreatedEventListener(slotUseCase);
   }
 
   @Bean
   public AuctionFinishedEventListener auctionFinishedEventListener() {
-    return new AuctionFinishedEventListener(auctionComponent);
-  }
-
-  @Bean
-  public AuctionStartedEventListener auctionStartedEventListener() {
-    return new AuctionStartedEventListener(schedulerComponent);
+    return new AuctionFinishedEventListener(auctionUseCase);
   }
 
   @Bean
   public AuctionWinnerFoundEventListener auctionWinnerFoundEventListener() {
-    return new AuctionWinnerFoundEventListener(bookingComponent);
+    return new AuctionWinnerFoundEventListener(bookingUseCase);
+  }
+
+  @Bean
+  public SchedulerEventListener schedulerEventListener() {
+    return new SchedulerEventListener(schedulerComponent);
   }
 }

@@ -1,7 +1,7 @@
 package com.jusoft.bookingengine.component.room.api;
 
-import com.jusoft.bookingengine.component.auction.api.AuctionWinnerStrategyType;
 import com.jusoft.bookingengine.component.room.Room;
+import com.jusoft.bookingengine.component.timer.OpenDate;
 
 import java.time.ZonedDateTime;
 
@@ -11,11 +11,11 @@ public interface RoomComponent {
 
   Room find(long roomId);
 
-  void openNextSlotFor(long roomId);
+  OpenDate findNextSlotOpenDate(ZonedDateTime lastSlotEndTime, long roomId);
 
-  void scheduleComingSlotFor(long roomId);
+  OpenDate findFirstSlotOpenDate(long roomId);
 
-  ZonedDateTime findAuctionEndTimeFor(long roomId, long slotId);
+  ZonedDateTime findNextSlotOpeningTime(long roomId, int currentNumberOfSlotsOpen, ZonedDateTime nextSlotToFinishEndDate);
 
-  AuctionWinnerStrategyType findAuctionWinnerStrategyTypeFor(long roomId);
+  int getAuctionDurationFor(long roomId);
 }

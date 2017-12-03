@@ -6,8 +6,6 @@ import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import static com.jusoft.bookingengine.component.room.RoomFixtures.ACTIVE;
-import static com.jusoft.bookingengine.component.room.RoomFixtures.AUCTION_STRATEGY_TYPE;
-import static com.jusoft.bookingengine.component.room.RoomFixtures.AUCTION_TIME;
 import static com.jusoft.bookingengine.component.room.RoomFixtures.AVAILABLE_DAYS;
 import static com.jusoft.bookingengine.component.room.RoomFixtures.LESS_BOOKINGS_WITHIN_PERIOD_CONFIG;
 import static com.jusoft.bookingengine.component.room.RoomFixtures.MAX_SLOTS;
@@ -26,8 +24,6 @@ public class RoomTest {
       OPEN_TIMES,
       AVAILABLE_DAYS,
       ACTIVE,
-      AUCTION_TIME,
-      AUCTION_STRATEGY_TYPE,
       LESS_BOOKINGS_WITHIN_PERIOD_CONFIG);
   }
 

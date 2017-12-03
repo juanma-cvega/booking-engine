@@ -1,12 +1,12 @@
 package com.jusoft.bookingengine.component.room.api;
 
-import com.jusoft.bookingengine.component.auction.api.AuctionConfig;
-import com.jusoft.bookingengine.component.auction.api.AuctionWinnerStrategyType;
+import com.jusoft.bookingengine.component.auction.api.strategy.AuctionConfigInfo;
 import com.jusoft.bookingengine.component.shared.Command;
 import com.jusoft.bookingengine.component.timer.OpenTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NonNull;
 
 import java.time.DayOfWeek;
 import java.util.ArrayList;
@@ -18,12 +18,13 @@ import java.util.List;
 public class CreateRoomCommand implements Command {
   private final int maxSlots;
   private final int slotDurationInMinutes;
+  @NonNull
   private final List<OpenTime> openTimePerDay;
+  @NonNull
   private final List<DayOfWeek> availableDays;
   private final boolean active;
-  private final int auctionTime;
-  private final AuctionWinnerStrategyType strategy;
-  private final AuctionConfig auctionConfig;
+  @NonNull
+  private final AuctionConfigInfo auctionConfigInfo;
 
 
   public List<OpenTime> getOpenTimePerDay() {

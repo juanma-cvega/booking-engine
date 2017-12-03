@@ -5,6 +5,7 @@ import cucumber.api.junit.Cucumber;
 import org.junit.runner.RunWith;
 
 @RunWith(Cucumber.class)
-@CucumberOptions(features = "src/test/resources/features/room_management.feature", glue = {"com.jusoft.bookingengine.component.room", "com.jusoft.bookingengine.component.slot"})
+@CucumberOptions(features = "src/test/resources/features/room_management.feature", glue = {"com.jusoft.bookingengine.component.room",
+  "com.jusoft.bookingengine.component.slot", "com.jusoft.bookingengine.component.shared"})
 public class RoomManagementCTest {
 }

@@ -1,37 +1,47 @@
 package com.jusoft.bookingengine.component.auction;
 
-import com.jusoft.bookingengine.component.auction.api.LessBookingsWithinPeriodConfig;
+import com.jusoft.bookingengine.component.auction.api.strategy.LessBookingsWithinPeriodConfigInfo;
 import com.jusoft.bookingengine.component.booking.api.BookingComponent;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
 import java.time.Clock;
 import java.time.ZonedDateTime;
-import java.util.Comparator;
-import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+import java.util.function.Predicate;
 
+import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toSet;
 
-@AllArgsConstructor
-public class LessBookingsWithinPeriodStrategy implements AuctionWinnerStrategy<LessBookingsWithinPeriodConfig> {
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
+class LessBookingsWithinPeriodStrategy implements AuctionWinnerStrategy {
 
   private final BookingComponent bookingComponent;
   private final Clock clock;
+  private final LessBookingsWithinPeriodConfigInfo config;
 
   @Override
-  public long findWinner(Set<Bid> bids, LessBookingsWithinPeriodConfig config) {
-    long winner = -1;
+  public Optional<Long> findWinner(Set<Bid> bids) {
+    Optional<Long> winner = Optional.empty();
     if (!bids.isEmpty()) {
-      ZonedDateTime endTime = ZonedDateTime.now(clock).plusDays(config.getEndRangeTimeInDays());
+      ZonedDateTime endPeriod = ZonedDateTime.now(clock).plusDays(config.getEndRangeTimeInDays());
       Set<Long> buyers = bids.stream().map(Bid::getUserId).collect(toSet());
-      List<Long> usersWithLessBookings = bookingComponent.findUsersWithLessBookingsUntil(endTime, buyers);
-      if (usersWithLessBookings.size() == 1) {
-        winner = usersWithLessBookings.get(0);
-      } else {
-        Bid firstBid = bids.stream().min(Comparator.comparing(Bid::getCreationTime)).get();
-        winner = firstBid.getUserId();
-      }
+      Set<Long> usersWithLessBookings = bookingComponent.findUsersWithLessBookingsUntil(endPeriod, buyers);
+      winner = Optional.of(findFirstCreatedBidFrom(bids, usersWithLessBookings));
     }
     return winner;
+  }
+
+  private long findFirstCreatedBidFrom(Set<Bid> bids, Set<Long> usersWithLessBookings) {
+    return bids.stream()
+      .filter(byUserIn(usersWithLessBookings))
+      .min(comparing(Bid::getCreationTime))
+      .orElseThrow(() -> new IllegalArgumentException("No bids found")) //Not happening
+      .getUserId();
+  }
+
+  private Predicate<Bid> byUserIn(Set<Long> usersWithLessBookings) {
+    return bid -> usersWithLessBookings.contains(bid.getUserId());
   }
 }

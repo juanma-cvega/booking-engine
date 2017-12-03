@@ -29,6 +29,7 @@ class SlotComponentImpl implements SlotComponent {
     return newSlot;
   }
 
+  //FIXME possible problem when slots end????
   @Override
   public List<Slot> findOpenSlotsFor(long roomId) {
     return slotRepository.getByRoom(roomId);
@@ -42,6 +43,11 @@ class SlotComponentImpl implements SlotComponent {
   @Override
   public Optional<Slot> findSlotInUseOrToStartFor(long roomId) {
     return slotRepository.findSlotInUseOrToStartFor(roomId);
+  }
+
+  @Override
+  public int findNumberOfSlotsOpenFor(long roomId) {
+    return findOpenSlotsFor(roomId).size();
   }
 
   @Override

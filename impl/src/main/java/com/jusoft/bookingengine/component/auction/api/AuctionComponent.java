@@ -2,15 +2,17 @@ package com.jusoft.bookingengine.component.auction.api;
 
 import com.jusoft.bookingengine.component.auction.Auction;
 
+import java.util.Optional;
+
 public interface AuctionComponent {
 
-  void startAuction(long slotId, long roomId);
+  Auction startAuction(CreateAuctionCommand createAuctionCommand);
 
   void addBuyerTo(long slotId, long userId);
 
-  Auction findBySlot(long slotId);
+  Optional<Auction> findBySlot(long slotId);
 
-  void finishAuction(long auctionId);
+  void finishAuction(FinishAuctionCommand finishAuctionCommand);
 
   boolean isAuctionOpenForSlot(long slotId);
 }

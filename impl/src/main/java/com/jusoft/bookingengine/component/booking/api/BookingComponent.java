@@ -14,7 +14,9 @@ public interface BookingComponent {
 
   Booking find(long userId, long bookingId) throws BookingNotFoundException;
 
+  List<Booking> findAllBy(long userId);
+
   List<Booking> getFor(long userId);
 
-  List<Long> findUsersWithLessBookingsUntil(ZonedDateTime endTime, Set<Long> users);
+  Set<Long> findUsersWithLessBookingsUntil(ZonedDateTime endTime, Set<Long> users);
 }

@@ -1,18 +1,23 @@
 package com.jusoft.bookingengine.component.auction;
 
+import com.jusoft.bookingengine.component.auction.api.CreateAuctionCommand;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
 import java.time.Clock;
-import java.time.ZonedDateTime;
 import java.util.function.Supplier;
 
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
 class AuctionFactory {
 
   private final Supplier<Long> idSupplier;
   private final Clock clock;
 
-  public Auction createFrom(long slotId, long roomId, ZonedDateTime endTime) {
-    return new Auction(idSupplier.get(), slotId, roomId, endTime, clock);
+  public Auction createFrom(CreateAuctionCommand createAuctionCommand) {
+    return new Auction(idSupplier.get(),
+      createAuctionCommand.getSlotId(),
+      createAuctionCommand.getRoomId(),
+      createAuctionCommand.getDurationInMinutes(),
+      clock);
   }
 }

@@ -3,8 +3,8 @@ package com.jusoft.bookingengine.component.booking;
 import com.jusoft.bookingengine.component.booking.api.SlotAlreadyBookedException;
 
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -13,6 +13,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 class BookingRepositoryInMemory implements BookingRepository {
 
@@ -29,10 +30,9 @@ class BookingRepositoryInMemory implements BookingRepository {
    * @param newBooking booking to save
    * @throws SlotAlreadyBookedException in case the slot is already booked
    */
-  //FIXME is repository the one who has to throw a business exception
   @Override
   public synchronized void save(Booking newBooking) throws SlotAlreadyBookedException {
-    store.values().stream().filter(booking -> Long.compare(booking.getId(), newBooking.getId()) == 0).findFirst()
+    store.values().stream().filter(booking -> Long.compare(booking.getSlotId(), newBooking.getSlotId()) == 0).findFirst()
       .ifPresent(booking -> {
         throw new SlotAlreadyBookedException(newBooking.getRoomId(), newBooking.getId());
       });
@@ -55,21 +55,30 @@ class BookingRepositoryInMemory implements BookingRepository {
   }
 
   @Override
-  public List<Long> findUserWithLessBookingsUntil(ZonedDateTime endTime, Set<Long> users) {
+  public Set<Long> findUserWithLessBookingsUntil(ZonedDateTime endTime, Set<Long> users) {
+    Set<Long> usersWithAtLeastOneBooking = store.values().stream().map(Booking::getUserId).collect(toSet());
+    Map<Long, Long> usersWithoutPreviousBookings = users.stream()
+      .filter(userId -> !usersWithAtLeastOneBooking.contains(userId))
+      .collect(Collectors.toMap(Function.identity(), userId -> 0L));
     Map<Long, Long> mapUserToNumberOfBookings = store.values().stream()
       .filter(booking -> users.contains(booking.getUserId()))
       .map(Booking::getUserId)
       .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+    mapUserToNumberOfBookings.putAll(usersWithoutPreviousBookings);
 
-    return mapUserToNumberOfBookings.values().stream().min(Comparator.naturalOrder())
-      .map(maxBookings -> mapToUsersWithMinimumBookings(mapUserToNumberOfBookings, maxBookings))
-      .orElse(new ArrayList<>());
+    Set<Long> usersFound = users;
+    if (!mapUserToNumberOfBookings.isEmpty()) {
+      usersFound = mapUserToNumberOfBookings.values().stream().min(Comparator.naturalOrder())
+        .map(maxBookings -> mapToUsersWithMinimumBookings(mapUserToNumberOfBookings, maxBookings))
+        .orElse(new HashSet<>());
+    }
+    return usersFound;
   }
 
-  private List<Long> mapToUsersWithMinimumBookings(Map<Long, Long> mapUserToNumberOfBookings, Long minBookings) {
+  private Set<Long> mapToUsersWithMinimumBookings(Map<Long, Long> mapUserToNumberOfBookings, Long minBookings) {
     return mapUserToNumberOfBookings.entrySet().stream()
       .filter(entry -> entry.getValue().equals(minBookings))
       .map(Map.Entry::getKey)
-      .collect(toList());
+      .collect(toSet());
   }
 }

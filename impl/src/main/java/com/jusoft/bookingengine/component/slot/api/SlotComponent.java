@@ -19,4 +19,6 @@ public interface SlotComponent {
   Optional<Slot> findLastCreatedFor(long roomId);
 
   Optional<Slot> findSlotInUseOrToStartFor(long roomId);
+
+  int findNumberOfSlotsOpenFor(long roomId);
 }

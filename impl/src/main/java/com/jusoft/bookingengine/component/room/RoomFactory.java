@@ -11,15 +11,13 @@ class RoomFactory {
 
   private final Supplier<Long> idGenerator;
 
-  public Room createFrom(CreateRoomCommand createRoomCommand) {
+  Room createFrom(CreateRoomCommand createRoomCommand) {
     return new Room(idGenerator.get(),
       createRoomCommand.getMaxSlots(),
       createRoomCommand.getSlotDurationInMinutes(),
       createRoomCommand.getOpenTimePerDay(),
       createRoomCommand.getAvailableDays(),
       createRoomCommand.isActive(),
-      createRoomCommand.getAuctionTime(),
-      createRoomCommand.getStrategy(),
-      createRoomCommand.getAuctionConfig());
+      createRoomCommand.getAuctionConfigInfo());
   }
 }

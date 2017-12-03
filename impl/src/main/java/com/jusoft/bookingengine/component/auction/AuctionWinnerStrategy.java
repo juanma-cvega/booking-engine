@@ -1,10 +1,9 @@
 package com.jusoft.bookingengine.component.auction;
 
-import com.jusoft.bookingengine.component.auction.api.AuctionConfig;
-
+import java.util.Optional;
 import java.util.Set;
 
-public interface AuctionWinnerStrategy<T extends AuctionConfig> {
+public interface AuctionWinnerStrategy {
 
-  long findWinner(Set<Bid> buyers, T auctionConfig);
+  Optional<Long> findWinner(Set<Bid> buyers);
 }
