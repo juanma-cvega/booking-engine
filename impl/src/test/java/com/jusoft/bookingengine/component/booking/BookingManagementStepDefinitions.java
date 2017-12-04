@@ -107,7 +107,8 @@ public class BookingManagementStepDefinitions extends AbstractStepDefinitions {
   }
 
   private long extractBookingId(long userId) {
-    return messagesSink.getMessages(BookingCreatedEvent.class).stream()
+    return messagesSink.getMessages(BookingCreatedEvent.class)
+      .orElseThrow(() -> new IllegalArgumentException(String.format("Empty list found for message of type %s", BookingCreatedEvent.class))).stream()
       .filter(bookingCreatedEvent -> bookingCreatedEvent.getUserId() == userId)
       .findFirst()
       .orElseThrow(() -> new IllegalArgumentException("No booking messages found"))

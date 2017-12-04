@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 public class MessagesSink {
@@ -15,8 +16,8 @@ public class MessagesSink {
     this.messages = messages;
   }
 
-  public <T extends Message> List<T> getMessages(Class<T> clazz) {
-    return (List<T>) this.messages.get(clazz);
+  public <T extends Message> Optional<List<T>> getMessages(Class<T> clazz) {
+    return Optional.ofNullable((List<T>) this.messages.get(clazz));
   }
 
 }
