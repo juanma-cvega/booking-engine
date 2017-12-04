@@ -128,7 +128,9 @@ public class RoomManagementStepDefinitions extends AbstractStepDefinitions {
   }
 
   private boolean isSlotsCreatedForRoomLessThanMaxSlots(int maxSlots, long startTime) {
-    return messagesSink.getMessages(SlotCreatedEvent.class).stream()
+    return messagesSink.getMessages(SlotCreatedEvent.class)
+      .orElseThrow(() -> new IllegalArgumentException(String.format("No messages found of type %s", SlotCreatedEvent.class)))
+      .stream()
       .filter(slotCreatedEvent -> slotCreatedEvent.getRoomId() == roomHolder.roomCreated.getId())
       .count() < maxSlots || System.currentTimeMillis() > startTime + TIMEOUT;
   }
