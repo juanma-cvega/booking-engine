@@ -29,7 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Slf4j
 public class RoomManagementStepDefinitions extends AbstractStepDefinitions {
 
-  private static final long TIMEOUT = 2000;
+  private static final long TIMEOUT = 10000;
   private static final int WAITING_TIME = 100;
 
   @Autowired
