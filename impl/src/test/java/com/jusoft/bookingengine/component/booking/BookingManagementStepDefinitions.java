@@ -111,7 +111,7 @@ public class BookingManagementStepDefinitions extends AbstractStepDefinitions {
       .orElseThrow(() -> new IllegalArgumentException(String.format("Empty list found for message of type %s", BookingCreatedEvent.class))).stream()
       .filter(bookingCreatedEvent -> bookingCreatedEvent.getUserId() == userId)
       .findFirst()
-      .orElseThrow(() -> new IllegalArgumentException("No booking messages found"))
+      .orElseThrow(() -> new IllegalArgumentException(String.format("No booking messages found of type %s for userId %s", BookingCreatedEvent.class, userId)))
       .getBookingId();
   }
 

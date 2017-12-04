@@ -49,4 +49,9 @@ public class MessageListenersConfig {
   public SchedulerEventListener schedulerEventListener() {
     return new SchedulerEventListener(schedulerComponent);
   }
+
+  @Bean
+  public BookingCreatedEventListener bookingCreatedEventListener() {
+    return new BookingCreatedEventListener();
+  }
 }
