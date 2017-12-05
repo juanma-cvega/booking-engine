@@ -34,8 +34,7 @@ class AuctionComponentImpl implements AuctionComponent {
     auction.addBuyers(userId);
   }
 
-  @Override
-  public Optional<Auction> findBySlot(long slotId) {
+  private Optional<Auction> findBySlot(long slotId) {
     return auctionRepository.findOneBySlot(slotId);
   }
 
