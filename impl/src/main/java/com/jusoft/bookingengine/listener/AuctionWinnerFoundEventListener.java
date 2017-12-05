@@ -9,16 +9,15 @@ import org.springframework.context.event.EventListener;
 
 @AllArgsConstructor
 @Slf4j
-public class AuctionWinnerFoundEventListener implements MessageListener<AuctionWinnerFoundEvent> {
+public class AuctionWinnerFoundEventListener implements MessageListener {
 
   private final BookingUseCase bookingUseCase;
 
   @EventListener(AuctionWinnerFoundEvent.class)
-  @Override
-  public void consume(AuctionWinnerFoundEvent event) {
+  public void bookSlotForAuctionWinner(AuctionWinnerFoundEvent event) {
     log.info("AuctionWinnerFoundEvent consumed: auctionId={}, auctionWinner={}, slotId={}, roomId={}",
       event.getAuctionId(), event.getAuctionWinnerId(), event.getSlotId(), event.getRoomId());
-    //FIXME possible race condition when someone books exactly at the same time the auction ends??? 
+    //FIXME possible race condition when someone books exactly at the same time the auction ends???
     bookingUseCase.book(new CreateBookingCommand(event.getAuctionWinnerId(), event.getRoomId(), event.getSlotId()));
   }
 }

@@ -6,13 +6,12 @@ import lombok.AllArgsConstructor;
 import org.springframework.context.event.EventListener;
 
 @AllArgsConstructor
-public class SchedulerEventListener implements MessageListener<ScheduledEvent> {
+public class SchedulerEventListener implements MessageListener {
 
   private final SchedulerComponent schedulerComponent;
 
   @EventListener(ScheduledEvent.class)
-  @Override
-  public void consume(ScheduledEvent event) {
+  public void scheduleMessage(ScheduledEvent event) {
     schedulerComponent.schedule(event);
   }
 }

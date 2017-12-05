@@ -9,13 +9,12 @@ import org.springframework.context.event.EventListener;
 
 @Slf4j
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-class OpenNextSlotCommandListener implements MessageListener<OpenNextSlotCommand> {
+class OpenNextSlotCommandListener implements MessageListener {
 
   private final SlotUseCase slotUseCase;
 
   @EventListener(OpenNextSlotCommand.class)
-  @Override
-  public void consume(OpenNextSlotCommand command) {
+  public void openNextSlot(OpenNextSlotCommand command) {
     log.info("OpenNextSlotCommand consumed: roomId={}", command.getRoomId());
     slotUseCase.openNextSlotFor(command.getRoomId());
   }

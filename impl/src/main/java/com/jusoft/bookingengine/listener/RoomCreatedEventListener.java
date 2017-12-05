@@ -9,13 +9,12 @@ import org.springframework.context.event.EventListener;
 
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 @Slf4j
-public class RoomCreatedEventListener implements MessageListener<RoomCreatedEvent> {
+public class RoomCreatedEventListener implements MessageListener {
 
   private final SlotUseCase slotUseCase;
 
   @EventListener(RoomCreatedEvent.class)
-  @Override
-  public void consume(RoomCreatedEvent event) {
+  public void openFirstSlot(RoomCreatedEvent event) {
     log.info("RoomCreatedEvent consumed: roomId={}", event.getRoomId());
     slotUseCase.openNextSlotFor(event.getRoomId());
   }

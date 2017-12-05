@@ -9,13 +9,12 @@ import org.springframework.context.event.EventListener;
 
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 @Slf4j
-class AuctionFinishedEventListener implements MessageListener<AuctionFinishedEvent> {
+class AuctionFinishedEventListener implements MessageListener {
 
   private final AuctionUseCase auctionUseCase;
 
   @EventListener(AuctionFinishedEvent.class)
-  @Override
-  public void consume(AuctionFinishedEvent event) {
+  public void finishAuction(AuctionFinishedEvent event) {
     log.info("AuctionFinishedEvent consumed: auctionId={}", event.getAuctionId());
 
     auctionUseCase.finishAuction(event.getAuctionId(), event.getRoomId());
