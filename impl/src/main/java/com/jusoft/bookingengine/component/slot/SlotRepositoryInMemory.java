@@ -39,8 +39,7 @@ class SlotRepositoryInMemory implements SlotRepository {
   public Optional<Slot> getLastCreatedFor(long roomId) {
     return store.values().stream()
       .filter(slot -> slot.getRoomId() == roomId)
-      .sorted(bySlotIdDesc())
-      .findFirst();
+      .min(bySlotIdDesc());
   }
 
   private Comparator<? super Slot> bySlotIdDesc() {
@@ -54,8 +53,7 @@ class SlotRepositoryInMemory implements SlotRepository {
       .findFirst()
       .orElseGet(() -> store.values().stream()
         .filter(bySlotsToStart())
-        .sorted(byStartDateAsc())
-        .findFirst()
+        .min(byStartDateAsc())
         .orElse(null)));
   }
 

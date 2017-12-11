@@ -5,6 +5,7 @@ import com.jusoft.bookingengine.component.booking.api.BookingCreatedEvent;
 import com.jusoft.bookingengine.component.booking.api.BookingNotFoundException;
 import com.jusoft.bookingengine.component.booking.api.CancelBookingCommand;
 import com.jusoft.bookingengine.component.booking.api.CreateBookingCommand;
+import com.jusoft.bookingengine.component.booking.api.WrongBookingUserException;
 import com.jusoft.bookingengine.component.shared.MessagePublisher;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -37,17 +38,18 @@ class BookingComponentImpl implements BookingComponent {
     return newBooking;
   }
 
-  //FIXME provide a compute method at the repository level to avoid the need of locking
   @Override
-  public void cancel(CancelBookingCommand cancelBookingCommand) throws BookingNotFoundException {
-    Booking booking = find(cancelBookingCommand.getUserId(), cancelBookingCommand.getBookingId());
-    if (booking.canClose(cancelBookingCommand.getUserId())) {
-      bookingRepository.delete(booking.getId());
+  public void cancel(CancelBookingCommand cancelBookingCommand) {
+    Booking booking = bookingRepository.find(cancelBookingCommand.getBookingId())
+      .orElseThrow(() -> new BookingNotFoundException(cancelBookingCommand.getUserId(), cancelBookingCommand.getBookingId()));
+    if (!booking.isOwner(cancelBookingCommand.getUserId())) {
+      throw new WrongBookingUserException(cancelBookingCommand.getUserId(), booking.getUserId(), booking.getId());
     }
+    bookingRepository.delete(cancelBookingCommand.getBookingId());
   }
 
   @Override
-  public Booking find(long userId, long bookingId) throws BookingNotFoundException {
+  public Booking find(long userId, long bookingId) {
     return bookingRepository.find(bookingId)
       .orElseThrow(() -> new BookingNotFoundException(userId, bookingId));
   }
@@ -62,17 +64,8 @@ class BookingComponentImpl implements BookingComponent {
     return bookingRepository.getByUser(userId);
   }
 
-  /**
-   * Find the userId from the list of {@link Booking}s that has booked the less number of times within the period
-   * from now to the given end time. In case of a draw, it returns all elements userIds.
-   *
-   * @param endTime end date for the search.
-   * @param users   userIds to use to filter out from the list of {@link Booking}s.
-   * @return list of users that matched the criteria
-   */
   @Override
-  public Set<Long> findUsersWithLessBookingsUntil(ZonedDateTime endTime, Set<Long> users) {
-    return bookingRepository.findUserWithLessBookingsUntil(endTime, users);
+  public List<Booking> findUsersBookingsUntilFor(ZonedDateTime endTime, Set<Long> users) {
+    return bookingRepository.findBookingsUntilFor(endTime, users);
   }
-
 }

@@ -23,7 +23,7 @@ public class RoomComponentConfig {
   public RoomComponent roomComponent() {
     return new RoomComponentImpl(roomRepository(), roomFactory(), roomEventFactory(), messagePublisher, clock);
   }
-
+ 
   private RoomFactory roomFactory() {
     return new RoomFactory(idGenerator());
   }

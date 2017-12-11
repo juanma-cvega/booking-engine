@@ -3,24 +3,25 @@ package com.jusoft.bookingengine.component.booking;
 import com.jusoft.bookingengine.component.booking.api.SlotAlreadyBookedException;
 
 import java.time.ZonedDateTime;
-import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Predicate;
 
+import static com.jusoft.bookingengine.util.LockingTemplate.withLock;
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
 
 class BookingRepositoryInMemory implements BookingRepository {
 
   private final Map<Long, Booking> store;
+  private final Lock lock;
 
   BookingRepositoryInMemory(Map<Long, Booking> store) {
     this.store = store;
+    this.lock = new ReentrantLock();
   }
 
   /**
@@ -31,17 +32,19 @@ class BookingRepositoryInMemory implements BookingRepository {
    * @throws SlotAlreadyBookedException in case the slot is already booked
    */
   @Override
-  public synchronized void save(Booking newBooking) throws SlotAlreadyBookedException {
-    store.values().stream().filter(booking -> Long.compare(booking.getSlotId(), newBooking.getSlotId()) == 0).findFirst()
-      .ifPresent(booking -> {
-        throw new SlotAlreadyBookedException(newBooking.getRoomId(), newBooking.getId());
-      });
-    store.put(newBooking.getId(), newBooking);
+  public void save(Booking newBooking) throws SlotAlreadyBookedException {
+    withLock(lock, () -> {
+      store.values().stream().filter(booking -> Long.compare(booking.getSlotId(), newBooking.getSlotId()) == 0).findFirst()
+        .ifPresent(booking -> {
+          throw new SlotAlreadyBookedException(newBooking.getRoomId(), newBooking.getId());
+        });
+      store.put(newBooking.getId(), newBooking);
+    });
   }
 
   @Override
-  public void delete(long bookingId) {
-    store.remove(bookingId);
+  public boolean delete(long bookingId) {
+    return store.remove(bookingId) != null;
   }
 
   @Override
@@ -55,30 +58,18 @@ class BookingRepositoryInMemory implements BookingRepository {
   }
 
   @Override
-  public Set<Long> findUserWithLessBookingsUntil(ZonedDateTime endTime, Set<Long> users) {
-    Set<Long> usersWithAtLeastOneBooking = store.values().stream().map(Booking::getUserId).collect(toSet());
-    Map<Long, Long> usersWithoutPreviousBookings = users.stream()
-      .filter(userId -> !usersWithAtLeastOneBooking.contains(userId))
-      .collect(Collectors.toMap(Function.identity(), userId -> 0L));
-    Map<Long, Long> mapUserToNumberOfBookings = store.values().stream()
-      .filter(booking -> users.contains(booking.getUserId()))
-      .map(Booking::getUserId)
-      .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
-    mapUserToNumberOfBookings.putAll(usersWithoutPreviousBookings);
-
-    Set<Long> usersFound = users;
-    if (!mapUserToNumberOfBookings.isEmpty()) {
-      usersFound = mapUserToNumberOfBookings.values().stream().min(Comparator.naturalOrder())
-        .map(maxBookings -> mapToUsersWithMinimumBookings(mapUserToNumberOfBookings, maxBookings))
-        .orElse(new HashSet<>());
-    }
-    return usersFound;
+  public List<Booking> findBookingsUntilFor(ZonedDateTime endTime, Set<Long> users) {
+    return store.values().stream()
+      .filter(byBookingBelongsToUserFrom(users))
+      .filter(byBookingCreatedBeforeOrAt(endTime))
+      .collect(toList());
   }
 
-  private Set<Long> mapToUsersWithMinimumBookings(Map<Long, Long> mapUserToNumberOfBookings, Long minBookings) {
-    return mapUserToNumberOfBookings.entrySet().stream()
-      .filter(entry -> entry.getValue().equals(minBookings))
-      .map(Map.Entry::getKey)
-      .collect(toSet());
+  private Predicate<Booking> byBookingBelongsToUserFrom(Set<Long> users) {
+    return booking -> users.contains(booking.getUserId());
+  }
+
+  private Predicate<Booking> byBookingCreatedBeforeOrAt(ZonedDateTime endTime) {
+    return booking -> booking.getBookingTime().isBefore(endTime) || booking.getBookingTime().isEqual(endTime);
   }
 }

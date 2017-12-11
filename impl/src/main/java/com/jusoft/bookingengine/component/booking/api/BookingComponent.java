@@ -8,15 +8,15 @@ import java.util.Set;
 
 public interface BookingComponent {
 
-  Booking book(CreateBookingCommand createBookingCommand) throws SlotAlreadyStartedException;
+  Booking book(CreateBookingCommand createBookingCommand);
 
-  void cancel(CancelBookingCommand cancelBookingCommand) throws BookingNotFoundException;
+  void cancel(CancelBookingCommand cancelBookingCommand);
 
-  Booking find(long userId, long bookingId) throws BookingNotFoundException;
+  Booking find(long userId, long bookingId);
 
   List<Booking> findAllBy(long userId);
 
   List<Booking> getFor(long userId);
 
-  Set<Long> findUsersWithLessBookingsUntil(ZonedDateTime endTime, Set<Long> users);
+  List<Booking> findUsersBookingsUntilFor(ZonedDateTime endTime, Set<Long> users);
 }

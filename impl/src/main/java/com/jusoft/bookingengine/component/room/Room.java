@@ -58,7 +58,6 @@ public class Room {
 
   //FIXME avoid many calls to database by finding all first slots to create in one go rather than launching the
   //FIXME creation of each individual one
-  //FIXME avoid passing SlotComponent as it lets use the component to modify slots ????
   //FIXME provide different strategies to decide when the next slot should be created. Current one waits for the first slot to finish
   ZonedDateTime findUpcomingSlot(Clock clock, int currentNumberOfSlotsOpen, ZonedDateTime nextSlotToFinishEndDate) {
     ZonedDateTime creationTime = ZonedDateTime.now(clock);
