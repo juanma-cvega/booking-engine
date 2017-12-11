@@ -1,4 +1,4 @@
-package com.jusoft.bookingengine.component;
+package com.jusoft.bookingengine.component.mock;
 
 import com.jusoft.bookingengine.component.booking.BookingHolder;
 import com.jusoft.bookingengine.component.room.RoomHolder;

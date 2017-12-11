@@ -27,18 +27,18 @@ public class RoomFixtures {
   public static final OpenTime OPEN_TIME_AFTERNOON = new OpenTime(START_TIME_AFTERNOON, END_TIME_AFTERNOON);
   public static final List<OpenTime> OPEN_TIMES = Arrays.asList(OPEN_TIME_MORNING, OPEN_TIME_AFTERNOON);
   public static final List<DayOfWeek> AVAILABLE_DAYS = Arrays.asList(DayOfWeek.MONDAY, DayOfWeek.TUESDAY);
-  public static final boolean ACTIVE = true;
+  public static final boolean IS_ACTIVE = true;
 
   public static final int AUCTION_DURATION = 0;
   public static final int END_RANGE_TIME_IN_DAYS = 5;
   public static final AuctionConfigInfo LESS_BOOKINGS_WITHIN_PERIOD_CONFIG = new LessBookingsWithinPeriodConfigInfo(AUCTION_DURATION, END_RANGE_TIME_IN_DAYS);
   public static final AuctionConfigInfo NO_AUCTION_CONFIG = new NoAuctionConfigInfo();
 
-  public static final CreateRoomCommand CREATE_ROOM_COMMAND = new CreateRoomCommand(MAX_SLOTS, SLOT_DURATION_IN_MINUTES, OPEN_TIMES, AVAILABLE_DAYS, ACTIVE, NO_AUCTION_CONFIG);
+  public static final CreateRoomCommand CREATE_ROOM_COMMAND = new CreateRoomCommand(MAX_SLOTS, SLOT_DURATION_IN_MINUTES, OPEN_TIMES, AVAILABLE_DAYS, IS_ACTIVE, NO_AUCTION_CONFIG);
 
   public static CreateRoomCommand createRoomCommand(Consumer<CreateRoomCommandBuilder> consumer) {
     CreateRoomCommandBuilder builder = CreateRoomCommand.builder()
-      .active(ACTIVE)
+      .active(IS_ACTIVE)
       .availableDays(AVAILABLE_DAYS)
       .openTimePerDay(OPEN_TIMES)
       .maxSlots(MAX_SLOTS)

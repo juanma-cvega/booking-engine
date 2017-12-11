@@ -8,8 +8,8 @@ import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.jusoft.bookingengine.component.room.RoomFixtures.ACTIVE;
 import static com.jusoft.bookingengine.component.room.RoomFixtures.AVAILABLE_DAYS;
+import static com.jusoft.bookingengine.component.room.RoomFixtures.IS_ACTIVE;
 import static com.jusoft.bookingengine.component.room.RoomFixtures.LESS_BOOKINGS_WITHIN_PERIOD_CONFIG;
 import static com.jusoft.bookingengine.component.room.RoomFixtures.MAX_SLOTS;
 import static com.jusoft.bookingengine.component.room.RoomFixtures.OPEN_TIMES;
@@ -41,7 +41,7 @@ public class RoomHolder {
         slotDurationInMinutes == null ? SLOT_DURATION_IN_MINUTES : slotDurationInMinutes,
         openTimes.isEmpty() ? OPEN_TIMES : openTimes,
         availableDays.isEmpty() ? AVAILABLE_DAYS : availableDays,
-        active == null ? ACTIVE : active,
+        active == null ? IS_ACTIVE : active,
         auctionConfigInfo == null ? LESS_BOOKINGS_WITHIN_PERIOD_CONFIG : auctionConfigInfo);
     }
 

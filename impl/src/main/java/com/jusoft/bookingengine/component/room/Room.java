@@ -173,11 +173,11 @@ public class Room {
     return closestOpenTimeForLastSlotEnd.getStartTime().equals(closestOpenTimeForSlotNextEnd.getStartTime());
   }
 
-  List<OpenTime> getOpenTimesPerDay() {
+  public List<OpenTime> getOpenTimesPerDay() {
     return new ArrayList<>(openTimesPerDay);
   }
 
-  List<DayOfWeek> getAvailableDays() {
+  public List<DayOfWeek> getAvailableDays() {
     return new ArrayList<>(availableDays);
   }
 }

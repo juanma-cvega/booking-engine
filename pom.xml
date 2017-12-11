@@ -23,7 +23,7 @@
     <cucumber.version>1.2.5</cucumber.version>
     <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
     <tomcat7-maven-plugin.version>2.2</tomcat7-maven-plugin.version>
-    <spring-boot.version>1.5.6.RELEASE</spring-boot.version>
+    <spring-boot.version>1.5.9.RELEASE</spring-boot.version>
     <assertj.version>3.8.0</assertj.version>
     <junit.version>4.12</junit.version>
     <mockito.version>2.7.9</mockito.version>
@@ -120,6 +120,13 @@
         <artifactId>spring-test</artifactId>
         <version>${spring.version}</version>
       </dependency>
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-test</artifactId>
+        <version>${spring-boot.version}</version>
+        <scope>test</scope>
+      </dependency>
+
       <dependency>
         <groupId>info.cukes</groupId>
         <artifactId>cucumber-java8</artifactId>
