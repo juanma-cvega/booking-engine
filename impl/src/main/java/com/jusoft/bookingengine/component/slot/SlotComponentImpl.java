@@ -4,6 +4,7 @@ import com.jusoft.bookingengine.component.shared.MessagePublisher;
 import com.jusoft.bookingengine.component.slot.api.CreateSlotCommand;
 import com.jusoft.bookingengine.component.slot.api.SlotComponent;
 import com.jusoft.bookingengine.component.slot.api.SlotNotFoundException;
+import com.jusoft.bookingengine.component.slot.api.SlotView;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
@@ -22,27 +23,28 @@ class SlotComponentImpl implements SlotComponent {
   private final Clock clock;
 
   @Override
-  public Slot create(CreateSlotCommand createSlotCommand, Clock clock) {
+  public SlotView create(CreateSlotCommand createSlotCommand, Clock clock) {
     Slot newSlot = slotFactory.createFrom(createSlotCommand, clock);
     slotRepository.save(newSlot);
     messagePublisher.publish(slotEventFactory.slotCreatedEvent(newSlot));
-    return newSlot;
+    return slotFactory.createFrom(newSlot);
   }
 
   //FIXME possible problem when slots end????
   @Override
-  public List<Slot> findOpenSlotsFor(long roomId) {
-    return slotRepository.getByRoom(roomId);
+  public List<SlotView> findOpenSlotsFor(long roomId) {
+    return slotFactory.createFrom(slotRepository.getByRoom(roomId));
   }
 
   @Override
-  public Optional<Slot> findLastCreatedFor(long roomId) {
-    return slotRepository.getLastCreatedFor(roomId);
+  public Optional<SlotView> findLastCreatedFor(long roomId) {
+    Optional<Slot> lastCreated = slotRepository.getLastCreatedFor(roomId);
+    return lastCreated.map(slotFactory::createFrom);
   }
 
   @Override
-  public Optional<Slot> findSlotInUseOrToStartFor(long roomId) {
-    return slotRepository.findSlotInUseOrToStartFor(roomId);
+  public Optional<SlotView> findSlotInUseOrToStartFor(long roomId) {
+    return slotRepository.findSlotInUseOrToStartFor(roomId).map(slotFactory::createFrom);
   }
 
   @Override
@@ -51,12 +53,16 @@ class SlotComponentImpl implements SlotComponent {
   }
 
   @Override
-  public Slot find(long slotId, long roomId) {
-    return slotRepository.find(slotId, roomId).orElseThrow(() -> new SlotNotFoundException(slotId, roomId));
+  public SlotView find(long slotId, long roomId) {
+    return slotFactory.createFrom(findSlotOrFail(slotId, roomId));
   }
 
   @Override
   public boolean isSlotOpen(long slotId, long roomId) {
-    return find(slotId, roomId).isOpen(ZonedDateTime.now(clock));
+    return findSlotOrFail(slotId, roomId).isOpen(ZonedDateTime.now(clock));
+  }
+
+  private Slot findSlotOrFail(long slotId, long roomId) {
+    return slotRepository.find(slotId, roomId).orElseThrow(() -> new SlotNotFoundException(slotId, roomId));
   }
 }

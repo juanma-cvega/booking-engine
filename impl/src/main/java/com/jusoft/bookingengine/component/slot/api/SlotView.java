@@ -1,15 +1,12 @@
-package com.jusoft.bookingengine.component.slot;
+package com.jusoft.bookingengine.component.slot.api;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NonNull;
 
 import java.time.ZonedDateTime;
 
 @Data
-@AllArgsConstructor(access = AccessLevel.PACKAGE)
-class Slot {
+public class SlotView {
 
   private final long id;
   private final long roomId;
@@ -19,8 +16,4 @@ class Slot {
   private final ZonedDateTime startDate;
   @NonNull
   private final ZonedDateTime endDate;
-
-  public boolean isOpen(ZonedDateTime requestTime) {
-    return startDate.isAfter(requestTime);
-  }
 }

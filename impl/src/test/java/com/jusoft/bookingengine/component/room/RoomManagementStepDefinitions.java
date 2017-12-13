@@ -9,9 +9,9 @@ import com.jusoft.bookingengine.component.room.api.OpenNextSlotCommand;
 import com.jusoft.bookingengine.component.room.api.RoomComponent;
 import com.jusoft.bookingengine.component.scheduler.ScheduledTask;
 import com.jusoft.bookingengine.component.shared.Message;
-import com.jusoft.bookingengine.component.slot.Slot;
 import com.jusoft.bookingengine.component.slot.api.SlotComponent;
 import com.jusoft.bookingengine.component.slot.api.SlotCreatedEvent;
+import com.jusoft.bookingengine.component.slot.api.SlotView;
 import com.jusoft.bookingengine.component.timer.OpenTime;
 import com.jusoft.bookingengine.usecase.RoomUseCase;
 import lombok.extern.slf4j.Slf4j;
@@ -75,22 +75,22 @@ public class RoomManagementStepDefinitions extends AbstractStepDefinitions {
       assertThat(slotComponent.findOpenSlotsFor(roomHolder.roomCreated.getId())).hasSize(slotsToBeCreated);
     });
     Then("^the first slot should start at (.*)$", (String startTime) -> {
-      Slot slot = slotComponent.findOpenSlotsFor(roomHolder.roomCreated.getId()).get(0);
+      SlotView slot = slotComponent.findOpenSlotsFor(roomHolder.roomCreated.getId()).get(0);
       LocalTime time = LocalTime.parse(startTime);
       assertThat(slot.getStartDate().toLocalTime()).isBetween(time, time);
     });
     Then("^the last slot should start at (.*)$", (String startTime) -> {
-      Slot slot = Iterables.getLast(slotComponent.findOpenSlotsFor(roomHolder.roomCreated.getId()));
+      SlotView slot = Iterables.getLast(slotComponent.findOpenSlotsFor(roomHolder.roomCreated.getId()));
       LocalTime time = LocalTime.parse(startTime);
       assertThat(slot.getStartDate().toLocalTime()).isBetween(time, time);
     });
     Then("^the last slot should start the day after$", () -> {
-      Slot slot = Iterables.getLast(slotComponent.findOpenSlotsFor(roomHolder.roomCreated.getId()));
+      SlotView slot = Iterables.getLast(slotComponent.findOpenSlotsFor(roomHolder.roomCreated.getId()));
       LocalDate date = LocalDate.now(clock).plusDays(1);
       assertThat(slot.getStartDate().toLocalDate()).isAfterOrEqualTo(date).isBeforeOrEqualTo(date);
     });
     Then("^the first slot should start the day after$", () -> {
-      Slot slot = slotComponent.findOpenSlotsFor(roomHolder.roomCreated.getId()).get(0);
+      SlotView slot = slotComponent.findOpenSlotsFor(roomHolder.roomCreated.getId()).get(0);
       LocalDate date = LocalDate.now(clock).plusDays(1);
       assertThat(slot.getStartDate().toLocalDate()).isAfterOrEqualTo(date).isBeforeOrEqualTo(date);
     });
