@@ -1,11 +1,13 @@
 package com.jusoft.bookingengine.component.booking;
 
+import com.jusoft.bookingengine.component.booking.api.BookingView;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class BookingHolder {
 
-  public Booking bookingCreated;
-  public List<Booking> bookingsCreated = new ArrayList<>();
-  public List<Booking> bookingsFetched = new ArrayList<>();
+  public BookingView bookingCreated;
+  public List<BookingView> bookingsCreated = new ArrayList<>();
+  public List<BookingView> bookingsFetched = new ArrayList<>();
 }

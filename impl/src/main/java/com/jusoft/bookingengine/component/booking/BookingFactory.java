@@ -1,13 +1,17 @@
 package com.jusoft.bookingengine.component.booking;
 
 
+import com.jusoft.bookingengine.component.booking.api.BookingView;
 import com.jusoft.bookingengine.component.booking.api.CreateBookingCommand;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
 import java.time.Clock;
 import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.function.Supplier;
+
+import static java.util.stream.Collectors.toList;
 
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class BookingFactory {
@@ -21,5 +25,17 @@ class BookingFactory {
       ZonedDateTime.now(clock),
       createBookingCommand.getSlotId(),
       createBookingCommand.getRoomId());
+  }
+
+  BookingView create(Booking booking) {
+    return new BookingView(booking.getId(),
+      booking.getUserId(),
+      booking.getBookingTime(),
+      booking.getSlotId(),
+      booking.getRoomId());
+  }
+
+  public List<BookingView> create(List<Booking> bookings) {
+    return bookings.stream().map(this::create).collect(toList());
   }
 }

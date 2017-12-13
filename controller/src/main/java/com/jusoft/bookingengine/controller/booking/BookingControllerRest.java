@@ -1,8 +1,8 @@
 package com.jusoft.bookingengine.controller.booking;
 
-import com.jusoft.bookingengine.component.booking.Booking;
 import com.jusoft.bookingengine.component.booking.api.BookingComponent;
 import com.jusoft.bookingengine.component.booking.api.BookingNotFoundException;
+import com.jusoft.bookingengine.component.booking.api.BookingView;
 import com.jusoft.bookingengine.component.booking.api.SlotAlreadyBookedException;
 import com.jusoft.bookingengine.component.booking.api.SlotAlreadyStartedException;
 import com.jusoft.bookingengine.component.booking.api.WrongBookingUserException;
@@ -41,7 +41,7 @@ class BookingControllerRest {
   @ResponseBody
   public BookingResource book(@PathVariable long roomId, @PathVariable long slotId, @Valid @RequestBody CreateBookingRequest command) {
     log.info("Create booking request received: roomId={}, slotId={}, userId={}", roomId, slotId, command.getUserId());
-    Booking booking = bookingComponent.book(bookingCommandFactory.createFrom(roomId, slotId, command.getUserId()));
+    BookingView booking = bookingComponent.book(bookingCommandFactory.createFrom(roomId, slotId, command.getUserId()));
     BookingResource bookingResource = bookingResourceFactory.createFrom(booking);
     log.info("Create booking request finished: booking={}", bookingResource);
     return bookingResource;
@@ -59,7 +59,7 @@ class BookingControllerRest {
   @ResponseBody
   public BookingResource find(@PathVariable long userId, @PathVariable long bookingId) {
     log.info("Find booking request received: userId={}, bookingId={}", userId, bookingId);
-    Booking booking = bookingComponent.find(userId, bookingId);
+    BookingView booking = bookingComponent.find(userId, bookingId);
     BookingResource bookingResource = bookingResourceFactory.createFrom(booking);
     log.info("Find booking request finished: booking={}", bookingResource);
     return bookingResource;
@@ -69,7 +69,7 @@ class BookingControllerRest {
   @ResponseBody
   public BookingResources getFor(@PathVariable long userId) {
     log.info("Create booking request received: userId={}", userId);
-    List<Booking> bookings = bookingComponent.getFor(userId);
+    List<BookingView> bookings = bookingComponent.getFor(userId);
     BookingResources bookingResources = bookingResourceFactory.createFrom(bookings);
     log.info("Create booking request finished: userId={}, bookings={}", userId, bookingResources.getBookings().size());
     return bookingResources;

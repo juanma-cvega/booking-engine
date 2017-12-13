@@ -9,7 +9,7 @@ import java.time.ZonedDateTime;
 
 @Data
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-public class Booking {
+class Booking {
 
   private final long id;
   private final long userId;

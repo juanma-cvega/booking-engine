@@ -4,6 +4,7 @@ import com.jusoft.bookingengine.component.AbstractStepDefinitions;
 import com.jusoft.bookingengine.component.booking.api.BookingComponent;
 import com.jusoft.bookingengine.component.booking.api.BookingCreatedEvent;
 import com.jusoft.bookingengine.component.booking.api.BookingNotFoundException;
+import com.jusoft.bookingengine.component.booking.api.BookingView;
 import com.jusoft.bookingengine.component.booking.api.CancelBookingCommand;
 import com.jusoft.bookingengine.component.booking.api.CreateBookingCommand;
 import com.jusoft.bookingengine.component.booking.api.SlotAlreadyBookedException;
@@ -61,7 +62,7 @@ public class BookingManagementStepDefinitions extends AbstractStepDefinitions {
 
       storeException(() -> storeBooking(() -> bookSlot(userId, slotHolder.slotSelected))));
     Then("^the slot should be booked by the user (.*)$", (Long userId) -> {
-      Booking booking = bookingComponent.find(userId, extractBookingId(userId));
+      BookingView booking = bookingComponent.find(userId, extractBookingId(userId));
       assertThat(booking).isNotNull();
       Assertions.assertThat(booking.getSlotId()).isEqualTo(slotHolder.slotSelected);
     });
@@ -121,11 +122,11 @@ public class BookingManagementStepDefinitions extends AbstractStepDefinitions {
       .getId();
   }
 
-  private Booking bookSlot(Long userId, long slotId) {
+  private BookingView bookSlot(Long userId, long slotId) {
     return bookingUseCase.book(new CreateBookingCommand(userId, CommonFixtures.ROOM_ID, slotId));
   }
 
-  private void storeBooking(Supplier<Booking> supplier) {
+  private void storeBooking(Supplier<BookingView> supplier) {
     bookingHolder.bookingCreated = supplier.get();
     bookingHolder.bookingsCreated.add(bookingHolder.bookingCreated);
   }

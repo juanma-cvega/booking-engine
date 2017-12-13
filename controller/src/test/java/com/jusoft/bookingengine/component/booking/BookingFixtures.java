@@ -1,5 +1,6 @@
 package com.jusoft.bookingengine.component.booking;
 
+import com.jusoft.bookingengine.component.booking.api.BookingView;
 import com.jusoft.bookingengine.component.booking.api.CancelBookingCommand;
 import com.jusoft.bookingengine.component.booking.api.CreateBookingCommand;
 import com.jusoft.bookingengine.component.slot.SlotFixtures;
@@ -24,9 +25,9 @@ public class BookingFixtures {
   public static final ZonedDateTime BOOKING_TIME_DATE = TimeUtil.getLocalDateTimeFrom(BOOKING_TIME);
   public static final CancelBookingCommand CANCEL_BOOKING_COMMAND = new CancelBookingCommand(USER_ID_1, BOOKING_ID_1);
 
-  public static final Booking BOOKING_1 = new Booking(BOOKING_ID_1, USER_ID_1, BOOKING_TIME_DATE, SlotFixtures.SLOT_ID_1, ROOM_ID);
-  public static final Booking BOOKING_2 = new Booking(BOOKING_ID_2, USER_ID_1, BOOKING_TIME_DATE, SlotFixtures.SLOT_ID_2, ROOM_ID);
-  public static final List<Booking> BOOKINGS = asList(BOOKING_1, BOOKING_2);
+  public static final BookingView BOOKING_1 = new BookingView(BOOKING_ID_1, USER_ID_1, BOOKING_TIME_DATE, SlotFixtures.SLOT_ID_1, ROOM_ID);
+  public static final BookingView BOOKING_2 = new BookingView(BOOKING_ID_2, USER_ID_1, BOOKING_TIME_DATE, SlotFixtures.SLOT_ID_2, ROOM_ID);
+  public static final List<BookingView> BOOKINGS = asList(BOOKING_1, BOOKING_2);
 
   public static final CreateBookingCommand CREATE_BOOKING_COMMAND = new CreateBookingCommand(USER_ID_1, ROOM_ID, SlotFixtures.SLOT_ID_1);
 

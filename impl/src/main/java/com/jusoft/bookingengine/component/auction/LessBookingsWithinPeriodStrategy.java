@@ -1,8 +1,8 @@
 package com.jusoft.bookingengine.component.auction;
 
 import com.jusoft.bookingengine.component.auction.api.strategy.LessBookingsWithinPeriodConfigInfo;
-import com.jusoft.bookingengine.component.booking.Booking;
 import com.jusoft.bookingengine.component.booking.api.BookingComponent;
+import com.jusoft.bookingengine.component.booking.api.BookingView;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
@@ -36,7 +36,7 @@ class LessBookingsWithinPeriodStrategy implements AuctionWinnerStrategy {
     if (!bids.isEmpty()) {
       ZonedDateTime endPeriod = ZonedDateTime.now(clock).plusDays(config.getEndRangeTimeInDays());
       Set<Long> buyers = bids.stream().map(Bid::getUserId).collect(toSet());
-      List<Booking> usersBookingsFound = bookingComponent.findUsersBookingsUntilFor(endPeriod, buyers);
+      List<BookingView> usersBookingsFound = bookingComponent.findUsersBookingsUntilFor(endPeriod, buyers);
       Set<Long> usersWithLessBookings = buyers.stream()
         .collect(groupingByUserToNumberOfBookings(usersBookingsFound)).entrySet().stream()
         .collect(groupingByNumberOfBookingsToUsers()).entrySet().stream()
@@ -49,13 +49,13 @@ class LessBookingsWithinPeriodStrategy implements AuctionWinnerStrategy {
     return winner;
   }
 
-  private long bookingsFor(List<Booking> bookings, Long user) {
+  private long bookingsFor(List<BookingView> bookings, Long user) {
     return bookings.stream()
       .filter(booking -> booking.getUserId() == user)
       .count();
   }
 
-  private Collector<Long, ?, Map<Long, Long>> groupingByUserToNumberOfBookings(List<Booking> usersBookingsFound) {
+  private Collector<Long, ?, Map<Long, Long>> groupingByUserToNumberOfBookings(List<BookingView> usersBookingsFound) {
     return toMap(user -> user, user -> bookingsFor(usersBookingsFound, user));
   }
 

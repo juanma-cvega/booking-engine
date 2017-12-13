@@ -3,6 +3,7 @@ package com.jusoft.bookingengine.component.booking;
 import com.jusoft.bookingengine.component.booking.api.BookingComponent;
 import com.jusoft.bookingengine.component.booking.api.BookingCreatedEvent;
 import com.jusoft.bookingengine.component.booking.api.BookingNotFoundException;
+import com.jusoft.bookingengine.component.booking.api.BookingView;
 import com.jusoft.bookingengine.component.booking.api.CancelBookingCommand;
 import com.jusoft.bookingengine.component.booking.api.CreateBookingCommand;
 import com.jusoft.bookingengine.component.booking.api.WrongBookingUserException;
@@ -31,11 +32,11 @@ class BookingComponentImpl implements BookingComponent {
    * @return the created booking
    */
   @Override
-  public Booking book(CreateBookingCommand createBookingCommand) {
+  public BookingView book(CreateBookingCommand createBookingCommand) {
     Booking newBooking = bookingFactory.create(createBookingCommand);
     bookingRepository.save(newBooking);
     messagePublisher.publish(new BookingCreatedEvent(newBooking.getId(), newBooking.getUserId(), newBooking.getSlotId()));
-    return newBooking;
+    return bookingFactory.create(newBooking);
   }
 
   @Override
@@ -49,23 +50,23 @@ class BookingComponentImpl implements BookingComponent {
   }
 
   @Override
-  public Booking find(long userId, long bookingId) {
-    return bookingRepository.find(bookingId)
+  public BookingView find(long userId, long bookingId) {
+    return bookingRepository.find(bookingId).map(bookingFactory::create)
       .orElseThrow(() -> new BookingNotFoundException(userId, bookingId));
   }
 
   @Override
-  public List<Booking> findAllBy(long userId) {
-    return bookingRepository.getByUser(userId);
+  public List<BookingView> findAllBy(long userId) {
+    return bookingFactory.create(bookingRepository.getByUser(userId));
   }
 
   @Override
-  public List<Booking> getFor(long userId) {
-    return bookingRepository.getByUser(userId);
+  public List<BookingView> getFor(long userId) {
+    return bookingFactory.create(bookingRepository.getByUser(userId));
   }
 
   @Override
-  public List<Booking> findUsersBookingsUntilFor(ZonedDateTime endTime, Set<Long> users) {
-    return bookingRepository.findBookingsUntilFor(endTime, users);
+  public List<BookingView> findUsersBookingsUntilFor(ZonedDateTime endTime, Set<Long> users) {
+    return bookingFactory.create(bookingRepository.findBookingsUntilFor(endTime, users));
   }
 }
