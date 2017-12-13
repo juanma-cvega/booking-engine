@@ -1,7 +1,5 @@
 package com.jusoft.bookingengine.component.slot;
 
-import com.jusoft.bookingengine.component.room.Room;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -34,7 +32,7 @@ interface SlotRepository {
   /**
    * Finds the last created {@link Slot} for the provided roomId
    *
-   * @param roomId id of the {@link Room} that contains the {@link Slot}
+   * @param roomId id of the room that contains the {@link Slot}
    * @return
    */
   Optional<Slot> getLastCreatedFor(long roomId);

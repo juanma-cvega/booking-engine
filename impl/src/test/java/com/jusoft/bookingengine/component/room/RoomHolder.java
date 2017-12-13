@@ -2,6 +2,7 @@ package com.jusoft.bookingengine.component.room;
 
 import com.jusoft.bookingengine.component.auction.api.strategy.AuctionConfigInfo;
 import com.jusoft.bookingengine.component.room.api.CreateRoomCommand;
+import com.jusoft.bookingengine.component.room.api.RoomView;
 import com.jusoft.bookingengine.component.timer.OpenTime;
 
 import java.time.DayOfWeek;
@@ -17,8 +18,8 @@ import static com.jusoft.bookingengine.component.room.RoomFixtures.SLOT_DURATION
 
 public class RoomHolder {
 
-  public Room roomCreated;
-  public Room roomFetched;
+  public RoomView roomCreated;
+  public RoomView roomFetched;
 
   public CreateRoomCommandBuilder roomBuilder;
 

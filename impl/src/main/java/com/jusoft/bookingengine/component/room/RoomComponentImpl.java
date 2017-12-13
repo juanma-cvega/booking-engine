@@ -3,6 +3,7 @@ package com.jusoft.bookingengine.component.room;
 import com.jusoft.bookingengine.component.room.api.CreateRoomCommand;
 import com.jusoft.bookingengine.component.room.api.RoomComponent;
 import com.jusoft.bookingengine.component.room.api.RoomNotFoundException;
+import com.jusoft.bookingengine.component.room.api.RoomView;
 import com.jusoft.bookingengine.component.shared.MessagePublisher;
 import com.jusoft.bookingengine.component.timer.OpenDate;
 import lombok.AccessLevel;
@@ -21,16 +22,16 @@ class RoomComponentImpl implements RoomComponent {
   private final Clock clock;
 
   @Override
-  public Room create(CreateRoomCommand createRoomCommand) {
+  public RoomView create(CreateRoomCommand createRoomCommand) {
     Room room = roomFactory.createFrom(createRoomCommand);
     roomRepository.save(room);
     messagePublisher.publish(roomEventFactory.roomCreatedEvent(room));
-    return room;
+    return roomFactory.createFrom(room);
   }
 
   @Override
-  public Room find(long roomId) {
-    return roomRepository.find(roomId).orElseThrow(() -> new RoomNotFoundException(roomId));
+  public RoomView find(long roomId) {
+    return roomFactory.createFrom(roomRepository.find(roomId).orElseThrow(() -> new RoomNotFoundException(roomId)));
   }
 
   @Override

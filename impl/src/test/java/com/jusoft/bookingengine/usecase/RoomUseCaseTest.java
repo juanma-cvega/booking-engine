@@ -1,10 +1,10 @@
 package com.jusoft.bookingengine.usecase;
 
 import com.jusoft.bookingengine.MainConfig;
-import com.jusoft.bookingengine.component.room.Room;
 import com.jusoft.bookingengine.component.room.RoomFixtures;
 import com.jusoft.bookingengine.component.room.api.RoomComponent;
 import com.jusoft.bookingengine.component.room.api.RoomCreatedEvent;
+import com.jusoft.bookingengine.component.room.api.RoomView;
 import com.jusoft.bookingengine.component.shared.MessagePublisher;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,9 +39,9 @@ public class RoomUseCaseTest {
 
   @Test
   public void use_case_create_room_creates_room_and_publishes_room_created_event() {
-    Room room = roomUseCase.createRoom(RoomFixtures.CREATE_ROOM_COMMAND);
+    RoomView room = roomUseCase.createRoom(RoomFixtures.CREATE_ROOM_COMMAND);
 
-    Room storedRoom = roomComponent.find(room.getId());
+    RoomView storedRoom = roomComponent.find(room.getId());
     verify(messagePublisher).publish(roomCreatedEventCaptor.capture());
     RoomCreatedEvent roomCreatedEvent = roomCreatedEventCaptor.getValue();
     assertThat(roomCreatedEvent.getRoomId())

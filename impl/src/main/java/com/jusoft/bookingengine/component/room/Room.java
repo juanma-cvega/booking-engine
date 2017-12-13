@@ -21,7 +21,7 @@ import java.util.function.Predicate;
 import static com.jusoft.bookingengine.component.timer.TimeConstants.UTC;
 
 @Data
-public class Room {
+class Room {
 
   private final long id;
   private final int maxSlots; //TODO define this as a strategy to define how many slots can be available at all times

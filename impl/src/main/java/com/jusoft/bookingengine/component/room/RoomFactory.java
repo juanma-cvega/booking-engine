@@ -1,6 +1,7 @@
 package com.jusoft.bookingengine.component.room;
 
 import com.jusoft.bookingengine.component.room.api.CreateRoomCommand;
+import com.jusoft.bookingengine.component.room.api.RoomView;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
@@ -19,5 +20,15 @@ class RoomFactory {
       createRoomCommand.getAvailableDays(),
       createRoomCommand.isActive(),
       createRoomCommand.getAuctionConfigInfo());
+  }
+
+  RoomView createFrom(Room room) {
+    return new RoomView(room.getId(),
+      room.getMaxSlots(),
+      room.getSlotDurationInMinutes(),
+      room.getOpenTimesPerDay(),
+      room.getAvailableDays(),
+      room.isActive(),
+      room.getAuctionConfigInfo());
   }
 }

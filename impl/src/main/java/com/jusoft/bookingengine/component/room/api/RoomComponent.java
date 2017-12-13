@@ -1,15 +1,14 @@
 package com.jusoft.bookingengine.component.room.api;
 
-import com.jusoft.bookingengine.component.room.Room;
 import com.jusoft.bookingengine.component.timer.OpenDate;
 
 import java.time.ZonedDateTime;
 
 public interface RoomComponent {
 
-  Room create(CreateRoomCommand createRoomCommand);
+  RoomView create(CreateRoomCommand createRoomCommand);
 
-  Room find(long roomId);
+  RoomView find(long roomId);
 
   OpenDate findNextSlotOpenDate(ZonedDateTime lastSlotEndTime, long roomId);
 
