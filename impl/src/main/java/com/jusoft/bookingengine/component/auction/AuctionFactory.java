@@ -1,5 +1,6 @@
 package com.jusoft.bookingengine.component.auction;
 
+import com.jusoft.bookingengine.component.auction.api.AuctionView;
 import com.jusoft.bookingengine.component.auction.api.CreateAuctionCommand;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -19,5 +20,14 @@ class AuctionFactory {
       createAuctionCommand.getRoomId(),
       createAuctionCommand.getDurationInMinutes(),
       clock);
+  }
+
+  public AuctionView createFromm(Auction auction) {
+    return new AuctionView(auction.getId(),
+      auction.getSlotId(),
+      auction.getRoomId(),
+      auction.getStartTime(),
+      auction.getEndTime(),
+      auction.getBuyers());
   }
 }

@@ -1,5 +1,6 @@
 package com.jusoft.bookingengine.component.auction;
 
+import com.jusoft.bookingengine.component.auction.api.Bid;
 import com.jusoft.bookingengine.component.auction.api.strategy.LessBookingsWithinPeriodConfigInfo;
 import com.jusoft.bookingengine.component.booking.api.BookingComponent;
 import com.jusoft.bookingengine.component.booking.api.BookingView;

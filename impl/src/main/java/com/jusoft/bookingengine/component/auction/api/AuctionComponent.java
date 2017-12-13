@@ -1,10 +1,8 @@
 package com.jusoft.bookingengine.component.auction.api;
 
-import com.jusoft.bookingengine.component.auction.Auction;
-
 public interface AuctionComponent {
 
-  Auction startAuction(CreateAuctionCommand createAuctionCommand);
+  AuctionView startAuction(CreateAuctionCommand createAuctionCommand);
 
   void addBuyerTo(long slotId, long userId);
 

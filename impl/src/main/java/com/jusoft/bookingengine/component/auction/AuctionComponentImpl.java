@@ -2,6 +2,7 @@ package com.jusoft.bookingengine.component.auction;
 
 import com.jusoft.bookingengine.component.auction.api.AuctionComponent;
 import com.jusoft.bookingengine.component.auction.api.AuctionNotFoundException;
+import com.jusoft.bookingengine.component.auction.api.AuctionView;
 import com.jusoft.bookingengine.component.auction.api.AuctionWinnerFoundEvent;
 import com.jusoft.bookingengine.component.auction.api.CreateAuctionCommand;
 import com.jusoft.bookingengine.component.auction.api.FinishAuctionCommand;
@@ -22,10 +23,10 @@ class AuctionComponentImpl implements AuctionComponent {
   private final MessagePublisher messagePublisher;
 
   @Override
-  public Auction startAuction(CreateAuctionCommand createAuctionCommand) {
+  public AuctionView startAuction(CreateAuctionCommand createAuctionCommand) {
     Auction newAuction = auctionFactory.createFrom(createAuctionCommand);
     auctionRepository.save(newAuction);
-    return newAuction;
+    return auctionFactory.createFromm(newAuction);
   }
 
   @Override

@@ -1,8 +1,8 @@
 package com.jusoft.bookingengine.usecase;
 
-import com.jusoft.bookingengine.component.auction.Auction;
 import com.jusoft.bookingengine.component.auction.api.AuctionComponent;
 import com.jusoft.bookingengine.component.auction.api.AuctionFinishedEvent;
+import com.jusoft.bookingengine.component.auction.api.AuctionView;
 import com.jusoft.bookingengine.component.auction.api.CreateAuctionCommand;
 import com.jusoft.bookingengine.component.auction.api.FinishAuctionCommand;
 import com.jusoft.bookingengine.component.room.api.RoomComponent;
@@ -23,7 +23,7 @@ public class AuctionUseCase {
   public void startAuction(long roomId, long slotId) {
     int auctionDuration = roomComponent.getAuctionDurationFor(roomId);
     if (isAuctionEnabledFor(auctionDuration)) {
-      Auction newAuction = auctionComponent.startAuction(new CreateAuctionCommand(slotId, roomId, auctionDuration));
+      AuctionView newAuction = auctionComponent.startAuction(new CreateAuctionCommand(slotId, roomId, auctionDuration));
       AuctionFinishedEvent message = new AuctionFinishedEvent(newAuction.getId(), newAuction.getRoomId(), newAuction.getSlotId());
       messagePublisher.publish(new ScheduledEvent(message, newAuction.getEndTime()));
     }

@@ -1,5 +1,6 @@
 package com.jusoft.bookingengine.component.auction;
 
+import com.jusoft.bookingengine.component.auction.api.Bid;
 import lombok.Data;
 import lombok.NonNull;
 
@@ -10,7 +11,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @Data
-public class Auction {
+class Auction {
 
   private final long id;
   private final long slotId;
