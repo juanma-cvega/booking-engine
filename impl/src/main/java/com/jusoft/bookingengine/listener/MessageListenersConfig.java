@@ -1,9 +1,14 @@
 package com.jusoft.bookingengine.listener;
 
 import com.jusoft.bookingengine.component.scheduler.api.SchedulerComponent;
-import com.jusoft.bookingengine.usecase.AuctionUseCase;
-import com.jusoft.bookingengine.usecase.BookingUseCase;
-import com.jusoft.bookingengine.usecase.SlotUseCase;
+import com.jusoft.bookingengine.usecase.AddBuyerToAuctionUseCase;
+import com.jusoft.bookingengine.usecase.CancelBookingUseCase;
+import com.jusoft.bookingengine.usecase.CreateBookingUseCase;
+import com.jusoft.bookingengine.usecase.CreateRoomUseCase;
+import com.jusoft.bookingengine.usecase.FinishAuctionUseCase;
+import com.jusoft.bookingengine.usecase.OpenNextSlotUseCase;
+import com.jusoft.bookingengine.usecase.ScheduleNextSlotUseCase;
+import com.jusoft.bookingengine.usecase.StartAuctionUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,37 +17,47 @@ import org.springframework.context.annotation.Configuration;
 public class MessageListenersConfig {
 
   @Autowired
-  private SlotUseCase slotUseCase;
+  private AddBuyerToAuctionUseCase addBuyerToAuctionUseCase;
   @Autowired
-  private AuctionUseCase auctionUseCase;
+  private CancelBookingUseCase cancelBookingUseCase;
   @Autowired
-  private BookingUseCase bookingUseCase;
+  private CreateBookingUseCase createBookingUseCase;
+  @Autowired
+  private CreateRoomUseCase createRoomUseCase;
+  @Autowired
+  private FinishAuctionUseCase finishAuctionUseCase;
+  @Autowired
+  private OpenNextSlotUseCase openNextSlotUseCase;
+  @Autowired
+  private ScheduleNextSlotUseCase scheduleNextSlotUseCase;
+  @Autowired
+  private StartAuctionUseCase startAuctionUseCase;
   @Autowired
   private SchedulerComponent schedulerComponent;
 
   @Bean
   public OpenNextSlotCommandListener createSlotCommandListener() {
-    return new OpenNextSlotCommandListener(slotUseCase);
+    return new OpenNextSlotCommandListener(openNextSlotUseCase);
   }
 
   @Bean
   public SlotCreatedEventListener slotCreatedEventListener() {
-    return new SlotCreatedEventListener(slotUseCase, auctionUseCase);
+    return new SlotCreatedEventListener(scheduleNextSlotUseCase, startAuctionUseCase);
   }
 
   @Bean
   public RoomCreatedEventListener roomCreatedEventListener() {
-    return new RoomCreatedEventListener(slotUseCase);
+    return new RoomCreatedEventListener(openNextSlotUseCase);
   }
 
   @Bean
   public AuctionFinishedEventListener auctionFinishedEventListener() {
-    return new AuctionFinishedEventListener(auctionUseCase);
+    return new AuctionFinishedEventListener(finishAuctionUseCase);
   }
 
   @Bean
   public AuctionWinnerFoundEventListener auctionWinnerFoundEventListener() {
-    return new AuctionWinnerFoundEventListener(bookingUseCase);
+    return new AuctionWinnerFoundEventListener(createBookingUseCase);
   }
 
   @Bean

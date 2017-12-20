@@ -20,7 +20,6 @@
     <maven-compiler-plugin>1.8</maven-compiler-plugin>
     <spring.version>4.3.6.RELEASE</spring.version>
     <tomcat.version>8.0.39</tomcat.version>
-    <cucumber.version>1.2.5</cucumber.version>
     <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
     <tomcat7-maven-plugin.version>2.2</tomcat7-maven-plugin.version>
     <spring-boot.version>1.5.9.RELEASE</spring-boot.version>
@@ -41,6 +40,7 @@
     <commons-collections4.version>4.1</commons-collections4.version>
     <guava.version>23.0</guava.version>
     <jackson.version>2.9.2</jackson.version>
+    <cucumber.version>2.3.1</cucumber.version>
   </properties>
 
   <dependencyManagement>
@@ -128,23 +128,24 @@
       </dependency>
 
       <dependency>
-        <groupId>info.cukes</groupId>
+        <groupId>io.cucumber</groupId>
         <artifactId>cucumber-java8</artifactId>
         <version>${cucumber.version}</version>
         <scope>test</scope>
       </dependency>
       <dependency>
-        <groupId>info.cukes</groupId>
-        <artifactId>cucumber-junit</artifactId>
-        <version>${cucumber.version}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>info.cukes</groupId>
+        <groupId>io.cucumber</groupId>
         <artifactId>cucumber-spring</artifactId>
         <version>${cucumber.version}</version>
         <scope>test</scope>
       </dependency>
+      <dependency>
+        <groupId>io.cucumber</groupId>
+        <artifactId>cucumber-junit</artifactId>
+        <version>${cucumber.version}</version>
+        <scope>test</scope>
+      </dependency>
+
       <dependency>
         <groupId>com.jayway.jsonpath</groupId>
         <artifactId>json-path</artifactId>

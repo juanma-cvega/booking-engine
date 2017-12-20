@@ -47,7 +47,7 @@ class RoomComponentImpl implements RoomComponent {
   }
 
   @Override
-  public ZonedDateTime findNextSlotOpeningTime(long roomId, int currentNumberOfSlotsOpen, ZonedDateTime nextSlotToFinishEndDate) {
+  public ZonedDateTime findNextSlotCreationTime(long roomId, int currentNumberOfSlotsOpen, ZonedDateTime nextSlotToFinishEndDate) {
     Room room = findRoom(roomId);
     return room.findUpcomingSlot(clock, currentNumberOfSlotsOpen, nextSlotToFinishEndDate);
   }

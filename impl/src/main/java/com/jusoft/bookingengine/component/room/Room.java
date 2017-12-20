@@ -18,8 +18,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Predicate;
 
-import static com.jusoft.bookingengine.component.timer.TimeConstants.UTC;
-
 @Data
 class Room {
 
@@ -68,28 +66,24 @@ class Room {
   }
 
   OpenDate findFirstSlotDate(Clock clock) {
-    ZonedDateTime endDate = getLastSlotEndTime(clock);
-    return getNextSlotDate(endDate, clock);
+    ZonedDateTime endDate = findNextSlotStartTimeFromNow(clock);
+    return findNextSlotDate(endDate, clock);
   }
 
-  private ZonedDateTime getLastSlotEndTime(Clock clock) {
-    ZonedDateTime endDate;
+  private ZonedDateTime findNextSlotStartTimeFromNow(Clock clock) {
+    ZonedDateTime previousSlotEndTime;
     LocalTime currentTime = LocalTime.now(clock);
     OpenTime openTime = findOpenTimeFor(currentTime);
     if (isNotWithinOpenTime(currentTime, openTime)) {
-      endDate = getStartOfNextOpenTime(openTime, clock);
+      previousSlotEndTime = getStartOfNextOpenTime(openTime, clock);
     } else {
-      endDate = findSlotWithin(openTime, currentTime, clock);
+      previousSlotEndTime = findPreviousSlotEndTimeWithin(openTime, clock);
     }
-    return endDate;
+    return previousSlotEndTime;
   }
 
   OpenDate findNextSlotDate(ZonedDateTime lastSlotEndTime, Clock clock) {
-    return getNextSlotDate(lastSlotEndTime, clock);
-  }
-
-  private OpenDate getNextSlotDate(ZonedDateTime endDate, Clock clock) {
-    ZonedDateTime nextSlotEndTime = getNextSlotEndTime(endDate, clock);
+    ZonedDateTime nextSlotEndTime = getNextSlotEndTime(lastSlotEndTime, clock);
     return new OpenDate(nextSlotEndTime.minusMinutes(slotDurationInMinutes), nextSlotEndTime);
   }
 
@@ -105,14 +99,14 @@ class Room {
   }
 
   private ZonedDateTime getStartOfNextOpenTime(OpenTime openTime, Clock clock) {
-    return ZonedDateTime.of(getNextSlotLocalDate(ZonedDateTime.now(clock), openTime.getStartTime()), openTime.getStartTime(), UTC);
+    return ZonedDateTime.of(getNextSlotLocalDate(ZonedDateTime.now(clock), openTime.getStartTime()), openTime.getStartTime(), clock.getZone());
   }
 
-  private ZonedDateTime findSlotWithin(OpenTime openTime, LocalTime now, Clock clock) {
-    long minutesFromStartToNow = openTime.getStartTime().until(now, ChronoUnit.MINUTES);
+  private ZonedDateTime findPreviousSlotEndTimeWithin(OpenTime openTime, Clock clock) {
+    long minutesFromStartToNow = openTime.getStartTime().until(LocalTime.now(clock), ChronoUnit.MINUTES);
     double slotsToNow = (double) minutesFromStartToNow / slotDurationInMinutes;
     int nextSlotNumber = findNextSlotNumber(slotsToNow);
-    return ZonedDateTime.of(LocalDate.now(clock), findLocalTimeForSlot(openTime, nextSlotNumber), clock.getZone());
+    return ZonedDateTime.of(LocalDate.now(clock), findSlotStartTimeFor(openTime, nextSlotNumber), clock.getZone());
   }
 
   private int findNextSlotNumber(double slotsToNow) {
@@ -129,7 +123,7 @@ class Room {
     return slotsToNow % 1 == 0;
   }
 
-  private LocalTime findLocalTimeForSlot(OpenTime openTime, int nextSlotNumber) {
+  private LocalTime findSlotStartTimeFor(OpenTime openTime, int nextSlotNumber) {
     return openTime.getStartTime().plusMinutes(nextSlotNumber * slotDurationInMinutes);
   }
 

@@ -1,4 +1,4 @@
-package com.jusoft.bookingengine.component.room;
+package com.jusoft.bookingengine.holder;
 
 import com.jusoft.bookingengine.component.auction.api.strategy.AuctionConfigInfo;
 import com.jusoft.bookingengine.component.room.api.CreateRoomCommand;
@@ -9,17 +9,16 @@ import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.jusoft.bookingengine.component.room.RoomFixtures.AVAILABLE_DAYS;
-import static com.jusoft.bookingengine.component.room.RoomFixtures.IS_ACTIVE;
-import static com.jusoft.bookingengine.component.room.RoomFixtures.LESS_BOOKINGS_WITHIN_PERIOD_CONFIG;
-import static com.jusoft.bookingengine.component.room.RoomFixtures.MAX_SLOTS;
-import static com.jusoft.bookingengine.component.room.RoomFixtures.OPEN_TIMES;
-import static com.jusoft.bookingengine.component.room.RoomFixtures.SLOT_DURATION_IN_MINUTES;
+import static com.jusoft.bookingengine.fixture.RoomFixtures.AVAILABLE_DAYS;
+import static com.jusoft.bookingengine.fixture.RoomFixtures.IS_ACTIVE;
+import static com.jusoft.bookingengine.fixture.RoomFixtures.LESS_BOOKINGS_WITHIN_PERIOD_CONFIG;
+import static com.jusoft.bookingengine.fixture.RoomFixtures.MAX_SLOTS;
+import static com.jusoft.bookingengine.fixture.RoomFixtures.OPEN_TIMES;
+import static com.jusoft.bookingengine.fixture.RoomFixtures.SLOT_DURATION_IN_MINUTES;
 
 public class RoomHolder {
 
   public RoomView roomCreated;
-  public RoomView roomFetched;
 
   public CreateRoomCommandBuilder roomBuilder;
 
@@ -27,7 +26,7 @@ public class RoomHolder {
     roomBuilder = new CreateRoomCommandBuilder();
   }
 
-  static class CreateRoomCommandBuilder {
+  public static class CreateRoomCommandBuilder {
 
     public Integer maxSlots;
     public Integer slotDurationInMinutes;

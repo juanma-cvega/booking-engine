@@ -59,7 +59,7 @@ class Auction {
 
   public boolean isOpen() {
     ZonedDateTime now = ZonedDateTime.now(clock);
-    return now.isBefore(endTime) && now.isAfter(startTime);
+    return now.isBefore(endTime) && (now.isAfter(startTime) || now.isEqual(startTime));
   }
 
   public Optional<Long> findAuctionWinner(AuctionWinnerStrategy strategy) {

@@ -3,6 +3,9 @@ package com.jusoft.bookingengine.util;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -15,6 +18,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Supplier;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @Slf4j
 public class LockingTemplateTest {
@@ -31,7 +35,15 @@ public class LockingTemplateTest {
   private final ExecutorService executor = Executors.newFixedThreadPool(3);
 
   @Test
-  public void runnableWithLock() throws ExecutionException, InterruptedException {
+  public void test_constructor_is_private() throws NoSuchMethodException {
+    Constructor<LockingTemplate> constructor = LockingTemplate.class.getDeclaredConstructor();
+    assertThat(Modifier.isPrivate(constructor.getModifiers())).isTrue();
+    constructor.setAccessible(true);
+    assertThatThrownBy(constructor::newInstance).isInstanceOf(InvocationTargetException.class);
+  }
+
+  @Test
+  public void runnable_with_lock_should_make_second_thread_wait_for_first_thread_to_finish() throws ExecutionException, InterruptedException {
     AtomicLong testObject = new AtomicLong(INITIAL_VALUE);
     Future<?> slowTask = executor.submit(() -> LockingTemplate.withLock(lock, runnableToTest(testObject, SLOW_TASK_VALUE, SLOW_TASK)));
     sleep(SLEEP_TIME_BETWEEN_THREAD_EXECUTION);
@@ -46,7 +58,7 @@ public class LockingTemplateTest {
   }
 
   @Test
-  public void runnableWithoutLock() throws ExecutionException, InterruptedException {
+  public void runnable_without_lock_should_let_both_threads_run_the_code_at_same_time() throws ExecutionException, InterruptedException {
     AtomicLong testObject = new AtomicLong(INITIAL_VALUE);
     Future<?> slowTask = executor.submit(runnableToTest(testObject, SLOW_TASK_VALUE, SLOW_TASK));
     sleep(SLEEP_TIME_BETWEEN_THREAD_EXECUTION);
@@ -61,7 +73,7 @@ public class LockingTemplateTest {
   }
 
   @Test
-  public void supplierWithLock() throws ExecutionException, InterruptedException {
+  public void supplier_with_lock_should_make_second_thread_wait_for_first_thread_to_finish() throws ExecutionException, InterruptedException {
     AtomicLong testObject = new AtomicLong(INITIAL_VALUE);
     Future<Long> slowTask = executor.submit(() -> LockingTemplate.withLock(lock, supplierToTest(testObject, SLOW_TASK_VALUE, SLOW_TASK)));
     sleep(SLEEP_TIME_BETWEEN_THREAD_EXECUTION);
@@ -78,7 +90,7 @@ public class LockingTemplateTest {
   }
 
   @Test
-  public void supplierWithLockThrowsException() throws InterruptedException {
+  public void supplier_with_lock_throws_exception_should_release_lock_after_failing() throws InterruptedException {
     executor.submit(() -> LockingTemplate.withLock(lock, (Supplier<RuntimeException>) RuntimeException::new));
     boolean isLockAcquired = lock.tryLock(SLEEP_TIME_BETWEEN_THREAD_EXECUTION, TimeUnit.MILLISECONDS);
     lock.unlock();
@@ -86,7 +98,7 @@ public class LockingTemplateTest {
   }
 
   @Test
-  public void supplierWithoutLockRunnable() throws ExecutionException, InterruptedException {
+  public void supplier_without_lock_runnable_should_let_both_threads_run_the_code_at_same_time() throws ExecutionException, InterruptedException {
     AtomicLong testObject = new AtomicLong(0);
     Future<Long> slowTask = executor.submit(callableToTest(testObject, SLOW_TASK_VALUE, SLOW_TASK));
     sleep(SLEEP_TIME_BETWEEN_THREAD_EXECUTION);

@@ -1,7 +1,7 @@
 package com.jusoft.bookingengine.listener;
 
 import com.jusoft.bookingengine.component.room.api.RoomCreatedEvent;
-import com.jusoft.bookingengine.usecase.SlotUseCase;
+import com.jusoft.bookingengine.usecase.OpenNextSlotUseCase;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,11 +11,11 @@ import org.springframework.context.event.EventListener;
 @Slf4j
 public class RoomCreatedEventListener implements MessageListener {
 
-  private final SlotUseCase slotUseCase;
+  private final OpenNextSlotUseCase openNextSlotUseCase;
 
   @EventListener(RoomCreatedEvent.class)
   public void openFirstSlot(RoomCreatedEvent event) {
     log.info("RoomCreatedEvent consumed: roomId={}", event.getRoomId());
-    slotUseCase.openNextSlotFor(event.getRoomId());
+    openNextSlotUseCase.openNextSlotFor(event.getRoomId());
   }
 }

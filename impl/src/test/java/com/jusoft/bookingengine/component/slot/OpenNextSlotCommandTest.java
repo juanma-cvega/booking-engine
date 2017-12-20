@@ -1,11 +1,11 @@
 package com.jusoft.bookingengine.component.slot;
 
-import com.jusoft.bookingengine.component.fixtures.CommonFixtures;
 import com.jusoft.bookingengine.component.slot.api.CreateSlotCommand;
+import com.jusoft.bookingengine.fixture.CommonFixtures;
 import org.junit.Test;
 
-import static com.jusoft.bookingengine.component.slot.SlotsFixtures.END_TIME;
-import static com.jusoft.bookingengine.component.slot.SlotsFixtures.START_TIME;
+import static com.jusoft.bookingengine.fixture.SlotsFixtures.END_TIME;
+import static com.jusoft.bookingengine.fixture.SlotsFixtures.START_TIME;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class OpenNextSlotCommandTest {

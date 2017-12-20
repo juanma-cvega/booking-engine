@@ -23,13 +23,14 @@ class SlotComponentImpl implements SlotComponent {
   private final Clock clock;
 
   @Override
-  public SlotView create(CreateSlotCommand createSlotCommand, Clock clock) {
+  public SlotView create(CreateSlotCommand createSlotCommand) {
     Slot newSlot = slotFactory.createFrom(createSlotCommand, clock);
     slotRepository.save(newSlot);
     messagePublisher.publish(slotEventFactory.slotCreatedEvent(newSlot));
     return slotFactory.createFrom(newSlot);
   }
 
+  //FIXME it doesn't filter by slots ended already
   //FIXME possible problem when slots end????
   @Override
   public List<SlotView> findOpenSlotsFor(long roomId) {

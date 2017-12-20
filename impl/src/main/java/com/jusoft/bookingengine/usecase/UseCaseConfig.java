@@ -28,22 +28,43 @@ public class UseCaseConfig {
   private MessagePublisher messagePublisher;
 
   @Bean
-  public AuctionUseCase auctionUseCase() {
-    return new AuctionUseCase(roomComponent, auctionComponent, messagePublisher);
+  public AddBuyerToAuctionUseCase addBuyerToAuctionUseCase() {
+    return new AddBuyerToAuctionUseCase(auctionComponent);
   }
 
   @Bean
-  public BookingUseCase bookingUseCase() {
-    return new BookingUseCase(bookingComponent, slotComponent, auctionComponent);
+  public CancelBookingUseCase cancelBookingUseCase() {
+    return new CancelBookingUseCase(bookingComponent, slotComponent);
   }
 
   @Bean
-  public RoomUseCase createRoomUseCase() {
-    return new RoomUseCase(roomComponent);
+  public CreateBookingUseCase createBookingUseCase() {
+    return new CreateBookingUseCase(bookingComponent, slotComponent, auctionComponent);
   }
 
   @Bean
-  public SlotUseCase slotUseCase() {
-    return new SlotUseCase(roomComponent, slotComponent, messagePublisher, clock);
+  public CreateRoomUseCase createRoomUseCase() {
+    return new CreateRoomUseCase(roomComponent);
   }
+
+  @Bean
+  public FinishAuctionUseCase finishAuctionUseCase() {
+    return new FinishAuctionUseCase(roomComponent, auctionComponent);
+  }
+
+  @Bean
+  public OpenNextSlotUseCase openNextSlotUseCase() {
+    return new OpenNextSlotUseCase(roomComponent, slotComponent);
+  }
+
+  @Bean
+  public ScheduleNextSlotUseCase scheduleNextSlotUseCase() {
+    return new ScheduleNextSlotUseCase(roomComponent, slotComponent, messagePublisher, clock);
+  }
+
+  @Bean
+  public StartAuctionUseCase startAuctionUseCase() {
+    return new StartAuctionUseCase(auctionComponent, roomComponent);
+  }
+
 }

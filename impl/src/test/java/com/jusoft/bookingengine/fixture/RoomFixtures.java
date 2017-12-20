@@ -1,10 +1,9 @@
-package com.jusoft.bookingengine.component.room;
+package com.jusoft.bookingengine.fixture;
 
 import com.jusoft.bookingengine.component.auction.api.strategy.AuctionConfigInfo;
 import com.jusoft.bookingengine.component.auction.api.strategy.LessBookingsWithinPeriodConfigInfo;
 import com.jusoft.bookingengine.component.auction.api.strategy.NoAuctionConfigInfo;
 import com.jusoft.bookingengine.component.room.api.CreateRoomCommand;
-import com.jusoft.bookingengine.component.room.api.CreateRoomCommand.CreateRoomCommandBuilder;
 import com.jusoft.bookingengine.component.timer.OpenTime;
 import lombok.experimental.UtilityClass;
 
@@ -12,7 +11,6 @@ import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Consumer;
 
 @UtilityClass
 public class RoomFixtures {
@@ -23,9 +21,12 @@ public class RoomFixtures {
   public static final LocalTime END_TIME_MORNING = LocalTime.of(12, 0);
   public static final OpenTime OPEN_TIME_MORNING = new OpenTime(START_TIME_MORNING, END_TIME_MORNING);
   public static final LocalTime START_TIME_AFTERNOON = LocalTime.of(14, 0);
-  public static final LocalTime END_TIME_AFTERNOON = LocalTime.of(20, 0);
+  public static final LocalTime START_TIME_NIGHT = LocalTime.of(20, 0);
+  public static final LocalTime END_TIME_AFTERNOON = LocalTime.of(16, 0);
+  public static final LocalTime END_TIME_NIGHT = LocalTime.of(22, 0);
   public static final OpenTime OPEN_TIME_AFTERNOON = new OpenTime(START_TIME_AFTERNOON, END_TIME_AFTERNOON);
-  public static final List<OpenTime> OPEN_TIMES = Arrays.asList(OPEN_TIME_MORNING, OPEN_TIME_AFTERNOON);
+  public static final OpenTime OPEN_TIME_NIGHT = new OpenTime(START_TIME_NIGHT, END_TIME_NIGHT);
+  public static final List<OpenTime> OPEN_TIMES = Arrays.asList(OPEN_TIME_MORNING, OPEN_TIME_AFTERNOON, OPEN_TIME_NIGHT);
   public static final List<DayOfWeek> AVAILABLE_DAYS = Arrays.asList(DayOfWeek.MONDAY, DayOfWeek.TUESDAY);
   public static final boolean IS_ACTIVE = true;
 
@@ -36,15 +37,4 @@ public class RoomFixtures {
 
   public static final CreateRoomCommand CREATE_ROOM_COMMAND = new CreateRoomCommand(MAX_SLOTS, SLOT_DURATION_IN_MINUTES, OPEN_TIMES, AVAILABLE_DAYS, IS_ACTIVE, NO_AUCTION_CONFIG);
 
-  public static CreateRoomCommand createRoomCommand(Consumer<CreateRoomCommandBuilder> consumer) {
-    CreateRoomCommandBuilder builder = CreateRoomCommand.builder()
-      .active(IS_ACTIVE)
-      .availableDays(AVAILABLE_DAYS)
-      .openTimePerDay(OPEN_TIMES)
-      .maxSlots(MAX_SLOTS)
-      .slotDurationInMinutes(SLOT_DURATION_IN_MINUTES)
-      .auctionConfigInfo(LESS_BOOKINGS_WITHIN_PERIOD_CONFIG);
-    consumer.accept(builder);
-    return builder.build();
-  }
 }

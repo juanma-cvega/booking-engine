@@ -1,4 +1,4 @@
-package com.jusoft.bookingengine.component.booking;
+package com.jusoft.bookingengine.holder;
 
 import com.jusoft.bookingengine.component.booking.api.BookingView;
 

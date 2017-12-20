@@ -6,7 +6,7 @@ import com.jusoft.bookingengine.component.room.api.RoomView;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class RoomUseCase {
+public class CreateRoomUseCase {
 
   private final RoomComponent roomComponent;
 

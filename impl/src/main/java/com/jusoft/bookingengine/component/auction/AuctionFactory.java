@@ -22,7 +22,7 @@ class AuctionFactory {
       clock);
   }
 
-  public AuctionView createFromm(Auction auction) {
+  public AuctionView createFrom(Auction auction) {
     return new AuctionView(auction.getId(),
       auction.getSlotId(),
       auction.getRoomId(),

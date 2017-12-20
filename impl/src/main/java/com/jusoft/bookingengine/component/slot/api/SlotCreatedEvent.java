@@ -12,7 +12,7 @@ public class SlotCreatedEvent implements Event {
   private final long slotId;
   private final long roomId;
   @NonNull
-  private final ZonedDateTime startTime;
+  private final ZonedDateTime startDate;
   @NonNull
-  private final ZonedDateTime endTime;
+  private final ZonedDateTime endDate;
 }
