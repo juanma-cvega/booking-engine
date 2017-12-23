@@ -4,22 +4,25 @@ import com.jusoft.bookingengine.component.auction.api.AuctionComponent;
 import com.jusoft.bookingengine.component.auction.api.AuctionFinishedEvent;
 import com.jusoft.bookingengine.component.auction.api.AuctionView;
 import com.jusoft.bookingengine.component.auction.api.SlotNotInAuctionException;
-import com.jusoft.bookingengine.component.scheduler.api.ScheduledEvent;
+import com.jusoft.bookingengine.component.scheduler.ScheduledTask;
 import com.jusoft.bookingengine.config.AbstractUseCaseStepDefinitions;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Optional;
 
+import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.verify;
+import static org.awaitility.Awaitility.await;
 import static org.mockito.Mockito.verifyZeroInteractions;
 
 public class StartAuctionUseCaseStepDefinitions extends AbstractUseCaseStepDefinitions {
 
   @Autowired
   private AuctionComponent auctionComponent;
+  @Autowired
+  private List<ScheduledTask> tasks;
 
   @Autowired
   private StartAuctionUseCase startAuctionUseCase;
@@ -39,16 +42,11 @@ public class StartAuctionUseCaseStepDefinitions extends AbstractUseCaseStepDefin
       assertThat(auction.getStartTime()).isEqualTo(auctionHolder.auctionCreated.getStartTime());
     });
     Then("^an auction finished event should be scheduled to be published at (.*)$", (String auctionFinishedTime) -> {
-      verify(messagePublisher).publish(messageCaptor.capture());
-      assertThat(messageCaptor.getValue()).isInstanceOf(ScheduledEvent.class);
-      ScheduledEvent scheduledEvent = (ScheduledEvent) messageCaptor.getValue();
-      assertThat(scheduledEvent.getMessage()).isInstanceOf(AuctionFinishedEvent.class);
-      AuctionFinishedEvent auctionFinishedEvent = (AuctionFinishedEvent) scheduledEvent.getMessage();
-      ZonedDateTime finishAuctionDate = getDateFrom(auctionFinishedTime);
-      assertThat(auctionFinishedEvent.getAuctionId()).isEqualTo(auctionHolder.auctionCreated.getId());
-      assertThat(auctionFinishedEvent.getRoomId()).isEqualTo(auctionHolder.auctionCreated.getRoomId());
-      assertThat(auctionFinishedEvent.getSlotId()).isEqualTo(auctionHolder.auctionCreated.getSlotId());
-      assertThat(scheduledEvent.getExecutionTime()).isEqualTo(finishAuctionDate);
+      assertThat(tasks).hasSize(1);
+      assertThat(tasks.get(0).getExecutionTime()).isEqualTo(getDateFrom(auctionFinishedTime));
+      assertThat(tasks.get(0).getScheduledEvent()).isEqualTo(
+        new AuctionFinishedEvent(auctionHolder.auctionCreated.getId(), roomHolder.roomCreated.getId(), slotHolder.slotCreated.getId()));
+      assertThat(tasks.get(0).getTask().isDone()).isFalse();
     });
     Then("^the auction shouldn't exist$", () -> {
       assertThat(auctionHolder.auctionCreated).isNull();
@@ -56,6 +54,6 @@ public class StartAuctionUseCaseStepDefinitions extends AbstractUseCaseStepDefin
         .isInstanceOf(SlotNotInAuctionException.class);
     });
     Then("^an auction finished event shouldn't be scheduled to be published$", () ->
-      verifyZeroInteractions(messagePublisher));
+      await().with().pollDelay(1, SECONDS).untilAsserted(() -> verifyZeroInteractions(messagePublisher)));
   }
 }

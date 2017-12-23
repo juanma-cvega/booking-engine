@@ -1,8 +1,8 @@
 package com.jusoft.bookingengine.config;
 
 import com.jusoft.bookingengine.MainConfig;
-import com.jusoft.bookingengine.component.shared.Message;
-import com.jusoft.bookingengine.component.shared.MessagePublisher;
+import com.jusoft.bookingengine.publisher.Message;
+import com.jusoft.bookingengine.publisher.MessagePublisher;
 import com.jusoft.bookingengine.holder.AuctionHolder;
 import com.jusoft.bookingengine.holder.BookingHolder;
 import com.jusoft.bookingengine.holder.ExceptionHolder;

@@ -1,8 +1,8 @@
 package com.jusoft.bookingengine.component.room.api;
 
 import com.jusoft.bookingengine.component.auction.api.strategy.AuctionConfigInfo;
-import com.jusoft.bookingengine.component.shared.Command;
 import com.jusoft.bookingengine.component.timer.OpenTime;
+import com.jusoft.bookingengine.publisher.Command;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

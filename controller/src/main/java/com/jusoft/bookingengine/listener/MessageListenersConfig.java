@@ -1,6 +1,5 @@
 package com.jusoft.bookingengine.listener;
 
-import com.jusoft.bookingengine.component.scheduler.api.SchedulerComponent;
 import com.jusoft.bookingengine.usecase.AddBuyerToAuctionUseCase;
 import com.jusoft.bookingengine.usecase.CancelBookingUseCase;
 import com.jusoft.bookingengine.usecase.CreateBookingUseCase;
@@ -32,8 +31,6 @@ public class MessageListenersConfig {
   private ScheduleNextSlotUseCase scheduleNextSlotUseCase;
   @Autowired
   private StartAuctionUseCase startAuctionUseCase;
-  @Autowired
-  private SchedulerComponent schedulerComponent;
 
   @Bean
   public OpenNextSlotCommandListener createSlotCommandListener() {
@@ -58,11 +55,6 @@ public class MessageListenersConfig {
   @Bean
   public AuctionWinnerFoundEventListener auctionWinnerFoundEventListener() {
     return new AuctionWinnerFoundEventListener(createBookingUseCase);
-  }
-
-  @Bean
-  public SchedulerEventListener schedulerEventListener() {
-    return new SchedulerEventListener(schedulerComponent);
   }
 
   @Bean

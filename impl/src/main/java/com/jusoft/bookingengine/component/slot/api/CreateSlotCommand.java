@@ -1,6 +1,6 @@
 package com.jusoft.bookingengine.component.slot.api;
 
-import com.jusoft.bookingengine.component.shared.Command;
+import com.jusoft.bookingengine.publisher.Command;
 import lombok.Data;
 import lombok.NonNull;
 

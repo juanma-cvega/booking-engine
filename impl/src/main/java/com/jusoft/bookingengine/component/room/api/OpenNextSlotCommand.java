@@ -1,6 +1,6 @@
 package com.jusoft.bookingengine.component.room.api;
 
-import com.jusoft.bookingengine.component.shared.Command;
+import com.jusoft.bookingengine.publisher.Command;
 import lombok.Data;
 
 @Data

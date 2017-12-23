@@ -8,7 +8,7 @@
 //import com.jusoft.bookingengine.component.room.api.OpenNextSlotCommand;
 //import com.jusoft.bookingengine.component.room.api.RoomComponent;
 //import com.jusoft.bookingengine.component.scheduler.ScheduledTask;
-//import com.jusoft.bookingengine.component.shared.Message;
+//import com.jusoft.bookingengine.publisher.Message;
 //import com.jusoft.bookingengine.component.slot.api.SlotComponent;
 //import com.jusoft.bookingengine.component.slot.api.SlotCreatedEvent;
 //import com.jusoft.bookingengine.component.slot.api.SlotView;

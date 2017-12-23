@@ -1,5 +1,6 @@
 package com.jusoft.bookingengine.controller.booking.api;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -13,6 +14,7 @@ public class CreateBookingRequest {
   @NotNull
   private final Long userId;
 
+  @JsonCreator
   private CreateBookingRequest() {
     userId = null;
   }

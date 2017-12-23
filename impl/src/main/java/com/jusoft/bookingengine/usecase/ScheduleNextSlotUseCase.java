@@ -2,8 +2,7 @@ package com.jusoft.bookingengine.usecase;
 
 import com.jusoft.bookingengine.component.room.api.OpenNextSlotCommand;
 import com.jusoft.bookingengine.component.room.api.RoomComponent;
-import com.jusoft.bookingengine.component.scheduler.api.ScheduledEvent;
-import com.jusoft.bookingengine.component.shared.MessagePublisher;
+import com.jusoft.bookingengine.component.scheduler.api.SchedulerComponent;
 import com.jusoft.bookingengine.component.slot.api.SlotComponent;
 import com.jusoft.bookingengine.component.slot.api.SlotView;
 import lombok.AllArgsConstructor;
@@ -16,7 +15,7 @@ public class ScheduleNextSlotUseCase {
 
   private final RoomComponent roomComponent;
   private final SlotComponent slotComponent;
-  private final MessagePublisher messagePublisher;
+  private final SchedulerComponent schedulerComponent;
   private final Clock clock;
 
   //FIXME add strategies to calculate the max number of slots
@@ -29,7 +28,6 @@ public class ScheduleNextSlotUseCase {
       .orElse(ZonedDateTime.now(clock));
 
     ZonedDateTime nextSlotCreationTime = roomComponent.findNextSlotCreationTime(roomId, numberOfOpenSlots, nextSlotToFinishEndDate);
-    ScheduledEvent scheduleNextSlotEvent = new ScheduledEvent(new OpenNextSlotCommand(roomId), nextSlotCreationTime);
-    messagePublisher.publish(scheduleNextSlotEvent);
+    schedulerComponent.schedule(nextSlotCreationTime, new OpenNextSlotCommand(roomId));
   }
 }

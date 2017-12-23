@@ -1,4 +1,4 @@
-package com.jusoft.bookingengine.component.shared;
+package com.jusoft.bookingengine.publisher;
 
 public interface MessagePublisher {
 

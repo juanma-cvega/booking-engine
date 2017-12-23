@@ -4,8 +4,8 @@ import com.jusoft.bookingengine.component.room.api.CreateRoomCommand;
 import com.jusoft.bookingengine.component.room.api.RoomComponent;
 import com.jusoft.bookingengine.component.room.api.RoomNotFoundException;
 import com.jusoft.bookingengine.component.room.api.RoomView;
-import com.jusoft.bookingengine.component.shared.MessagePublisher;
 import com.jusoft.bookingengine.component.timer.OpenDate;
+import com.jusoft.bookingengine.publisher.MessagePublisher;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 

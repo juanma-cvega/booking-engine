@@ -5,7 +5,7 @@ import com.jusoft.bookingengine.component.auction.api.AuctionComponent;
 import com.jusoft.bookingengine.component.auction.api.strategy.AuctionConfigInfo;
 import com.jusoft.bookingengine.component.auction.api.strategy.LessBookingsWithinPeriodConfigInfo;
 import com.jusoft.bookingengine.component.booking.api.BookingComponent;
-import com.jusoft.bookingengine.component.shared.MessagePublisher;
+import com.jusoft.bookingengine.publisher.MessagePublisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

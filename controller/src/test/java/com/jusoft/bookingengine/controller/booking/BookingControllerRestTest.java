@@ -1,13 +1,13 @@
 package com.jusoft.bookingengine.controller.booking;
 
-import com.jusoft.bookingengine.component.booking.BookingFixtures;
 import com.jusoft.bookingengine.component.booking.api.BookingComponent;
 import com.jusoft.bookingengine.component.booking.api.BookingNotFoundException;
 import com.jusoft.bookingengine.component.booking.api.SlotAlreadyBookedException;
 import com.jusoft.bookingengine.component.booking.api.SlotAlreadyStartedException;
 import com.jusoft.bookingengine.component.booking.api.WrongBookingUserException;
-import com.jusoft.bookingengine.component.slot.SlotFixtures;
 import com.jusoft.bookingengine.controller.booking.api.CreateBookingRequest;
+import com.jusoft.bookingengine.fixtures.BookingFixtures;
+import com.jusoft.bookingengine.fixtures.SlotFixtures;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,15 +19,15 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.StringJoiner;
 
-import static com.jusoft.bookingengine.component.booking.BookingFixtures.BOOKINGS;
-import static com.jusoft.bookingengine.component.booking.BookingFixtures.BOOKING_1;
-import static com.jusoft.bookingengine.component.booking.BookingFixtures.BOOKING_ID_1;
-import static com.jusoft.bookingengine.component.booking.BookingFixtures.BOOKING_ID_2;
-import static com.jusoft.bookingengine.component.booking.BookingFixtures.BOOKING_RESOURCES;
-import static com.jusoft.bookingengine.component.booking.BookingFixtures.BOOKING_RESOURCE_1;
-import static com.jusoft.bookingengine.component.booking.BookingFixtures.CANCEL_BOOKING_COMMAND;
-import static com.jusoft.bookingengine.component.booking.BookingFixtures.CREATE_BOOKING_COMMAND;
-import static com.jusoft.bookingengine.component.booking.BookingFixtures.CREATE_BOOKING_REQUEST;
+import static com.jusoft.bookingengine.fixtures.BookingFixtures.BOOKINGS;
+import static com.jusoft.bookingengine.fixtures.BookingFixtures.BOOKING_1;
+import static com.jusoft.bookingengine.fixtures.BookingFixtures.BOOKING_ID_1;
+import static com.jusoft.bookingengine.fixtures.BookingFixtures.BOOKING_ID_2;
+import static com.jusoft.bookingengine.fixtures.BookingFixtures.BOOKING_RESOURCES;
+import static com.jusoft.bookingengine.fixtures.BookingFixtures.BOOKING_RESOURCE_1;
+import static com.jusoft.bookingengine.fixtures.BookingFixtures.CANCEL_BOOKING_COMMAND;
+import static com.jusoft.bookingengine.fixtures.BookingFixtures.CREATE_BOOKING_COMMAND;
+import static com.jusoft.bookingengine.fixtures.BookingFixtures.CREATE_BOOKING_REQUEST;
 import static com.jusoft.bookingengine.fixtures.CommonFixtures.ROOM_ID;
 import static com.jusoft.bookingengine.fixtures.CommonFixtures.USER_ID_1;
 import static com.jusoft.bookingengine.fixtures.CommonFixtures.USER_ID_2;

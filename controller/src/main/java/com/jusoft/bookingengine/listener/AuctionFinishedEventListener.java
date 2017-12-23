@@ -1,6 +1,6 @@
 package com.jusoft.bookingengine.listener;
 
-import com.jusoft.bookingengine.component.auction.api.AuctionFinishedEvent;
+import com.jusoft.bookingengine.publisher.message.AuctionFinishedMessage;
 import com.jusoft.bookingengine.usecase.FinishAuctionUseCase;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -13,10 +13,10 @@ class AuctionFinishedEventListener implements MessageListener {
 
   private final FinishAuctionUseCase finishAuctionUseCase;
 
-  @EventListener(AuctionFinishedEvent.class)
-  public void finishAuction(AuctionFinishedEvent event) {
+  @EventListener(AuctionFinishedMessage.class)
+  public void finishAuction(AuctionFinishedMessage event) {
     log.info("AuctionFinishedEvent consumed: auctionId={}", event.getAuctionId());
-
     finishAuctionUseCase.finishAuction(event.getAuctionId(), event.getRoomId());
+    log.info("AuctionFinishedEvent processed: auctionId={}");
   }
 }

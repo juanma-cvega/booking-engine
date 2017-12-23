@@ -1,7 +1,7 @@
 package com.jusoft.bookingengine.component.room.api;
 
-import com.jusoft.bookingengine.component.shared.Event;
 import com.jusoft.bookingengine.component.timer.OpenTime;
+import com.jusoft.bookingengine.publisher.Event;
 import lombok.Data;
 import lombok.NonNull;
 

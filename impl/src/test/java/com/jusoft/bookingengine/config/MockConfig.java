@@ -1,6 +1,6 @@
 package com.jusoft.bookingengine.config;
 
-import com.jusoft.bookingengine.component.shared.MessagePublisher;
+import com.jusoft.bookingengine.publisher.MessagePublisher;
 import org.mockito.Mockito;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

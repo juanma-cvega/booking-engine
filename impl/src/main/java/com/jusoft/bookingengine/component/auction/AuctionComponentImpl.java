@@ -1,7 +1,6 @@
 package com.jusoft.bookingengine.component.auction;
 
 import com.jusoft.bookingengine.component.auction.api.AuctionComponent;
-import com.jusoft.bookingengine.component.auction.api.AuctionFinishedEvent;
 import com.jusoft.bookingengine.component.auction.api.AuctionFinishedException;
 import com.jusoft.bookingengine.component.auction.api.AuctionNotFoundException;
 import com.jusoft.bookingengine.component.auction.api.AuctionView;
@@ -10,8 +9,7 @@ import com.jusoft.bookingengine.component.auction.api.CreateAuctionCommand;
 import com.jusoft.bookingengine.component.auction.api.FinishAuctionCommand;
 import com.jusoft.bookingengine.component.auction.api.SlotNotInAuctionException;
 import com.jusoft.bookingengine.component.auction.api.strategy.AuctionConfigInfo;
-import com.jusoft.bookingengine.component.scheduler.api.ScheduledEvent;
-import com.jusoft.bookingengine.component.shared.MessagePublisher;
+import com.jusoft.bookingengine.publisher.MessagePublisher;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
@@ -29,8 +27,6 @@ class AuctionComponentImpl implements AuctionComponent {
   public AuctionView startAuction(CreateAuctionCommand createAuctionCommand) {
     Auction newAuction = auctionFactory.createFrom(createAuctionCommand);
     auctionRepository.save(newAuction);
-    AuctionFinishedEvent message = new AuctionFinishedEvent(newAuction.getId(), newAuction.getRoomId(), newAuction.getSlotId());
-    messagePublisher.publish(new ScheduledEvent(message, newAuction.getEndTime()));
     return auctionFactory.createFrom(newAuction);
   }
 

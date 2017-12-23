@@ -7,7 +7,7 @@ import com.jusoft.bookingengine.component.booking.api.BookingView;
 import com.jusoft.bookingengine.component.booking.api.CancelBookingCommand;
 import com.jusoft.bookingengine.component.booking.api.CreateBookingCommand;
 import com.jusoft.bookingengine.component.booking.api.WrongBookingUserException;
-import com.jusoft.bookingengine.component.shared.MessagePublisher;
+import com.jusoft.bookingengine.publisher.MessagePublisher;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 

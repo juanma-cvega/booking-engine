@@ -1,10 +1,10 @@
 package com.jusoft.bookingengine.component.slot;
 
-import com.jusoft.bookingengine.component.shared.MessagePublisher;
 import com.jusoft.bookingengine.component.slot.api.CreateSlotCommand;
 import com.jusoft.bookingengine.component.slot.api.SlotComponent;
 import com.jusoft.bookingengine.component.slot.api.SlotNotFoundException;
 import com.jusoft.bookingengine.component.slot.api.SlotView;
+import com.jusoft.bookingengine.publisher.MessagePublisher;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 

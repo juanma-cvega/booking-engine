@@ -1,6 +1,6 @@
 //package com.jusoft.bookingengine.component.mock;
 //
-//import com.jusoft.bookingengine.component.shared.Message;
+//import com.jusoft.bookingengine.publisher.Message;
 //import com.jusoft.bookingengine.component.shared.MessagePublisher;
 //import org.springframework.beans.BeansException;
 //import org.springframework.beans.factory.config.BeanPostProcessor;

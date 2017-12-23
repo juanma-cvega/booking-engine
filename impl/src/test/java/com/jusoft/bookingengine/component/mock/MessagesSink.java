@@ -1,6 +1,6 @@
 //package com.jusoft.bookingengine.component.mock;
 //
-//import com.jusoft.bookingengine.component.shared.Message;
+//import com.jusoft.bookingengine.publisher.Message;
 //import lombok.extern.slf4j.Slf4j;
 //
 //import java.util.List;

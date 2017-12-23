@@ -1,7 +1,7 @@
 package com.jusoft.bookingengine.component.scheduler;
 
 import com.jusoft.bookingengine.component.scheduler.api.SchedulerComponent;
-import com.jusoft.bookingengine.component.shared.MessagePublisher;
+import com.jusoft.bookingengine.publisher.MessagePublisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 @Configuration
 public class SchedulerComponentConfig {
@@ -23,7 +24,7 @@ public class SchedulerComponentConfig {
 
   @Bean
   public SchedulerComponent schedulerComponent() {
-    return new SchedulerComponentInMemory(clock, messagePublisher, executor(), tasks());
+    return new SchedulerComponentInMemory(clock, messagePublisher, executor(), tasks(), scheduledExecutorService());
   }
 
   @Bean
@@ -33,5 +34,9 @@ public class SchedulerComponentConfig {
 
   private Executor executor() {
     return Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+  }
+
+  private ScheduledExecutorService scheduledExecutorService() {
+    return Executors.newSingleThreadScheduledExecutor();
   }
 }

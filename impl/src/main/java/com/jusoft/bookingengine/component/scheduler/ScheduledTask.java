@@ -1,9 +1,10 @@
 package com.jusoft.bookingengine.component.scheduler;
 
-import com.jusoft.bookingengine.component.scheduler.api.ScheduledEvent;
+import com.jusoft.bookingengine.publisher.Message;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.time.ZonedDateTime;
 import java.util.concurrent.ScheduledFuture;
 
 @Data
@@ -11,5 +12,6 @@ import java.util.concurrent.ScheduledFuture;
 public class ScheduledTask {
 
   private final ScheduledFuture<?> task;
-  private final ScheduledEvent scheduledEvent;
+  private final Message scheduledEvent;
+  private final ZonedDateTime executionTime;
 }

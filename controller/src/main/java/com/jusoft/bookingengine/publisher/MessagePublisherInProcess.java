@@ -1,18 +1,18 @@
 package com.jusoft.bookingengine.publisher;
 
-import com.jusoft.bookingengine.component.shared.Message;
-import com.jusoft.bookingengine.component.shared.MessagePublisher;
+import com.jusoft.bookingengine.publisher.factory.InfrastructureMessageFactory;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-class MessagePublisherImpl implements MessagePublisher {
+class MessagePublisherInProcess implements MessagePublisher {
 
   private final ApplicationEventPublisher publisher;
+  private final InfrastructureMessageFactory messageFactory;
 
   @Override
   public void publish(Message message) {
-    publisher.publishEvent(message);
+    publisher.publishEvent(messageFactory.createFrom(message));
   }
 }

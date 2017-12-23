@@ -1,7 +1,7 @@
 package com.jusoft.bookingengine.component.slot;
 
-import com.jusoft.bookingengine.component.shared.MessagePublisher;
 import com.jusoft.bookingengine.component.slot.api.SlotComponent;
+import com.jusoft.bookingengine.publisher.MessagePublisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

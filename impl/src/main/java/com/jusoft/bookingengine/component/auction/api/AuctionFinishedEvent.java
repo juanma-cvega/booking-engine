@@ -1,6 +1,6 @@
 package com.jusoft.bookingengine.component.auction.api;
 
-import com.jusoft.bookingengine.component.shared.Event;
+import com.jusoft.bookingengine.publisher.Event;
 import lombok.Data;
 
 @Data

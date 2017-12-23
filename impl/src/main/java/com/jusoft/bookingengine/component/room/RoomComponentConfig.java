@@ -1,7 +1,7 @@
 package com.jusoft.bookingengine.component.room;
 
 import com.jusoft.bookingengine.component.room.api.RoomComponent;
-import com.jusoft.bookingengine.component.shared.MessagePublisher;
+import com.jusoft.bookingengine.publisher.MessagePublisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

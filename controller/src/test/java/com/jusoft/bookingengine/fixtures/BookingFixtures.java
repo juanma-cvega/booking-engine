@@ -1,9 +1,8 @@
-package com.jusoft.bookingengine.component.booking;
+package com.jusoft.bookingengine.fixtures;
 
 import com.jusoft.bookingengine.component.booking.api.BookingView;
 import com.jusoft.bookingengine.component.booking.api.CancelBookingCommand;
 import com.jusoft.bookingengine.component.booking.api.CreateBookingCommand;
-import com.jusoft.bookingengine.component.slot.SlotFixtures;
 import com.jusoft.bookingengine.controller.booking.BookingResources;
 import com.jusoft.bookingengine.controller.booking.api.BookingResource;
 import com.jusoft.bookingengine.controller.booking.api.CreateBookingRequest;
