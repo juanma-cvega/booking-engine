@@ -30,11 +30,9 @@ class SlotComponentImpl implements SlotComponent {
     return slotFactory.createFrom(newSlot);
   }
 
-  //FIXME it doesn't filter by slots ended already
-  //FIXME possible problem when slots end????
   @Override
   public List<SlotView> findOpenSlotsFor(long roomId) {
-    return slotFactory.createFrom(slotRepository.getByRoom(roomId));
+    return slotFactory.createFrom(slotRepository.findOpenSlotsByRoom(roomId));
   }
 
   @Override

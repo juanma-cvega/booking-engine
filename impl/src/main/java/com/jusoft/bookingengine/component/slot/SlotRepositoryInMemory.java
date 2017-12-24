@@ -21,11 +21,6 @@ class SlotRepositoryInMemory implements SlotRepository {
   private final Clock clock;
 
   @Override
-  public List<Slot> getByRoom(long roomId) {
-    return store.values().stream().filter(slot -> Long.compare(slot.getRoomId(), roomId) == 0).collect(toList());
-  }
-
-  @Override
   public Optional<Slot> find(long slotId, long roomId) {
     return ofNullable(store.get(slotId)).filter(slotFound -> Long.compare(slotFound.getRoomId(), roomId) == 0);
   }
@@ -55,6 +50,14 @@ class SlotRepositoryInMemory implements SlotRepository {
         .filter(bySlotsToStart())
         .min(byStartDateAsc())
         .orElse(null)));
+  }
+
+  @Override
+  public List<Slot> findOpenSlotsByRoom(long roomId) {
+    return store.values().stream()
+      .filter(slot -> Long.compare(slot.getRoomId(), roomId) == 0)
+      .filter(slot -> slot.getEndDate().isAfter(ZonedDateTime.now(clock)))
+      .collect(toList());
   }
 
   private Comparator<Slot> byStartDateAsc() {

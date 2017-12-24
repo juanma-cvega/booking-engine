@@ -6,14 +6,6 @@ import java.util.Optional;
 interface SlotRepository {
 
   /**
-   * Returns the list of {@link Slot}s contained in the room with the id provided
-   *
-   * @param roomId id of the room the {@link Slot}s belong to
-   * @return List of {@link Slot}s found
-   */
-  List<Slot> getByRoom(long roomId);
-
-  /**
    * Returns the {@link Slot} if it's contained in the store and if the roomId matches the one provided
    *
    * @param slotId the id of the slot to findBySlot
@@ -38,4 +30,6 @@ interface SlotRepository {
   Optional<Slot> getLastCreatedFor(long roomId);
 
   Optional<Slot> findSlotInUseOrToStartFor(long roomId);
+
+  List<Slot> findOpenSlotsByRoom(long roomId);
 }
