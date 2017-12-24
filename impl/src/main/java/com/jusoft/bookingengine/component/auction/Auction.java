@@ -2,7 +2,9 @@ package com.jusoft.bookingengine.component.auction;
 
 import com.jusoft.bookingengine.component.auction.api.AuctionFinishedException;
 import com.jusoft.bookingengine.component.auction.api.Bid;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NonNull;
 
 import java.time.Clock;
@@ -23,6 +25,7 @@ class Auction {
   private final ZonedDateTime endTime;
   @NonNull
   private final Set<Bid> buyers;
+  @Getter(value = AccessLevel.PRIVATE)
   @NonNull
   private final Clock clock;
 

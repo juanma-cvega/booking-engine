@@ -3,7 +3,9 @@ package com.jusoft.bookingengine.component.room;
 import com.jusoft.bookingengine.component.auction.api.strategy.AuctionConfigInfo;
 import com.jusoft.bookingengine.component.timer.OpenDate;
 import com.jusoft.bookingengine.component.timer.OpenTime;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Getter;
 import org.apache.commons.lang3.Validate;
 
 import java.time.Clock;
@@ -28,6 +30,7 @@ class Room {
   private final List<DayOfWeek> availableDays;
   private final boolean active;
   private final AuctionConfigInfo auctionConfigInfo;
+  @Getter(value = AccessLevel.PRIVATE)
   private final Clock clock;
 
   Room(long id, int maxSlots, int slotDurationInMinutes, List<OpenTime> openTimesPerDay, List<DayOfWeek> availableDays,
