@@ -28,8 +28,8 @@
     <mockito.version>2.7.9</mockito.version>
     <rest-assured.version>3.0.2</rest-assured.version>
     <commons-lang3.version>3.5</commons-lang3.version>
-    <maven-surefire-plugin.version>2.19.1</maven-surefire-plugin.version>
-    <maven-failsafe-plugin.version>2.19.1</maven-failsafe-plugin.version>
+    <maven-surefire-plugin.version>2.20.1</maven-surefire-plugin.version>
+    <maven-failsafe-plugin.version>2.20.1</maven-failsafe-plugin.version>
     <hibernate-validator.version>5.1.3.Final</hibernate-validator.version>
     <json-path.version>2.2.0</json-path.version>
     <logback-classic.version>1.2.3</logback-classic.version>
@@ -42,6 +42,7 @@
     <jackson.version>2.9.2</jackson.version>
     <cucumber.version>2.3.1</cucumber.version>
     <awaitility.version>3.0.0</awaitility.version>
+    <maven-resources-plugin.version>3.0.2</maven-resources-plugin.version>
   </properties>
 
   <dependencyManagement>
@@ -165,7 +166,7 @@
         <version>${awaitility.version}</version>
         <scope>test</scope>
       </dependency>
-      
+
       <dependency>
         <groupId>org.apache.tomcat</groupId>
         <artifactId>tomcat-juli</artifactId>
@@ -213,6 +214,14 @@
         <configuration>
           <source>${java-source}</source>
           <target>${java-target}</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>${maven-resources-plugin.version}</version>
+        <configuration>
+          <encoding>UTF-8</encoding>
         </configuration>
       </plugin>
     </plugins>
