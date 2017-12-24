@@ -5,12 +5,14 @@ import com.jusoft.bookingengine.component.room.api.RoomView;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
+import java.time.Clock;
 import java.util.function.Supplier;
 
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class RoomFactory {
 
   private final Supplier<Long> idGenerator;
+  private final Clock clock;
 
   Room createFrom(CreateRoomCommand createRoomCommand) {
     return new Room(idGenerator.get(),
@@ -19,7 +21,8 @@ class RoomFactory {
       createRoomCommand.getOpenTimePerDay(),
       createRoomCommand.getAvailableDays(),
       createRoomCommand.isActive(),
-      createRoomCommand.getAuctionConfigInfo());
+      createRoomCommand.getAuctionConfigInfo(),
+      clock);
   }
 
   RoomView createFrom(Room room) {

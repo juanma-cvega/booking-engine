@@ -3,7 +3,7 @@ package com.jusoft.bookingengine.fixture;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public class CommonFixtures {
+public class BookingFixtures {
 
-  public static final long USER_ID_1 = 111L;
+  public static final long BOOKING_ID = 34;
 }

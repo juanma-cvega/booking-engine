@@ -9,7 +9,6 @@ import com.jusoft.bookingengine.publisher.MessagePublisher;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
-import java.time.Clock;
 import java.time.ZonedDateTime;
 
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
@@ -19,7 +18,6 @@ class RoomComponentImpl implements RoomComponent {
   private final RoomFactory roomFactory;
   private final RoomEventFactory roomEventFactory;
   private final MessagePublisher messagePublisher;
-  private final Clock clock;
 
   @Override
   public RoomView create(CreateRoomCommand createRoomCommand) {
@@ -37,19 +35,19 @@ class RoomComponentImpl implements RoomComponent {
   @Override
   public OpenDate findNextSlotOpenDate(ZonedDateTime lastSlotEndTime, long roomId) {
     Room room = findRoom(roomId);
-    return room.findNextSlotDate(lastSlotEndTime, clock);
+    return room.findNextSlotDate(lastSlotEndTime);
   }
 
   @Override
   public OpenDate findFirstSlotOpenDate(long roomId) {
     Room room = findRoom(roomId);
-    return room.findFirstSlotDate(clock);
+    return room.findFirstSlotDate();
   }
 
   @Override
   public ZonedDateTime findNextSlotCreationTime(long roomId, int currentNumberOfSlotsOpen, ZonedDateTime nextSlotToFinishEndDate) {
     Room room = findRoom(roomId);
-    return room.findUpcomingSlot(clock, currentNumberOfSlotsOpen, nextSlotToFinishEndDate);
+    return room.findUpcomingSlot(currentNumberOfSlotsOpen, nextSlotToFinishEndDate);
   }
 
   @Override

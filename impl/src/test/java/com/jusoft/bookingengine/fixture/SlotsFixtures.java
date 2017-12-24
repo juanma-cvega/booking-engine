@@ -6,7 +6,7 @@ import lombok.experimental.UtilityClass;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 
-import static com.jusoft.bookingengine.fixture.CommonFixtures.ROOM_ID;
+import static com.jusoft.bookingengine.fixture.RoomFixtures.ROOM_ID;
 
 @UtilityClass
 public class SlotsFixtures {

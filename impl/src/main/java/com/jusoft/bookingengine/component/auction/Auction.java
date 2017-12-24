@@ -1,5 +1,6 @@
 package com.jusoft.bookingengine.component.auction;
 
+import com.jusoft.bookingengine.component.auction.api.AuctionFinishedException;
 import com.jusoft.bookingengine.component.auction.api.Bid;
 import lombok.Data;
 import lombok.NonNull;
@@ -20,7 +21,6 @@ class Auction {
   private final ZonedDateTime startTime;
   @NonNull
   private final ZonedDateTime endTime;
-  //FIXME use library that uses primitives for collections?
   @NonNull
   private final Set<Bid> buyers;
   @NonNull
@@ -54,6 +54,9 @@ class Auction {
   }
 
   void addBuyers(long buyer) {
+    if (!isOpen()) {
+      throw new AuctionFinishedException(id, slotId, roomId);
+    }
     buyers.add(new Bid(buyer, ZonedDateTime.now(clock)));
   }
 

@@ -15,6 +15,7 @@ import java.util.List;
 @UtilityClass
 public class RoomFixtures {
 
+  public static final long ROOM_ID = 1;
   public static final int MAX_SLOTS = 10;
   public static final int SLOT_DURATION_IN_MINUTES = 30;
   public static final LocalTime START_TIME_MORNING = LocalTime.of(8, 0);

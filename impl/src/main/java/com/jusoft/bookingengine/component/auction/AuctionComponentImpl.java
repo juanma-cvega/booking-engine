@@ -1,7 +1,6 @@
 package com.jusoft.bookingengine.component.auction;
 
 import com.jusoft.bookingengine.component.auction.api.AuctionComponent;
-import com.jusoft.bookingengine.component.auction.api.AuctionFinishedException;
 import com.jusoft.bookingengine.component.auction.api.AuctionNotFoundException;
 import com.jusoft.bookingengine.component.auction.api.AuctionView;
 import com.jusoft.bookingengine.component.auction.api.AuctionWinnerFoundEvent;
@@ -33,9 +32,6 @@ class AuctionComponentImpl implements AuctionComponent {
   @Override
   public void addBuyerTo(long slotId, long userId) {
     Auction auction = findBySlot(slotId).orElseThrow(() -> new SlotNotInAuctionException(slotId));
-    if (!auction.isOpen()) {
-      throw new AuctionFinishedException(auction.getId(), auction.getSlotId(), auction.getRoomId());
-    }
     auction.addBuyers(userId);
   }
 

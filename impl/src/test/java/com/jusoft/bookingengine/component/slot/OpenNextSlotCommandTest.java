@@ -1,7 +1,7 @@
 package com.jusoft.bookingengine.component.slot;
 
 import com.jusoft.bookingengine.component.slot.api.CreateSlotCommand;
-import com.jusoft.bookingengine.fixture.CommonFixtures;
+import com.jusoft.bookingengine.fixture.RoomFixtures;
 import org.junit.Test;
 
 import static com.jusoft.bookingengine.fixture.SlotsFixtures.END_TIME;
@@ -12,11 +12,11 @@ public class OpenNextSlotCommandTest {
 
   @Test
   public void nullStartTimeFailsConstructor() {
-    assertThatThrownBy(() -> new CreateSlotCommand(CommonFixtures.ROOM_ID, null, END_TIME)).isInstanceOf(NullPointerException.class);
+    assertThatThrownBy(() -> new CreateSlotCommand(RoomFixtures.ROOM_ID, null, END_TIME)).isInstanceOf(NullPointerException.class);
   }
 
   @Test
   public void nullEndTimeFailsConstructor() {
-    assertThatThrownBy(() -> new CreateSlotCommand(CommonFixtures.ROOM_ID, START_TIME, null)).isInstanceOf(NullPointerException.class);
+    assertThatThrownBy(() -> new CreateSlotCommand(RoomFixtures.ROOM_ID, START_TIME, null)).isInstanceOf(NullPointerException.class);
   }
 }
