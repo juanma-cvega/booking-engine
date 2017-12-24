@@ -1,6 +1,7 @@
 package com.jusoft.bookingengine.publisher.factory;
 
 import com.jusoft.bookingengine.publisher.InfrastructureMessage;
+import com.jusoft.bookingengine.publisher.Message;
 import com.jusoft.bookingengine.publisher.message.AuctionFinishedMessage;
 import com.jusoft.bookingengine.publisher.message.AuctionWinnerFoundMessage;
 import com.jusoft.bookingengine.publisher.message.BookingCreatedMessage;
@@ -20,6 +21,7 @@ import static com.jusoft.bookingengine.fixtures.RoomFixtures.ROOM_CREATED_EVENT;
 import static com.jusoft.bookingengine.fixtures.SlotFixtures.OPEN_NEXT_SLOT_COMMAND;
 import static com.jusoft.bookingengine.fixtures.SlotFixtures.SLOT_CREATED_EVENT;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = InfrastructureMessageFactoryConfig.class)
@@ -96,4 +98,13 @@ public class InfrastructureMessageFactoryTest {
     assertThat(slotCreatedEvent.getEndDate()).isEqualTo(SLOT_CREATED_EVENT.getEndDate());
   }
 
+  @Test
+  public void create_from_unknown_type_should_fail() {
+    assertThatThrownBy(() -> infrastructureMessageFactory.createFrom(new UnknownMessage()))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining("Factory not found for message");
+  }
+
+  private static class UnknownMessage implements Message {
+  }
 }
