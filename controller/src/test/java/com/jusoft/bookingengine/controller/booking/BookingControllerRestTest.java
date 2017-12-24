@@ -28,9 +28,9 @@ import static com.jusoft.bookingengine.fixtures.BookingFixtures.BOOKING_RESOURCE
 import static com.jusoft.bookingengine.fixtures.BookingFixtures.CANCEL_BOOKING_COMMAND;
 import static com.jusoft.bookingengine.fixtures.BookingFixtures.CREATE_BOOKING_COMMAND;
 import static com.jusoft.bookingengine.fixtures.BookingFixtures.CREATE_BOOKING_REQUEST;
-import static com.jusoft.bookingengine.fixtures.CommonFixtures.ROOM_ID;
 import static com.jusoft.bookingengine.fixtures.CommonFixtures.USER_ID_1;
 import static com.jusoft.bookingengine.fixtures.CommonFixtures.USER_ID_2;
+import static com.jusoft.bookingengine.fixtures.RoomFixtures.ROOM_ID;
 import static com.jusoft.bookingengine.util.HelpUtils.OBJECT_MAPPER;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.Mockito.verify;
