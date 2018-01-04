@@ -16,7 +16,7 @@ class RoomFactory {
 
   Room createFrom(CreateRoomCommand createRoomCommand) {
     return new Room(idGenerator.get(),
-      createRoomCommand.getMaxSlots(),
+      createRoomCommand.getSlotCreationConfigInfo(),
       createRoomCommand.getSlotDurationInMinutes(),
       createRoomCommand.getOpenTimePerDay(),
       createRoomCommand.getAvailableDays(),
@@ -27,7 +27,7 @@ class RoomFactory {
 
   RoomView createFrom(Room room) {
     return new RoomView(room.getId(),
-      room.getMaxSlots(),
+      room.getSlotCreationConfigInfo(),
       room.getSlotDurationInMinutes(),
       room.getOpenTimesPerDay(),
       room.getAvailableDays(),

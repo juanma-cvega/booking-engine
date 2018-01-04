@@ -6,6 +6,7 @@ import com.jusoft.bookingengine.component.room.api.RoomComponent;
 import com.jusoft.bookingengine.component.scheduler.api.SchedulerComponent;
 import com.jusoft.bookingengine.component.slot.api.SlotComponent;
 import com.jusoft.bookingengine.publisher.MessagePublisher;
+import com.jusoft.bookingengine.strategy.slotcreation.api.SlotCreationStrategyRegistrar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,6 +26,8 @@ public class UseCaseConfig {
   private BookingComponent bookingComponent;
   @Autowired
   private SchedulerComponent schedulerComponent;
+  @Autowired
+  private SlotCreationStrategyRegistrar slotCreationStrategyRegistrar;
   @Autowired
   private Clock clock;
   @Autowired
@@ -62,7 +65,7 @@ public class UseCaseConfig {
 
   @Bean
   public ScheduleNextSlotUseCase scheduleNextSlotUseCase() {
-    return new ScheduleNextSlotUseCase(roomComponent, slotComponent, schedulerComponent, clock);
+    return new ScheduleNextSlotUseCase(roomComponent, schedulerComponent, slotCreationStrategyRegistrar);
   }
 
   @Bean

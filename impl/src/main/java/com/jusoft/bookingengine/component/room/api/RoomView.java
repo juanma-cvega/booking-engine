@@ -2,6 +2,7 @@ package com.jusoft.bookingengine.component.room.api;
 
 import com.jusoft.bookingengine.component.auction.api.strategy.AuctionConfigInfo;
 import com.jusoft.bookingengine.component.timer.OpenTime;
+import com.jusoft.bookingengine.strategy.slotcreation.api.SlotCreationConfigInfo;
 import lombok.Data;
 
 import java.time.DayOfWeek;
@@ -12,7 +13,7 @@ import java.util.List;
 public class RoomView {
 
   private final long id;
-  private final int maxSlots;
+  private final SlotCreationConfigInfo slotCreationConfigInfo;
   private final int slotDurationInMinutes;
   private final List<OpenTime> openTimesPerDay;
   private final List<DayOfWeek> availableDays;
@@ -20,14 +21,14 @@ public class RoomView {
   private final AuctionConfigInfo auctionConfigInfo;
 
   public RoomView(long id,
-                  int maxSlots,
+                  SlotCreationConfigInfo slotCreationConfigInfo,
                   int slotDurationInMinutes,
                   List<OpenTime> openTimesPerDay,
                   List<DayOfWeek> availableDays,
                   boolean active,
                   AuctionConfigInfo auctionConfigInfo) {
     this.id = id;
-    this.maxSlots = maxSlots;
+    this.slotCreationConfigInfo = slotCreationConfigInfo;
     this.slotDurationInMinutes = slotDurationInMinutes;
     this.openTimesPerDay = new ArrayList<>(openTimesPerDay);
     this.availableDays = new ArrayList<>(availableDays);

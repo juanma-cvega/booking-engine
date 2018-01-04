@@ -12,7 +12,6 @@ import java.util.List;
 public class RoomCreatedEvent implements Event {
 
   private final long roomId;
-  private final int maxSlots;
   private final int slotDurationInMinutes;
   @NonNull
   private final List<OpenTime> openTimesPerDay;

@@ -3,6 +3,7 @@ package com.jusoft.bookingengine.component.room;
 import com.jusoft.bookingengine.component.auction.api.strategy.AuctionConfigInfo;
 import com.jusoft.bookingengine.component.timer.OpenDate;
 import com.jusoft.bookingengine.component.timer.OpenTime;
+import com.jusoft.bookingengine.strategy.slotcreation.api.SlotCreationConfigInfo;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
@@ -24,7 +25,7 @@ import java.util.function.Predicate;
 class Room {
 
   private final long id;
-  private final int maxSlots; //TODO define this as a strategy to define how many slots can be available at all times
+  private final SlotCreationConfigInfo slotCreationConfigInfo;
   private final int slotDurationInMinutes;
   private final List<OpenTime> openTimesPerDay;
   private final List<DayOfWeek> availableDays;
@@ -33,10 +34,10 @@ class Room {
   @Getter(value = AccessLevel.PRIVATE)
   private final Clock clock;
 
-  Room(long id, int maxSlots, int slotDurationInMinutes, List<OpenTime> openTimesPerDay, List<DayOfWeek> availableDays,
+  Room(long id, SlotCreationConfigInfo slotCreationConfigInfo, int slotDurationInMinutes, List<OpenTime> openTimesPerDay, List<DayOfWeek> availableDays,
        boolean active, AuctionConfigInfo auctionConfigInfo, Clock clock) {
     this.id = id;
-    this.maxSlots = maxSlots;
+    this.slotCreationConfigInfo = slotCreationConfigInfo;
     this.slotDurationInMinutes = slotDurationInMinutes;
     Collections.sort(openTimesPerDay); //Needed to ensure soonest open time is checked first
     this.openTimesPerDay = openTimesPerDay;
@@ -44,6 +45,8 @@ class Room {
     this.active = active;
     this.auctionConfigInfo = auctionConfigInfo;
     this.clock = clock;
+    Validate.notNull(this.auctionConfigInfo); //TODO add validation tests
+    Validate.notNull(this.slotCreationConfigInfo); //TODO add validation tests
     Validate.notEmpty(this.openTimesPerDay);
     Validate.notEmpty(this.availableDays);
     Validate.notNull(this.clock);
@@ -57,17 +60,6 @@ class Room {
         "Open time not valid: startTime=%s, endTime=%s",
         openTime.getStartTime(), openTime.getEndTime());
     });
-  }
-
-  //FIXME avoid many calls to database by finding all first slots to create in one go rather than launching the
-  //FIXME creation of each individual one
-  //FIXME provide different strategies to decide when the next slot should be created. Current one waits for the first slot to finish
-  ZonedDateTime findUpcomingSlot(int currentNumberOfSlotsOpen, ZonedDateTime nextSlotToFinishEndDate) {
-    ZonedDateTime creationTime = ZonedDateTime.now(clock);
-    if (currentNumberOfSlotsOpen >= maxSlots) {
-      creationTime = nextSlotToFinishEndDate;
-    }
-    return creationTime;
   }
 
   OpenDate findFirstSlotDate() {

@@ -10,7 +10,6 @@ class RoomEventFactory {
   RoomCreatedEvent roomCreatedEvent(Room room) {
     return new RoomCreatedEvent(
       room.getId(),
-      room.getMaxSlots(),
       room.getSlotDurationInMinutes(),
       room.getOpenTimesPerDay(),
       room.getAvailableDays(),

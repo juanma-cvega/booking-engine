@@ -80,7 +80,6 @@ public class InfrastructureMessageFactoryTest {
     assertThat(message).isInstanceOf(RoomCreatedMessage.class);
     RoomCreatedMessage roomCreatedEvent = (RoomCreatedMessage) message;
     assertThat(roomCreatedEvent.getRoomId()).isEqualTo(ROOM_CREATED_EVENT.getRoomId());
-    assertThat(roomCreatedEvent.getMaxSlots()).isEqualTo(ROOM_CREATED_EVENT.getMaxSlots());
     assertThat(roomCreatedEvent.getSlotDurationInMinutes()).isEqualTo(ROOM_CREATED_EVENT.getSlotDurationInMinutes());
     assertThat(roomCreatedEvent.getAvailableDays()).isEqualTo(ROOM_CREATED_EVENT.getAvailableDays());
     assertThat(roomCreatedEvent.getOpenTimesPerDay()).isEqualTo(ROOM_CREATED_EVENT.getOpenTimesPerDay());

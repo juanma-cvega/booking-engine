@@ -11,7 +11,6 @@ class RoomCreatedMessageFactory implements MessageFactory<RoomCreatedEvent, Room
   public RoomCreatedMessage createFrom(RoomCreatedEvent message) {
     return new RoomCreatedMessage(
       message.getRoomId(),
-      message.getMaxSlots(),
       message.getSlotDurationInMinutes(),
       message.getOpenTimesPerDay(),
       message.getAvailableDays(),

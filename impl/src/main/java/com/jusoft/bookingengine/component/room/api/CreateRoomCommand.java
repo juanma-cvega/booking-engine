@@ -3,6 +3,7 @@ package com.jusoft.bookingengine.component.room.api;
 import com.jusoft.bookingengine.component.auction.api.strategy.AuctionConfigInfo;
 import com.jusoft.bookingengine.component.timer.OpenTime;
 import com.jusoft.bookingengine.publisher.Command;
+import com.jusoft.bookingengine.strategy.slotcreation.api.SlotCreationConfigInfo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +17,8 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 public class CreateRoomCommand implements Command {
-  private final int maxSlots;
+  @NonNull
+  private final SlotCreationConfigInfo slotCreationConfigInfo;
   private final int slotDurationInMinutes;
   @NonNull
   private final List<OpenTime> openTimePerDay;

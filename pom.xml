@@ -214,6 +214,7 @@
         <configuration>
           <source>${java-source}</source>
           <target>${java-target}</target>
+          <encoding>UTF-8</encoding>
         </configuration>
       </plugin>
       <plugin>

@@ -14,7 +14,5 @@ public interface RoomComponent {
 
   OpenDate findFirstSlotOpenDate(long roomId);
 
-  ZonedDateTime findNextSlotCreationTime(long roomId, int currentNumberOfSlotsOpen, ZonedDateTime nextSlotToFinishEndDate);
-
   int getAuctionDurationFor(long roomId);
 }

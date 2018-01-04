@@ -10,6 +10,7 @@ import com.jusoft.bookingengine.component.slot.api.SlotComponent;
 import com.jusoft.bookingengine.component.slot.api.SlotView;
 import com.jusoft.bookingengine.component.timer.OpenTime;
 import com.jusoft.bookingengine.config.AbstractUseCaseStepDefinitions;
+import com.jusoft.bookingengine.strategy.slotcreation.api.MaxNumberOfSlotsStrategyConfigInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
@@ -37,7 +38,7 @@ public class CreateRoomUseCaseStepDefinitions extends AbstractUseCaseStepDefinit
       RoomView roomView = roomComponent.find(roomHolder.roomCreated.getId());
       assertThat(roomView.getId()).isEqualTo(roomHolder.roomCreated.getId());
       assertThat(roomView.getSlotDurationInMinutes()).isEqualTo(roomHolder.roomCreated.getSlotDurationInMinutes());
-      assertThat(roomView.getMaxSlots()).isEqualTo(roomHolder.roomCreated.getMaxSlots());
+      assertThat(roomView.getSlotCreationConfigInfo()).isEqualTo(roomHolder.roomCreated.getSlotCreationConfigInfo());
       assertThat(roomView.getAvailableDays()).isEqualTo(roomHolder.roomCreated.getAvailableDays());
       assertThat(roomView.getOpenTimesPerDay()).isEqualTo(roomHolder.roomCreated.getOpenTimesPerDay());
       assertThat(roomView.getAuctionConfigInfo()).isEqualTo(roomHolder.roomCreated.getAuctionConfigInfo());
@@ -48,7 +49,6 @@ public class CreateRoomUseCaseStepDefinitions extends AbstractUseCaseStepDefinit
       RoomCreatedEvent roomCreatedEvent = (RoomCreatedEvent) messageCaptor.getValue();
       assertThat(roomCreatedEvent.getRoomId()).isEqualTo(roomHolder.roomCreated.getId());
       assertThat(roomCreatedEvent.getSlotDurationInMinutes()).isEqualTo(roomHolder.roomCreated.getSlotDurationInMinutes());
-      assertThat(roomCreatedEvent.getMaxSlots()).isEqualTo(roomHolder.roomCreated.getMaxSlots());
       assertThat(roomCreatedEvent.getAvailableDays()).isEqualTo(roomHolder.roomCreated.getAvailableDays());
       assertThat(roomCreatedEvent.getOpenTimesPerDay()).isEqualTo(roomHolder.roomCreated.getOpenTimesPerDay());
     });
@@ -57,7 +57,7 @@ public class CreateRoomUseCaseStepDefinitions extends AbstractUseCaseStepDefinit
     Given("^the room is open between (.*) and (.*)$", (String startTime, String endTime) ->
       roomHolder.roomBuilder.openTimes.add(new OpenTime(LocalTime.parse(startTime), LocalTime.parse(endTime))));
     Given("^the room can open up to (.*) slots at the same time$", (Integer slots) ->
-      roomHolder.roomBuilder.maxSlots = slots);
+      roomHolder.roomBuilder.slotCreationConfigInfo = new MaxNumberOfSlotsStrategyConfigInfo(slots));
     Given("^the slots time is of (.*) minute$", (Integer slotDurationInMinutes) ->
       roomHolder.roomBuilder.slotDurationInMinutes = slotDurationInMinutes);
     Given("^the room has a (.*) minutes auction time and a (.*) days bookings created window$", (Integer auctionDuration, Integer daysRange) ->
@@ -66,7 +66,6 @@ public class CreateRoomUseCaseStepDefinitions extends AbstractUseCaseStepDefinit
       roomHolder.roomBuilder.auctionConfigInfo = new NoAuctionConfigInfo());
     When("^the room is created with that configuration$", () -> {
       roomHolder.roomCreated = createRoomUseCase.createRoom(roomHolder.roomBuilder.build());
-//      awaitSlotsCreation();
     });
     Then("^(.*) slots should have been created$", (Integer slotsToBeCreated) ->
       assertThat(slotComponent.findOpenSlotsFor(roomHolder.roomCreated.getId())).hasSize(slotsToBeCreated));
