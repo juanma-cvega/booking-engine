@@ -45,8 +45,8 @@ class Room {
     this.active = active;
     this.auctionConfigInfo = auctionConfigInfo;
     this.clock = clock;
-    Validate.notNull(this.auctionConfigInfo); //TODO add validation tests
-    Validate.notNull(this.slotCreationConfigInfo); //TODO add validation tests
+    Validate.notNull(this.auctionConfigInfo);
+    Validate.notNull(this.slotCreationConfigInfo);
     Validate.notEmpty(this.openTimesPerDay);
     Validate.notEmpty(this.availableDays);
     Validate.notNull(this.clock);
