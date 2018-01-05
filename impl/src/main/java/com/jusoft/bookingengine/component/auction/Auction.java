@@ -2,6 +2,7 @@ package com.jusoft.bookingengine.component.auction;
 
 import com.jusoft.bookingengine.component.auction.api.AuctionFinishedException;
 import com.jusoft.bookingengine.component.auction.api.Bid;
+import com.jusoft.bookingengine.strategy.auctionwinner.api.AuctionWinnerStrategy;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
@@ -46,8 +47,8 @@ class Auction {
     this.id = id;
     this.slotId = slotId;
     this.roomId = roomId;
-    this.startTime = ZonedDateTime.now(clock);
-    this.endTime = startTime.plusMinutes(durationInMinutes);
+    startTime = ZonedDateTime.now(clock);
+    endTime = startTime.plusMinutes(durationInMinutes);
     this.buyers = new HashSet<>(buyers);
     this.clock = clock;
   }

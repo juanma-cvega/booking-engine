@@ -7,7 +7,6 @@ import com.jusoft.bookingengine.component.auction.api.AuctionWinnerFoundEvent;
 import com.jusoft.bookingengine.component.auction.api.CreateAuctionCommand;
 import com.jusoft.bookingengine.component.auction.api.FinishAuctionCommand;
 import com.jusoft.bookingengine.component.auction.api.SlotNotInAuctionException;
-import com.jusoft.bookingengine.component.auction.api.strategy.AuctionConfigInfo;
 import com.jusoft.bookingengine.publisher.MessagePublisher;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -18,7 +17,6 @@ import java.util.Optional;
 class AuctionComponentImpl implements AuctionComponent {
 
   private final AuctionRepository auctionRepository;
-  private final AuctionStrategyRegistrar auctionStrategyRegistrar;
   private final AuctionFactory auctionFactory;
   private final MessagePublisher messagePublisher;
 
@@ -41,10 +39,10 @@ class AuctionComponentImpl implements AuctionComponent {
 
   @Override
   public void finishAuction(FinishAuctionCommand command) {
-    Auction auction = auctionRepository.find(command.getAuctionId()).orElseThrow(() -> new AuctionNotFoundException(command.getAuctionId()));
-    AuctionConfigInfo auctionConfigInfo = command.getAuctionConfigInfo();
-    AuctionWinnerStrategy strategy = auctionStrategyRegistrar.createStrategyWith(auctionConfigInfo);
-    auction.findAuctionWinner(strategy).ifPresent(auctionWinner ->
+    Auction auction = auctionRepository
+      .find(command.getAuctionId())
+      .orElseThrow(() -> new AuctionNotFoundException(command.getAuctionId()));
+    auction.findAuctionWinner(command.getAuctionWinnerStrategy()).ifPresent(auctionWinner ->
       messagePublisher.publish(new AuctionWinnerFoundEvent(auction.getId(), auctionWinner, auction.getSlotId(), auction.getRoomId())));
   }
 

@@ -1,9 +1,9 @@
 package com.jusoft.bookingengine.holder;
 
-import com.jusoft.bookingengine.component.auction.api.strategy.AuctionConfigInfo;
 import com.jusoft.bookingengine.component.room.api.CreateRoomCommand;
 import com.jusoft.bookingengine.component.room.api.RoomView;
 import com.jusoft.bookingengine.component.timer.OpenTime;
+import com.jusoft.bookingengine.strategy.auctionwinner.api.AuctionConfigInfo;
 import com.jusoft.bookingengine.strategy.slotcreation.api.SlotCreationConfigInfo;
 
 import java.time.DayOfWeek;

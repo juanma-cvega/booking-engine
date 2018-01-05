@@ -6,6 +6,7 @@ import com.jusoft.bookingengine.component.room.api.RoomComponent;
 import com.jusoft.bookingengine.component.scheduler.api.SchedulerComponent;
 import com.jusoft.bookingengine.component.slot.api.SlotComponent;
 import com.jusoft.bookingengine.publisher.MessagePublisher;
+import com.jusoft.bookingengine.strategy.auctionwinner.api.AuctionStrategyRegistrar;
 import com.jusoft.bookingengine.strategy.slotcreation.api.SlotCreationStrategyRegistrar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -26,6 +27,8 @@ public class UseCaseConfig {
   private BookingComponent bookingComponent;
   @Autowired
   private SchedulerComponent schedulerComponent;
+  @Autowired
+  private AuctionStrategyRegistrar auctionStrategyRegistrar;
   @Autowired
   private SlotCreationStrategyRegistrar slotCreationStrategyRegistrar;
   @Autowired
@@ -55,7 +58,7 @@ public class UseCaseConfig {
 
   @Bean
   public FinishAuctionUseCase finishAuctionUseCase() {
-    return new FinishAuctionUseCase(roomComponent, auctionComponent);
+    return new FinishAuctionUseCase(roomComponent, auctionComponent, auctionStrategyRegistrar);
   }
 
   @Bean

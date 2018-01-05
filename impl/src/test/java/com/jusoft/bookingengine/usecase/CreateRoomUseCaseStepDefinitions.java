@@ -1,8 +1,6 @@
 package com.jusoft.bookingengine.usecase;
 
 import com.google.common.collect.Iterables;
-import com.jusoft.bookingengine.component.auction.api.strategy.LessBookingsWithinPeriodConfigInfo;
-import com.jusoft.bookingengine.component.auction.api.strategy.NoAuctionConfigInfo;
 import com.jusoft.bookingengine.component.room.api.RoomComponent;
 import com.jusoft.bookingengine.component.room.api.RoomCreatedEvent;
 import com.jusoft.bookingengine.component.room.api.RoomView;
@@ -10,6 +8,8 @@ import com.jusoft.bookingengine.component.slot.api.SlotComponent;
 import com.jusoft.bookingengine.component.slot.api.SlotView;
 import com.jusoft.bookingengine.component.timer.OpenTime;
 import com.jusoft.bookingengine.config.AbstractUseCaseStepDefinitions;
+import com.jusoft.bookingengine.strategy.auctionwinner.api.LessBookingsWithinPeriodConfigInfo;
+import com.jusoft.bookingengine.strategy.auctionwinner.api.NoAuctionConfigInfo;
 import com.jusoft.bookingengine.strategy.slotcreation.api.MaxNumberOfSlotsStrategyConfigInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 

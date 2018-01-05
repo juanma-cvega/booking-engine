@@ -1,6 +1,6 @@
 package com.jusoft.bookingengine.component.auction.api;
 
-import com.jusoft.bookingengine.component.auction.api.strategy.AuctionConfigInfo;
+import com.jusoft.bookingengine.strategy.auctionwinner.api.AuctionWinnerStrategy;
 import lombok.Data;
 import lombok.NonNull;
 
@@ -9,5 +9,5 @@ public class FinishAuctionCommand {
 
   private final long auctionId;
   @NonNull
-  private final AuctionConfigInfo auctionConfigInfo;
+  private final AuctionWinnerStrategy auctionWinnerStrategy;
 }

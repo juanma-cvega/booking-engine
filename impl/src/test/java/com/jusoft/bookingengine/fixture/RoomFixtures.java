@@ -1,10 +1,10 @@
 package com.jusoft.bookingengine.fixture;
 
-import com.jusoft.bookingengine.component.auction.api.strategy.AuctionConfigInfo;
-import com.jusoft.bookingengine.component.auction.api.strategy.LessBookingsWithinPeriodConfigInfo;
-import com.jusoft.bookingengine.component.auction.api.strategy.NoAuctionConfigInfo;
 import com.jusoft.bookingengine.component.room.api.CreateRoomCommand;
 import com.jusoft.bookingengine.component.timer.OpenTime;
+import com.jusoft.bookingengine.strategy.auctionwinner.api.AuctionConfigInfo;
+import com.jusoft.bookingengine.strategy.auctionwinner.api.LessBookingsWithinPeriodConfigInfo;
+import com.jusoft.bookingengine.strategy.auctionwinner.api.NoAuctionConfigInfo;
 import com.jusoft.bookingengine.strategy.slotcreation.api.MaxNumberOfSlotsStrategyConfigInfo;
 import lombok.experimental.UtilityClass;
 

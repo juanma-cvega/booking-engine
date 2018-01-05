@@ -22,7 +22,6 @@ class SlotCreatedEventListener implements MessageListener {
     scheduleNextSlotUseCase.scheduleNextSlot(event.getRoomId());
   }
 
-  //FIXME add auction configuration to event to avoid calling the roomComponent???
   @EventListener(SlotCreatedMessage.class)
   public void startAuction(SlotCreatedMessage event) {
     log.info("SlotCreatedEvent consumed for auction: slotId={}, roomId={}, startTime={}, endTime={}",

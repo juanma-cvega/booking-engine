@@ -1,4 +1,4 @@
-package com.jusoft.bookingengine.component.auction;
+package com.jusoft.bookingengine.strategy.auctionwinner.api;
 
 
 import com.jusoft.bookingengine.component.auction.api.Bid;

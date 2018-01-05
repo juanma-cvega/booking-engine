@@ -2,7 +2,7 @@
 //
 //import com.google.common.collect.Iterables;
 //import com.jusoft.bookingengine.component.AbstractStepDefinitions;
-//import com.jusoft.bookingengine.component.auction.api.strategy.LessBookingsWithinPeriodConfigInfo;
+//import com.jusoft.bookingengine.strategy.auctionwinner.api.LessBookingsWithinPeriodConfigInfo;
 //import com.jusoft.bookingengine.component.mock.ClockStub;
 //import com.jusoft.bookingengine.component.mock.MessagesSink;
 //import com.jusoft.bookingengine.component.room.api.OpenNextSlotCommand;

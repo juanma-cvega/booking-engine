@@ -1,9 +1,10 @@
-package com.jusoft.bookingengine.component.auction;
+package com.jusoft.bookingengine.strategy.auctionwinner;
 
 import com.jusoft.bookingengine.component.auction.api.Bid;
-import com.jusoft.bookingengine.component.auction.api.strategy.LessBookingsWithinPeriodConfigInfo;
 import com.jusoft.bookingengine.component.booking.api.BookingComponent;
 import com.jusoft.bookingengine.component.booking.api.BookingView;
+import com.jusoft.bookingengine.strategy.auctionwinner.api.AuctionWinnerStrategy;
+import com.jusoft.bookingengine.strategy.auctionwinner.api.LessBookingsWithinPeriodConfigInfo;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
