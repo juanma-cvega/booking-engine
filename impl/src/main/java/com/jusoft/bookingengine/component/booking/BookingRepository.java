@@ -1,7 +1,5 @@
 package com.jusoft.bookingengine.component.booking;
 
-import com.jusoft.bookingengine.component.booking.api.SlotAlreadyBookedException;
-
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -9,7 +7,7 @@ import java.util.Set;
 
 interface BookingRepository {
 
-  void save(Booking newBooking) throws SlotAlreadyBookedException;
+  void save(Booking newBooking);
 
   boolean delete(long bookingId);
 

@@ -4,9 +4,12 @@ import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 
-public class TimeUtil {
+public final class TimeUtil {
 
-  //FIXME findBySlot better serialization
+  private TimeUtil() {
+  }
+
+  //FIXME find better serialization
   public static long getTimeFrom(ZonedDateTime time) {
     return time.toInstant().getEpochSecond();
   }

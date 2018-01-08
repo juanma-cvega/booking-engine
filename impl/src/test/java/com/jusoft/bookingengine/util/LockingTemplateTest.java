@@ -23,13 +23,13 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @Slf4j
 public class LockingTemplateTest {
 
-  private static final int SLOW_TASK = 1000;
-  private static final int FAST_TASK = 100;
+  private static final int SLOW_TASK = 500;
+  private static final int FAST_TASK = 10;
   private static final int INITIAL_VALUE = 0;
   private static final int SLOW_TASK_VALUE = 10;
   private static final int FAST_TASK_VALUE = 20;
   private static final int TOTAL_TASK_VALUE = 30;
-  private static final int SLEEP_TIME_BETWEEN_THREAD_EXECUTION = 200; //Ensures the right order of execution
+  private static final int SLEEP_TIME_BETWEEN_THREAD_EXECUTION = 100; //Ensures the right order of execution
 
   private final Lock lock = new ReentrantLock();
   private final ExecutorService executor = Executors.newFixedThreadPool(3);

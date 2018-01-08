@@ -78,20 +78,24 @@ class BookingControllerRest {
   @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Booking not found")
   @ExceptionHandler(BookingNotFoundException.class)
   public void bookingNotFoundException() {
+    //Do nothing
   }
 
   @ResponseStatus(value = HttpStatus.CONFLICT, reason = "Slot already booked")
   @ExceptionHandler(SlotAlreadyBookedException.class)
   public void slotAlreadyBookedException() {
+    //Do nothing
   }
 
   @ResponseStatus(value = HttpStatus.PRECONDITION_REQUIRED, reason = "Slot already started")
   @ExceptionHandler(SlotAlreadyStartedException.class)
   public void slotAlreadyStartedException() {
+    //Do nothing
   }
 
   @ResponseStatus(value = HttpStatus.UNAUTHORIZED, reason = "Booking does not belong to user")
   @ExceptionHandler(WrongBookingUserException.class)
   public void wrongBookingUserException() {
+    //Do nothing
   }
 }

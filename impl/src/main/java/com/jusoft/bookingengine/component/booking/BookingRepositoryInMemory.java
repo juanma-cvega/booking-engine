@@ -21,7 +21,7 @@ class BookingRepositoryInMemory implements BookingRepository {
 
   BookingRepositoryInMemory(Map<Long, Booking> store) {
     this.store = store;
-    this.lock = new ReentrantLock();
+    lock = new ReentrantLock();
   }
 
   /**
@@ -32,7 +32,7 @@ class BookingRepositoryInMemory implements BookingRepository {
    * @throws SlotAlreadyBookedException in case the slot is already booked
    */
   @Override
-  public void save(Booking newBooking) throws SlotAlreadyBookedException {
+  public void save(Booking newBooking) {
     withLock(lock, () -> {
       store.values().stream().filter(booking -> Long.compare(booking.getSlotId(), newBooking.getSlotId()) == 0).findFirst()
         .ifPresent(booking -> {

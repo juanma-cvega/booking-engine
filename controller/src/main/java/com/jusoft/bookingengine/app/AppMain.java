@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Import;
 @Import({TimerConfig.class, SlotComponentConfig.class, BookingComponentConfig.class, ControllerConfig.class})
 public class AppMain {
 
-  public static void main(String[] args) throws Exception {
+  public static void main(String[] args) {
     SpringApplication.run(AppMain.class);
   }
 }
