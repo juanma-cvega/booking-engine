@@ -1,5 +1,9 @@
 Feature: As an admin, I want to see slots scheduled to be created based on a creation strategy
 
+  Background:
+    Given a club is created
+    And a building is created
+
   Scenario: As an admin, I want to see a slot scheduled to be created immediately when the room can have more open slots
     Given a room is to be created
     And the room can open up to 10 slots at the same time

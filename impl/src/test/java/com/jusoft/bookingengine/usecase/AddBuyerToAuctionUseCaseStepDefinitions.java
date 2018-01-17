@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Optional;
 
+import static com.jusoft.bookingengine.holder.DataHolder.auctionCreated;
+import static com.jusoft.bookingengine.holder.DataHolder.exceptionThrown;
+import static com.jusoft.bookingengine.holder.DataHolder.slotCreated;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AddBuyerToAuctionUseCaseStepDefinitions extends AbstractUseCaseStepDefinitions {
@@ -20,19 +23,19 @@ public class AddBuyerToAuctionUseCaseStepDefinitions extends AbstractUseCaseStep
 
   public AddBuyerToAuctionUseCaseStepDefinitions() {
     When("^user (.*) bets on the auction$", (Integer userId) ->
-      storeException(() -> addBuyerToAuctionUseCase.addBuyerTo(slotHolder.slotCreated.getId(), userId)));
+      storeException(() -> addBuyerToAuctionUseCase.addBuyerTo(slotCreated.getId(), userId)));
     Then("^the auction should contain the user (\\d+) bet created at (.*)$", (Integer userId, String creationTime) -> {
-      Optional<AuctionView> auctionFound = auctionComponent.find(auctionHolder.auctionCreated.getId());
+      Optional<AuctionView> auctionFound = auctionComponent.find(auctionCreated.getId());
       assertThat(auctionFound).isPresent();
       AuctionView auction = auctionFound.get();
       assertThat(auction.getBuyers()).contains(new Bid(userId, getDateFrom(creationTime)));
     });
     Then("^the user should be notified the auction is finished$", () -> {
-      assertThat(exceptionHolder.exceptionThrown).isInstanceOf(AuctionFinishedException.class);
-      AuctionFinishedException exception = (AuctionFinishedException) exceptionHolder.exceptionThrown;
-      assertThat(exception.getAuctionId()).isEqualTo(auctionHolder.auctionCreated.getId());
-      assertThat(exception.getSlotId()).isEqualTo(auctionHolder.auctionCreated.getSlotId());
-      assertThat(exception.getRoomId()).isEqualTo(auctionHolder.auctionCreated.getRoomId());
+      assertThat(exceptionThrown).isInstanceOf(AuctionFinishedException.class);
+      AuctionFinishedException exception = (AuctionFinishedException) exceptionThrown;
+      assertThat(exception.getAuctionId()).isEqualTo(auctionCreated.getId());
+      assertThat(exception.getSlotId()).isEqualTo(auctionCreated.getSlotId());
+      assertThat(exception.getRoomId()).isEqualTo(auctionCreated.getRoomId());
     });
   }
 }

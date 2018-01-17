@@ -2,7 +2,7 @@ package com.jusoft.bookingengine.component.auction;
 
 import java.util.Optional;
 
-public interface AuctionRepository {
+interface AuctionRepository {
 
   void save(Auction newAuction);
 

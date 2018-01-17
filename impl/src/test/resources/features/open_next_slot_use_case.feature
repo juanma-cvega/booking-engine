@@ -1,5 +1,9 @@
 Feature: As an admin, I want to see slots created. As a user, I want to be able to see the available slots
 
+  Background:
+    Given a club is created
+    And a building is created
+
   Scenario: As an admin, I want to see the first slot created for a room while before the first open time
     Given a room is to be created
     And the room can open up to 10 slots at the same time

@@ -1,5 +1,9 @@
 Feature: As a user, I want to know the result of a auction I bet for
 
+  Background:
+    Given a club is created
+    And a building is created
+
   Scenario: As a user, I shouldn't win an auction if there is someone with a better criteria when the auction is configured
   to make the winner the person with less bookings within a period of time
     Given a room is created

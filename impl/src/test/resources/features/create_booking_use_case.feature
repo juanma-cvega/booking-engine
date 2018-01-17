@@ -1,5 +1,9 @@
 Feature: As a user, I want to book a slot
 
+  Background:
+    Given a club is created
+    And a building is created
+
   Scenario: As a user, I want to book an available slot
     Given a room is created
     And a slot is created

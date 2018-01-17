@@ -1,5 +1,9 @@
 Feature: As a user, I want to bet in an open auction for a slot
 
+  Background:
+    Given a club is created
+    And a building is created
+
   Scenario: As a user, I should be able to bet on an auction just opened
     Given a room is to be created
     And the room has a 10 minutes auction time and a 5 days bookings created window

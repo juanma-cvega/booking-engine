@@ -2,7 +2,7 @@ package com.jusoft.bookingengine.component.room;
 
 import java.util.Optional;
 
-public interface RoomRepository {
+interface RoomRepository {
 
   void save(Room newRoom);
 

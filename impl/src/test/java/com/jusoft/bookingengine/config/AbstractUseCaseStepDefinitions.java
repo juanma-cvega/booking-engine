@@ -3,11 +3,6 @@ package com.jusoft.bookingengine.config;
 import com.jusoft.bookingengine.MainConfig;
 import com.jusoft.bookingengine.publisher.Message;
 import com.jusoft.bookingengine.publisher.MessagePublisher;
-import com.jusoft.bookingengine.holder.AuctionHolder;
-import com.jusoft.bookingengine.holder.BookingHolder;
-import com.jusoft.bookingengine.holder.ExceptionHolder;
-import com.jusoft.bookingengine.holder.RoomHolder;
-import com.jusoft.bookingengine.holder.SlotHolder;
 import cucumber.api.java8.En;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +13,11 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZonedDateTime;
 
+import static com.jusoft.bookingengine.holder.DataHolder.exceptionThrown;
+
 @ContextConfiguration(classes = {
   MainConfig.class,
-  MockConfig.class,
-  HolderConfig.class
+  MockConfig.class
 })
 @DirtiesContext
 public class AbstractUseCaseStepDefinitions implements En {
@@ -30,16 +26,16 @@ public class AbstractUseCaseStepDefinitions implements En {
   protected MessagePublisher messagePublisher;
   @Autowired
   protected ClockStub clock;
-  @Autowired
-  protected ExceptionHolder exceptionHolder;
-  @Autowired
-  protected AuctionHolder auctionHolder;
-  @Autowired
-  protected RoomHolder roomHolder;
-  @Autowired
-  protected SlotHolder slotHolder;
-  @Autowired
-  protected BookingHolder bookingHolder;
+//  @Autowired
+//  protected ExceptionHolder exceptionHolder;
+//  @Autowired
+//  protected AuctionHolder auctionHolder;
+//  @Autowired
+//  protected RoomHolder roomHolder;
+//  @Autowired
+//  protected SlotHolder slotHolder;
+//  @Autowired
+//  protected BookingHolder bookingHolder;
 
   protected ArgumentCaptor<Message> messageCaptor = ArgumentCaptor.forClass(Message.class);
 
@@ -55,7 +51,7 @@ public class AbstractUseCaseStepDefinitions implements En {
     try {
       runnable.run();
     } catch (RuntimeException exception) {
-      exceptionHolder.exceptionThrown = exception;
+      exceptionThrown = exception;
     }
   }
 }

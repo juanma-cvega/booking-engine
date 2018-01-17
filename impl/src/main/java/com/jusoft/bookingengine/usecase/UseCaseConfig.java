@@ -2,6 +2,8 @@ package com.jusoft.bookingengine.usecase;
 
 import com.jusoft.bookingengine.component.auction.api.AuctionComponent;
 import com.jusoft.bookingengine.component.booking.api.BookingComponent;
+import com.jusoft.bookingengine.component.building.api.BuildingComponent;
+import com.jusoft.bookingengine.component.club.api.ClubComponent;
 import com.jusoft.bookingengine.component.room.api.RoomComponent;
 import com.jusoft.bookingengine.component.scheduler.api.SchedulerComponent;
 import com.jusoft.bookingengine.component.slot.api.SlotComponent;
@@ -25,6 +27,10 @@ public class UseCaseConfig {
   private SlotComponent slotComponent;
   @Autowired
   private BookingComponent bookingComponent;
+  @Autowired
+  private BuildingComponent buildingComponent;
+  @Autowired
+  private ClubComponent clubComponent;
   @Autowired
   private SchedulerComponent schedulerComponent;
   @Autowired
@@ -53,7 +59,7 @@ public class UseCaseConfig {
 
   @Bean
   public CreateRoomUseCase createRoomUseCase() {
-    return new CreateRoomUseCase(roomComponent);
+    return new CreateRoomUseCase(roomComponent, buildingComponent);
   }
 
   @Bean
@@ -76,4 +82,13 @@ public class UseCaseConfig {
     return new StartAuctionUseCase(auctionComponent, roomComponent, schedulerComponent);
   }
 
+  @Bean
+  public CreateBuildingUseCase createBuildingUseCase() {
+    return new CreateBuildingUseCase(clubComponent, buildingComponent);
+  }
+
+  @Bean
+  public CreateClubUseCase createClubUseCase() {
+    return new CreateClubUseCase(clubComponent);
+  }
 }

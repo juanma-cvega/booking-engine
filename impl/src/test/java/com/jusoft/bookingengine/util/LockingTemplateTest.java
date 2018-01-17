@@ -1,5 +1,6 @@
 package com.jusoft.bookingengine.util;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
@@ -19,6 +20,7 @@ import java.util.function.Supplier;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.awaitility.Awaitility.await;
 
 @Slf4j
 public class LockingTemplateTest {
@@ -29,7 +31,7 @@ public class LockingTemplateTest {
   private static final int SLOW_TASK_VALUE = 10;
   private static final int FAST_TASK_VALUE = 20;
   private static final int TOTAL_TASK_VALUE = 30;
-  private static final int SLEEP_TIME_BETWEEN_THREAD_EXECUTION = 100; //Ensures the right order of execution
+  private static final int SLEEP_TIME_BETWEEN_THREAD_EXECUTION = 200; //Ensures the right order of execution
 
   private final Lock lock = new ReentrantLock();
   private final ExecutorService executor = Executors.newFixedThreadPool(3);
@@ -45,9 +47,10 @@ public class LockingTemplateTest {
   @Test
   public void runnable_with_lock_should_make_second_thread_wait_for_first_thread_to_finish() throws ExecutionException, InterruptedException {
     AtomicLong testObject = new AtomicLong(INITIAL_VALUE);
-    Future<?> slowTask = executor.submit(() -> LockingTemplate.withLock(lock, runnableToTest(testObject, SLOW_TASK_VALUE, SLOW_TASK)));
-    sleep(SLEEP_TIME_BETWEEN_THREAD_EXECUTION);
-    Future<?> fastTask = executor.submit(() -> LockingTemplate.withLock(lock, runnableToTest(testObject, FAST_TASK_VALUE, FAST_TASK)));
+    TestRunnable slowTaskSupplier = new TestRunnable(testObject, SLOW_TASK_VALUE, SLOW_TASK);
+    Future<?> slowTask = executor.submit(() -> LockingTemplate.withLock(lock, slowTaskSupplier));
+    await().atMost(SLEEP_TIME_BETWEEN_THREAD_EXECUTION, TimeUnit.MILLISECONDS).until(() -> slowTaskSupplier.isRunning);
+    Future<?> fastTask = executor.submit(() -> LockingTemplate.withLock(lock, new TestRunnable(testObject, FAST_TASK_VALUE, FAST_TASK)));
 
     assertThat(testObject.get()).isEqualTo(INITIAL_VALUE);
     slowTask.get();
@@ -60,9 +63,10 @@ public class LockingTemplateTest {
   @Test
   public void runnable_without_lock_should_let_both_threads_run_the_code_at_same_time() throws ExecutionException, InterruptedException {
     AtomicLong testObject = new AtomicLong(INITIAL_VALUE);
-    Future<?> slowTask = executor.submit(runnableToTest(testObject, SLOW_TASK_VALUE, SLOW_TASK));
-    sleep(SLEEP_TIME_BETWEEN_THREAD_EXECUTION);
-    Future<?> fastTask = executor.submit(runnableToTest(testObject, FAST_TASK_VALUE, FAST_TASK));
+    TestRunnable slowTaskSupplier = new TestRunnable(testObject, SLOW_TASK_VALUE, SLOW_TASK);
+    Future<?> slowTask = executor.submit(slowTaskSupplier);
+    await().atMost(SLEEP_TIME_BETWEEN_THREAD_EXECUTION, TimeUnit.MILLISECONDS).until(() -> slowTaskSupplier.isRunning);
+    Future<?> fastTask = executor.submit(new TestRunnable(testObject, FAST_TASK_VALUE, FAST_TASK));
 
     assertThat(testObject.get()).isEqualTo(INITIAL_VALUE);
     fastTask.get();
@@ -75,9 +79,10 @@ public class LockingTemplateTest {
   @Test
   public void supplier_with_lock_should_make_second_thread_wait_for_first_thread_to_finish() throws ExecutionException, InterruptedException {
     AtomicLong testObject = new AtomicLong(INITIAL_VALUE);
-    Future<Long> slowTask = executor.submit(() -> LockingTemplate.withLock(lock, supplierToTest(testObject, SLOW_TASK_VALUE, SLOW_TASK)));
-    sleep(SLEEP_TIME_BETWEEN_THREAD_EXECUTION);
-    Future<Long> fastTask = executor.submit(() -> LockingTemplate.withLock(lock, supplierToTest(testObject, FAST_TASK_VALUE, FAST_TASK)));
+    TestSupplier slowTaskSupplier = new TestSupplier(testObject, SLOW_TASK_VALUE, SLOW_TASK);
+    Future<Long> slowTask = executor.submit(() -> LockingTemplate.withLock(lock, slowTaskSupplier));
+    await().atMost(SLEEP_TIME_BETWEEN_THREAD_EXECUTION, TimeUnit.MILLISECONDS).until(() -> slowTaskSupplier.isRunning);
+    Future<Long> fastTask = executor.submit(() -> LockingTemplate.withLock(lock, new TestSupplier(testObject, FAST_TASK_VALUE, FAST_TASK)));
 
     assertThat(testObject.get()).isEqualTo(INITIAL_VALUE);
     Long firstValue = slowTask.get();
@@ -100,9 +105,10 @@ public class LockingTemplateTest {
   @Test
   public void supplier_without_lock_runnable_should_let_both_threads_run_the_code_at_same_time() throws ExecutionException, InterruptedException {
     AtomicLong testObject = new AtomicLong(0);
-    Future<Long> slowTask = executor.submit(callableToTest(testObject, SLOW_TASK_VALUE, SLOW_TASK));
-    sleep(SLEEP_TIME_BETWEEN_THREAD_EXECUTION);
-    Future<Long> fastTask = executor.submit(callableToTest(testObject, FAST_TASK_VALUE, FAST_TASK));
+    TestCallable testCallable = new TestCallable(testObject, SLOW_TASK_VALUE, SLOW_TASK);
+    Future<Long> slowTask = executor.submit(testCallable);
+    await().atMost(SLEEP_TIME_BETWEEN_THREAD_EXECUTION, TimeUnit.MILLISECONDS).until(() -> testCallable.isRunning);
+    Future<Long> fastTask = executor.submit(new TestCallable(testObject, FAST_TASK_VALUE, FAST_TASK));
 
     assertThat(testObject.get()).isEqualTo(INITIAL_VALUE);
     Long firstValue = fastTask.get();
@@ -114,28 +120,65 @@ public class LockingTemplateTest {
     assertThat(testObject.get()).isEqualTo(TOTAL_TASK_VALUE);
   }
 
-  private Runnable runnableToTest(AtomicLong testObject, long newValue, long sleepTime) {
-    return () -> {
+  @RequiredArgsConstructor
+  private static class TestRunnable implements Runnable {
+
+    private volatile boolean isRunning;
+
+    private final AtomicLong testObject;
+    private final long newValue;
+    private final long sleepTime;
+
+    @Override
+    public void run() {
+      isRunning = true;
       sleep(sleepTime);
       testObject.set(newValue);
-    };
+      isRunning = false;
+    }
   }
 
-  private Supplier<Long> supplierToTest(AtomicLong testObject, long newValue, long sleepTime) {
-    return () -> {
+  @RequiredArgsConstructor
+  private static class TestSupplier implements Supplier<Long> {
+
+    private volatile boolean isRunning;
+
+    private final AtomicLong testObject;
+    private final long newValue;
+    private final long sleepTime;
+
+    @Override
+    public Long get() {
+      isRunning = true;
       sleep(sleepTime);
-      return testObject.updateAndGet(current -> current + newValue);
-    };
+      testObject.updateAndGet(current -> current + newValue);
+      isRunning = false;
+      return testObject.get();
+    }
+
   }
 
-  private Callable<Long> callableToTest(AtomicLong testObject, long newValue, long sleepTime) {
-    return () -> {
+  @RequiredArgsConstructor
+  private static class TestCallable implements Callable<Long> {
+
+    private volatile boolean isRunning;
+
+    private final AtomicLong testObject;
+    private final long newValue;
+    private final long sleepTime;
+
+    @Override
+    public Long call() {
+      isRunning = true;
       sleep(sleepTime);
-      return testObject.updateAndGet(current -> current + newValue);
-    };
+      testObject.updateAndGet(current -> current + newValue);
+      isRunning = false;
+      return testObject.get();
+    }
+
   }
 
-  private void sleep(long millis) {
+  private static void sleep(long millis) {
     try {
       Thread.sleep(millis);
     } catch (InterruptedException e) {

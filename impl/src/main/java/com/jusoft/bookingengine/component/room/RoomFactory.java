@@ -16,6 +16,7 @@ class RoomFactory {
 
   Room createFrom(CreateRoomCommand createRoomCommand) {
     return new Room(idGenerator.get(),
+      createRoomCommand.getBuildingId(),
       createRoomCommand.getSlotCreationConfigInfo(),
       createRoomCommand.getSlotDurationInMinutes(),
       createRoomCommand.getOpenTimePerDay(),

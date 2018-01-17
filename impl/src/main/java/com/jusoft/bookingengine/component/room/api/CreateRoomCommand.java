@@ -17,6 +17,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 public class CreateRoomCommand implements Command {
+  private final long buildingId;
   @NonNull
   private final SlotCreationConfigInfo slotCreationConfigInfo;
   private final int slotDurationInMinutes;

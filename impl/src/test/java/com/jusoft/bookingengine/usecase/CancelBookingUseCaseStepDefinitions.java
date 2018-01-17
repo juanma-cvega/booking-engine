@@ -5,8 +5,11 @@ import com.jusoft.bookingengine.component.booking.api.BookingNotFoundException;
 import com.jusoft.bookingengine.component.booking.api.CancelBookingCommand;
 import com.jusoft.bookingengine.component.booking.api.SlotAlreadyStartedException;
 import com.jusoft.bookingengine.config.AbstractUseCaseStepDefinitions;
+import com.jusoft.bookingengine.holder.DataHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import static com.jusoft.bookingengine.holder.DataHolder.bookingCreated;
+import static com.jusoft.bookingengine.holder.DataHolder.exceptionThrown;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
@@ -20,19 +23,18 @@ public class CancelBookingUseCaseStepDefinitions extends AbstractUseCaseStepDefi
 
   public CancelBookingUseCaseStepDefinitions() {
     When("^the user (.*) cancels the booking from user (.*)$", (Long userToCancel, Long userOwner) ->
-      storeException(() -> cancelBookingUseCase.cancel(new CancelBookingCommand(userToCancel, bookingHolder.bookingCreated.getId()))));
+      storeException(() -> cancelBookingUseCase.cancel(new CancelBookingCommand(userToCancel, bookingCreated.getId()))));
     When("^the user (.*) cancels his booking$", (Long userId) ->
-      storeException(() -> cancelBookingUseCase.cancel(new CancelBookingCommand(userId, bookingHolder.bookingCreated.getId()))));
+      storeException(() -> cancelBookingUseCase.cancel(new CancelBookingCommand(userId, bookingCreated.getId()))));
     When("^user (.*) cancels the booking$", (Long userId) ->
-      storeException(() -> cancelBookingUseCase.cancel(new CancelBookingCommand(userId, bookingHolder.bookingCreated.getId()))));
+      storeException(() -> cancelBookingUseCase.cancel(new CancelBookingCommand(userId, bookingCreated.getId()))));
     Then("^the user (.*) should not see that booking in his list$", (Long userId) ->
       assertThatExceptionOfType(BookingNotFoundException.class)
-        .isThrownBy(() -> bookingComponent.find(userId, bookingHolder.bookingCreated.getId())));
+        .isThrownBy(() -> bookingComponent.find(userId, bookingCreated.getId())));
     Then("^the user should be notified the booking is already started$", () -> {
-      assertThat(exceptionHolder.exceptionThrown).isNotNull().isInstanceOf(SlotAlreadyStartedException.class);
-      SlotAlreadyStartedException exceptionThrown = (SlotAlreadyStartedException) exceptionHolder.exceptionThrown;
-      assertThat(exceptionThrown.getSlotId()).isEqualTo(bookingHolder.bookingCreated.getSlotId());
+      assertThat(exceptionThrown).isNotNull().isInstanceOf(SlotAlreadyStartedException.class);
+      SlotAlreadyStartedException exceptionThrown = (SlotAlreadyStartedException) DataHolder.exceptionThrown;
+      assertThat(exceptionThrown.getSlotId()).isEqualTo(bookingCreated.getSlotId());
     });
-
   }
 }

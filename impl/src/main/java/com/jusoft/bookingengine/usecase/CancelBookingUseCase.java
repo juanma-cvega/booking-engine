@@ -12,7 +12,7 @@ public class CancelBookingUseCase {
 
   private final BookingComponent bookingComponent;
   private final SlotComponent slotComponent;
-  
+
   //FIXME it makes two calls to database to find the same booking
   public void cancel(CancelBookingCommand cancelBookingCommand) {
     BookingView booking = bookingComponent.find(cancelBookingCommand.getUserId(), cancelBookingCommand.getBookingId());

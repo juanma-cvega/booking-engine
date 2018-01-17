@@ -1,5 +1,9 @@
 Feature: As an admin, I want to see auctions created based on configuration for slots
 
+  Background:
+    Given a club is created
+    And a building is created
+
   Scenario: As an admin, I should be able to see an auction created for a slot
     Given a room is to be created
     And the room has a 10 minutes auction time and a 5 days bookings created window

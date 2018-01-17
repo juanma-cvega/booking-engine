@@ -1,10 +1,16 @@
 package com.jusoft.bookingengine.holder;
 
+import com.jusoft.bookingengine.component.auction.api.AuctionView;
+import com.jusoft.bookingengine.component.booking.api.BookingView;
+import com.jusoft.bookingengine.component.building.api.BuildingView;
+import com.jusoft.bookingengine.component.club.api.ClubView;
 import com.jusoft.bookingengine.component.room.api.CreateRoomCommand;
 import com.jusoft.bookingengine.component.room.api.RoomView;
+import com.jusoft.bookingengine.component.slot.api.SlotView;
 import com.jusoft.bookingengine.component.timer.OpenTime;
 import com.jusoft.bookingengine.strategy.auctionwinner.api.AuctionConfigInfo;
 import com.jusoft.bookingengine.strategy.slotcreation.api.SlotCreationConfigInfo;
+import lombok.experimental.UtilityClass;
 
 import java.time.DayOfWeek;
 import java.util.ArrayList;
@@ -17,13 +23,22 @@ import static com.jusoft.bookingengine.fixture.RoomFixtures.MAX_NUMBER_OF_SLOTS_
 import static com.jusoft.bookingengine.fixture.RoomFixtures.OPEN_TIMES;
 import static com.jusoft.bookingengine.fixture.RoomFixtures.SLOT_DURATION_IN_MINUTES;
 
-public class RoomHolder {
+@UtilityClass
+public class DataHolder {
 
-  public RoomView roomCreated;
+  public static RoomView roomCreated;
+  public static SlotView slotCreated;
+  public static BookingView bookingCreated;
+  public static List<BookingView> bookingsCreated = new ArrayList<>();
+  public static List<BookingView> bookingsFetched = new ArrayList<>();
+  public static AuctionView auctionCreated;
+  public static ClubView clubCreated;
+  public static BuildingView buildingCreated;
+  public static RuntimeException exceptionThrown;
 
-  public CreateRoomCommandBuilder roomBuilder;
+  public static CreateRoomCommandBuilder roomBuilder;
 
-  public void createRoomBuilder() {
+  public static void createRoomBuilder() {
     roomBuilder = new CreateRoomCommandBuilder();
   }
 
@@ -36,8 +51,9 @@ public class RoomHolder {
     public Boolean active;
     public AuctionConfigInfo auctionConfigInfo;
 
-    public CreateRoomCommand build() {
+    public CreateRoomCommand build(Long buildingId) {
       return new CreateRoomCommand(
+        buildingId,
         slotCreationConfigInfo == null ? MAX_NUMBER_OF_SLOTS_STRATEGY_CONFIG_INFO : slotCreationConfigInfo,
         slotDurationInMinutes == null ? SLOT_DURATION_IN_MINUTES : slotDurationInMinutes,
         openTimes.isEmpty() ? OPEN_TIMES : openTimes,

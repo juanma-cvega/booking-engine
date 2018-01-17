@@ -25,6 +25,7 @@ import java.util.function.Predicate;
 class Room {
 
   private final long id;
+  private final long buildingId;
   private final SlotCreationConfigInfo slotCreationConfigInfo;
   private final int slotDurationInMinutes;
   private final List<OpenTime> openTimesPerDay;
@@ -34,13 +35,14 @@ class Room {
   @Getter(value = AccessLevel.PRIVATE)
   private final Clock clock;
 
-  Room(long id, SlotCreationConfigInfo slotCreationConfigInfo, int slotDurationInMinutes, List<OpenTime> openTimesPerDay, List<DayOfWeek> availableDays,
+  Room(long id, long buildingId, SlotCreationConfigInfo slotCreationConfigInfo, int slotDurationInMinutes, List<OpenTime> openTimesPerDay, List<DayOfWeek> availableDays,
        boolean active, AuctionConfigInfo auctionConfigInfo, Clock clock) {
     this.id = id;
+    this.buildingId = buildingId;
     this.slotCreationConfigInfo = slotCreationConfigInfo;
     this.slotDurationInMinutes = slotDurationInMinutes;
-    Collections.sort(openTimesPerDay); //Needed to ensure soonest open time is checked first
     this.openTimesPerDay = openTimesPerDay;
+    Collections.sort(this.openTimesPerDay); //Needed to ensure soonest open time is checked first
     this.availableDays = availableDays;
     this.active = active;
     this.auctionConfigInfo = auctionConfigInfo;

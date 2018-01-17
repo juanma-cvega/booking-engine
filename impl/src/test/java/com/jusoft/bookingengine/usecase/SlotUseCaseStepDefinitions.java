@@ -10,6 +10,8 @@ import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.stream.IntStream;
 
+import static com.jusoft.bookingengine.holder.DataHolder.roomCreated;
+import static com.jusoft.bookingengine.holder.DataHolder.slotCreated;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 
@@ -23,9 +25,9 @@ public class SlotUseCaseStepDefinitions extends AbstractUseCaseStepDefinitions {
 
   public SlotUseCaseStepDefinitions() {
     When("^a slot is created$", () ->
-      slotHolder.slotCreated = openNextSlotUseCase.openNextSlotFor(roomHolder.roomCreated.getId()));
+      slotCreated = openNextSlotUseCase.openNextSlotFor(roomCreated.getId()));
     When("(.*) slots are created", (Integer slotsToCreate) ->
-      IntStream.range(0, slotsToCreate).forEach((index) -> openNextSlotUseCase.openNextSlotFor(roomHolder.roomCreated.getId())));
+      IntStream.range(0, slotsToCreate).forEach((index) -> openNextSlotUseCase.openNextSlotFor(roomCreated.getId())));
     Then("^a notification of a created slot starting at (.*) and ending at (.*) should be published$", (String startTime, String endTime) -> {
       ZonedDateTime startDate = getDateFrom(startTime);
       ZonedDateTime endDate = getDateFrom(endTime);
@@ -49,15 +51,15 @@ public class SlotUseCaseStepDefinitions extends AbstractUseCaseStepDefinitions {
   }
 
   private void verifySlotCreatedStored(ZonedDateTime startDate, ZonedDateTime endDate) {
-    SlotView slotStored = slotComponent.find(slotHolder.slotCreated.getId(), slotHolder.slotCreated.getRoomId());
-    assertThat(slotHolder.slotCreated.getId())
+    SlotView slotStored = slotComponent.find(slotCreated.getId(), slotCreated.getRoomId());
+    assertThat(slotCreated.getId())
       .isEqualTo(slotStored.getId());
-    assertThat(slotHolder.slotCreated.getRoomId())
+    assertThat(slotCreated.getRoomId())
       .isEqualTo(slotStored.getRoomId());
-    assertThat(slotHolder.slotCreated.getStartDate())
+    assertThat(slotCreated.getStartDate())
       .isEqualTo(startDate)
       .isEqualTo(slotStored.getStartDate());
-    assertThat(slotHolder.slotCreated.getEndDate())
+    assertThat(slotCreated.getEndDate())
       .isEqualTo(endDate)
       .isEqualTo(slotStored.getEndDate());
   }
@@ -66,14 +68,14 @@ public class SlotUseCaseStepDefinitions extends AbstractUseCaseStepDefinitions {
     verify(messagePublisher).publish(messageCaptor.capture());
     assertThat(messageCaptor.getValue()).isInstanceOf(SlotCreatedEvent.class);
     SlotCreatedEvent slotCreatedEvent = (SlotCreatedEvent) messageCaptor.getValue();
-    assertThat(slotHolder.slotCreated.getId())
+    assertThat(slotCreated.getId())
       .isEqualTo(slotCreatedEvent.getSlotId());
-    assertThat(slotHolder.slotCreated.getRoomId())
+    assertThat(slotCreated.getRoomId())
       .isEqualTo(slotCreatedEvent.getRoomId());
-    assertThat(slotHolder.slotCreated.getStartDate())
+    assertThat(slotCreated.getStartDate())
       .isEqualTo(startDate)
       .isEqualTo(slotCreatedEvent.getStartDate());
-    assertThat(slotHolder.slotCreated.getEndDate())
+    assertThat(slotCreated.getEndDate())
       .isEqualTo(endDate)
       .isEqualTo(slotCreatedEvent.getEndDate());
   }
