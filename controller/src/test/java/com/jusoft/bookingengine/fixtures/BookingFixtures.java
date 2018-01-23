@@ -14,7 +14,6 @@ import java.time.ZonedDateTime;
 import java.util.List;
 
 import static com.jusoft.bookingengine.fixtures.CommonFixtures.USER_ID_1;
-import static com.jusoft.bookingengine.fixtures.RoomFixtures.ROOM_ID;
 import static com.jusoft.bookingengine.fixtures.SlotFixtures.SLOT_ID_1;
 import static java.util.Arrays.asList;
 
@@ -28,11 +27,11 @@ public class BookingFixtures {
   public static final ZonedDateTime BOOKING_TIME_DATE = TimeUtil.getLocalDateTimeFrom(BOOKING_TIME);
   public static final CancelBookingCommand CANCEL_BOOKING_COMMAND = new CancelBookingCommand(USER_ID_1, BOOKING_ID_1);
 
-  public static final BookingView BOOKING_1 = new BookingView(BOOKING_ID_1, USER_ID_1, BOOKING_TIME_DATE, SlotFixtures.SLOT_ID_1, ROOM_ID);
-  public static final BookingView BOOKING_2 = new BookingView(BOOKING_ID_2, USER_ID_1, BOOKING_TIME_DATE, SlotFixtures.SLOT_ID_2, ROOM_ID);
+  public static final BookingView BOOKING_1 = new BookingView(BOOKING_ID_1, USER_ID_1, BOOKING_TIME_DATE, SlotFixtures.SLOT_ID_1);
+  public static final BookingView BOOKING_2 = new BookingView(BOOKING_ID_2, USER_ID_1, BOOKING_TIME_DATE, SlotFixtures.SLOT_ID_2);
   public static final List<BookingView> BOOKINGS = asList(BOOKING_1, BOOKING_2);
 
-  public static final CreateBookingCommand CREATE_BOOKING_COMMAND = new CreateBookingCommand(USER_ID_1, ROOM_ID, SlotFixtures.SLOT_ID_1);
+  public static final CreateBookingCommand CREATE_BOOKING_COMMAND = new CreateBookingCommand(USER_ID_1, SlotFixtures.SLOT_ID_1);
 
   public static final BookingResource BOOKING_RESOURCE_1 = new BookingResource(BOOKING_ID_1, BOOKING_TIME, SlotFixtures.SLOT_RESOURCE_1);
   public static final BookingResource BOOKING_RESOURCE_2 = new BookingResource(BOOKING_ID_2, BOOKING_TIME, SlotFixtures.SLOT_RESOURCE_1);

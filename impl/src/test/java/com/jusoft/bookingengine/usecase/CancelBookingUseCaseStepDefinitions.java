@@ -4,6 +4,7 @@ import com.jusoft.bookingengine.component.booking.api.BookingComponent;
 import com.jusoft.bookingengine.component.booking.api.BookingNotFoundException;
 import com.jusoft.bookingengine.component.booking.api.CancelBookingCommand;
 import com.jusoft.bookingengine.component.booking.api.SlotAlreadyStartedException;
+import com.jusoft.bookingengine.component.booking.api.WrongBookingUserException;
 import com.jusoft.bookingengine.config.AbstractUseCaseStepDefinitions;
 import com.jusoft.bookingengine.holder.DataHolder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,13 @@ public class CancelBookingUseCaseStepDefinitions extends AbstractUseCaseStepDefi
       assertThat(exceptionThrown).isNotNull().isInstanceOf(SlotAlreadyStartedException.class);
       SlotAlreadyStartedException exceptionThrown = (SlotAlreadyStartedException) DataHolder.exceptionThrown;
       assertThat(exceptionThrown.getSlotId()).isEqualTo(bookingCreated.getSlotId());
+    });
+    Then("^the user (.*) should be notified the booking does belong to other user$", (Long userId) -> {
+      assertThat(exceptionThrown).isNotNull().isInstanceOf(WrongBookingUserException.class);
+      WrongBookingUserException exception = (WrongBookingUserException) exceptionThrown;
+      assertThat(exception.getBookingId()).isEqualTo(bookingCreated.getId());
+      assertThat(exception.getExpectedId()).isEqualTo(bookingCreated.getUserId());
+      assertThat(exception.getProvidedId()).isEqualTo(userId);
     });
   }
 }

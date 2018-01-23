@@ -1,18 +1,19 @@
 package com.jusoft.bookingengine.component.slot;
 
+import com.jusoft.bookingengine.repository.Repository;
+
 import java.util.List;
 import java.util.Optional;
 
-interface SlotRepository {
+interface SlotRepository extends Repository<Slot> {
 
   /**
    * Returns the {@link Slot} if it's contained in the store and if the roomId matches the one provided
    *
    * @param slotId the id of the slot to findBySlot
-   * @param roomId the id of the room the slot belongs to
    * @return Optional containing the {@link Slot} found
    */
-  Optional<Slot> find(long slotId, long roomId);
+  Optional<Slot> find(long slotId);
 
   /**
    * Stores the {@link Slot} provided

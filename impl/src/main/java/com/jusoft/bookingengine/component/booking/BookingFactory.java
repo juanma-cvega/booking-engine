@@ -23,16 +23,14 @@ class BookingFactory {
     return new Booking(idGenerator.get(),
       createBookingCommand.getUserId(),
       ZonedDateTime.now(clock),
-      createBookingCommand.getSlotId(),
-      createBookingCommand.getRoomId());
+      createBookingCommand.getSlotId());
   }
 
   BookingView create(Booking booking) {
     return new BookingView(booking.getId(),
       booking.getUserId(),
       booking.getBookingTime(),
-      booking.getSlotId(),
-      booking.getRoomId());
+      booking.getSlotId());
   }
 
   public List<BookingView> create(List<Booking> bookings) {

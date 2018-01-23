@@ -1,5 +1,6 @@
 package com.jusoft.bookingengine.component.booking;
 
+import com.jusoft.bookingengine.component.booking.api.BookingNotFoundException;
 import com.jusoft.bookingengine.component.booking.api.SlotAlreadyBookedException;
 
 import java.time.ZonedDateTime;
@@ -36,15 +37,18 @@ class BookingRepositoryInMemory implements BookingRepository {
     withLock(lock, () -> {
       store.values().stream().filter(booking -> Long.compare(booking.getSlotId(), newBooking.getSlotId()) == 0).findFirst()
         .ifPresent(booking -> {
-          throw new SlotAlreadyBookedException(newBooking.getRoomId(), newBooking.getId());
+          throw new SlotAlreadyBookedException(newBooking.getSlotId());
         });
       store.put(newBooking.getId(), newBooking);
     });
   }
 
   @Override
-  public boolean delete(long bookingId) {
-    return store.remove(bookingId) != null;
+  public void delete(long bookingId, Predicate<Booking> predicate) {
+    Booking booking = find(bookingId).orElseThrow(() -> new BookingNotFoundException(0, bookingId));
+    if (predicate.test(booking)) {
+      store.remove(bookingId);
+    }
   }
 
   @Override

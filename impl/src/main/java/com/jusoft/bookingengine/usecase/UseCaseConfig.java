@@ -4,6 +4,7 @@ import com.jusoft.bookingengine.component.auction.api.AuctionComponent;
 import com.jusoft.bookingengine.component.booking.api.BookingComponent;
 import com.jusoft.bookingengine.component.building.api.BuildingComponent;
 import com.jusoft.bookingengine.component.club.api.ClubComponent;
+import com.jusoft.bookingengine.component.member.api.MemberComponent;
 import com.jusoft.bookingengine.component.room.api.RoomComponent;
 import com.jusoft.bookingengine.component.scheduler.api.SchedulerComponent;
 import com.jusoft.bookingengine.component.slot.api.SlotComponent;
@@ -32,6 +33,8 @@ public class UseCaseConfig {
   @Autowired
   private ClubComponent clubComponent;
   @Autowired
+  private MemberComponent memberComponent;
+  @Autowired
   private SchedulerComponent schedulerComponent;
   @Autowired
   private AuctionStrategyRegistrar auctionStrategyRegistrar;
@@ -54,7 +57,7 @@ public class UseCaseConfig {
 
   @Bean
   public CreateBookingUseCase createBookingUseCase() {
-    return new CreateBookingUseCase(bookingComponent, slotComponent, auctionComponent);
+    return new CreateBookingUseCase(bookingComponent, slotComponent, auctionComponent, memberComponent);
   }
 
   @Bean
@@ -90,5 +93,35 @@ public class UseCaseConfig {
   @Bean
   public CreateClubUseCase createClubUseCase() {
     return new CreateClubUseCase(clubComponent);
+  }
+
+  @Bean
+  public AcceptJoinRequestUseCase acceptJoinRequestUseCase() {
+    return new AcceptJoinRequestUseCase(clubComponent);
+  }
+
+  @Bean
+  public DenyJoinRequestUseCase denyJoinRequestUseCase() {
+    return new DenyJoinRequestUseCase(clubComponent);
+  }
+
+  @Bean
+  public FindClubByNameUseCase findClubByNameUseCase() {
+    return new FindClubByNameUseCase(clubComponent);
+  }
+
+  @Bean
+  public CreateJoinRequestUseCase createJoinRequestUseCase() {
+    return new CreateJoinRequestUseCase(clubComponent);
+  }
+
+  @Bean
+  public CreateMemberUseCase createMemberUseCase() {
+    return new CreateMemberUseCase(memberComponent);
+  }
+
+  @Bean
+  public FindJoinRequestsUseCase findJoinRequestsUseCase() {
+    return new FindJoinRequestsUseCase(clubComponent);
   }
 }

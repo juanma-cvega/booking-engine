@@ -9,6 +9,8 @@ import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.jusoft.bookingengine.fixtures.ClubFixtures.CLUB_ID;
+
 @UtilityClass
 public class RoomFixtures {
 
@@ -27,5 +29,5 @@ public class RoomFixtures {
   public static final List<DayOfWeek> AVAILABLE_DAYS = Arrays.asList(DayOfWeek.MONDAY, DayOfWeek.TUESDAY);
   public static final boolean IS_ACTIVE = true;
 
-  public static final RoomCreatedEvent ROOM_CREATED_EVENT = new RoomCreatedEvent(ROOM_ID, SLOT_DURATION_IN_MINUTES, OPEN_TIMES, AVAILABLE_DAYS, IS_ACTIVE);
+  public static final RoomCreatedEvent ROOM_CREATED_EVENT = new RoomCreatedEvent(ROOM_ID, CLUB_ID, SLOT_DURATION_IN_MINUTES, OPEN_TIMES, AVAILABLE_DAYS, IS_ACTIVE);
 }

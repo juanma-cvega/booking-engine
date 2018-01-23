@@ -11,6 +11,7 @@ public class SlotCreatedEvent implements Event {
 
   private final long slotId;
   private final long roomId;
+  private final long clubId;
   @NonNull
   private final ZonedDateTime startDate;
   @NonNull

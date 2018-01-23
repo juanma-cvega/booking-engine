@@ -10,6 +10,7 @@ class OpenNextSlotMessageFactory implements MessageFactory<OpenNextSlotCommand, 
   @Override
   public OpenNextSlotMessage createFrom(OpenNextSlotCommand message) {
     return new OpenNextSlotMessage(
-      message.getRoomId());
+      message.getRoomId(),
+      message.getClubId());
   }
 }

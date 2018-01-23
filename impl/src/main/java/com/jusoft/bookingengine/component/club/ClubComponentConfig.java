@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Supplier;
 
 @Configuration
@@ -18,7 +19,16 @@ public class ClubComponentConfig {
 
   @Bean
   public ClubComponent clubComponent() {
-    return new ClubComponentImpl(buildingFactory(), repository(), messagePublisher);
+    return new ClubComponentImpl(buildingFactory(), joinRequestFactory(), repository(), messagePublisher);
+  }
+
+  private JoinRequestFactory joinRequestFactory() {
+    return new JoinRequestFactory(idGeneratorForJoinRequests());
+  }
+
+  private Supplier<Long> idGeneratorForJoinRequests() {
+    AtomicLong idGenerator = new AtomicLong(1);
+    return idGenerator::getAndIncrement;
   }
 
   private ClubFactory buildingFactory() {
@@ -31,6 +41,6 @@ public class ClubComponentConfig {
   }
 
   private ClubRepository repository() {
-    return new ClubRepositoryInMemory(new ConcurrentHashMap<>());
+    return new ClubRepositoryInMemory(new ConcurrentHashMap<>(), new ReentrantLock());
   }
 }

@@ -1,5 +1,6 @@
 package com.jusoft.bookingengine.usecase;
 
+import com.jusoft.bookingengine.component.room.api.OpenNextSlotCommand;
 import com.jusoft.bookingengine.component.slot.api.SlotComponent;
 import com.jusoft.bookingengine.component.slot.api.SlotCreatedEvent;
 import com.jusoft.bookingengine.component.slot.api.SlotView;
@@ -10,6 +11,7 @@ import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.stream.IntStream;
 
+import static com.jusoft.bookingengine.holder.DataHolder.clubCreated;
 import static com.jusoft.bookingengine.holder.DataHolder.roomCreated;
 import static com.jusoft.bookingengine.holder.DataHolder.slotCreated;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,9 +27,9 @@ public class SlotUseCaseStepDefinitions extends AbstractUseCaseStepDefinitions {
 
   public SlotUseCaseStepDefinitions() {
     When("^a slot is created$", () ->
-      slotCreated = openNextSlotUseCase.openNextSlotFor(roomCreated.getId()));
+      slotCreated = openNextSlotUseCase.openNextSlotFor(new OpenNextSlotCommand(roomCreated.getId(), clubCreated.getId())));
     When("(.*) slots are created", (Integer slotsToCreate) ->
-      IntStream.range(0, slotsToCreate).forEach((index) -> openNextSlotUseCase.openNextSlotFor(roomCreated.getId())));
+      IntStream.range(0, slotsToCreate).forEach((index) -> openNextSlotUseCase.openNextSlotFor(new OpenNextSlotCommand(roomCreated.getId(), clubCreated.getId()))));
     Then("^a notification of a created slot starting at (.*) and ending at (.*) should be published$", (String startTime, String endTime) -> {
       ZonedDateTime startDate = getDateFrom(startTime);
       ZonedDateTime endDate = getDateFrom(endTime);
@@ -51,7 +53,7 @@ public class SlotUseCaseStepDefinitions extends AbstractUseCaseStepDefinitions {
   }
 
   private void verifySlotCreatedStored(ZonedDateTime startDate, ZonedDateTime endDate) {
-    SlotView slotStored = slotComponent.find(slotCreated.getId(), slotCreated.getRoomId());
+    SlotView slotStored = slotComponent.find(slotCreated.getId());
     assertThat(slotCreated.getId())
       .isEqualTo(slotStored.getId());
     assertThat(slotCreated.getRoomId())

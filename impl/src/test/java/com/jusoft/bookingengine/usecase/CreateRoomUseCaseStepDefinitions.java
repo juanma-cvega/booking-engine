@@ -1,6 +1,7 @@
 package com.jusoft.bookingengine.usecase;
 
 import com.google.common.collect.Iterables;
+import com.jusoft.bookingengine.component.building.api.BuildingNotFoundException;
 import com.jusoft.bookingengine.component.room.api.RoomComponent;
 import com.jusoft.bookingengine.component.room.api.RoomCreatedEvent;
 import com.jusoft.bookingengine.component.room.api.RoomView;
@@ -19,6 +20,8 @@ import java.time.LocalTime;
 
 import static com.jusoft.bookingengine.fixture.RoomFixtures.CREATE_ROOM_COMMAND;
 import static com.jusoft.bookingengine.holder.DataHolder.buildingCreated;
+import static com.jusoft.bookingengine.holder.DataHolder.clubCreated;
+import static com.jusoft.bookingengine.holder.DataHolder.exceptionThrown;
 import static com.jusoft.bookingengine.holder.DataHolder.roomBuilder;
 import static com.jusoft.bookingengine.holder.DataHolder.roomCreated;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -26,6 +29,7 @@ import static org.mockito.Mockito.verify;
 
 public class CreateRoomUseCaseStepDefinitions extends AbstractUseCaseStepDefinitions {
 
+  public static final long NON_EXISTING_BUILDING_ID = 5667L;
   @Autowired
   private RoomComponent roomComponent;
   @Autowired
@@ -41,6 +45,7 @@ public class CreateRoomUseCaseStepDefinitions extends AbstractUseCaseStepDefinit
     Then("^the room should be stored", () -> {
       RoomView roomView = roomComponent.find(roomCreated.getId());
       assertThat(roomView.getId()).isEqualTo(roomCreated.getId());
+      assertThat(roomView.getBuildingId()).isEqualTo(roomCreated.getBuildingId());
       assertThat(roomView.getSlotDurationInMinutes()).isEqualTo(roomCreated.getSlotDurationInMinutes());
       assertThat(roomView.getSlotCreationConfigInfo()).isEqualTo(roomCreated.getSlotCreationConfigInfo());
       assertThat(roomView.getAvailableDays()).isEqualTo(roomCreated.getAvailableDays());
@@ -52,6 +57,7 @@ public class CreateRoomUseCaseStepDefinitions extends AbstractUseCaseStepDefinit
       assertThat(messageCaptor.getValue()).isInstanceOf(RoomCreatedEvent.class);
       RoomCreatedEvent roomCreatedEvent = (RoomCreatedEvent) messageCaptor.getValue();
       assertThat(roomCreatedEvent.getRoomId()).isEqualTo(roomCreated.getId());
+      assertThat(roomCreatedEvent.getClubId()).isEqualTo(clubCreated.getId());
       assertThat(roomCreatedEvent.getSlotDurationInMinutes()).isEqualTo(roomCreated.getSlotDurationInMinutes());
       assertThat(roomCreatedEvent.getAvailableDays()).isEqualTo(roomCreated.getAvailableDays());
       assertThat(roomCreatedEvent.getOpenTimesPerDay()).isEqualTo(roomCreated.getOpenTimesPerDay());
@@ -90,6 +96,13 @@ public class CreateRoomUseCaseStepDefinitions extends AbstractUseCaseStepDefinit
       SlotView slot = slotComponent.findOpenSlotsFor(roomCreated.getId()).get(0);
       LocalDate date = LocalDate.now(clock).plusDays(1);
       assertThat(slot.getStartDate().toLocalDate()).isAfterOrEqualTo(date).isBeforeOrEqualTo(date);
+    });
+    When("^a room is created for a non existing building$", () ->
+      storeException(() -> createRoomUseCase.createRoom(CREATE_ROOM_COMMAND.apply(NON_EXISTING_BUILDING_ID))));
+    Then("^the user should be notified the building does not exist$", () -> {
+      assertThat(exceptionThrown).isInstanceOf(BuildingNotFoundException.class);
+      BuildingNotFoundException exception = (BuildingNotFoundException) exceptionThrown;
+      assertThat(exception.getBuildingId()).isEqualTo(NON_EXISTING_BUILDING_ID);
     });
   }
 }

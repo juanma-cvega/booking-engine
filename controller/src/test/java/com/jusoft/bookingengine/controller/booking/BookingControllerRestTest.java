@@ -6,8 +6,6 @@ import com.jusoft.bookingengine.component.booking.api.SlotAlreadyBookedException
 import com.jusoft.bookingengine.component.booking.api.SlotAlreadyStartedException;
 import com.jusoft.bookingengine.component.booking.api.WrongBookingUserException;
 import com.jusoft.bookingengine.controller.booking.api.CreateBookingRequest;
-import com.jusoft.bookingengine.fixtures.BookingFixtures;
-import com.jusoft.bookingengine.fixtures.SlotFixtures;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,12 +23,16 @@ import static com.jusoft.bookingengine.fixtures.BookingFixtures.BOOKING_ID_1;
 import static com.jusoft.bookingengine.fixtures.BookingFixtures.BOOKING_ID_2;
 import static com.jusoft.bookingengine.fixtures.BookingFixtures.BOOKING_RESOURCES;
 import static com.jusoft.bookingengine.fixtures.BookingFixtures.BOOKING_RESOURCE_1;
+import static com.jusoft.bookingengine.fixtures.BookingFixtures.BOOKING_TIME;
 import static com.jusoft.bookingengine.fixtures.BookingFixtures.CANCEL_BOOKING_COMMAND;
 import static com.jusoft.bookingengine.fixtures.BookingFixtures.CREATE_BOOKING_COMMAND;
 import static com.jusoft.bookingengine.fixtures.BookingFixtures.CREATE_BOOKING_REQUEST;
 import static com.jusoft.bookingengine.fixtures.CommonFixtures.USER_ID_1;
 import static com.jusoft.bookingengine.fixtures.CommonFixtures.USER_ID_2;
 import static com.jusoft.bookingengine.fixtures.RoomFixtures.ROOM_ID;
+import static com.jusoft.bookingengine.fixtures.SlotFixtures.END_TIME;
+import static com.jusoft.bookingengine.fixtures.SlotFixtures.SLOT_ID_1;
+import static com.jusoft.bookingengine.fixtures.SlotFixtures.START_TIME;
 import static com.jusoft.bookingengine.util.HelpUtils.OBJECT_MAPPER;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.Mockito.verify;
@@ -70,22 +72,22 @@ public class BookingControllerRestTest {
 
   @Test
   public void book() throws Exception {
-    when(mockBookingCommandFactory.createFrom(ROOM_ID, SlotFixtures.SLOT_ID_1, USER_ID_1)).thenReturn(CREATE_BOOKING_COMMAND);
+    when(mockBookingCommandFactory.createFrom(ROOM_ID, SLOT_ID_1, USER_ID_1)).thenReturn(CREATE_BOOKING_COMMAND);
     when(mockBookingComponent.book(CREATE_BOOKING_COMMAND)).thenReturn(BOOKING_1);
     when(mockBookingResourceFactory.createFrom(BOOKING_1)).thenReturn(BOOKING_RESOURCE_1);
 
-    String createUrl = String.format(CREATE_BOOKING_URL_TEMPLATE, ROOM_ID, SlotFixtures.SLOT_ID_1);
+    String createUrl = String.format(CREATE_BOOKING_URL_TEMPLATE, ROOM_ID, SLOT_ID_1);
     String urlTemplate = new StringJoiner(FORTHSLASH).add(BOOKINGS_URL).add(createUrl).toString();
     mockMvc.perform(post(urlTemplate)
       .contentType(APPLICATION_JSON)
       .content(OBJECT_MAPPER.writeValueAsString(CREATE_BOOKING_REQUEST)))
       .andExpect(status().isCreated())
       .andExpect(jsonPath("$.bookingId", is(Long.valueOf(BOOKING_ID_1).intValue())))
-      .andExpect(jsonPath("$.bookingTime", is(Long.valueOf(BookingFixtures.BOOKING_TIME).intValue())))
-      .andExpect(jsonPath("$.slot.slotId", is(Long.valueOf(SlotFixtures.SLOT_ID_1).intValue())))
+      .andExpect(jsonPath("$.bookingTime", is(Long.valueOf(BOOKING_TIME).intValue())))
+      .andExpect(jsonPath("$.slot.slotId", is(Long.valueOf(SLOT_ID_1).intValue())))
       .andExpect(jsonPath("$.slot.roomId", is(Long.valueOf(ROOM_ID).intValue())))
-      .andExpect(jsonPath("$.slot.startDate", is(Long.valueOf(SlotFixtures.START_TIME).intValue())))
-      .andExpect(jsonPath("$.slot.endDate", is(Long.valueOf(SlotFixtures.END_TIME).intValue())));
+      .andExpect(jsonPath("$.slot.startDate", is(Long.valueOf(START_TIME).intValue())))
+      .andExpect(jsonPath("$.slot.endDate", is(Long.valueOf(END_TIME).intValue())));
   }
 
   @Test
@@ -110,11 +112,11 @@ public class BookingControllerRestTest {
     mockMvc.perform(get(urlTemplate).contentType(APPLICATION_JSON))
       .andExpect(status().isOk())
       .andExpect(jsonPath("$.bookingId", is(Long.valueOf(BOOKING_ID_1).intValue())))
-      .andExpect(jsonPath("$.bookingTime", is(Long.valueOf(BookingFixtures.BOOKING_TIME).intValue())))
-      .andExpect(jsonPath("$.slot.slotId", is(Long.valueOf(SlotFixtures.SLOT_ID_1).intValue())))
+      .andExpect(jsonPath("$.bookingTime", is(Long.valueOf(BOOKING_TIME).intValue())))
+      .andExpect(jsonPath("$.slot.slotId", is(Long.valueOf(SLOT_ID_1).intValue())))
       .andExpect(jsonPath("$.slot.roomId", is(Long.valueOf(ROOM_ID).intValue())))
-      .andExpect(jsonPath("$.slot.startDate", is(Long.valueOf(SlotFixtures.START_TIME).intValue())))
-      .andExpect(jsonPath("$.slot.endDate", is(Long.valueOf(SlotFixtures.END_TIME).intValue())));
+      .andExpect(jsonPath("$.slot.startDate", is(Long.valueOf(START_TIME).intValue())))
+      .andExpect(jsonPath("$.slot.endDate", is(Long.valueOf(END_TIME).intValue())));
   }
 
   @Test
@@ -127,22 +129,22 @@ public class BookingControllerRestTest {
     mockMvc.perform(get(urlTemplate).contentType(APPLICATION_JSON))
       .andExpect(status().isOk())
       .andExpect(jsonPath("$.bookings[0].bookingId", is(Long.valueOf(BOOKING_ID_1).intValue())))
-      .andExpect(jsonPath("$.bookings[0].bookingTime", is(Long.valueOf(BookingFixtures.BOOKING_TIME).intValue())))
-      .andExpect(jsonPath("$.bookings[0].slot.slotId", is(Long.valueOf(SlotFixtures.SLOT_ID_1).intValue())))
+      .andExpect(jsonPath("$.bookings[0].bookingTime", is(Long.valueOf(BOOKING_TIME).intValue())))
+      .andExpect(jsonPath("$.bookings[0].slot.slotId", is(Long.valueOf(SLOT_ID_1).intValue())))
       .andExpect(jsonPath("$.bookings[0].slot.roomId", is(Long.valueOf(ROOM_ID).intValue())))
-      .andExpect(jsonPath("$.bookings[0].slot.startDate", is(Long.valueOf(SlotFixtures.START_TIME).intValue())))
-      .andExpect(jsonPath("$.bookings[0].slot.endDate", is(Long.valueOf(SlotFixtures.END_TIME).intValue())))
+      .andExpect(jsonPath("$.bookings[0].slot.startDate", is(Long.valueOf(START_TIME).intValue())))
+      .andExpect(jsonPath("$.bookings[0].slot.endDate", is(Long.valueOf(END_TIME).intValue())))
       .andExpect(jsonPath("$.bookings[1].bookingId", is(Long.valueOf(BOOKING_ID_2).intValue())))
-      .andExpect(jsonPath("$.bookings[1].bookingTime", is(Long.valueOf(BookingFixtures.BOOKING_TIME).intValue())))
-      .andExpect(jsonPath("$.bookings[1].slot.slotId", is(Long.valueOf(SlotFixtures.SLOT_ID_1).intValue())))
+      .andExpect(jsonPath("$.bookings[1].bookingTime", is(Long.valueOf(BOOKING_TIME).intValue())))
+      .andExpect(jsonPath("$.bookings[1].slot.slotId", is(Long.valueOf(SLOT_ID_1).intValue())))
       .andExpect(jsonPath("$.bookings[1].slot.roomId", is(Long.valueOf(ROOM_ID).intValue())))
-      .andExpect(jsonPath("$.bookings[1].slot.startDate", is(Long.valueOf(SlotFixtures.START_TIME).intValue())))
-      .andExpect(jsonPath("$.bookings[1].slot.endDate", is(Long.valueOf(SlotFixtures.END_TIME).intValue())));
+      .andExpect(jsonPath("$.bookings[1].slot.startDate", is(Long.valueOf(START_TIME).intValue())))
+      .andExpect(jsonPath("$.bookings[1].slot.endDate", is(Long.valueOf(END_TIME).intValue())));
   }
 
   @Test
   public void bookWithNullUserIdFails() throws Exception {
-    String createUrl = String.format(CREATE_BOOKING_URL_TEMPLATE, ROOM_ID, SlotFixtures.SLOT_ID_1);
+    String createUrl = String.format(CREATE_BOOKING_URL_TEMPLATE, ROOM_ID, SLOT_ID_1);
     String urlTemplate = new StringJoiner(FORTHSLASH).add(BOOKINGS_URL).add(createUrl).toString();
     mockMvc.perform(post(urlTemplate)
       .contentType(APPLICATION_JSON)
@@ -163,10 +165,10 @@ public class BookingControllerRestTest {
 
   @Test
   public void slotAlreadyBooked() throws Exception {
-    String createUrl = String.format(CREATE_BOOKING_URL_TEMPLATE, ROOM_ID, SlotFixtures.SLOT_ID_1);
+    String createUrl = String.format(CREATE_BOOKING_URL_TEMPLATE, ROOM_ID, SLOT_ID_1);
     String urlTemplate = new StringJoiner(FORTHSLASH).add(BOOKINGS_URL).add(createUrl).toString();
-    when(mockBookingCommandFactory.createFrom(ROOM_ID, SlotFixtures.SLOT_ID_1, USER_ID_1)).thenReturn(CREATE_BOOKING_COMMAND);
-    when(mockBookingComponent.book(CREATE_BOOKING_COMMAND)).thenThrow(new SlotAlreadyBookedException(ROOM_ID, SlotFixtures.SLOT_ID_1));
+    when(mockBookingCommandFactory.createFrom(ROOM_ID, SLOT_ID_1, USER_ID_1)).thenReturn(CREATE_BOOKING_COMMAND);
+    when(mockBookingComponent.book(CREATE_BOOKING_COMMAND)).thenThrow(new SlotAlreadyBookedException(SLOT_ID_1));
 
     mockMvc.perform(post(urlTemplate)
       .contentType(APPLICATION_JSON)
@@ -177,10 +179,10 @@ public class BookingControllerRestTest {
 
   @Test
   public void slotAlreadyStarted() throws Exception {
-    when(mockBookingCommandFactory.createFrom(ROOM_ID, SlotFixtures.SLOT_ID_1, USER_ID_1)).thenReturn(CREATE_BOOKING_COMMAND);
-    when(mockBookingComponent.book(CREATE_BOOKING_COMMAND)).thenThrow(new SlotAlreadyStartedException(SlotFixtures.SLOT_ID_1, ROOM_ID));
+    when(mockBookingCommandFactory.createFrom(ROOM_ID, SLOT_ID_1, USER_ID_1)).thenReturn(CREATE_BOOKING_COMMAND);
+    when(mockBookingComponent.book(CREATE_BOOKING_COMMAND)).thenThrow(new SlotAlreadyStartedException(SLOT_ID_1));
 
-    String createUrl = String.format(CREATE_BOOKING_URL_TEMPLATE, ROOM_ID, SlotFixtures.SLOT_ID_1);
+    String createUrl = String.format(CREATE_BOOKING_URL_TEMPLATE, ROOM_ID, SLOT_ID_1);
     String urlTemplate = new StringJoiner(FORTHSLASH).add(BOOKINGS_URL).add(createUrl).toString();
     mockMvc.perform(post(urlTemplate).contentType(APPLICATION_JSON).content(OBJECT_MAPPER.writeValueAsString(USER_ID_1)))
       .andExpect(status().isPreconditionRequired())
@@ -189,10 +191,10 @@ public class BookingControllerRestTest {
 
   @Test
   public void wrongBookingUser() throws Exception {
-    when(mockBookingCommandFactory.createFrom(ROOM_ID, SlotFixtures.SLOT_ID_1, USER_ID_1)).thenReturn(CREATE_BOOKING_COMMAND);
+    when(mockBookingCommandFactory.createFrom(ROOM_ID, SLOT_ID_1, USER_ID_1)).thenReturn(CREATE_BOOKING_COMMAND);
     when(mockBookingComponent.book(CREATE_BOOKING_COMMAND)).thenThrow(new WrongBookingUserException(USER_ID_1, USER_ID_2, BOOKING_ID_1));
 
-    String createUrl = String.format(CREATE_BOOKING_URL_TEMPLATE, ROOM_ID, SlotFixtures.SLOT_ID_1);
+    String createUrl = String.format(CREATE_BOOKING_URL_TEMPLATE, ROOM_ID, SLOT_ID_1);
     String urlTemplate = new StringJoiner(FORTHSLASH).add(BOOKINGS_URL).add(createUrl).toString();
     mockMvc.perform(post(urlTemplate).contentType(APPLICATION_JSON).content(OBJECT_MAPPER.writeValueAsString(USER_ID_1)))
       .andExpect(status().isUnauthorized())

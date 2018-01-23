@@ -25,11 +25,6 @@ class BuildingComponentImpl implements BuildingComponent {
   }
 
   @Override
-  public boolean isAvailable(long buildingId) {
-    return repository.find(buildingId).isPresent();
-  }
-
-  @Override
   public BuildingView find(long id) {
     return buildingFactory.createFrom(
       repository.find(id).orElseThrow(() -> new BuildingNotFoundException(id)));

@@ -12,6 +12,7 @@ import java.util.List;
 public class RoomCreatedMessage implements InfrastructureMessage {
 
   private final long roomId;
+  private final long clubId;
   private final int slotDurationInMinutes;
   @NonNull
   private final List<OpenTime> openTimesPerDay;

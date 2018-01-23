@@ -8,6 +8,7 @@ import lombok.experimental.UtilityClass;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 
+import static com.jusoft.bookingengine.fixtures.ClubFixtures.CLUB_ID;
 import static com.jusoft.bookingengine.fixtures.RoomFixtures.ROOM_ID;
 
 @UtilityClass
@@ -22,7 +23,7 @@ public class SlotFixtures {
 
   public static final SlotResource SLOT_RESOURCE_1 = new SlotResource(SLOT_ID_1, ROOM_ID, START_TIME, END_TIME);
 
-  public static final OpenNextSlotCommand OPEN_NEXT_SLOT_COMMAND = new OpenNextSlotCommand(ROOM_ID);
-  public static final SlotCreatedEvent SLOT_CREATED_EVENT = new SlotCreatedEvent(SLOT_ID_1, ROOM_ID, START_DATE, END_DATE);
+  public static final OpenNextSlotCommand OPEN_NEXT_SLOT_COMMAND = new OpenNextSlotCommand(ROOM_ID, CLUB_ID);
+  public static final SlotCreatedEvent SLOT_CREATED_EVENT = new SlotCreatedEvent(SLOT_ID_1, ROOM_ID, CLUB_ID, START_DATE, END_DATE);
 
 }

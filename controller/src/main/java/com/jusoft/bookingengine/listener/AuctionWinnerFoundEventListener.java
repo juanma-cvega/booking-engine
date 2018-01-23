@@ -19,7 +19,7 @@ class AuctionWinnerFoundEventListener implements MessageListener {
     log.info("AuctionWinnerFoundEvent consumed: auctionId={}, userId={}, slotId={}, roomId={}",
       event.getAuctionId(), event.getAuctionWinnerId(), event.getSlotId(), event.getRoomId());
     //FIXME possible race condition when someone books exactly at the same time the auction ends???
-    BookingView bookingCreated = createBookingUseCase.book(new CreateBookingCommand(event.getAuctionWinnerId(), event.getRoomId(), event.getSlotId()));
+    BookingView bookingCreated = createBookingUseCase.book(new CreateBookingCommand(event.getAuctionWinnerId(), event.getSlotId()));
     log.info("AuctionWinnerFoundEvent processed: auctionId={}, slotId={}, roomId={}, bookingId={}, userId={}",
       event.getAuctionId(), event.getSlotId(), event.getRoomId(), bookingCreated.getId(), bookingCreated.getUserId());
   }

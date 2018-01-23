@@ -6,6 +6,7 @@ import lombok.experimental.UtilityClass;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 
+import static com.jusoft.bookingengine.fixture.ClubFixtures.CLUB_ID;
 import static com.jusoft.bookingengine.fixture.RoomFixtures.ROOM_ID;
 
 @UtilityClass
@@ -16,6 +17,6 @@ public class SlotsFixtures {
   public static final long SLOT_ID_1 = 2;
   public static final long SLOT_ID_2 = 6;
 
-  public static final CreateSlotCommand CREATE_SLOT_COMMAND = new CreateSlotCommand(ROOM_ID, START_TIME, END_TIME);
+  public static final CreateSlotCommand CREATE_SLOT_COMMAND = new CreateSlotCommand(ROOM_ID, CLUB_ID, START_TIME, END_TIME);
 
 }

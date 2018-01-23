@@ -8,6 +8,7 @@ class SlotEventFactory {
     return new SlotCreatedEvent(
       newSlot.getId(),
       newSlot.getRoomId(),
+      newSlot.getClubId(),
       newSlot.getStartDate(),
       newSlot.getEndDate());
   }

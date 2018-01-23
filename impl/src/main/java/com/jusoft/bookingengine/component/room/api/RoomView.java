@@ -13,6 +13,7 @@ import java.util.List;
 public class RoomView {
 
   private final long id;
+  private final long buildingId;
   private final SlotCreationConfigInfo slotCreationConfigInfo;
   private final int slotDurationInMinutes;
   private final List<OpenTime> openTimesPerDay;
@@ -21,6 +22,7 @@ public class RoomView {
   private final AuctionConfigInfo auctionConfigInfo;
 
   public RoomView(long id,
+                  long buildingId,
                   SlotCreationConfigInfo slotCreationConfigInfo,
                   int slotDurationInMinutes,
                   List<OpenTime> openTimesPerDay,
@@ -28,6 +30,7 @@ public class RoomView {
                   boolean active,
                   AuctionConfigInfo auctionConfigInfo) {
     this.id = id;
+    this.buildingId = buildingId;
     this.slotCreationConfigInfo = slotCreationConfigInfo;
     this.slotDurationInMinutes = slotDurationInMinutes;
     this.openTimesPerDay = new ArrayList<>(openTimesPerDay);

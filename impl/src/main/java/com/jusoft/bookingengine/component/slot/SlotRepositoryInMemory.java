@@ -21,8 +21,8 @@ class SlotRepositoryInMemory implements SlotRepository {
   private final Clock clock;
 
   @Override
-  public Optional<Slot> find(long slotId, long roomId) {
-    return ofNullable(store.get(slotId)).filter(slotFound -> Long.compare(slotFound.getRoomId(), roomId) == 0);
+  public Optional<Slot> find(long slotId) {
+    return ofNullable(store.get(slotId));
   }
 
   @Override

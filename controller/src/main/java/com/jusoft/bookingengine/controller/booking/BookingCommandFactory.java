@@ -10,6 +10,6 @@ class BookingCommandFactory {
   }
 
   public CreateBookingCommand createFrom(long roomId, long slotId, long userId) {
-    return new CreateBookingCommand(userId, slotId, roomId);
+    return new CreateBookingCommand(userId, slotId);
   }
 }

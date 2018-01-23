@@ -20,10 +20,10 @@ class RoomComponentImpl implements RoomComponent {
   private final MessagePublisher messagePublisher;
 
   @Override
-  public RoomView create(CreateRoomCommand createRoomCommand) {
+  public RoomView create(CreateRoomCommand createRoomCommand, long clubId) {
     Room room = roomFactory.createFrom(createRoomCommand);
     roomRepository.save(room);
-    messagePublisher.publish(roomEventFactory.roomCreatedEvent(room));
+    messagePublisher.publish(roomEventFactory.roomCreatedEvent(room, clubId));
     return roomFactory.createFrom(room);
   }
 

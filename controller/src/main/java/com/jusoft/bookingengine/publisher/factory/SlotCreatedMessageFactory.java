@@ -12,6 +12,7 @@ class SlotCreatedMessageFactory implements MessageFactory<SlotCreatedEvent, Slot
     return new SlotCreatedMessage(
       message.getSlotId(),
       message.getRoomId(),
+      message.getClubId(),
       message.getStartDate(),
       message.getEndDate());
   }

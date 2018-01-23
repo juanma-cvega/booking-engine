@@ -52,16 +52,16 @@ class SlotComponentImpl implements SlotComponent {
   }
 
   @Override
-  public SlotView find(long slotId, long roomId) {
-    return slotFactory.createFrom(findSlotOrFail(slotId, roomId));
+  public SlotView find(long slotId) {
+    return slotFactory.createFrom(findSlotOrFail(slotId));
   }
 
   @Override
-  public boolean isSlotOpen(long slotId, long roomId) {
-    return findSlotOrFail(slotId, roomId).isOpen(ZonedDateTime.now(clock));
+  public boolean isSlotOpen(long slotId) {
+    return findSlotOrFail(slotId).isOpen(ZonedDateTime.now(clock));
   }
 
-  private Slot findSlotOrFail(long slotId, long roomId) {
-    return slotRepository.find(slotId, roomId).orElseThrow(() -> new SlotNotFoundException(slotId, roomId));
+  private Slot findSlotOrFail(long slotId) {
+    return slotRepository.find(slotId).orElseThrow(() -> new SlotNotFoundException(slotId));
   }
 }

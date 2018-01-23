@@ -16,7 +16,6 @@ class Booking {
   @NonNull
   private final ZonedDateTime bookingTime;
   private final long slotId;
-  private final long roomId;
 
   boolean isOwner(Long requestUserId) {
     return Long.compare(requestUserId, userId) == 0;

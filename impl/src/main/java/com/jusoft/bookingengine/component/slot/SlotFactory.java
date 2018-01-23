@@ -20,6 +20,7 @@ class SlotFactory {
   Slot createFrom(CreateSlotCommand request, Clock clock) {
     return new Slot(idGenerator.get(),
       request.getRoomId(),
+      request.getClubId(),
       ZonedDateTime.now(clock),
       request.getStartTime(),
       request.getEndTime());
@@ -28,6 +29,7 @@ class SlotFactory {
   SlotView createFrom(Slot slot) {
     return new SlotView(slot.getId(),
       slot.getRoomId(),
+      slot.getClubId(),
       slot.getCreationTime(),
       slot.getStartDate(),
       slot.getEndDate());

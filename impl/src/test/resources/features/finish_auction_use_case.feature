@@ -1,8 +1,11 @@
 Feature: As a user, I want to know the result of a auction I bet for
 
   Background:
-    Given a club is created
+    Given a club is created by user 4
     And a building is created
+    And user 1 issues a join request
+    And admin 4 accepts the join request created by user 1
+    And the accepted join request for user 1 is processed
 
   Scenario: As a user, I shouldn't win an auction if there is someone with a better criteria when the auction is configured
   to make the winner the person with less bookings within a period of time

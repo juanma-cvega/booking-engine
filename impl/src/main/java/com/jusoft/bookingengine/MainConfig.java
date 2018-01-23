@@ -4,6 +4,7 @@ import com.jusoft.bookingengine.component.auction.AuctionComponentConfig;
 import com.jusoft.bookingengine.component.booking.BookingComponentConfig;
 import com.jusoft.bookingengine.component.building.BuildingComponentConfig;
 import com.jusoft.bookingengine.component.club.ClubComponentConfig;
+import com.jusoft.bookingengine.component.member.MemberComponentConfig;
 import com.jusoft.bookingengine.component.room.RoomComponentConfig;
 import com.jusoft.bookingengine.component.scheduler.SchedulerComponentConfig;
 import com.jusoft.bookingengine.component.slot.SlotComponentConfig;
@@ -24,6 +25,7 @@ import org.springframework.context.annotation.Import;
   AuctionComponentConfig.class,
   BuildingComponentConfig.class,
   ClubComponentConfig.class,
+  MemberComponentConfig.class,
   AuctionWinnerStrategyConfig.class,
   SlotCreationConfig.class,
   UseCaseConfig.class})

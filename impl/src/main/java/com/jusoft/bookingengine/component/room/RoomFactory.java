@@ -28,6 +28,7 @@ class RoomFactory {
 
   RoomView createFrom(Room room) {
     return new RoomView(room.getId(),
+      room.getBuildingId(),
       room.getSlotCreationConfigInfo(),
       room.getSlotDurationInMinutes(),
       room.getOpenTimesPerDay(),

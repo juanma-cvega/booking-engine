@@ -16,8 +16,8 @@ public class CancelBookingUseCase {
   //FIXME it makes two calls to database to find the same booking
   public void cancel(CancelBookingCommand cancelBookingCommand) {
     BookingView booking = bookingComponent.find(cancelBookingCommand.getUserId(), cancelBookingCommand.getBookingId());
-    if (!slotComponent.isSlotOpen(booking.getSlotId(), booking.getRoomId())) {
-      throw new SlotAlreadyStartedException(booking.getSlotId(), booking.getRoomId());
+    if (!slotComponent.isSlotOpen(booking.getSlotId())) {
+      throw new SlotAlreadyStartedException(booking.getSlotId());
     }
     bookingComponent.cancel(cancelBookingCommand);
   }

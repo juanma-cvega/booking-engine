@@ -10,6 +10,7 @@ import java.time.ZonedDateTime;
 public class CreateSlotCommand implements Command {
 
   private final long roomId;
+  private final long clubId;
   @NonNull
   private final ZonedDateTime startTime;
   @NonNull

@@ -26,16 +26,6 @@ public class AbstractUseCaseStepDefinitions implements En {
   protected MessagePublisher messagePublisher;
   @Autowired
   protected ClockStub clock;
-//  @Autowired
-//  protected ExceptionHolder exceptionHolder;
-//  @Autowired
-//  protected AuctionHolder auctionHolder;
-//  @Autowired
-//  protected RoomHolder roomHolder;
-//  @Autowired
-//  protected SlotHolder slotHolder;
-//  @Autowired
-//  protected BookingHolder bookingHolder;
 
   protected ArgumentCaptor<Message> messageCaptor = ArgumentCaptor.forClass(Message.class);
 

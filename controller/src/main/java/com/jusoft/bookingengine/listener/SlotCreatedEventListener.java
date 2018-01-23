@@ -19,7 +19,7 @@ class SlotCreatedEventListener implements MessageListener {
   public void scheduleNextSlot(SlotCreatedMessage event) {
     log.info("SlotCreatedEvent consumed: slotId={}, roomId={}, startTime={}, endTime={}",
       event.getSlotId(), event.getRoomId(), event.getStartDate(), event.getEndDate());
-    scheduleNextSlotUseCase.scheduleNextSlot(event.getRoomId());
+    scheduleNextSlotUseCase.scheduleNextSlot(event.getRoomId(), event.getClubId());
   }
 
   @EventListener(SlotCreatedMessage.class)

@@ -1,10 +1,13 @@
 Feature: As a user, I want to be able to cancel bookings
 
   Background:
-    Given a club is created
+    Given a club is created by user 4
     And a building is created
     And a room is created
     And a slot is created
+    And user 1 issues a join request
+    And admin 4 accepts the join request created by user 1
+    And the accepted join request for user 1 is processed
 
   Scenario: As a user, I want to cancel a booking
     And the slot is booked by user 1
@@ -22,4 +25,4 @@ Feature: As a user, I want to be able to cancel bookings
     And the slot is booked by user 1
     When the user 2 cancels the booking from user 1
     Then the slot should be booked by the user 1
-    And the user should be notified the booking does belong to other user
+    And the user 2 should be notified the booking does belong to other user

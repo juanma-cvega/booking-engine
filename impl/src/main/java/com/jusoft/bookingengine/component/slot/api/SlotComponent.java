@@ -7,9 +7,9 @@ public interface SlotComponent {
 
   SlotView create(CreateSlotCommand createSlotCommand);
 
-  SlotView find(long slotId, long roomId);
+  SlotView find(long slotId);
 
-  boolean isSlotOpen(long slotId, long roomId);
+  boolean isSlotOpen(long slotId);
 
   List<SlotView> findOpenSlotsFor(long roomId);
 

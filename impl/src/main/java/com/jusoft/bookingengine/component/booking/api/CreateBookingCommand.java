@@ -7,7 +7,6 @@ import lombok.Data;
 public class CreateBookingCommand implements Command {
 
   private final long userId;
-  private final long roomId;
   private final long slotId;
 
 }

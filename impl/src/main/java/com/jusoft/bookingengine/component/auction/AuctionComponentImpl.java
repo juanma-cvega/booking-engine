@@ -31,6 +31,7 @@ class AuctionComponentImpl implements AuctionComponent {
   public void addBuyerTo(long slotId, long userId) {
     Auction auction = findBySlot(slotId).orElseThrow(() -> new SlotNotInAuctionException(slotId));
     auction.addBuyers(userId);
+    //FIXME missing call to DB
   }
 
   private Optional<Auction> findBySlot(long slotId) {

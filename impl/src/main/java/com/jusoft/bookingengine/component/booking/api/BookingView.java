@@ -13,5 +13,4 @@ public class BookingView {
   @NonNull
   private final ZonedDateTime bookingTime;
   private final long slotId;
-  private final long roomId;
 }

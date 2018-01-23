@@ -13,6 +13,7 @@ class Slot {
 
   private final long id;
   private final long roomId;
+  private final long clubId;
   @NonNull
   private final ZonedDateTime creationTime;
   @NonNull

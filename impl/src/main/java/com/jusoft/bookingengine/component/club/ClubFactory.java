@@ -15,14 +15,18 @@ class ClubFactory {
   Club createFrom(CreateClubCommand command) {
     return new Club(
       idSupplier.get(),
-      command.getDescription()
+      command.getName(),
+      command.getDescription(),
+      command.getAdminId()
     );
   }
 
-  public ClubView createFrom(Club building) {
+  public ClubView createFrom(Club club) {
     return new ClubView(
-      building.getId(),
-      building.getDescription()
+      club.getId(),
+      club.getName(),
+      club.getDescription(),
+      club.getAdmins()
     );
   }
 }

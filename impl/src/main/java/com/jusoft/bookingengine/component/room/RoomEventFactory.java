@@ -7,9 +7,10 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class RoomEventFactory {
 
-  RoomCreatedEvent roomCreatedEvent(Room room) {
+  RoomCreatedEvent roomCreatedEvent(Room room, long clubId) {
     return new RoomCreatedEvent(
       room.getId(),
+      clubId,
       room.getSlotDurationInMinutes(),
       room.getOpenTimesPerDay(),
       room.getAvailableDays(),

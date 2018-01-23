@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
+import static com.jusoft.bookingengine.holder.DataHolder.clubCreated;
 import static com.jusoft.bookingengine.holder.DataHolder.roomCreated;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -22,7 +23,7 @@ public class ScheduleNextSlotUseCaseStepDefinitions extends AbstractUseCaseStepD
 
   public ScheduleNextSlotUseCaseStepDefinitions() {
     When("^a slot is scheduled$", () ->
-      scheduleNextSlotUseCase.scheduleNextSlot(roomCreated.getId()));
+      scheduleNextSlotUseCase.scheduleNextSlot(roomCreated.getId(), clubCreated.getId()));
     Then("^a command to open the next slot for the room should be published immediately$", () -> {
       await().atMost(1, SECONDS).untilAsserted(() -> {
         verify(messagePublisher).publish(messageCaptor.capture());
@@ -34,7 +35,7 @@ public class ScheduleNextSlotUseCaseStepDefinitions extends AbstractUseCaseStepD
     Then("^a command to open the next slot for the room should be scheduled to be published at (.*)$", (String localTime) -> {
       assertThat(tasks).hasSize(1);
       assertThat(tasks.get(0).getExecutionTime()).isEqualTo(getDateFrom(localTime));
-      assertThat(tasks.get(0).getScheduledEvent()).isEqualTo(new OpenNextSlotCommand(roomCreated.getId()));
+      assertThat(tasks.get(0).getScheduledEvent()).isEqualTo(new OpenNextSlotCommand(roomCreated.getId(), clubCreated.getId()));
       assertThat(tasks.get(0).getTask().isDone()).isFalse();
     });
   }

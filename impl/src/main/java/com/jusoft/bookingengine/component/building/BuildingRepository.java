@@ -1,8 +1,10 @@
 package com.jusoft.bookingengine.component.building;
 
+import com.jusoft.bookingengine.repository.Repository;
+
 import java.util.Optional;
 
-interface BuildingRepository {
+interface BuildingRepository extends Repository<Building> {
 
   void save(Building building);
 

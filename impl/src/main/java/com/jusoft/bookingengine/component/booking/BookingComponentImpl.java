@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class BookingComponentImpl implements BookingComponent {
@@ -41,12 +42,16 @@ class BookingComponentImpl implements BookingComponent {
 
   @Override
   public void cancel(CancelBookingCommand cancelBookingCommand) {
-    Booking booking = bookingRepository.find(cancelBookingCommand.getBookingId())
-      .orElseThrow(() -> new BookingNotFoundException(cancelBookingCommand.getUserId(), cancelBookingCommand.getBookingId()));
-    if (!booking.isOwner(cancelBookingCommand.getUserId())) {
-      throw new WrongBookingUserException(cancelBookingCommand.getUserId(), booking.getUserId(), booking.getId());
-    }
-    bookingRepository.delete(cancelBookingCommand.getBookingId());
+    bookingRepository.delete(cancelBookingCommand.getBookingId(), deleteBookingIfOwner(cancelBookingCommand.getUserId()));
+  }
+
+  private Predicate<Booking> deleteBookingIfOwner(long userId) {
+    return bookingToDelete -> {
+      if (!bookingToDelete.isOwner(userId)) {
+        throw new WrongBookingUserException(userId, bookingToDelete.getUserId(), bookingToDelete.getId());
+      }
+      return true;
+    };
   }
 
   @Override

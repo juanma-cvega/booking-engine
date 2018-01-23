@@ -7,5 +7,7 @@ import lombok.Data;
 @Data
 public class CreateClubCommand {
 
+  private final String name;
   private final String description;
+  private final long adminId;
 }
