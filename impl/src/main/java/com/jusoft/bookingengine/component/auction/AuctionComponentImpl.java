@@ -10,6 +10,7 @@ import com.jusoft.bookingengine.publisher.MessagePublisher;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
+import java.time.Clock;
 import java.util.Optional;
 
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
@@ -18,6 +19,7 @@ class AuctionComponentImpl implements AuctionComponent {
   private final AuctionRepository auctionRepository;
   private final AuctionFactory auctionFactory;
   private final MessagePublisher messagePublisher;
+  private final Clock clock;
 
   @Override
   public AuctionView startAuction(CreateAuctionCommand createAuctionCommand) {
@@ -29,7 +31,7 @@ class AuctionComponentImpl implements AuctionComponent {
   @Override
   public void addBidderTo(long auctionId, long userId) {
     auctionRepository.execute(auctionId, auction -> {
-      auction.addBidder(userId);
+      auction.addBidder(userId, clock);
       return auction;
     }, () -> new AuctionNotFoundException(auctionId));
   }
@@ -45,7 +47,7 @@ class AuctionComponentImpl implements AuctionComponent {
 
   @Override
   public boolean isAuctionOpenForSlot(long slotId) {
-    return auctionRepository.findOneBySlot(slotId).map(Auction::isOpen).orElse(false);
+    return auctionRepository.findOneBySlot(slotId).map(auction -> auction.isOpen(clock)).orElse(false);
   }
 
   @Override

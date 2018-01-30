@@ -5,8 +5,6 @@ import lombok.experimental.UtilityClass;
 import java.util.concurrent.locks.Lock;
 import java.util.function.Supplier;
 
-import static java.lang.System.currentTimeMillis;
-
 @UtilityClass
 public class LockingTemplate {
 
@@ -30,16 +28,5 @@ public class LockingTemplate {
       lock.unlock();
     }
     return result;
-  }
-
-  public static void tryCompareAndSwap(Supplier<Boolean> action) {
-    boolean replaced = false;
-    long startTime = currentTimeMillis();
-    while (!replaced && currentTimeMillis() - startTime < TIMEOUT_MILLIS) {
-      replaced = action.get();
-    }
-    if (!replaced) {
-      throw new RuntimeException("Failed to update. The action timed out while trying to update the value");
-    }
   }
 }

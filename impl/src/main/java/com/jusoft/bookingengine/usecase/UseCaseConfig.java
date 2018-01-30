@@ -82,7 +82,7 @@ public class UseCaseConfig {
 
   @Bean
   public StartAuctionUseCase startAuctionUseCase() {
-    return new StartAuctionUseCase(auctionComponent, roomComponent, schedulerComponent);
+    return new StartAuctionUseCase(auctionComponent, roomComponent, schedulerComponent, clock);
   }
 
   @Bean

@@ -4,9 +4,7 @@ import com.jusoft.bookingengine.component.timer.OpenDate;
 import com.jusoft.bookingengine.component.timer.OpenTime;
 import com.jusoft.bookingengine.strategy.auctionwinner.api.AuctionConfigInfo;
 import com.jusoft.bookingengine.strategy.slotcreation.api.SlotCreationConfigInfo;
-import lombok.AccessLevel;
 import lombok.Data;
-import lombok.Getter;
 import org.apache.commons.lang3.Validate;
 
 import java.time.Clock;
@@ -32,11 +30,9 @@ class Room {
   private final List<DayOfWeek> availableDays;
   private final boolean active;
   private final AuctionConfigInfo auctionConfigInfo;
-  @Getter(value = AccessLevel.PRIVATE)
-  private final Clock clock;
 
   Room(long id, long buildingId, SlotCreationConfigInfo slotCreationConfigInfo, int slotDurationInMinutes, List<OpenTime> openTimesPerDay, List<DayOfWeek> availableDays,
-       boolean active, AuctionConfigInfo auctionConfigInfo, Clock clock) {
+       boolean active, AuctionConfigInfo auctionConfigInfo) {
     this.id = id;
     this.buildingId = buildingId;
     this.slotCreationConfigInfo = slotCreationConfigInfo;
@@ -46,12 +42,10 @@ class Room {
     this.availableDays = availableDays;
     this.active = active;
     this.auctionConfigInfo = auctionConfigInfo;
-    this.clock = clock;
     Validate.notNull(this.auctionConfigInfo);
     Validate.notNull(this.slotCreationConfigInfo);
     Validate.notEmpty(this.openTimesPerDay);
     Validate.notEmpty(this.availableDays);
-    Validate.notNull(this.clock);
     validateOpenTimesDurationAreMultiplesOfSlotDuration(openTimesPerDay, slotDurationInMinutes);
   }
 
@@ -64,25 +58,25 @@ class Room {
     });
   }
 
-  OpenDate findFirstSlotDate() {
-    ZonedDateTime endDate = findNextSlotStartTimeFromNow();
-    return findNextSlotDate(endDate);
+  OpenDate findFirstSlotDate(Clock clock) {
+    ZonedDateTime endDate = findNextSlotStartTimeFromNow(clock);
+    return findNextSlotDate(endDate, clock);
   }
 
-  private ZonedDateTime findNextSlotStartTimeFromNow() {
+  private ZonedDateTime findNextSlotStartTimeFromNow(Clock clock) {
     ZonedDateTime previousSlotEndTime;
     LocalTime currentTime = LocalTime.now(clock);
     OpenTime openTime = findOpenTimeFor(currentTime);
     if (isNotWithinOpenTime(currentTime, openTime)) {
-      previousSlotEndTime = getStartOfNextOpenTime(openTime);
+      previousSlotEndTime = getStartOfNextOpenTime(openTime, clock);
     } else {
-      previousSlotEndTime = findPreviousSlotEndTimeWithin(openTime);
+      previousSlotEndTime = findPreviousSlotEndTimeWithin(openTime, clock);
     }
     return previousSlotEndTime;
   }
 
-  OpenDate findNextSlotDate(ZonedDateTime lastSlotEndTime) {
-    ZonedDateTime nextSlotEndTime = getNextSlotEndTime(lastSlotEndTime);
+  OpenDate findNextSlotDate(ZonedDateTime lastSlotEndTime, Clock clock) {
+    ZonedDateTime nextSlotEndTime = getNextSlotEndTime(lastSlotEndTime, clock);
     return new OpenDate(nextSlotEndTime.minusMinutes(slotDurationInMinutes), nextSlotEndTime);
   }
 
@@ -97,11 +91,11 @@ class Room {
     return currentTime.isBefore(openTime.getStartTime()) || currentTime.isAfter(openTime.getEndTime());
   }
 
-  private ZonedDateTime getStartOfNextOpenTime(OpenTime openTime) {
+  private ZonedDateTime getStartOfNextOpenTime(OpenTime openTime, Clock clock) {
     return ZonedDateTime.of(getNextSlotLocalDate(ZonedDateTime.now(clock), openTime.getStartTime()), openTime.getStartTime(), clock.getZone());
   }
 
-  private ZonedDateTime findPreviousSlotEndTimeWithin(OpenTime openTime) {
+  private ZonedDateTime findPreviousSlotEndTimeWithin(OpenTime openTime, Clock clock) {
     long minutesFromStartToNow = openTime.getStartTime().until(LocalTime.now(clock), ChronoUnit.MINUTES);
     double slotsToNow = (double) minutesFromStartToNow / slotDurationInMinutes;
     int nextSlotNumber = findNextSlotNumber(slotsToNow);
@@ -146,7 +140,7 @@ class Room {
     return closestOpenTime;
   }
 
-  private ZonedDateTime getNextSlotEndTime(ZonedDateTime lastSlotEndTime) {
+  private ZonedDateTime getNextSlotEndTime(ZonedDateTime lastSlotEndTime, Clock clock) {
     ZonedDateTime endTimeNextSlot = lastSlotEndTime.plusMinutes(slotDurationInMinutes);
     OpenTime closestOpenTimeForLastSlotEnd = findClosestOpenTimeFor(lastSlotEndTime.toLocalTime());
     OpenTime closestOpenTimeForSlotNextEnd = findClosestOpenTimeFor(endTimeNextSlot.toLocalTime());

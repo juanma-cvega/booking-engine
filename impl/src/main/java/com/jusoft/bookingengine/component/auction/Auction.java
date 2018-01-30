@@ -3,9 +3,7 @@ package com.jusoft.bookingengine.component.auction;
 import com.jusoft.bookingengine.component.auction.api.AuctionFinishedException;
 import com.jusoft.bookingengine.component.auction.api.Bid;
 import com.jusoft.bookingengine.strategy.auctionwinner.api.AuctionWinnerStrategy;
-import lombok.AccessLevel;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NonNull;
 
 import java.time.Clock;
@@ -26,45 +24,41 @@ class Auction {
   private final ZonedDateTime endTime;
   @NonNull
   private final Set<Bid> bidders;
-  @Getter(value = AccessLevel.PRIVATE)
-  @NonNull
-  private final Clock clock;
 
   Auction(long id,
           long slotId,
           long roomId,
-          int durationInMinutes,
-          Clock clock) {
-    this(id, slotId, roomId, durationInMinutes, new HashSet<>(), clock);
+          ZonedDateTime startTime,
+          ZonedDateTime endTime) {
+    this(id, slotId, roomId, startTime, endTime, new HashSet<>());
   }
 
   Auction(long id,
           long slotId,
           long roomId,
-          int durationInMinutes,
-          Set<Bid> bidders,
-          Clock clock) {
+          ZonedDateTime startTime,
+          ZonedDateTime endTime,
+          Set<Bid> bidders) {
     this.id = id;
     this.slotId = slotId;
     this.roomId = roomId;
-    startTime = ZonedDateTime.now(clock);
-    endTime = startTime.plusMinutes(durationInMinutes);
+    this.startTime = startTime;
+    this.endTime = endTime;
     this.bidders = new HashSet<>(bidders);
-    this.clock = clock;
   }
 
   public Set<Bid> getBidders() {
     return new HashSet<>(bidders);
   }
 
-  void addBidder(long bidder) {
-    if (!isOpen()) {
+  void addBidder(long bidder, Clock clock) {
+    if (!isOpen(clock)) {
       throw new AuctionFinishedException(id, slotId, roomId);
     }
     bidders.add(new Bid(bidder, ZonedDateTime.now(clock)));
   }
 
-  public boolean isOpen() {
+  public boolean isOpen(Clock clock) {
     ZonedDateTime now = ZonedDateTime.now(clock);
     return now.isBefore(endTime) && (now.isAfter(startTime) || now.isEqual(startTime));
   }

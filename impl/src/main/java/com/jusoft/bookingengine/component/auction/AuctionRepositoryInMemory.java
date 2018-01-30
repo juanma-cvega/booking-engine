@@ -5,15 +5,17 @@ import lombok.AllArgsConstructor;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.locks.Lock;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
-import static com.jusoft.bookingengine.util.LockingTemplate.tryCompareAndSwap;
+import static com.jusoft.bookingengine.util.LockingTemplate.withLock;
 
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class AuctionRepositoryInMemory implements AuctionRepository {
 
   private final Map<Long, Auction> store;
+  private final Lock lock;
 
   @Override
   public void save(Auction newAuction) {
@@ -22,19 +24,36 @@ class AuctionRepositoryInMemory implements AuctionRepository {
 
   @Override
   public Optional<Auction> findOneBySlot(long slotId) {
-    return store.values().stream().filter(auction -> auction.getSlotId() == slotId).findFirst();
+    return store.values().stream()
+      .filter(auction -> auction.getSlotId() == slotId)
+      .findFirst()
+      .map(this::copyAuction);
   }
 
   @Override
   public Optional<Auction> find(long auctionId) {
-    return Optional.ofNullable(store.get(auctionId));
+    Auction value = store.get(auctionId);
+    if (value != null) {
+      return Optional.of(copyAuction(value));
+    }
+    return Optional.empty();
+  }
+
+  private Auction copyAuction(Auction value) {
+    return new Auction(value.getId(),
+      value.getSlotId(),
+      value.getRoomId(),
+      value.getStartTime(),
+      value.getEndTime(),
+      value.getBidders());
   }
 
   @Override
   public void execute(long auctionId, UnaryOperator<Auction> function, Supplier<RuntimeException> notFoundException) {
-    tryCompareAndSwap(() -> {
+    withLock(lock, () -> {
       Auction auction = find(auctionId).orElseThrow(notFoundException);
-      return store.replace(auctionId, auction, function.apply(auction));
+      Auction auctionModified = function.apply(auction);
+      store.put(auctionId, auctionModified);
     });
   }
 }

@@ -80,10 +80,12 @@ class ClubComponentImpl implements ClubComponent {
 
   @Override
   public JoinRequest createJoinRequest(CreateJoinRequestCommand command) {
-    Club club = findBy(command.getClubId());
     JoinRequest joinRequest = joinRequestFactory.createFrom(command.getUserId());
-    club.addJoinRequest(joinRequest);
-    messagePublisher.publish(new JoinRequestCreatedEvent(joinRequest.getId(), club.getId()));
+    repository.addJoinRequest(command.getClubId(), club -> {
+      club.addJoinRequest(joinRequest);
+      return club;
+    }, () -> new ClubNotFoundException(command.getClubId()));
+    messagePublisher.publish(new JoinRequestCreatedEvent(joinRequest.getId(), command.getClubId()));
     return joinRequest;
   }
 

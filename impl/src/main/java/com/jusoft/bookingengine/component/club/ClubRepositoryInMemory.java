@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.concurrent.locks.Lock;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 
 import static com.jusoft.bookingengine.util.LockingTemplate.withLock;
 
@@ -33,7 +34,10 @@ public class ClubRepositoryInMemory implements ClubRepository {
 
   @Override
   public Optional<Club> findBy(String name) {
-    return store.values().stream().filter(club -> club.getName().equals(name)).findFirst();
+    return store.values().stream()
+      .filter(club -> club.getName().equals(name))
+      .findFirst()
+      .map(this::copyClub);
   }
 
   @Override
@@ -47,7 +51,27 @@ public class ClubRepositoryInMemory implements ClubRepository {
   }
 
   @Override
+  public void addJoinRequest(long clubId, UnaryOperator<Club> function, Supplier<RuntimeException> notFoundException) {
+    withLock(lock, () -> {
+      Club club = find(clubId).orElseThrow(notFoundException);
+      store.put(clubId, function.apply(club));
+    });
+  }
+
+  @Override
   public Optional<Club> find(long clubId) {
-    return Optional.ofNullable(store.get(clubId));
+    Club value = store.get(clubId);
+    if (value != null) {
+      return Optional.of(copyClub(value));
+    }
+    return Optional.empty();
+  }
+
+  private Club copyClub(Club value) {
+    return new Club(value.getId(),
+      value.getName(),
+      value.getDescription(),
+      value.getAdmins(),
+      value.getJoinRequests());
   }
 }

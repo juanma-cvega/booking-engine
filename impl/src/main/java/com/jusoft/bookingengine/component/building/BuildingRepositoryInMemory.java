@@ -18,6 +18,13 @@ public class BuildingRepositoryInMemory implements BuildingRepository {
 
   @Override
   public Optional<Building> find(long buildingId) {
-    return Optional.ofNullable(store.get(buildingId));
+    Building value = store.get(buildingId);
+    if (value != null) {
+      return Optional.of(new Building(value.getId(),
+        value.getClubId(),
+        value.getAddress(),
+        value.getDescription()));
+    }
+    return Optional.empty();
   }
 }

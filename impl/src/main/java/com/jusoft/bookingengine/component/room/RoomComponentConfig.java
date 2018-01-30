@@ -21,11 +21,11 @@ public class RoomComponentConfig {
 
   @Bean
   public RoomComponent roomComponent() {
-    return new RoomComponentImpl(roomRepository(), roomFactory(), roomEventFactory(), messagePublisher);
+    return new RoomComponentImpl(roomRepository(), roomFactory(), roomEventFactory(), messagePublisher, clock);
   }
 
   private RoomFactory roomFactory() {
-    return new RoomFactory(idGenerator(), clock);
+    return new RoomFactory(idGenerator());
   }
 
   private Supplier<Long> idGenerator() {

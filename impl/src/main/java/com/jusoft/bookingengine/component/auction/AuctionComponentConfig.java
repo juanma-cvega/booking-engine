@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import java.time.Clock;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Supplier;
 
 @Configuration
@@ -24,15 +25,15 @@ public class AuctionComponentConfig {
 
   @Bean
   public AuctionComponent auctionComponent() {
-    return new AuctionComponentImpl(auctionRepository(), auctionFactory(), messagePublisher);
+    return new AuctionComponentImpl(auctionRepository(), auctionFactory(), messagePublisher, clock);
   }
 
   private AuctionRepository auctionRepository() {
-    return new AuctionRepositoryInMemory(new ConcurrentHashMap<>());
+    return new AuctionRepositoryInMemory(new ConcurrentHashMap<>(), new ReentrantLock());
   }
 
   private AuctionFactory auctionFactory() {
-    return new AuctionFactory(idGenerator(), clock);
+    return new AuctionFactory(idGenerator());
   }
 
   private Supplier<Long> idGenerator() {

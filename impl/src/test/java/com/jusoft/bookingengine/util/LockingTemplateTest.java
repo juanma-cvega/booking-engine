@@ -7,9 +7,6 @@ import org.junit.Test;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
-import java.util.ArrayDeque;
-import java.util.Arrays;
-import java.util.Queue;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -21,9 +18,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Supplier;
 
-import static com.jusoft.bookingengine.util.LockingTemplate.tryCompareAndSwap;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.awaitility.Awaitility.await;
 
@@ -123,26 +118,6 @@ public class LockingTemplateTest {
     Long secondValue = slowTask.get();
     assertThat(secondValue).isEqualTo(TOTAL_TASK_VALUE);
     assertThat(testObject.get()).isEqualTo(TOTAL_TASK_VALUE);
-  }
-
-  @Test
-  public void tryCompareAndSwap_when_action_returns_true_should_return() {
-    assertThatCode(() -> tryCompareAndSwap(() -> true)).doesNotThrowAnyException();
-  }
-
-  @Test
-  public void tryCompareAndSwap_when_action_returns_always_false_should_throw_exception() {
-    assertThatThrownBy(() -> tryCompareAndSwap(() -> false)).isInstanceOf(RuntimeException.class);
-  }
-
-  @Test
-  public void tryCompareAndSwap_when_action_changes_from_returning_false_to_true_before_timeout_should_return() {
-    assertThatCode(() -> tryCompareAndSwap(booleanSupplier())).doesNotThrowAnyException();
-  }
-
-  private Supplier<Boolean> booleanSupplier() {
-    Queue<Boolean> stack = new ArrayDeque<>(Arrays.asList(false, false, true));
-    return stack::poll;
   }
 
   @RequiredArgsConstructor
