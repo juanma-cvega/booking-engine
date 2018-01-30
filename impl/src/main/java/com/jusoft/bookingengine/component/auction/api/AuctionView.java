@@ -18,23 +18,23 @@ public class AuctionView {
   @NonNull
   private final ZonedDateTime endTime;
   @NonNull
-  private final Set<Bid> buyers;
+  private final Set<Bid> bidders;
 
   public AuctionView(long id,
                      long slotId,
                      long roomId,
                      ZonedDateTime startTime,
                      ZonedDateTime endTime,
-                     Set<Bid> buyers) {
+                     Set<Bid> bidders) {
     this.id = id;
     this.slotId = slotId;
     this.roomId = roomId;
     this.startTime = startTime;
     this.endTime = endTime;
-    this.buyers = new HashSet<>(buyers);
+    this.bidders = new HashSet<>(bidders);
   }
 
-  public Set<Bid> getBuyers() {
-    return new HashSet<>(buyers);
+  public Set<Bid> getBidders() {
+    return new HashSet<>(bidders);
   }
 }

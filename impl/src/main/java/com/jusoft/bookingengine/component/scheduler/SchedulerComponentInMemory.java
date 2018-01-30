@@ -33,7 +33,7 @@ class SchedulerComponentInMemory implements SchedulerComponent {
   }
 
   private Runnable createCommand(Message scheduledEvent) {
-    //Executes the publishing in a different thread to avoid contention if the publisher calls the listener in the same thread
+    //Executes the publishing in a different thread to avoid contention if the publisher implementation calls the listener in the same thread
     return () -> executor.execute(() -> messagePublisher.publish(scheduledEvent));
   }
 

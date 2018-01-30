@@ -16,7 +16,7 @@
 //import com.jusoft.bookingengine.holder.BookingHolder;
 //import com.jusoft.bookingengine.holder.RoomHolder;
 //import com.jusoft.bookingengine.holder.SlotHolder;
-//import com.jusoft.bookingengine.usecase.AddBuyerToAuctionUseCase;
+//import com.jusoft.bookingengine.usecase.AddBidderToAuctionUseCase;
 //import com.jusoft.bookingengine.usecase.CancelBookingUseCase;
 //import com.jusoft.bookingengine.usecase.CreateBookingUseCase;
 //import org.assertj.core.api.Assertions;
@@ -41,7 +41,7 @@
 //  private CreateBookingUseCase createBookingUseCase;
 //
 //  @Autowired
-//  private AddBuyerToAuctionUseCase addBuyerToAuctionUseCase;
+//  private AddBidderToAuctionUseCase addBidderToAuctionUseCase;
 //
 //  @Autowired
 //  private BookingComponent bookingComponent;
@@ -98,7 +98,7 @@
 //    When("^user (.*) cancels the booking$", (Long userId) ->
 //      storeException(() -> cancelBookingUseCase.cancel(new CancelBookingCommand(userId, extractBookingId(userId)))));
 //    When("^the user (.*) enters the auction$", (Integer userId) ->
-//      addBuyerToAuctionUseCase.addBuyerTo(slotHolder.slotSelected, userId));
+//      addBidderToAuctionUseCase.addBidderTo(slotHolder.slotSelected, userId));
 //    When("^the auction time is finished at (.*)$", (String currentTime) -> {
 //      ZonedDateTime previous = ZonedDateTime.now(clock);
 //      clock.setClock(getFixedClockAt(currentTime));

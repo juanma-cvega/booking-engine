@@ -25,7 +25,7 @@ class Auction {
   @NonNull
   private final ZonedDateTime endTime;
   @NonNull
-  private final Set<Bid> buyers;
+  private final Set<Bid> bidders;
   @Getter(value = AccessLevel.PRIVATE)
   @NonNull
   private final Clock clock;
@@ -42,26 +42,26 @@ class Auction {
           long slotId,
           long roomId,
           int durationInMinutes,
-          Set<Bid> buyers,
+          Set<Bid> bidders,
           Clock clock) {
     this.id = id;
     this.slotId = slotId;
     this.roomId = roomId;
     startTime = ZonedDateTime.now(clock);
     endTime = startTime.plusMinutes(durationInMinutes);
-    this.buyers = new HashSet<>(buyers);
+    this.bidders = new HashSet<>(bidders);
     this.clock = clock;
   }
 
-  public Set<Bid> getBuyers() {
-    return new HashSet<>(buyers);
+  public Set<Bid> getBidders() {
+    return new HashSet<>(bidders);
   }
 
-  void addBuyers(long buyer) {
+  void addBidder(long bidder) {
     if (!isOpen()) {
       throw new AuctionFinishedException(id, slotId, roomId);
     }
-    buyers.add(new Bid(buyer, ZonedDateTime.now(clock)));
+    bidders.add(new Bid(bidder, ZonedDateTime.now(clock)));
   }
 
   public boolean isOpen() {
@@ -70,6 +70,6 @@ class Auction {
   }
 
   public Optional<Long> findAuctionWinner(AuctionWinnerStrategy strategy) {
-    return strategy.findWinner(buyers);
+    return strategy.findWinner(bidders);
   }
 }

@@ -8,5 +8,5 @@ import java.util.Set;
 
 public interface AuctionWinnerStrategy {
 
-  Optional<Long> findWinner(Set<Bid> buyers);
+  Optional<Long> findWinner(Set<Bid> bidders);
 }

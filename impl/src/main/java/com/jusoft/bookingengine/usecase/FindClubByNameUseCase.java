@@ -10,6 +10,6 @@ public class FindClubByNameUseCase {
   private final ClubComponent clubComponent;
 
   public ClubView findByName(String name) {
-    return clubComponent.findBy(name);
+    return clubComponent.findByName(name);
   }
 }

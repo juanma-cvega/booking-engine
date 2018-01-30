@@ -38,10 +38,12 @@ public class ClubRepositoryInMemory implements ClubRepository {
 
   @Override
   public JoinRequest removeJoinRequest(long clubId, Function<Club, JoinRequest> function, Supplier<RuntimeException> clubNotFoundException) {
-    Club club = find(clubId).orElseThrow(clubNotFoundException);
-    JoinRequest joinRequest = function.apply(club);
-    store.put(clubId, club);
-    return joinRequest;
+    return withLock(lock, () -> {
+      Club club = find(clubId).orElseThrow(clubNotFoundException);
+      JoinRequest joinRequest = function.apply(club);
+      store.put(clubId, club);
+      return joinRequest;
+    });
   }
 
   @Override

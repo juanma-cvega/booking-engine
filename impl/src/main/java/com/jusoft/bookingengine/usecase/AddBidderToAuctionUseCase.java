@@ -4,11 +4,11 @@ import com.jusoft.bookingengine.component.auction.api.AuctionComponent;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class AddBuyerToAuctionUseCase {
+public class AddBidderToAuctionUseCase {
 
   private final AuctionComponent auctionComponent;
 
-  public void addBuyerTo(long slotId, long userId) {
-    auctionComponent.addBuyerTo(slotId, userId);
+  public void addBidderTo(long auctionId, long userId) {
+    auctionComponent.addBidderTo(auctionId, userId);
   }
 }

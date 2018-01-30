@@ -8,7 +8,7 @@ import java.util.Set;
 
 public class NoAuctionStrategy implements AuctionWinnerStrategy {
   @Override
-  public Optional<Long> findWinner(Set<Bid> buyers) {
+  public Optional<Long> findWinner(Set<Bid> bidders) {
     return Optional.empty();
   }
 }

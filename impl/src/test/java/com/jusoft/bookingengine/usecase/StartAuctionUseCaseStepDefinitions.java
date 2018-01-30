@@ -2,8 +2,8 @@ package com.jusoft.bookingengine.usecase;
 
 import com.jusoft.bookingengine.component.auction.api.AuctionComponent;
 import com.jusoft.bookingengine.component.auction.api.AuctionFinishedEvent;
+import com.jusoft.bookingengine.component.auction.api.AuctionNotFoundException;
 import com.jusoft.bookingengine.component.auction.api.AuctionView;
-import com.jusoft.bookingengine.component.auction.api.SlotNotInAuctionException;
 import com.jusoft.bookingengine.component.scheduler.ScheduledTask;
 import com.jusoft.bookingengine.config.AbstractUseCaseStepDefinitions;
 import com.jusoft.bookingengine.holder.DataHolder;
@@ -39,7 +39,7 @@ public class StartAuctionUseCaseStepDefinitions extends AbstractUseCaseStepDefin
       Optional<AuctionView> auctionCreated = auctionComponent.find(DataHolder.auctionCreated.getId());
       assertThat(auctionCreated).isPresent();
       AuctionView auction = auctionCreated.get();
-      assertThat(auction.getBuyers()).hasSameElementsAs(DataHolder.auctionCreated.getBuyers());
+      assertThat(auction.getBidders()).hasSameElementsAs(DataHolder.auctionCreated.getBidders());
       assertThat(auction.getEndTime()).isEqualTo(DataHolder.auctionCreated.getEndTime());
       assertThat(auction.getRoomId()).isEqualTo(DataHolder.auctionCreated.getRoomId());
       assertThat(auction.getSlotId()).isEqualTo(DataHolder.auctionCreated.getSlotId());
@@ -54,8 +54,8 @@ public class StartAuctionUseCaseStepDefinitions extends AbstractUseCaseStepDefin
     });
     Then("^the auction shouldn't exist$", () -> {
       assertThat(auctionCreated).isNull();
-      assertThatThrownBy(() -> auctionComponent.addBuyerTo(slotCreated.getId(), 0))
-        .isInstanceOf(SlotNotInAuctionException.class);
+      assertThatThrownBy(() -> auctionComponent.addBidderTo(slotCreated.getId(), 0))
+        .isInstanceOf(AuctionNotFoundException.class);
     });
     Then("^an auction finished event shouldn't be scheduled to be published$", () ->
       await().with().pollDelay(1, SECONDS).untilAsserted(() -> verifyZeroInteractions(messagePublisher)));

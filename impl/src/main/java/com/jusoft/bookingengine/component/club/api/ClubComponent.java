@@ -10,7 +10,7 @@ public interface ClubComponent {
 
   ClubView find(long clubId);
 
-  ClubView findBy(String name);
+  ClubView findByName(String name);
 
   void acceptAccessRequest(AcceptJoinRequestCommand acceptJoinRequestCommand);
 

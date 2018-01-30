@@ -5,6 +5,10 @@ import lombok.AllArgsConstructor;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
+
+import static com.jusoft.bookingengine.util.LockingTemplate.tryCompareAndSwap;
 
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class AuctionRepositoryInMemory implements AuctionRepository {
@@ -24,5 +28,13 @@ class AuctionRepositoryInMemory implements AuctionRepository {
   @Override
   public Optional<Auction> find(long auctionId) {
     return Optional.ofNullable(store.get(auctionId));
+  }
+
+  @Override
+  public void execute(long auctionId, UnaryOperator<Auction> function, Supplier<RuntimeException> notFoundException) {
+    tryCompareAndSwap(() -> {
+      Auction auction = find(auctionId).orElseThrow(notFoundException);
+      return store.replace(auctionId, auction, function.apply(auction));
+    });
   }
 }

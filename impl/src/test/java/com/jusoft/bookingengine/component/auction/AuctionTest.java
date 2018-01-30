@@ -35,10 +35,10 @@ public class AuctionTest {
   }
 
   @Test
-  public void create_auction_with_buyers_should_contain_the_buyers_passed() {
+  public void create_auction_with_bidders_should_contain_the_bidders_passed() {
     Bid bid = new Bid(USER_ID_1, ZonedDateTime.now(clock));
-    Set<Bid> buyers = Sets.newHashSet(bid);
-    Auction auction = new Auction(AUCTION_ID, SLOT_ID_1, ROOM_ID, AUCTION_DURATION_IN_MINUTES, buyers, clock);
-    assertThat(auction.getBuyers()).containsExactly(bid);
+    Set<Bid> bidders = Sets.newHashSet(bid);
+    Auction auction = new Auction(AUCTION_ID, SLOT_ID_1, ROOM_ID, AUCTION_DURATION_IN_MINUTES, bidders, clock);
+    assertThat(auction.getBidders()).containsExactly(bid);
   }
 }

@@ -1,6 +1,6 @@
 package com.jusoft.bookingengine.listener;
 
-import com.jusoft.bookingengine.usecase.AddBuyerToAuctionUseCase;
+import com.jusoft.bookingengine.usecase.AddBidderToAuctionUseCase;
 import com.jusoft.bookingengine.usecase.CancelBookingUseCase;
 import com.jusoft.bookingengine.usecase.CreateBookingUseCase;
 import com.jusoft.bookingengine.usecase.CreateRoomUseCase;
@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Configuration;
 public class MessageListenersConfig {
 
   @Autowired
-  private AddBuyerToAuctionUseCase addBuyerToAuctionUseCase;
+  private AddBidderToAuctionUseCase addBidderToAuctionUseCase;
   @Autowired
   private CancelBookingUseCase cancelBookingUseCase;
   @Autowired

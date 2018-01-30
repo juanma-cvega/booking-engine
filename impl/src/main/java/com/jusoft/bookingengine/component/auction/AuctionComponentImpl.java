@@ -6,7 +6,6 @@ import com.jusoft.bookingengine.component.auction.api.AuctionView;
 import com.jusoft.bookingengine.component.auction.api.AuctionWinnerFoundEvent;
 import com.jusoft.bookingengine.component.auction.api.CreateAuctionCommand;
 import com.jusoft.bookingengine.component.auction.api.FinishAuctionCommand;
-import com.jusoft.bookingengine.component.auction.api.SlotNotInAuctionException;
 import com.jusoft.bookingengine.publisher.MessagePublisher;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -28,14 +27,11 @@ class AuctionComponentImpl implements AuctionComponent {
   }
 
   @Override
-  public void addBuyerTo(long slotId, long userId) {
-    Auction auction = findBySlot(slotId).orElseThrow(() -> new SlotNotInAuctionException(slotId));
-    auction.addBuyers(userId);
-    //FIXME missing call to DB
-  }
-
-  private Optional<Auction> findBySlot(long slotId) {
-    return auctionRepository.findOneBySlot(slotId);
+  public void addBidderTo(long auctionId, long userId) {
+    auctionRepository.execute(auctionId, auction -> {
+      auction.addBidder(userId);
+      return auction;
+    }, () -> new AuctionNotFoundException(auctionId));
   }
 
   @Override
@@ -49,7 +45,7 @@ class AuctionComponentImpl implements AuctionComponent {
 
   @Override
   public boolean isAuctionOpenForSlot(long slotId) {
-    return findBySlot(slotId).map(Auction::isOpen).orElse(false);
+    return auctionRepository.findOneBySlot(slotId).map(Auction::isOpen).orElse(false);
   }
 
   @Override

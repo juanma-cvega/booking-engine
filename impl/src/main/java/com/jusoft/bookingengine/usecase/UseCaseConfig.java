@@ -46,8 +46,8 @@ public class UseCaseConfig {
   private MessagePublisher messagePublisher;
 
   @Bean
-  public AddBuyerToAuctionUseCase addBuyerToAuctionUseCase() {
-    return new AddBuyerToAuctionUseCase(auctionComponent);
+  public AddBidderToAuctionUseCase addBidderToAuctionUseCase() {
+    return new AddBidderToAuctionUseCase(auctionComponent);
   }
 
   @Bean

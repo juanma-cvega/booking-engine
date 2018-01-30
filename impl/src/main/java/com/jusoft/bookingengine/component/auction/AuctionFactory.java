@@ -28,6 +28,6 @@ class AuctionFactory {
       auction.getRoomId(),
       auction.getStartTime(),
       auction.getEndTime(),
-      auction.getBuyers());
+      auction.getBidders());
   }
 }

@@ -11,24 +11,23 @@ import java.util.Optional;
 
 import static com.jusoft.bookingengine.holder.DataHolder.auctionCreated;
 import static com.jusoft.bookingengine.holder.DataHolder.exceptionThrown;
-import static com.jusoft.bookingengine.holder.DataHolder.slotCreated;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AddBuyerToAuctionUseCaseStepDefinitions extends AbstractUseCaseStepDefinitions {
+public class AddBidderToAuctionUseCaseStepDefinitions extends AbstractUseCaseStepDefinitions {
 
   @Autowired
   private AuctionComponent auctionComponent;
   @Autowired
-  private AddBuyerToAuctionUseCase addBuyerToAuctionUseCase;
+  private AddBidderToAuctionUseCase addBidderToAuctionUseCase;
 
-  public AddBuyerToAuctionUseCaseStepDefinitions() {
+  public AddBidderToAuctionUseCaseStepDefinitions() {
     When("^user (.*) bets on the auction$", (Integer userId) ->
-      storeException(() -> addBuyerToAuctionUseCase.addBuyerTo(slotCreated.getId(), userId)));
+      storeException(() -> addBidderToAuctionUseCase.addBidderTo(auctionCreated.getId(), userId)));
     Then("^the auction should contain the user (\\d+) bet created at (.*)$", (Integer userId, String creationTime) -> {
       Optional<AuctionView> auctionFound = auctionComponent.find(auctionCreated.getId());
       assertThat(auctionFound).isPresent();
       AuctionView auction = auctionFound.get();
-      assertThat(auction.getBuyers()).contains(new Bid(userId, getDateFrom(creationTime)));
+      assertThat(auction.getBidders()).contains(new Bid(userId, getDateFrom(creationTime)));
     });
     Then("^the user should be notified the auction is finished$", () -> {
       assertThat(exceptionThrown).isInstanceOf(AuctionFinishedException.class);

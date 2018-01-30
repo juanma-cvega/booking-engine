@@ -48,7 +48,7 @@ class ClubComponentImpl implements ClubComponent {
   }
 
   @Override
-  public ClubView findBy(String name) {
+  public ClubView findByName(String name) {
     return clubFactory.createFrom(
       repository.findBy(name).orElseThrow(() -> new ClubWithNameNotFoundException(name)));
   }
