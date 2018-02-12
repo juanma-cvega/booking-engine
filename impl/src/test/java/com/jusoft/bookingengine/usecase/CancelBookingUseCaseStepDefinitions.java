@@ -33,9 +33,10 @@ public class CancelBookingUseCaseStepDefinitions extends AbstractUseCaseStepDefi
     When("^the user (.*) cancels the booking from user (.*)$", (Long userToCancel, Long userOwner) ->
       storeException(() -> cancelBookingUseCase.cancel(new CancelBookingCommand(userToCancel, bookingCreated.getId()))));
     When("^the user (.*) cancels his booking$", (Long userId) ->
-      storeException(() -> cancelBookingUseCase.cancel(new CancelBookingCommand(userId, bookingCreated.getId()))));
-    When("^user (.*) cancels the booking$", (Long userId) ->
-      storeException(() -> cancelBookingUseCase.cancel(new CancelBookingCommand(userId, bookingCreated.getId()))));
+      cancelBookingUseCase.cancel(new CancelBookingCommand(userId, bookingCreated.getId())));
+    When("^the user (\\d+) tries to cancel his booking$", (Long userId) -> {
+      storeException(() -> cancelBookingUseCase.cancel(new CancelBookingCommand(userId, bookingCreated.getId())));
+    });
     Then("^the user (.*) should not see that booking in his list$", (Long userId) ->
       assertThatExceptionOfType(BookingNotFoundException.class)
         .isThrownBy(() -> bookingComponent.find(userId, bookingCreated.getId())));

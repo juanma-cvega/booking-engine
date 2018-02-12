@@ -17,7 +17,7 @@ Feature: As a user, I want to be able to cancel bookings
   Scenario: As a user, I shouldn't be able to cancel a booking once it's already started
     And there is a booking created by user 1
     And the slot start time is passed
-    When the user 1 cancels his booking
+    When the user 1 tries to cancel his booking
     Then the slot should be booked by the user 1
     And the user should be notified the booking is already started
 
