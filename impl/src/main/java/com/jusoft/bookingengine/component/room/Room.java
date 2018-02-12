@@ -1,5 +1,7 @@
 package com.jusoft.bookingengine.component.room;
 
+import com.jusoft.bookingengine.component.room.api.NextSlotConfig;
+import com.jusoft.bookingengine.component.slot.api.SlotState;
 import com.jusoft.bookingengine.component.timer.OpenDate;
 import com.jusoft.bookingengine.component.timer.OpenTime;
 import com.jusoft.bookingengine.strategy.auctionwinner.api.AuctionConfigInfo;
@@ -18,6 +20,9 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Predicate;
+
+import static com.jusoft.bookingengine.component.slot.api.SlotState.AVAILABLE;
+import static com.jusoft.bookingengine.component.slot.api.SlotState.IN_AUCTION;
 
 @Data
 class Room {
@@ -58,7 +63,7 @@ class Room {
     });
   }
 
-  OpenDate findFirstSlotDate(Clock clock) {
+  NextSlotConfig findFirstSlotDate(Clock clock) {
     ZonedDateTime endDate = findNextSlotStartTimeFromNow(clock);
     return findNextSlotDate(endDate, clock);
   }
@@ -75,9 +80,14 @@ class Room {
     return previousSlotEndTime;
   }
 
-  OpenDate findNextSlotDate(ZonedDateTime lastSlotEndTime, Clock clock) {
+  NextSlotConfig findNextSlotDate(ZonedDateTime lastSlotEndTime, Clock clock) {
     ZonedDateTime nextSlotEndTime = getNextSlotEndTime(lastSlotEndTime, clock);
-    return new OpenDate(nextSlotEndTime.minusMinutes(slotDurationInMinutes), nextSlotEndTime);
+    OpenDate openDate = OpenDate.of(nextSlotEndTime.minusMinutes(slotDurationInMinutes), nextSlotEndTime);
+    return new NextSlotConfig(openDate, getSlotInitialState());
+  }
+
+  private SlotState getSlotInitialState() {
+    return isAuctionRequired() ? IN_AUCTION : AVAILABLE;
   }
 
   private OpenTime findOpenTimeFor(LocalTime localTime) {
@@ -167,4 +177,9 @@ class Room {
   public List<DayOfWeek> getAvailableDays() {
     return new ArrayList<>(availableDays);
   }
+
+  public boolean isAuctionRequired() {
+    return auctionConfigInfo.getAuctionDuration() > 0;
+  }
+
 }

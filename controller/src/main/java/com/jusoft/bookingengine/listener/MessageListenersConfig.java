@@ -4,10 +4,12 @@ import com.jusoft.bookingengine.usecase.AddBidderToAuctionUseCase;
 import com.jusoft.bookingengine.usecase.CancelBookingUseCase;
 import com.jusoft.bookingengine.usecase.CreateBookingUseCase;
 import com.jusoft.bookingengine.usecase.CreateRoomUseCase;
+import com.jusoft.bookingengine.usecase.CreateSlotUseCase;
 import com.jusoft.bookingengine.usecase.FinishAuctionUseCase;
-import com.jusoft.bookingengine.usecase.OpenNextSlotUseCase;
+import com.jusoft.bookingengine.usecase.ReserveSlotForAuctionWinnerUseCase;
 import com.jusoft.bookingengine.usecase.ScheduleNextSlotUseCase;
 import com.jusoft.bookingengine.usecase.StartAuctionUseCase;
+import com.jusoft.bookingengine.usecase.VerifyAuctionRequirementForSlotUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,11 +28,15 @@ public class MessageListenersConfig {
   @Autowired
   private FinishAuctionUseCase finishAuctionUseCase;
   @Autowired
-  private OpenNextSlotUseCase openNextSlotUseCase;
+  private CreateSlotUseCase openNextSlotUseCase;
   @Autowired
   private ScheduleNextSlotUseCase scheduleNextSlotUseCase;
   @Autowired
   private StartAuctionUseCase startAuctionUseCase;
+  @Autowired
+  private ReserveSlotForAuctionWinnerUseCase reserveSlotForAuctionWinnerUseCase;
+  @Autowired
+  private VerifyAuctionRequirementForSlotUseCase verifyAuctionRequirementForSlotUseCase;
 
   @Bean
   public OpenNextSlotCommandListener createSlotCommandListener() {
@@ -39,7 +45,7 @@ public class MessageListenersConfig {
 
   @Bean
   public SlotCreatedEventListener slotCreatedEventListener() {
-    return new SlotCreatedEventListener(scheduleNextSlotUseCase, startAuctionUseCase);
+    return new SlotCreatedEventListener(scheduleNextSlotUseCase, verifyAuctionRequirementForSlotUseCase);
   }
 
   @Bean
@@ -54,7 +60,7 @@ public class MessageListenersConfig {
 
   @Bean
   public AuctionWinnerFoundEventListener auctionWinnerFoundEventListener() {
-    return new AuctionWinnerFoundEventListener(createBookingUseCase);
+    return new AuctionWinnerFoundEventListener(reserveSlotForAuctionWinnerUseCase);
   }
 
   @Bean

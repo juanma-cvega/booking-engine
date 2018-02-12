@@ -1,9 +1,10 @@
 package com.jusoft.bookingengine.component.auction.api;
 
+import com.jusoft.bookingengine.component.timer.OpenDate;
+import com.jusoft.bookingengine.strategy.auctionwinner.api.AuctionConfigInfo;
 import lombok.Data;
 import lombok.NonNull;
 
-import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,26 +12,23 @@ import java.util.Set;
 public class AuctionView {
 
   private final long id;
-  private final long slotId;
-  private final long roomId;
+  private final long referenceId;
   @NonNull
-  private final ZonedDateTime startTime;
+  private final OpenDate openDate;
   @NonNull
-  private final ZonedDateTime endTime;
+  private final AuctionConfigInfo auctionConfigInfo;
   @NonNull
   private final Set<Bid> bidders;
 
   public AuctionView(long id,
-                     long slotId,
-                     long roomId,
-                     ZonedDateTime startTime,
-                     ZonedDateTime endTime,
+                     long referenceId,
+                     OpenDate openDate,
+                     AuctionConfigInfo auctionConfigInfo,
                      Set<Bid> bidders) {
     this.id = id;
-    this.slotId = slotId;
-    this.roomId = roomId;
-    this.startTime = startTime;
-    this.endTime = endTime;
+    this.referenceId = referenceId;
+    this.openDate = openDate;
+    this.auctionConfigInfo = auctionConfigInfo;
     this.bidders = new HashSet<>(bidders);
   }
 

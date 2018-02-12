@@ -4,6 +4,7 @@ import com.jusoft.bookingengine.component.auction.api.AuctionComponent;
 import com.jusoft.bookingengine.component.auction.api.AuctionFinishedEvent;
 import com.jusoft.bookingengine.component.auction.api.AuctionNotFoundException;
 import com.jusoft.bookingengine.component.auction.api.AuctionView;
+import com.jusoft.bookingengine.component.auction.api.StartAuctionCommand;
 import com.jusoft.bookingengine.component.scheduler.ScheduledTask;
 import com.jusoft.bookingengine.config.AbstractUseCaseStepDefinitions;
 import com.jusoft.bookingengine.holder.DataHolder;
@@ -33,23 +34,21 @@ public class StartAuctionUseCaseStepDefinitions extends AbstractUseCaseStepDefin
 
   public StartAuctionUseCaseStepDefinitions() {
     When("^an auction is created for the slot$", () ->
-      auctionCreated = startAuctionUseCase.startAuction(roomCreated.getId(), slotCreated.getId())
-        .orElse(null));
+      auctionCreated = startAuctionUseCase.startAuction(new StartAuctionCommand(slotCreated.getId(), roomCreated.getAuctionConfigInfo())));
     Then("^the auction should be stored$", () -> {
       Optional<AuctionView> auctionCreated = auctionComponent.find(DataHolder.auctionCreated.getId());
       assertThat(auctionCreated).isPresent();
       AuctionView auction = auctionCreated.get();
       assertThat(auction.getBidders()).hasSameElementsAs(DataHolder.auctionCreated.getBidders());
-      assertThat(auction.getEndTime()).isEqualTo(DataHolder.auctionCreated.getEndTime());
-      assertThat(auction.getRoomId()).isEqualTo(DataHolder.auctionCreated.getRoomId());
-      assertThat(auction.getSlotId()).isEqualTo(DataHolder.auctionCreated.getSlotId());
-      assertThat(auction.getStartTime()).isEqualTo(DataHolder.auctionCreated.getStartTime());
+      assertThat(auction.getOpenDate().getEndTime()).isEqualTo(DataHolder.auctionCreated.getOpenDate().getEndTime());
+      assertThat(auction.getReferenceId()).isEqualTo(DataHolder.auctionCreated.getReferenceId());
+      assertThat(auction.getOpenDate().getStartTime()).isEqualTo(DataHolder.auctionCreated.getOpenDate().getStartTime());
     });
     Then("^an auction finished event should be scheduled to be published at (.*)$", (String auctionFinishedTime) -> {
       assertThat(tasks).hasSize(1);
       assertThat(tasks.get(0).getExecutionTime()).isEqualTo(getDateFrom(auctionFinishedTime));
       assertThat(tasks.get(0).getScheduledEvent()).isEqualTo(
-        new AuctionFinishedEvent(auctionCreated.getId(), roomCreated.getId(), slotCreated.getId()));
+        new AuctionFinishedEvent(auctionCreated.getId(), slotCreated.getId()));
       assertThat(tasks.get(0).getTask().isDone()).isFalse();
     });
     Then("^the auction shouldn't exist$", () -> {

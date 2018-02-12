@@ -1,5 +1,6 @@
 package com.jusoft.bookingengine.component.slot;
 
+import com.jusoft.bookingengine.component.slot.api.SlotNotFoundException;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
@@ -9,8 +10,11 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.locks.Lock;
 import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
 
+import static com.jusoft.bookingengine.util.LockingTemplate.withLock;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 
@@ -18,6 +22,7 @@ import static java.util.stream.Collectors.toList;
 class SlotRepositoryInMemory implements SlotRepository {
 
   private final Map<Long, Slot> store;
+  private final Lock lock;
   private final Clock clock;
 
   @Override
@@ -26,10 +31,9 @@ class SlotRepositoryInMemory implements SlotRepository {
     if (value != null) {
       return Optional.of(new Slot(value.getId(),
         value.getRoomId(),
-        value.getClubId(),
         value.getCreationTime(),
-        value.getStartDate(),
-        value.getEndDate()));
+        value.getOpenDate(),
+        value.getState()));
     }
     return Optional.empty();
   }
@@ -65,25 +69,35 @@ class SlotRepositoryInMemory implements SlotRepository {
   public List<Slot> findOpenSlotsByRoom(long roomId) {
     return store.values().stream()
       .filter(slot -> Long.compare(slot.getRoomId(), roomId) == 0)
-      .filter(slot -> slot.getEndDate().isAfter(ZonedDateTime.now(clock)))
+      .filter(slot -> slot.getOpenDate().getEndTime().isAfter(ZonedDateTime.now(clock)))
       .collect(toList());
   }
 
+  @Override
+  public Slot execute(long slotId, UnaryOperator<Slot> operation) {
+    return withLock(lock, () -> {
+      Slot slot = find(slotId).orElseThrow(() -> new SlotNotFoundException(slotId));
+      Slot slotModified = operation.apply(slot);
+      store.put(slotId, slotModified);
+      return slotModified;
+    });
+  }
+
   private Comparator<Slot> byStartDateAsc() {
-    return Comparator.comparing(Slot::getStartDate);
+    return Comparator.comparing(slot -> slot.getOpenDate().getStartTime());
   }
 
   private Predicate<Slot> bySlotInUse() {
     return slot -> {
       ZonedDateTime now = ZonedDateTime.now(clock);
-      return slot.getStartDate().isBefore(now) && slot.getEndDate().isAfter(now);
+      return slot.getOpenDate().getStartTime().isBefore(now) && slot.getOpenDate().getEndTime().isAfter(now);
     };
   }
 
   private Predicate<Slot> bySlotsToStart() {
     return slot -> {
       ZonedDateTime now = ZonedDateTime.now(clock);
-      return slot.getStartDate().isAfter(now) || slot.getStartDate().isEqual(now);
+      return slot.getOpenDate().getStartTime().isAfter(now) || slot.getOpenDate().getStartTime().isEqual(now);
     };
   }
 }

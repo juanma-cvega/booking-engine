@@ -10,8 +10,6 @@ interface AuctionRepository extends Repository<Auction> {
 
   void save(Auction newAuction);
 
-  Optional<Auction> findOneBySlot(long slotId);
-
   Optional<Auction> find(long auctionId);
 
   void execute(long auctionId, UnaryOperator<Auction> function, Supplier<RuntimeException> notFoundException);

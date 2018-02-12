@@ -7,5 +7,4 @@ import lombok.Data;
 public class OpenNextSlotMessage implements InfrastructureMessage {
 
   private final long roomId;
-  private final long clubId;
 }

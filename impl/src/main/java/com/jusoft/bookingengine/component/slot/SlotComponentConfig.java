@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import java.time.Clock;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Supplier;
 
 @Configuration
@@ -30,11 +31,11 @@ public class SlotComponentConfig {
   }
 
   private SlotRepository slotRepository() {
-    return new SlotRepositoryInMemory(new ConcurrentHashMap<>(), clock);
+    return new SlotRepositoryInMemory(new ConcurrentHashMap<>(), new ReentrantLock(), clock);
   }
 
   private SlotFactory slotFactory() {
-    return new SlotFactory(idGenerator());
+    return new SlotFactory(idGenerator(), clock);
   }
 
   private Supplier<Long> idGenerator() {

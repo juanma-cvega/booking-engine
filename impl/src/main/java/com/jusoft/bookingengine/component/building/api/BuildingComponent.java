@@ -5,4 +5,6 @@ public interface BuildingComponent {
   BuildingView create(CreateBuildingCommand command);
 
   BuildingView find(long id);
+
+  boolean isAvailable(long id);
 }

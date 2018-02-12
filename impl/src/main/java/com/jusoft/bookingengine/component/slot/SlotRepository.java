@@ -4,6 +4,7 @@ import com.jusoft.bookingengine.repository.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.UnaryOperator;
 
 interface SlotRepository extends Repository<Slot> {
 
@@ -33,4 +34,6 @@ interface SlotRepository extends Repository<Slot> {
   Optional<Slot> findSlotInUseOrToStartFor(long roomId);
 
   List<Slot> findOpenSlotsByRoom(long roomId);
+
+  Slot execute(long slotId, UnaryOperator<Slot> operation);
 }

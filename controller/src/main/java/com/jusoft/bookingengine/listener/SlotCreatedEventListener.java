@@ -1,8 +1,9 @@
 package com.jusoft.bookingengine.listener;
 
+import com.jusoft.bookingengine.component.room.api.VerifyAuctionRequirementForSlotCommand;
 import com.jusoft.bookingengine.publisher.message.SlotCreatedMessage;
 import com.jusoft.bookingengine.usecase.ScheduleNextSlotUseCase;
-import com.jusoft.bookingengine.usecase.StartAuctionUseCase;
+import com.jusoft.bookingengine.usecase.VerifyAuctionRequirementForSlotUseCase;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,19 +14,19 @@ import org.springframework.context.event.EventListener;
 class SlotCreatedEventListener implements MessageListener {
 
   private final ScheduleNextSlotUseCase scheduleNextSlotUseCase;
-  private final StartAuctionUseCase startAuctionUseCase;
+  private final VerifyAuctionRequirementForSlotUseCase verifyAuctionRequirementForSlotUseCase;
 
   @EventListener(SlotCreatedMessage.class)
   public void scheduleNextSlot(SlotCreatedMessage event) {
-    log.info("SlotCreatedEvent consumed: slotId={}, roomId={}, startTime={}, endTime={}",
-      event.getSlotId(), event.getRoomId(), event.getStartDate(), event.getEndDate());
-    scheduleNextSlotUseCase.scheduleNextSlot(event.getRoomId(), event.getClubId());
+    log.info("SlotCreatedEvent consumed: slotId={}, roomId={}, openDate={}",
+      event.getSlotId(), event.getRoomId(), event.getOpenDate());
+    scheduleNextSlotUseCase.scheduleNextSlot(event.getRoomId());
   }
 
   @EventListener(SlotCreatedMessage.class)
   public void startAuction(SlotCreatedMessage event) {
-    log.info("SlotCreatedEvent consumed for auction: slotId={}, roomId={}, startTime={}, endTime={}",
-      event.getSlotId(), event.getRoomId(), event.getStartDate(), event.getEndDate());
-    startAuctionUseCase.startAuction(event.getRoomId(), event.getSlotId());
+    log.info("SlotCreatedEvent consumed for auction: slotId={}, roomId={}, openDate={}, endTime={}",
+      event.getSlotId(), event.getRoomId(), event.getOpenDate());
+    verifyAuctionRequirementForSlotUseCase.isAuctionRequiredForSlot(VerifyAuctionRequirementForSlotCommand.of(event.getRoomId(), event.getSlotId()));
   }
 }

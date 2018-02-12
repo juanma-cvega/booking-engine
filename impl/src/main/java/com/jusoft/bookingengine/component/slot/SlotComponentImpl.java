@@ -1,6 +1,7 @@
 package com.jusoft.bookingengine.component.slot;
 
 import com.jusoft.bookingengine.component.slot.api.CreateSlotCommand;
+import com.jusoft.bookingengine.component.slot.api.ReserveSlotCommand;
 import com.jusoft.bookingengine.component.slot.api.SlotComponent;
 import com.jusoft.bookingengine.component.slot.api.SlotNotFoundException;
 import com.jusoft.bookingengine.component.slot.api.SlotView;
@@ -9,7 +10,6 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
 import java.time.Clock;
-import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,7 +24,7 @@ class SlotComponentImpl implements SlotComponent {
 
   @Override
   public SlotView create(CreateSlotCommand createSlotCommand) {
-    Slot newSlot = slotFactory.createFrom(createSlotCommand, clock);
+    Slot newSlot = slotFactory.createFrom(createSlotCommand);
     slotRepository.save(newSlot);
     messagePublisher.publish(slotEventFactory.slotCreatedEvent(newSlot));
     return slotFactory.createFrom(newSlot);
@@ -52,13 +52,31 @@ class SlotComponentImpl implements SlotComponent {
   }
 
   @Override
+  public void reserveSlot(ReserveSlotCommand command) {
+    Slot slot = slotRepository.execute(command.getSlotId(), slotFound -> slotFound.reserve(clock));
+    messagePublisher.publish(slotEventFactory.slotReservedEvent(slot, command));
+  }
+
+  @Override
+  public void makeAvailable(long slotId) {
+    Slot slotModified = slotRepository.execute(slotId, Slot::makeAvailable);
+    messagePublisher.publish(slotEventFactory.slotMadeAvailableEvent(slotModified));
+  }
+
+  @Override
+  public void reserveSlotForAuctionWinner(ReserveSlotCommand command) {
+    Slot slot = slotRepository.execute(command.getSlotId(), Slot::reserveForAuctionWinner);
+    messagePublisher.publish(slotEventFactory.slotReservedEvent(slot, command));
+  }
+
+  @Override
   public SlotView find(long slotId) {
     return slotFactory.createFrom(findSlotOrFail(slotId));
   }
 
   @Override
   public boolean isSlotOpen(long slotId) {
-    return findSlotOrFail(slotId).isOpen(ZonedDateTime.now(clock));
+    return findSlotOrFail(slotId).isAvailable(clock);
   }
 
   private Slot findSlotOrFail(long slotId) {

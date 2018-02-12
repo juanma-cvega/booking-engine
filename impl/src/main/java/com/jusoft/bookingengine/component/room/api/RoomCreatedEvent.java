@@ -2,6 +2,7 @@ package com.jusoft.bookingengine.component.room.api;
 
 import com.jusoft.bookingengine.component.timer.OpenTime;
 import com.jusoft.bookingengine.publisher.Event;
+import com.jusoft.bookingengine.strategy.auctionwinner.api.AuctionConfigInfo;
 import lombok.Data;
 import lombok.NonNull;
 
@@ -12,11 +13,11 @@ import java.util.List;
 public class RoomCreatedEvent implements Event {
 
   private final long roomId;
-  private final long clubId;
   private final int slotDurationInMinutes;
   @NonNull
   private final List<OpenTime> openTimesPerDay;
   @NonNull
   private final List<DayOfWeek> availableDays;
   private final boolean active;
+  private final AuctionConfigInfo auctionConfigInfo;
 }

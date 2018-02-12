@@ -29,4 +29,9 @@ class BuildingComponentImpl implements BuildingComponent {
     return buildingFactory.createFrom(
       repository.find(id).orElseThrow(() -> new BuildingNotFoundException(id)));
   }
+
+  @Override
+  public boolean isAvailable(long id) {
+    return repository.find(id).isPresent();
+  }
 }

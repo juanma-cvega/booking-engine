@@ -11,7 +11,6 @@ import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.stream.IntStream;
 
-import static com.jusoft.bookingengine.holder.DataHolder.clubCreated;
 import static com.jusoft.bookingengine.holder.DataHolder.roomCreated;
 import static com.jusoft.bookingengine.holder.DataHolder.slotCreated;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -22,14 +21,14 @@ public class SlotUseCaseStepDefinitions extends AbstractUseCaseStepDefinitions {
   @Autowired
   private SlotComponent slotComponent;
   @Autowired
-  private OpenNextSlotUseCase openNextSlotUseCase;
+  private CreateSlotUseCase openNextSlotUseCase;
 
 
   public SlotUseCaseStepDefinitions() {
     When("^a slot is created$", () ->
-      slotCreated = openNextSlotUseCase.openNextSlotFor(new OpenNextSlotCommand(roomCreated.getId(), clubCreated.getId())));
+      slotCreated = openNextSlotUseCase.createSlotFor(new OpenNextSlotCommand(roomCreated.getId())));
     When("(.*) slots are created", (Integer slotsToCreate) ->
-      IntStream.range(0, slotsToCreate).forEach((index) -> openNextSlotUseCase.openNextSlotFor(new OpenNextSlotCommand(roomCreated.getId(), clubCreated.getId()))));
+      IntStream.range(0, slotsToCreate).forEach((index) -> openNextSlotUseCase.createSlotFor(new OpenNextSlotCommand(roomCreated.getId()))));
     Then("^a notification of a created slot starting at (.*) and ending at (.*) should be published$", (String startTime, String endTime) -> {
       ZonedDateTime startDate = getDateFrom(startTime);
       ZonedDateTime endDate = getDateFrom(endTime);
@@ -58,12 +57,12 @@ public class SlotUseCaseStepDefinitions extends AbstractUseCaseStepDefinitions {
       .isEqualTo(slotStored.getId());
     assertThat(slotCreated.getRoomId())
       .isEqualTo(slotStored.getRoomId());
-    assertThat(slotCreated.getStartDate())
+    assertThat(slotCreated.getOpenDate().getStartTime())
       .isEqualTo(startDate)
-      .isEqualTo(slotStored.getStartDate());
-    assertThat(slotCreated.getEndDate())
+      .isEqualTo(slotStored.getOpenDate().getStartTime());
+    assertThat(slotCreated.getOpenDate().getEndTime())
       .isEqualTo(endDate)
-      .isEqualTo(slotStored.getEndDate());
+      .isEqualTo(slotStored.getOpenDate().getEndTime());
   }
 
   private void verifySlotCreatedEvent(ZonedDateTime startDate, ZonedDateTime endDate) {
@@ -74,11 +73,11 @@ public class SlotUseCaseStepDefinitions extends AbstractUseCaseStepDefinitions {
       .isEqualTo(slotCreatedEvent.getSlotId());
     assertThat(slotCreated.getRoomId())
       .isEqualTo(slotCreatedEvent.getRoomId());
-    assertThat(slotCreated.getStartDate())
+    assertThat(slotCreated.getOpenDate().getStartTime())
       .isEqualTo(startDate)
-      .isEqualTo(slotCreatedEvent.getStartDate());
-    assertThat(slotCreated.getEndDate())
+      .isEqualTo(slotCreatedEvent.getOpenDate().getStartTime());
+    assertThat(slotCreated.getOpenDate().getEndTime())
       .isEqualTo(endDate)
-      .isEqualTo(slotCreatedEvent.getEndDate());
+      .isEqualTo(slotCreatedEvent.getOpenDate().getEndTime());
   }
 }

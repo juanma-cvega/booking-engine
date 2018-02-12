@@ -12,7 +12,7 @@ interface BookingRepository extends Repository<Booking> {
 
   void save(Booking newBooking);
 
-  void delete(long bookingId, Predicate<Booking> predicate);
+  boolean delete(long bookingId, Predicate<Booking> predicate);
 
   Optional<Booking> find(long bookingId);
 

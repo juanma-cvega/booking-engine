@@ -1,10 +1,11 @@
 package com.jusoft.bookingengine.component.room;
 
 import com.jusoft.bookingengine.component.room.api.CreateRoomCommand;
+import com.jusoft.bookingengine.component.room.api.NextSlotConfig;
 import com.jusoft.bookingengine.component.room.api.RoomComponent;
 import com.jusoft.bookingengine.component.room.api.RoomNotFoundException;
 import com.jusoft.bookingengine.component.room.api.RoomView;
-import com.jusoft.bookingengine.component.timer.OpenDate;
+import com.jusoft.bookingengine.component.room.api.VerifyAuctionRequirementForSlotCommand;
 import com.jusoft.bookingengine.publisher.MessagePublisher;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -17,15 +18,15 @@ class RoomComponentImpl implements RoomComponent {
 
   private final RoomRepository roomRepository;
   private final RoomFactory roomFactory;
-  private final RoomEventFactory roomEventFactory;
+  private final RoomMessageFactory roomMessageFactory;
   private final MessagePublisher messagePublisher;
   private final Clock clock;
 
   @Override
-  public RoomView create(CreateRoomCommand createRoomCommand, long clubId) {
+  public RoomView create(CreateRoomCommand createRoomCommand) {
     Room room = roomFactory.createFrom(createRoomCommand);
     roomRepository.save(room);
-    messagePublisher.publish(roomEventFactory.roomCreatedEvent(room, clubId));
+    messagePublisher.publish(roomMessageFactory.roomCreatedEvent(room));
     return roomFactory.createFrom(room);
   }
 
@@ -35,20 +36,23 @@ class RoomComponentImpl implements RoomComponent {
   }
 
   @Override
-  public OpenDate findNextSlotOpenDate(ZonedDateTime lastSlotEndTime, long roomId) {
+  public NextSlotConfig findNextSlotOpenDate(ZonedDateTime lastSlotEndTime, long roomId) {
     Room room = findRoom(roomId);
     return room.findNextSlotDate(lastSlotEndTime, clock);
   }
 
   @Override
-  public OpenDate findFirstSlotOpenDate(long roomId) {
+  public NextSlotConfig findFirstSlotOpenDate(long roomId) {
     Room room = findRoom(roomId);
     return room.findFirstSlotDate(clock);
   }
 
   @Override
-  public int getAuctionDurationFor(long roomId) {
-    return findRoom(roomId).getAuctionConfigInfo().getAuctionDuration();
+  public void verifyAuctionRequirementForSlot(VerifyAuctionRequirementForSlotCommand command) {
+    Room room = findRoom(command.getRoomId());
+    if (room.isAuctionRequired()) {
+      messagePublisher.publish(roomMessageFactory.startAuctionCommand(room, command.getSlotId()));
+    }
   }
 
   private Room findRoom(long roomId) {

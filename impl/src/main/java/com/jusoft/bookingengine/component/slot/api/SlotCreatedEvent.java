@@ -1,19 +1,16 @@
 package com.jusoft.bookingengine.component.slot.api;
 
+import com.jusoft.bookingengine.component.timer.OpenDate;
 import com.jusoft.bookingengine.publisher.Event;
 import lombok.Data;
 import lombok.NonNull;
-
-import java.time.ZonedDateTime;
 
 @Data
 public class SlotCreatedEvent implements Event {
 
   private final long slotId;
   private final long roomId;
-  private final long clubId;
+  private final SlotState state;
   @NonNull
-  private final ZonedDateTime startDate;
-  @NonNull
-  private final ZonedDateTime endDate;
+  private final OpenDate openDate;
 }

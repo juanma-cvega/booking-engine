@@ -1,10 +1,10 @@
 package com.jusoft.bookingengine.usecase;
 
 import com.google.common.collect.Iterables;
-import com.jusoft.bookingengine.component.building.api.BuildingNotFoundException;
 import com.jusoft.bookingengine.component.room.api.RoomComponent;
 import com.jusoft.bookingengine.component.room.api.RoomCreatedEvent;
 import com.jusoft.bookingengine.component.room.api.RoomView;
+import com.jusoft.bookingengine.component.room.api.RoomWithoutBuildingException;
 import com.jusoft.bookingengine.component.slot.api.SlotComponent;
 import com.jusoft.bookingengine.component.slot.api.SlotView;
 import com.jusoft.bookingengine.component.timer.OpenTime;
@@ -20,7 +20,6 @@ import java.time.LocalTime;
 
 import static com.jusoft.bookingengine.fixture.RoomFixtures.CREATE_ROOM_COMMAND;
 import static com.jusoft.bookingengine.holder.DataHolder.buildingCreated;
-import static com.jusoft.bookingengine.holder.DataHolder.clubCreated;
 import static com.jusoft.bookingengine.holder.DataHolder.exceptionThrown;
 import static com.jusoft.bookingengine.holder.DataHolder.roomBuilder;
 import static com.jusoft.bookingengine.holder.DataHolder.roomCreated;
@@ -57,7 +56,6 @@ public class CreateRoomUseCaseStepDefinitions extends AbstractUseCaseStepDefinit
       assertThat(messageCaptor.getValue()).isInstanceOf(RoomCreatedEvent.class);
       RoomCreatedEvent roomCreatedEvent = (RoomCreatedEvent) messageCaptor.getValue();
       assertThat(roomCreatedEvent.getRoomId()).isEqualTo(roomCreated.getId());
-      assertThat(roomCreatedEvent.getClubId()).isEqualTo(clubCreated.getId());
       assertThat(roomCreatedEvent.getSlotDurationInMinutes()).isEqualTo(roomCreated.getSlotDurationInMinutes());
       assertThat(roomCreatedEvent.getAvailableDays()).isEqualTo(roomCreated.getAvailableDays());
       assertThat(roomCreatedEvent.getOpenTimesPerDay()).isEqualTo(roomCreated.getOpenTimesPerDay());
@@ -80,28 +78,28 @@ public class CreateRoomUseCaseStepDefinitions extends AbstractUseCaseStepDefinit
     Then("^the first slot should start at (.*)$", (String startTime) -> {
       SlotView slot = slotComponent.findOpenSlotsFor(roomCreated.getId()).get(0);
       LocalTime time = LocalTime.parse(startTime);
-      assertThat(slot.getStartDate().toLocalTime()).isBetween(time, time);
+      assertThat(slot.getOpenDate().getStartTime().toLocalTime()).isBetween(time, time);
     });
     Then("^the last slot should start at (.*)$", (String startTime) -> {
       SlotView slot = Iterables.getLast(slotComponent.findOpenSlotsFor(roomCreated.getId()));
       LocalTime time = LocalTime.parse(startTime);
-      assertThat(slot.getStartDate().toLocalTime()).isBetween(time, time);
+      assertThat(slot.getOpenDate().getStartTime().toLocalTime()).isBetween(time, time);
     });
     Then("^the last slot should start the day after$", () -> {
       SlotView slot = Iterables.getLast(slotComponent.findOpenSlotsFor(roomCreated.getId()));
       LocalDate date = LocalDate.now(clock).plusDays(1);
-      assertThat(slot.getStartDate().toLocalDate()).isAfterOrEqualTo(date).isBeforeOrEqualTo(date);
+      assertThat(slot.getOpenDate().getStartTime().toLocalDate()).isAfterOrEqualTo(date).isBeforeOrEqualTo(date);
     });
     Then("^the first slot should start the day after$", () -> {
       SlotView slot = slotComponent.findOpenSlotsFor(roomCreated.getId()).get(0);
       LocalDate date = LocalDate.now(clock).plusDays(1);
-      assertThat(slot.getStartDate().toLocalDate()).isAfterOrEqualTo(date).isBeforeOrEqualTo(date);
+      assertThat(slot.getOpenDate().getStartTime().toLocalDate()).isAfterOrEqualTo(date).isBeforeOrEqualTo(date);
     });
     When("^a room is created for a non existing building$", () ->
       storeException(() -> createRoomUseCase.createRoom(CREATE_ROOM_COMMAND.apply(NON_EXISTING_BUILDING_ID))));
     Then("^the user should be notified the building does not exist$", () -> {
-      assertThat(exceptionThrown).isInstanceOf(BuildingNotFoundException.class);
-      BuildingNotFoundException exception = (BuildingNotFoundException) exceptionThrown;
+      assertThat(exceptionThrown).isInstanceOf(RoomWithoutBuildingException.class);
+      RoomWithoutBuildingException exception = (RoomWithoutBuildingException) exceptionThrown;
       assertThat(exception.getBuildingId()).isEqualTo(NON_EXISTING_BUILDING_ID);
     });
   }

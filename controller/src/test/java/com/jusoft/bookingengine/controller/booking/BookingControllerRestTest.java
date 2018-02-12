@@ -2,8 +2,8 @@ package com.jusoft.bookingengine.controller.booking;
 
 import com.jusoft.bookingengine.component.booking.api.BookingComponent;
 import com.jusoft.bookingengine.component.booking.api.BookingNotFoundException;
-import com.jusoft.bookingengine.component.booking.api.SlotAlreadyBookedException;
-import com.jusoft.bookingengine.component.booking.api.SlotAlreadyStartedException;
+import com.jusoft.bookingengine.component.booking.api.SlotAlreadyReservedException;
+import com.jusoft.bookingengine.component.booking.api.SlotNotAvailableException;
 import com.jusoft.bookingengine.component.booking.api.WrongBookingUserException;
 import com.jusoft.bookingengine.controller.booking.api.CreateBookingRequest;
 import org.junit.Before;
@@ -168,7 +168,7 @@ public class BookingControllerRestTest {
     String createUrl = String.format(CREATE_BOOKING_URL_TEMPLATE, ROOM_ID, SLOT_ID_1);
     String urlTemplate = new StringJoiner(FORTHSLASH).add(BOOKINGS_URL).add(createUrl).toString();
     when(mockBookingCommandFactory.createFrom(ROOM_ID, SLOT_ID_1, USER_ID_1)).thenReturn(CREATE_BOOKING_COMMAND);
-    when(mockBookingComponent.book(CREATE_BOOKING_COMMAND)).thenThrow(new SlotAlreadyBookedException(SLOT_ID_1));
+    when(mockBookingComponent.book(CREATE_BOOKING_COMMAND)).thenThrow(new SlotAlreadyReservedException(SLOT_ID_1));
 
     mockMvc.perform(post(urlTemplate)
       .contentType(APPLICATION_JSON)
@@ -180,7 +180,7 @@ public class BookingControllerRestTest {
   @Test
   public void slotAlreadyStarted() throws Exception {
     when(mockBookingCommandFactory.createFrom(ROOM_ID, SLOT_ID_1, USER_ID_1)).thenReturn(CREATE_BOOKING_COMMAND);
-    when(mockBookingComponent.book(CREATE_BOOKING_COMMAND)).thenThrow(new SlotAlreadyStartedException(SLOT_ID_1));
+    when(mockBookingComponent.book(CREATE_BOOKING_COMMAND)).thenThrow(new SlotNotAvailableException(SLOT_ID_1));
 
     String createUrl = String.format(CREATE_BOOKING_URL_TEMPLATE, ROOM_ID, SLOT_ID_1);
     String urlTemplate = new StringJoiner(FORTHSLASH).add(BOOKINGS_URL).add(createUrl).toString();

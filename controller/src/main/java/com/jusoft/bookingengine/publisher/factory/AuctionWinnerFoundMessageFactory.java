@@ -13,8 +13,7 @@ class AuctionWinnerFoundMessageFactory implements MessageFactory<AuctionWinnerFo
     return new AuctionWinnerFoundMessage(
       message.getAuctionId(),
       message.getAuctionWinnerId(),
-      message.getSlotId(),
-      message.getRoomId()
+      message.getSlotId()
     );
   }
 }

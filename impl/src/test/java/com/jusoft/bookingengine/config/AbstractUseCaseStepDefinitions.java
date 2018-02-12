@@ -14,6 +14,8 @@ import java.time.LocalTime;
 import java.time.ZonedDateTime;
 
 import static com.jusoft.bookingengine.holder.DataHolder.exceptionThrown;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
 
 @ContextConfiguration(classes = {
   MainConfig.class,
@@ -28,6 +30,13 @@ public class AbstractUseCaseStepDefinitions implements En {
   protected ClockStub clock;
 
   protected ArgumentCaptor<Message> messageCaptor = ArgumentCaptor.forClass(Message.class);
+
+  @SuppressWarnings("unchecked")
+  protected <T extends Message> T verifyAndGetMessageOfType(Class<T> type) {
+    verify(messagePublisher).publish(messageCaptor.capture());
+    assertThat(messageCaptor.getValue()).isInstanceOf(type);
+    return (T) messageCaptor.getValue();
+  }
 
   protected ZonedDateTime getDateFrom(String time) {
     return getDateFrom(time, LocalDate.now(clock));

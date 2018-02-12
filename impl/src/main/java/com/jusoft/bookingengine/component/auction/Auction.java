@@ -2,6 +2,8 @@ package com.jusoft.bookingengine.component.auction;
 
 import com.jusoft.bookingengine.component.auction.api.AuctionFinishedException;
 import com.jusoft.bookingengine.component.auction.api.Bid;
+import com.jusoft.bookingengine.component.timer.OpenDate;
+import com.jusoft.bookingengine.strategy.auctionwinner.api.AuctionConfigInfo;
 import com.jusoft.bookingengine.strategy.auctionwinner.api.AuctionWinnerStrategy;
 import lombok.Data;
 import lombok.NonNull;
@@ -16,34 +18,30 @@ import java.util.Set;
 class Auction {
 
   private final long id;
-  private final long slotId;
-  private final long roomId;
+  private final long referenceId;
   @NonNull
-  private final ZonedDateTime startTime;
+  private final OpenDate openDate;
   @NonNull
-  private final ZonedDateTime endTime;
+  private final AuctionConfigInfo auctionConfigInfo;
   @NonNull
   private final Set<Bid> bidders;
 
   Auction(long id,
-          long slotId,
-          long roomId,
+          long referenceId,
           ZonedDateTime startTime,
-          ZonedDateTime endTime) {
-    this(id, slotId, roomId, startTime, endTime, new HashSet<>());
+          AuctionConfigInfo auctionConfigInfo) {
+    this(id, referenceId, startTime, auctionConfigInfo, new HashSet<>());
   }
 
   Auction(long id,
-          long slotId,
-          long roomId,
+          long referenceId,
           ZonedDateTime startTime,
-          ZonedDateTime endTime,
+          AuctionConfigInfo auctionConfigInfo,
           Set<Bid> bidders) {
     this.id = id;
-    this.slotId = slotId;
-    this.roomId = roomId;
-    this.startTime = startTime;
-    this.endTime = endTime;
+    this.referenceId = referenceId;
+    this.openDate = OpenDate.of(startTime, startTime.plusMinutes(auctionConfigInfo.getAuctionDuration()));
+    this.auctionConfigInfo = auctionConfigInfo;
     this.bidders = new HashSet<>(bidders);
   }
 
@@ -53,14 +51,14 @@ class Auction {
 
   void addBidder(long bidder, Clock clock) {
     if (!isOpen(clock)) {
-      throw new AuctionFinishedException(id, slotId, roomId);
+      throw new AuctionFinishedException(id, referenceId);
     }
     bidders.add(new Bid(bidder, ZonedDateTime.now(clock)));
   }
 
   public boolean isOpen(Clock clock) {
     ZonedDateTime now = ZonedDateTime.now(clock);
-    return now.isBefore(endTime) && (now.isAfter(startTime) || now.isEqual(startTime));
+    return now.isBefore(openDate.getEndTime()) && (now.isAfter(openDate.getStartTime()) || now.isEqual(openDate.getStartTime()));
   }
 
   public Optional<Long> findAuctionWinner(AuctionWinnerStrategy strategy) {

@@ -18,4 +18,10 @@ public interface SlotComponent {
   Optional<SlotView> findSlotInUseOrToStartFor(long roomId);
 
   int findNumberOfSlotsOpenFor(long roomId);
+
+  void reserveSlot(ReserveSlotCommand command);
+
+  void makeAvailable(long slotId);
+
+  void reserveSlotForAuctionWinner(ReserveSlotCommand command);
 }

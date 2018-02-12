@@ -4,13 +4,11 @@ import java.util.Optional;
 
 public interface AuctionComponent {
 
-  AuctionView startAuction(CreateAuctionCommand createAuctionCommand);
+  AuctionView startAuction(StartAuctionCommand createAuctionCommand);
 
   void addBidderTo(long slotId, long userId);
 
   void finishAuction(FinishAuctionCommand finishAuctionCommand);
-
-  boolean isAuctionOpenForSlot(long slotId);
 
   Optional<AuctionView> find(long auctionId);
 }

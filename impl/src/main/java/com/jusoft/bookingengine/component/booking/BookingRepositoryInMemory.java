@@ -1,7 +1,7 @@
 package com.jusoft.bookingengine.component.booking;
 
 import com.jusoft.bookingengine.component.booking.api.BookingNotFoundException;
-import com.jusoft.bookingengine.component.booking.api.SlotAlreadyBookedException;
+import com.jusoft.bookingengine.component.booking.api.SlotAlreadyReservedException;
 
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -30,25 +30,28 @@ class BookingRepositoryInMemory implements BookingRepository {
    * two entries with the same slotId
    *
    * @param newBooking booking to save
-   * @throws SlotAlreadyBookedException in case the slot is already booked
+   * @throws SlotAlreadyReservedException in case the slot is already booked
    */
   @Override
   public void save(Booking newBooking) {
     withLock(lock, () -> {
       store.values().stream().filter(booking -> Long.compare(booking.getSlotId(), newBooking.getSlotId()) == 0).findFirst()
         .ifPresent(booking -> {
-          throw new SlotAlreadyBookedException(newBooking.getSlotId());
+          throw new SlotAlreadyReservedException(newBooking.getSlotId());
         });
       store.put(newBooking.getId(), newBooking);
     });
   }
 
   @Override
-  public void delete(long bookingId, Predicate<Booking> predicate) {
+  public boolean delete(long bookingId, Predicate<Booking> predicate) {
+    boolean isRemoved = false;
     Booking booking = find(bookingId).orElseThrow(() -> new BookingNotFoundException(0, bookingId));
     if (predicate.test(booking)) {
-      store.remove(bookingId);
+      Booking bookingRemoved = store.remove(bookingId);
+      isRemoved = bookingRemoved != null;
     }
+    return isRemoved;
   }
 
   @Override

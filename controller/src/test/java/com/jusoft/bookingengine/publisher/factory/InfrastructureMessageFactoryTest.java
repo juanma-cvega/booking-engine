@@ -37,7 +37,6 @@ public class InfrastructureMessageFactoryTest {
     assertThat(message).isInstanceOf(AuctionFinishedMessage.class);
     AuctionFinishedMessage auctionFinishedMessage = (AuctionFinishedMessage) message;
     assertThat(auctionFinishedMessage.getAuctionId()).isEqualTo(AUCTION_FINISHED_EVENT.getAuctionId());
-    assertThat(auctionFinishedMessage.getRoomId()).isEqualTo(AUCTION_FINISHED_EVENT.getRoomId());
     assertThat(auctionFinishedMessage.getSlotId()).isEqualTo(AUCTION_FINISHED_EVENT.getSlotId());
   }
 
@@ -48,9 +47,8 @@ public class InfrastructureMessageFactoryTest {
     assertThat(message).isInstanceOf(AuctionWinnerFoundMessage.class);
     AuctionWinnerFoundMessage auctionWinnerFoundEvent = (AuctionWinnerFoundMessage) message;
     assertThat(auctionWinnerFoundEvent.getAuctionId()).isEqualTo(AUCTION_WINNER_FOUND_EVENT.getAuctionId());
-    assertThat(auctionWinnerFoundEvent.getRoomId()).isEqualTo(AUCTION_WINNER_FOUND_EVENT.getRoomId());
     assertThat(auctionWinnerFoundEvent.getSlotId()).isEqualTo(AUCTION_WINNER_FOUND_EVENT.getSlotId());
-    assertThat(auctionWinnerFoundEvent.getRoomId()).isEqualTo(AUCTION_WINNER_FOUND_EVENT.getRoomId());
+    assertThat(auctionWinnerFoundEvent.getAuctionWinnerId()).isEqualTo(AUCTION_WINNER_FOUND_EVENT.getAuctionWinnerId());
   }
 
   @Test
@@ -93,8 +91,7 @@ public class InfrastructureMessageFactoryTest {
     SlotCreatedMessage slotCreatedEvent = (SlotCreatedMessage) message;
     assertThat(slotCreatedEvent.getRoomId()).isEqualTo(SLOT_CREATED_EVENT.getRoomId());
     assertThat(slotCreatedEvent.getSlotId()).isEqualTo(SLOT_CREATED_EVENT.getSlotId());
-    assertThat(slotCreatedEvent.getStartDate()).isEqualTo(SLOT_CREATED_EVENT.getStartDate());
-    assertThat(slotCreatedEvent.getEndDate()).isEqualTo(SLOT_CREATED_EVENT.getEndDate());
+    assertThat(slotCreatedEvent.getOpenDate()).isEqualTo(SLOT_CREATED_EVENT.getOpenDate());
   }
 
   @Test

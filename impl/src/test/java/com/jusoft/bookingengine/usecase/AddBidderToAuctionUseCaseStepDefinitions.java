@@ -21,9 +21,11 @@ public class AddBidderToAuctionUseCaseStepDefinitions extends AbstractUseCaseSte
   private AddBidderToAuctionUseCase addBidderToAuctionUseCase;
 
   public AddBidderToAuctionUseCaseStepDefinitions() {
-    When("^user (.*) bets on the auction$", (Integer userId) ->
+    When("^user (.*) bids on the auction$", (Long userId) ->
+      addBidderToAuctionUseCase.addBidderTo(auctionCreated.getId(), userId));
+    When("^user (.*) tries to bid on the auction$", (Long userId) ->
       storeException(() -> addBidderToAuctionUseCase.addBidderTo(auctionCreated.getId(), userId)));
-    Then("^the auction should contain the user (\\d+) bet created at (.*)$", (Integer userId, String creationTime) -> {
+    Then("^the auction should contain the user (\\d+) bid created at (.*)$", (Integer userId, String creationTime) -> {
       Optional<AuctionView> auctionFound = auctionComponent.find(auctionCreated.getId());
       assertThat(auctionFound).isPresent();
       AuctionView auction = auctionFound.get();
@@ -33,8 +35,7 @@ public class AddBidderToAuctionUseCaseStepDefinitions extends AbstractUseCaseSte
       assertThat(exceptionThrown).isInstanceOf(AuctionFinishedException.class);
       AuctionFinishedException exception = (AuctionFinishedException) exceptionThrown;
       assertThat(exception.getAuctionId()).isEqualTo(auctionCreated.getId());
-      assertThat(exception.getSlotId()).isEqualTo(auctionCreated.getSlotId());
-      assertThat(exception.getRoomId()).isEqualTo(auctionCreated.getRoomId());
+      assertThat(exception.getSlotId()).isEqualTo(auctionCreated.getReferenceId());
     });
   }
 }

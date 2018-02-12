@@ -7,8 +7,8 @@
 //import com.jusoft.bookingengine.component.booking.api.BookingView;
 //import com.jusoft.bookingengine.component.booking.api.CancelBookingCommand;
 //import com.jusoft.bookingengine.component.booking.api.CreateBookingCommand;
-//import com.jusoft.bookingengine.component.booking.api.SlotAlreadyBookedException;
-//import com.jusoft.bookingengine.component.booking.api.SlotAlreadyStartedException;
+//import com.jusoft.bookingengine.component.booking.api.SlotAlreadyReservedException;
+//import com.jusoft.bookingengine.component.booking.api.SlotNotAvailableException;
 //import com.jusoft.bookingengine.component.booking.api.SlotPendingAuctionException;
 //import com.jusoft.bookingengine.component.booking.api.WrongBookingUserException;
 //import com.jusoft.bookingengine.fixture.CommonFixtures;
@@ -63,7 +63,7 @@
 //  public BookingManagementStepDefinitions() {
 //    Given("^a slot from the room is selected", () ->
 //      slotHolder.slotSelected = getSlotFrom(roomHolder.roomCreated.getId()));
-//    When("^the slot is booked by user (.*)$", (Long userId) ->
+//    When("^there is a booking created by user (.*)$", (Long userId) ->
 //
 //      storeException(() -> storeBooking(() -> bookSlot(userId, slotHolder.slotSelected))));
 //    Then("^the slot should be booked by the user (.*)$", (Long userId) -> {
@@ -79,7 +79,7 @@
 //    Then("^the user should see all slots booked by him$", () ->
 //      assertThat(bookingHolder.bookingsFetched).hasSameElementsAs(bookingHolder.bookingsCreated));
 //    Then("^the user should get a notification that the slot is already booked$", () ->
-//      assertThat(exceptionThrown).isInstanceOf(SlotAlreadyBookedException.class));
+//      assertThat(exceptionThrown).isInstanceOf(SlotAlreadyReservedException.class));
 //    When("^the user (.*) cancels the booking from user (.*)$", (Long userToCancel, Long userOwner) ->
 //      storeException(() -> cancelBookingUseCase.cancel(new CancelBookingCommand(userToCancel, extractBookingId(userOwner)))));
 //    When("^the user (.*) cancels his booking$", (Long userId) ->
@@ -94,7 +94,7 @@
 //    Then("^the user should be notified the booking is already started$", () ->
 //      assertThat(exceptionThrown)
 //        .isNotNull()
-//        .isInstanceOf(SlotAlreadyStartedException.class));
+//        .isInstanceOf(SlotNotAvailableException.class));
 //    When("^user (.*) cancels the booking$", (Long userId) ->
 //      storeException(() -> cancelBookingUseCase.cancel(new CancelBookingCommand(userId, extractBookingId(userId)))));
 //    When("^the user (.*) enters the auction$", (Integer userId) ->
@@ -128,7 +128,7 @@
 //  }
 //
 //  private BookingView bookSlot(Long userId, long slotId) {
-//    return createBookingUseCase.book(new CreateBookingCommand(userId, CommonFixtures.ROOM_ID, slotId));
+//    return createBookingUseCase.reserve(new CreateBookingCommand(userId, CommonFixtures.ROOM_ID, slotId));
 //  }
 //
 //  private void storeBooking(Supplier<BookingView> supplier) {

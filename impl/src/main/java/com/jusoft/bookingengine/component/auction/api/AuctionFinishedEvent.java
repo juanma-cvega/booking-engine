@@ -7,6 +7,5 @@ import lombok.Data;
 public class AuctionFinishedEvent implements Event {
 
   private final long auctionId;
-  private final long roomId;
   private final long slotId;
 }

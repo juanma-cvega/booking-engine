@@ -33,8 +33,8 @@ public class RoomComponentConfig {
     return idGenerator::getAndIncrement;
   }
 
-  private RoomEventFactory roomEventFactory() {
-    return new RoomEventFactory();
+  private RoomMessageFactory roomEventFactory() {
+    return new RoomMessageFactory(clock);
   }
 
   private RoomRepository roomRepository() {

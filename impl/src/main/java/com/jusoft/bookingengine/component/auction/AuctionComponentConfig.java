@@ -33,7 +33,7 @@ public class AuctionComponentConfig {
   }
 
   private AuctionFactory auctionFactory() {
-    return new AuctionFactory(idGenerator());
+    return new AuctionFactory(idGenerator(), clock);
   }
 
   private Supplier<Long> idGenerator() {

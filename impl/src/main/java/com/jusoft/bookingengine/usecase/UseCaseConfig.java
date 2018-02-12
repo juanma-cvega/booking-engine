@@ -57,7 +57,7 @@ public class UseCaseConfig {
 
   @Bean
   public CreateBookingUseCase createBookingUseCase() {
-    return new CreateBookingUseCase(bookingComponent, slotComponent, auctionComponent, memberComponent);
+    return new CreateBookingUseCase(bookingComponent);
   }
 
   @Bean
@@ -67,12 +67,12 @@ public class UseCaseConfig {
 
   @Bean
   public FinishAuctionUseCase finishAuctionUseCase() {
-    return new FinishAuctionUseCase(roomComponent, auctionComponent, auctionStrategyRegistrar);
+    return new FinishAuctionUseCase(auctionComponent, auctionStrategyRegistrar);
   }
 
   @Bean
-  public OpenNextSlotUseCase openNextSlotUseCase() {
-    return new OpenNextSlotUseCase(roomComponent, slotComponent);
+  public CreateSlotUseCase openNextSlotUseCase() {
+    return new CreateSlotUseCase(roomComponent, slotComponent);
   }
 
   @Bean
@@ -82,7 +82,7 @@ public class UseCaseConfig {
 
   @Bean
   public StartAuctionUseCase startAuctionUseCase() {
-    return new StartAuctionUseCase(auctionComponent, roomComponent, schedulerComponent, clock);
+    return new StartAuctionUseCase(auctionComponent, schedulerComponent);
   }
 
   @Bean
@@ -123,5 +123,25 @@ public class UseCaseConfig {
   @Bean
   public FindJoinRequestsUseCase findJoinRequestsUseCase() {
     return new FindJoinRequestsUseCase(clubComponent);
+  }
+
+  @Bean
+  public MakeSlotAvailableUseCase makeSlotAvailableUseCase() {
+    return new MakeSlotAvailableUseCase(slotComponent);
+  }
+
+  @Bean
+  public ReserveSlotForAuctionWinnerUseCase reserveSlotForAuctionWinnerUseCase() {
+    return new ReserveSlotForAuctionWinnerUseCase(slotComponent);
+  }
+
+  @Bean
+  public ReserveSlotUseCase reserveSlotUseCase() {
+    return new ReserveSlotUseCase(slotComponent, roomComponent, buildingComponent, memberComponent);
+  }
+
+  @Bean
+  public VerifyAuctionRequirementForSlotUseCase verifyAuctionRequirementForSlotUseCase() {
+    return new VerifyAuctionRequirementForSlotUseCase(roomComponent);
   }
 }

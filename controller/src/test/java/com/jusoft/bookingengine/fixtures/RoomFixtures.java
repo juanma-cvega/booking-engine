@@ -2,14 +2,14 @@ package com.jusoft.bookingengine.fixtures;
 
 import com.jusoft.bookingengine.component.room.api.RoomCreatedEvent;
 import com.jusoft.bookingengine.component.timer.OpenTime;
+import com.jusoft.bookingengine.strategy.auctionwinner.api.AuctionConfigInfo;
+import com.jusoft.bookingengine.strategy.auctionwinner.api.NoAuctionConfigInfo;
 import lombok.experimental.UtilityClass;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
-
-import static com.jusoft.bookingengine.fixtures.ClubFixtures.CLUB_ID;
 
 @UtilityClass
 public class RoomFixtures {
@@ -28,6 +28,7 @@ public class RoomFixtures {
   public static final List<OpenTime> OPEN_TIMES = Arrays.asList(OPEN_TIME_MORNING, OPEN_TIME_AFTERNOON, OPEN_TIME_NIGHT);
   public static final List<DayOfWeek> AVAILABLE_DAYS = Arrays.asList(DayOfWeek.MONDAY, DayOfWeek.TUESDAY);
   public static final boolean IS_ACTIVE = true;
+  public static final AuctionConfigInfo AUCTION_CONFIG_INFO = new NoAuctionConfigInfo();
 
-  public static final RoomCreatedEvent ROOM_CREATED_EVENT = new RoomCreatedEvent(ROOM_ID, CLUB_ID, SLOT_DURATION_IN_MINUTES, OPEN_TIMES, AVAILABLE_DAYS, IS_ACTIVE);
+  public static final RoomCreatedEvent ROOM_CREATED_EVENT = new RoomCreatedEvent(ROOM_ID, SLOT_DURATION_IN_MINUTES, OPEN_TIMES, AVAILABLE_DAYS, IS_ACTIVE, AUCTION_CONFIG_INFO);
 }

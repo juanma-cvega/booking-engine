@@ -16,7 +16,7 @@ class AuctionFinishedEventListener implements MessageListener {
   @EventListener(AuctionFinishedMessage.class)
   public void finishAuction(AuctionFinishedMessage event) {
     log.info("AuctionFinishedEvent consumed: auctionId={}", event.getAuctionId());
-    finishAuctionUseCase.finishAuction(event.getAuctionId(), event.getRoomId());
+    finishAuctionUseCase.finishAuction(event.getAuctionId());
     log.info("AuctionFinishedEvent processed: auctionId={}");
   }
 }

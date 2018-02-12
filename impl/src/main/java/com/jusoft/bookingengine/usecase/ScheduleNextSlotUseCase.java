@@ -17,9 +17,9 @@ public class ScheduleNextSlotUseCase {
 
   //FIXME possible race condition. Two threads coming at the same time can see the number
   //FIXME of slots at max - 1 and decide to schedule a slot at the same time
-  public void scheduleNextSlot(long roomId, long clubId) {
+  public void scheduleNextSlot(long roomId) {
     RoomView room = roomComponent.find(roomId);
     SlotCreationStrategy strategy = slotCreationStrategyRegistrar.createStrategyWith(room.getSlotCreationConfigInfo());
-    schedulerComponent.schedule(strategy.nextSlotCreationTimeFor(room.getId()), new OpenNextSlotCommand(roomId, clubId));
+    schedulerComponent.schedule(strategy.nextSlotCreationTimeFor(room.getId()), new OpenNextSlotCommand(roomId));
   }
 }

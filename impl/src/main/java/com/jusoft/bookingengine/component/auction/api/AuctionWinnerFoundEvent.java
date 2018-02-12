@@ -1,13 +1,12 @@
 package com.jusoft.bookingengine.component.auction.api;
 
-import com.jusoft.bookingengine.publisher.Message;
+import com.jusoft.bookingengine.publisher.Event;
 import lombok.Data;
 
 @Data
-public class AuctionWinnerFoundEvent implements Message {
+public class AuctionWinnerFoundEvent implements Event {
 
   private final long auctionId;
   private final long auctionWinnerId;
   private final long slotId;
-  private final long roomId;
 }

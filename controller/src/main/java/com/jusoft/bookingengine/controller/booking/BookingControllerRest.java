@@ -3,8 +3,8 @@ package com.jusoft.bookingengine.controller.booking;
 import com.jusoft.bookingengine.component.booking.api.BookingComponent;
 import com.jusoft.bookingengine.component.booking.api.BookingNotFoundException;
 import com.jusoft.bookingengine.component.booking.api.BookingView;
-import com.jusoft.bookingengine.component.booking.api.SlotAlreadyBookedException;
-import com.jusoft.bookingengine.component.booking.api.SlotAlreadyStartedException;
+import com.jusoft.bookingengine.component.booking.api.SlotAlreadyReservedException;
+import com.jusoft.bookingengine.component.booking.api.SlotNotAvailableException;
 import com.jusoft.bookingengine.component.booking.api.WrongBookingUserException;
 import com.jusoft.bookingengine.controller.booking.api.BookingResource;
 import com.jusoft.bookingengine.controller.booking.api.CreateBookingRequest;
@@ -82,13 +82,13 @@ class BookingControllerRest {
   }
 
   @ResponseStatus(value = HttpStatus.CONFLICT, reason = "Slot already booked")
-  @ExceptionHandler(SlotAlreadyBookedException.class)
+  @ExceptionHandler(SlotAlreadyReservedException.class)
   public void slotAlreadyBookedException() {
     //Do nothing
   }
 
   @ResponseStatus(value = HttpStatus.PRECONDITION_REQUIRED, reason = "Slot already started")
-  @ExceptionHandler(SlotAlreadyStartedException.class)
+  @ExceptionHandler(SlotNotAvailableException.class)
   public void slotAlreadyStartedException() {
     //Do nothing
   }

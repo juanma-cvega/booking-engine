@@ -7,6 +7,5 @@ import lombok.Data;
 public class OpenNextSlotCommand implements Command {
 
   private final long roomId;
-  private final long clubId;
 
 }

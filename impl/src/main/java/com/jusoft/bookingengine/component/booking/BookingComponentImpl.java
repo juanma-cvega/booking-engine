@@ -1,5 +1,6 @@
 package com.jusoft.bookingengine.component.booking;
 
+import com.jusoft.bookingengine.component.booking.api.BookingCanceledEvent;
 import com.jusoft.bookingengine.component.booking.api.BookingComponent;
 import com.jusoft.bookingengine.component.booking.api.BookingCreatedEvent;
 import com.jusoft.bookingengine.component.booking.api.BookingNotFoundException;
@@ -42,7 +43,10 @@ class BookingComponentImpl implements BookingComponent {
 
   @Override
   public void cancel(CancelBookingCommand cancelBookingCommand) {
-    bookingRepository.delete(cancelBookingCommand.getBookingId(), deleteBookingIfOwner(cancelBookingCommand.getUserId()));
+    boolean isDeleted = bookingRepository.delete(cancelBookingCommand.getBookingId(), deleteBookingIfOwner(cancelBookingCommand.getUserId()));
+    if (isDeleted) {
+      messagePublisher.publish(new BookingCanceledEvent(cancelBookingCommand.getBookingId()));
+    }
   }
 
   private Predicate<Booking> deleteBookingIfOwner(long userId) {

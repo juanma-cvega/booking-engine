@@ -23,14 +23,6 @@ class AuctionRepositoryInMemory implements AuctionRepository {
   }
 
   @Override
-  public Optional<Auction> findOneBySlot(long slotId) {
-    return store.values().stream()
-      .filter(auction -> auction.getSlotId() == slotId)
-      .findFirst()
-      .map(this::copyAuction);
-  }
-
-  @Override
   public Optional<Auction> find(long auctionId) {
     Auction value = store.get(auctionId);
     if (value != null) {
@@ -41,10 +33,9 @@ class AuctionRepositoryInMemory implements AuctionRepository {
 
   private Auction copyAuction(Auction value) {
     return new Auction(value.getId(),
-      value.getSlotId(),
-      value.getRoomId(),
-      value.getStartTime(),
-      value.getEndTime(),
+      value.getReferenceId(),
+      value.getOpenDate().getStartTime(),
+      value.getAuctionConfigInfo(),
       value.getBidders());
   }
 
