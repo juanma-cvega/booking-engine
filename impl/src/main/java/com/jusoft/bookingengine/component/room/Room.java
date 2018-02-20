@@ -127,7 +127,7 @@ class Room {
   }
 
   private LocalTime findSlotStartTimeFor(OpenTime openTime, int nextSlotNumber) {
-    return openTime.getStartTime().plusMinutes(nextSlotNumber * slotDurationInMinutes);
+    return openTime.getStartTime().plusMinutes(nextSlotNumber * (long) slotDurationInMinutes);
   }
 
   private Predicate<OpenTime> isOpenTimeIncluding(LocalTime localTime) {
