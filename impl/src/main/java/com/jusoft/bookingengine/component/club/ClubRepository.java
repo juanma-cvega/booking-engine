@@ -8,7 +8,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
-interface ClubRepository extends Repository<Club> {
+interface ClubRepository extends Repository {
 
   void save(Club building);
 

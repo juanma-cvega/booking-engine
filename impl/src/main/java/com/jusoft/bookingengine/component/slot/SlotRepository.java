@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.UnaryOperator;
 
-interface SlotRepository extends Repository<Slot> {
+interface SlotRepository extends Repository {
 
   /**
    * Returns the {@link Slot} if it's contained in the store and if the roomId matches the one provided

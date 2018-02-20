@@ -4,7 +4,7 @@ import com.jusoft.bookingengine.repository.Repository;
 
 import java.util.Optional;
 
-interface BuildingRepository extends Repository<Building> {
+interface BuildingRepository extends Repository {
 
   void save(Building building);
 

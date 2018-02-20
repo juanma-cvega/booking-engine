@@ -16,7 +16,7 @@ import java.time.LocalTime;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Predicate;
@@ -38,19 +38,19 @@ class Room {
 
   Room(long id, long buildingId, SlotCreationConfigInfo slotCreationConfigInfo, int slotDurationInMinutes, List<OpenTime> openTimesPerDay, List<DayOfWeek> availableDays,
        boolean active, AuctionConfigInfo auctionConfigInfo) {
+    Validate.notNull(auctionConfigInfo);
+    Validate.notNull(slotCreationConfigInfo);
+    Validate.notEmpty(openTimesPerDay);
+    Validate.notEmpty(availableDays);
+    openTimesPerDay.sort(Comparator.comparing(OpenTime::getStartTime)); //Needed to ensure soonest open time is checked first
     this.id = id;
     this.buildingId = buildingId;
     this.slotCreationConfigInfo = slotCreationConfigInfo;
     this.slotDurationInMinutes = slotDurationInMinutes;
-    this.openTimesPerDay = openTimesPerDay;
-    Collections.sort(this.openTimesPerDay); //Needed to ensure soonest open time is checked first
-    this.availableDays = availableDays;
+    this.openTimesPerDay = new ArrayList<>(openTimesPerDay);
+    this.availableDays = new ArrayList<>(availableDays);
     this.active = active;
     this.auctionConfigInfo = auctionConfigInfo;
-    Validate.notNull(this.auctionConfigInfo);
-    Validate.notNull(this.slotCreationConfigInfo);
-    Validate.notEmpty(this.openTimesPerDay);
-    Validate.notEmpty(this.availableDays);
     validateOpenTimesDurationAreMultiplesOfSlotDuration(openTimesPerDay, slotDurationInMinutes);
   }
 

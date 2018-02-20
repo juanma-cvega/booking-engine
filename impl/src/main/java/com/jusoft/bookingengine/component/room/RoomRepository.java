@@ -4,7 +4,7 @@ import com.jusoft.bookingengine.repository.Repository;
 
 import java.util.Optional;
 
-interface RoomRepository extends Repository<Room> {
+interface RoomRepository extends Repository {
 
   void save(Room newRoom);
 

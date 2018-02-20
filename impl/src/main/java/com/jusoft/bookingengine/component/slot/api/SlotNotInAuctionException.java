@@ -1,5 +1,8 @@
 package com.jusoft.bookingengine.component.slot.api;
 
+import lombok.Getter;
+
+@Getter
 public class SlotNotInAuctionException extends RuntimeException {
 
   private static final String MESSAGE = "Slot %s is not part of an open auction";

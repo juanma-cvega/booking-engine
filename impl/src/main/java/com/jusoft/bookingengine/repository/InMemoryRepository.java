@@ -5,9 +5,9 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public abstract class InMemoryRepository<ID, T> {
+public abstract class InMemoryRepository<I, T> {
 
-  public <R> R execute(ID id, Function<T, R> mapper, Supplier<? extends RuntimeException> notFoundException) {
+  public <R> R execute(I id, Function<T, R> mapper, Supplier<? extends RuntimeException> notFoundException) {
     AtomicReference<R> reference = new AtomicReference<>();
     T modifiedClub = getStore().computeIfPresent(id, (key, entity) -> {
       reference.set(mapper.apply(entity));
@@ -22,5 +22,5 @@ public abstract class InMemoryRepository<ID, T> {
     return reference.get();
   }
 
-  protected abstract Map<ID, T> getStore();
+  protected abstract Map<I, T> getStore();
 }

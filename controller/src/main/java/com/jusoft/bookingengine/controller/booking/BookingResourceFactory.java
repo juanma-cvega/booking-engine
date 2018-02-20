@@ -17,7 +17,6 @@ class BookingResourceFactory {
   }
 
   BookingResource createFrom(BookingView booking) {
-//    return new BookingResource(booking.getId(), getTimeFrom(booking.getBookingTime()), slotResourceFactory.createFrom(booking.getSlot()));
     return null;
   }
 

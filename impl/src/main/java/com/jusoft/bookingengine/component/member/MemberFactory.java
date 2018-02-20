@@ -24,6 +24,6 @@ class MemberFactory {
       member.getId(),
       member.getUserId(),
       member.getClubId(),
-      null);//FIXME;
+      null);//FIXME add personal info somehow. Is personal info shared from the users profile??
   }
 }

@@ -27,15 +27,18 @@ public class ClubComponentConfig {
   }
 
   private Supplier<Long> idGeneratorForJoinRequests() {
-    AtomicLong idGenerator = new AtomicLong(1);
-    return idGenerator::getAndIncrement;
+    return inMemoryGeneratorSupplier();
   }
 
   private ClubFactory buildingFactory() {
-    return new ClubFactory(idGenerator());
+    return new ClubFactory(idGeneratorForClubs());
   }
 
-  private Supplier<Long> idGenerator() {
+  private Supplier<Long> idGeneratorForClubs() {
+    return inMemoryGeneratorSupplier();
+  }
+
+  private Supplier<Long> inMemoryGeneratorSupplier() {
     AtomicLong idGenerator = new AtomicLong(1);
     return idGenerator::getAndIncrement;
   }

@@ -8,8 +8,6 @@ import java.util.function.Supplier;
 @UtilityClass
 public class LockingTemplate {
 
-  private static final long TIMEOUT_MILLIS = 1000;
-
   public static void withLock(Lock lock, Runnable runnable) {
     lock.lock();
     try {

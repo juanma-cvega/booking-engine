@@ -17,9 +17,6 @@ class AuctionWinnerFoundEventListener implements MessageListener {
   public void bookSlotForAuctionWinner(AuctionWinnerFoundMessage event) {
     log.info("AuctionWinnerFoundEvent consumed: auctionId={}, userId={}, slotId={}",
       event.getAuctionId(), event.getAuctionWinnerId(), event.getSlotId());
-    //FIXME possible race condition when someone books exactly at the same time the auction ends???
     reserveSlotForAuctionWinnerUseCase.reserveSlotForAuctionWinner(ReserveSlotCommand.of(event.getSlotId(), event.getAuctionWinnerId()));
-//    log.info("AuctionWinnerFoundEvent processed: auctionId={}, slotId={}, roomId={}, bookingId={}, userId={}",
-//      event.getAuctionId(), event.getSlotId(), event.getRoomId(), bookingCreated.getId(), bookingCreated.getUserId());
   }
 }
