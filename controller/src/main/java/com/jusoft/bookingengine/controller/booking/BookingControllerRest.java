@@ -51,7 +51,7 @@ class BookingControllerRest {
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void cancel(@PathVariable long userId, @PathVariable long bookingId) {
     log.info("Cancel booking request received: userId={}, bookingId={}", userId, bookingId);
-    bookingManagerComponent.cancel(bookingCommandFactory.createFrom(userId, bookingId));
+    bookingManagerComponent.cancel(userId, bookingId);
     log.info("Cancel booking request finished");
   }
 
@@ -59,7 +59,7 @@ class BookingControllerRest {
   @ResponseBody
   public BookingResource find(@PathVariable long userId, @PathVariable long bookingId) {
     log.info("Find booking request received: userId={}, bookingId={}", userId, bookingId);
-    BookingView booking = bookingManagerComponent.find(userId, bookingId);
+    BookingView booking = bookingManagerComponent.find(bookingId);
     BookingResource bookingResource = bookingResourceFactory.createFrom(booking);
     log.info("Find booking request finished: booking={}", bookingResource);
     return bookingResource;

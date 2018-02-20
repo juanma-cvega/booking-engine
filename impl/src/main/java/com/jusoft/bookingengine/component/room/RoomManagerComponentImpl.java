@@ -5,7 +5,6 @@ import com.jusoft.bookingengine.component.room.api.NextSlotConfig;
 import com.jusoft.bookingengine.component.room.api.RoomManagerComponent;
 import com.jusoft.bookingengine.component.room.api.RoomNotFoundException;
 import com.jusoft.bookingengine.component.room.api.RoomView;
-import com.jusoft.bookingengine.component.room.api.VerifyAuctionRequirementForSlotCommand;
 import com.jusoft.bookingengine.publisher.MessagePublisher;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -48,10 +47,10 @@ class RoomManagerComponentImpl implements RoomManagerComponent {
   }
 
   @Override
-  public void verifyAuctionRequirementForSlot(VerifyAuctionRequirementForSlotCommand command) {
-    Room room = findRoom(command.getRoomId());
+  public void verifyAuctionRequirementFor(long roomId, long slotId) {
+    Room room = findRoom(roomId);
     if (room.isAuctionRequired()) {
-      messagePublisher.publish(roomMessageFactory.startAuctionCommand(room, command.getSlotId()));
+      messagePublisher.publish(roomMessageFactory.startAuctionCommand(room, slotId));
     }
   }
 

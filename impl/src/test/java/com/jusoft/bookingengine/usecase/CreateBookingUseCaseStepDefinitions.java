@@ -31,7 +31,7 @@ public class CreateBookingUseCaseStepDefinitions extends AbstractUseCaseStepDefi
     When("^there is a booking created by user (.*)$", (Long userId) ->
       storeBooking(() -> bookSlot(userId)));
     Then("^the slot should be booked by the user (.*)$", (Long userId) -> {
-      BookingView booking = bookingManagerComponent.find(userId, bookingCreated.getId());
+      BookingView booking = bookingManagerComponent.find(bookingCreated.getId());
       assertThat(booking.getSlotId()).isEqualTo(bookingCreated.getSlotId());
       assertThat(booking.getUserId()).isEqualTo(bookingCreated.getUserId());
       assertThat(booking.getBookingTime()).isEqualTo(bookingCreated.getBookingTime());

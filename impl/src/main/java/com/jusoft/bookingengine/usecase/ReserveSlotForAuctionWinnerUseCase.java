@@ -10,6 +10,6 @@ public class ReserveSlotForAuctionWinnerUseCase {
   private final SlotManagerComponent slotManagerComponent;
 
   public void reserveSlotForAuctionWinner(ReserveSlotCommand command) {
-    slotManagerComponent.reserveSlotForAuctionWinner(command);
+    slotManagerComponent.reserveSlotForAuctionWinner(command.getSlotId(), command.getUserId());
   }
 }

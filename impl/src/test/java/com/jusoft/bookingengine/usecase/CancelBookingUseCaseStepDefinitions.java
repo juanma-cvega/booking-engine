@@ -38,7 +38,7 @@ public class CancelBookingUseCaseStepDefinitions extends AbstractUseCaseStepDefi
       storeException(() -> cancelBookingUseCase.cancel(CancelBookingCommand.of(userId, bookingCreated.getId()))));
     Then("^the user (.*) should not see that booking in his list$", (Long userId) ->
       assertThatExceptionOfType(BookingNotFoundException.class)
-        .isThrownBy(() -> bookingManagerComponent.find(userId, bookingCreated.getId())));
+        .isThrownBy(() -> bookingManagerComponent.find(bookingCreated.getId())));
     Then("^the user should be notified the booking is already started$", () -> {
       assertThat(exceptionThrown).isNotNull().isInstanceOf(SlotNotAvailableException.class);
       SlotNotAvailableException exceptionThrown = (SlotNotAvailableException) DataHolder.exceptionThrown;

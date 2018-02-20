@@ -24,7 +24,6 @@ import static com.jusoft.bookingengine.fixtures.BookingFixtures.BOOKING_ID_2;
 import static com.jusoft.bookingengine.fixtures.BookingFixtures.BOOKING_RESOURCES;
 import static com.jusoft.bookingengine.fixtures.BookingFixtures.BOOKING_RESOURCE_1;
 import static com.jusoft.bookingengine.fixtures.BookingFixtures.BOOKING_TIME;
-import static com.jusoft.bookingengine.fixtures.BookingFixtures.CANCEL_BOOKING_COMMAND;
 import static com.jusoft.bookingengine.fixtures.BookingFixtures.CREATE_BOOKING_COMMAND;
 import static com.jusoft.bookingengine.fixtures.BookingFixtures.CREATE_BOOKING_REQUEST;
 import static com.jusoft.bookingengine.fixtures.CommonFixtures.USER_ID_1;
@@ -92,19 +91,17 @@ public class BookingControllerRestTest {
 
   @Test
   public void cancel() throws Exception {
-    when(mockBookingCommandFactory.createFrom(USER_ID_1, BOOKING_ID_1)).thenReturn(CANCEL_BOOKING_COMMAND);
-
     String cancelUrl = String.format(BOOKING_URL_TEMPLATE, USER_ID_1, BOOKING_ID_1);
     String urlTemplate = new StringJoiner(FORTHSLASH).add(BOOKINGS_URL).add(cancelUrl).toString();
     mockMvc.perform(delete(urlTemplate).contentType(APPLICATION_JSON))
       .andExpect(status().isNoContent());
 
-    verify(mockBookingManagerComponent).cancel(CANCEL_BOOKING_COMMAND);
+    verify(mockBookingManagerComponent).cancel(USER_ID_1, BOOKING_ID_1);
   }
 
   @Test
   public void find() throws Exception {
-    when(mockBookingManagerComponent.find(USER_ID_1, BOOKING_ID_1)).thenReturn(BOOKING_1);
+    when(mockBookingManagerComponent.find(BOOKING_ID_1)).thenReturn(BOOKING_1);
     when(mockBookingResourceFactory.createFrom(BOOKING_1)).thenReturn(BOOKING_RESOURCE_1);
 
     String findUrl = String.format(BOOKING_URL_TEMPLATE, USER_ID_1, BOOKING_ID_1);
@@ -154,7 +151,7 @@ public class BookingControllerRestTest {
 
   @Test
   public void bookingNotFoundException() throws Exception {
-    when(mockBookingManagerComponent.find(USER_ID_1, BOOKING_ID_1)).thenThrow(new BookingNotFoundException(USER_ID_1, BOOKING_ID_1));
+    when(mockBookingManagerComponent.find(BOOKING_ID_1)).thenThrow(new BookingNotFoundException(BOOKING_ID_1));
 
     String findUrl = String.format(BOOKING_URL_TEMPLATE, USER_ID_1, BOOKING_ID_1);
     String urlTemplate = new StringJoiner(FORTHSLASH).add(BOOKINGS_URL).add(findUrl).toString();

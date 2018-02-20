@@ -19,9 +19,9 @@ public interface SlotManagerComponent {
 
   int findNumberOfSlotsOpenFor(long roomId);
 
-  void reserveSlot(ReserveSlotCommand command);
+  void reserveSlot(long slotId, long userId);
 
   void makeAvailable(long slotId);
 
-  void reserveSlotForAuctionWinner(ReserveSlotCommand command);
+  void reserveSlotForAuctionWinner(long slotId, long userId);
 }

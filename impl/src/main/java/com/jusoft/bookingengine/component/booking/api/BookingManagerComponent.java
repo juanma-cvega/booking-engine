@@ -8,9 +8,9 @@ public interface BookingManagerComponent {
 
   BookingView book(CreateBookingCommand createBookingCommand);
 
-  void cancel(CancelBookingCommand cancelBookingCommand);
+  void cancel(long userId, long bookingId);
 
-  BookingView find(long userId, long bookingId);
+  BookingView find(long bookingId);
 
   List<BookingView> findAllBy(long userId);
 

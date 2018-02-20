@@ -5,10 +5,10 @@ import com.jusoft.bookingengine.component.auction.api.AuctionNotFoundException;
 import com.jusoft.bookingengine.component.auction.api.AuctionStartedEvent;
 import com.jusoft.bookingengine.component.auction.api.AuctionView;
 import com.jusoft.bookingengine.component.auction.api.AuctionWinnerFoundEvent;
-import com.jusoft.bookingengine.component.auction.api.FinishAuctionCommand;
 import com.jusoft.bookingengine.component.auction.api.StartAuctionCommand;
 import com.jusoft.bookingengine.component.slot.api.MakeSlotAvailableCommand;
 import com.jusoft.bookingengine.publisher.MessagePublisher;
+import com.jusoft.bookingengine.strategy.auctionwinner.api.AuctionWinnerStrategy;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
@@ -42,11 +42,11 @@ class AuctionManagerComponentImpl implements AuctionManagerComponent {
   }
 
   @Override
-  public void finishAuction(FinishAuctionCommand command) {
+  public void finishAuction(long auctionId, AuctionWinnerStrategy auctionWinnerStrategy) {
     Auction auction = auctionRepository
-      .find(command.getAuctionId())
-      .orElseThrow(() -> new AuctionNotFoundException(command.getAuctionId()));
-    Optional<Long> winnerFound = auction.findAuctionWinner(command.getAuctionWinnerStrategy());
+      .find(auctionId)
+      .orElseThrow(() -> new AuctionNotFoundException(auctionId));
+    Optional<Long> winnerFound = auction.findAuctionWinner(auctionWinnerStrategy);
     if (winnerFound.isPresent()) {
       Long auctionWinner = winnerFound.get();
       messagePublisher.publish(AuctionWinnerFoundEvent.of(auction.getId(), auctionWinner, auction.getReferenceId()));

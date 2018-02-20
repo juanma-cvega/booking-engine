@@ -10,6 +10,6 @@ public class VerifyAuctionRequirementForSlotUseCase {
   private final RoomManagerComponent roomManagerComponent;
 
   public void isAuctionRequiredForSlot(VerifyAuctionRequirementForSlotCommand command) {
-    roomManagerComponent.verifyAuctionRequirementForSlot(command);
+    roomManagerComponent.verifyAuctionRequirementFor(command.getRoomId(), command.getSlotId());
   }
 }

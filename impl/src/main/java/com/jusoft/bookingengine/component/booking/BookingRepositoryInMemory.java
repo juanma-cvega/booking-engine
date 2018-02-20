@@ -46,7 +46,7 @@ class BookingRepositoryInMemory implements BookingRepository {
   @Override
   public boolean delete(long bookingId, Predicate<Booking> predicate) {
     boolean isRemoved = false;
-    Booking booking = find(bookingId).orElseThrow(() -> new BookingNotFoundException(0, bookingId));
+    Booking booking = find(bookingId).orElseThrow(() -> new BookingNotFoundException(bookingId));
     if (predicate.test(booking)) {
       Booking bookingRemoved = store.remove(bookingId);
       isRemoved = bookingRemoved != null;

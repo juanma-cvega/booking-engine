@@ -26,6 +26,6 @@ public class ReserveSlotUseCase {
     if (!memberManagerComponent.isMemberOf(buildingView.getClubId(), command.getUserId())) {
       throw new UserNotMemberException(command.getUserId(), buildingView.getClubId());
     }
-    slotManagerComponent.reserveSlot(command);
+    slotManagerComponent.reserveSlot(command.getSlotId(), command.getUserId());
   }
 }
