@@ -14,4 +14,4 @@ Feature: As an admin, I want to see auctions created based on configuration for 
     And that sets the background
     When an auction is created for the slot
     Then the auction should be stored
-    And an auction finished event should be scheduled to be published at 06:10
+    And an auction started event should be published

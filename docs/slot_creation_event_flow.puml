@@ -1,0 +1,35 @@
+@startuml
+:roomCreatedEvent;
+repeat
+:CreateSlotUseCase|
+:slotCreatedEvent;
+fork
+  :VerifyAuctionRequirementForSlotUseCase|
+  if (auctionRequired?) then (yes)
+    :startAuctionCommand;
+    :StartAuctionUseCase|
+    :auctionStartedEvent;
+    :ScheduleFinishActionUseCase|
+    :auctionFinishedEvent;
+    (A)
+    detach
+    (A)
+    :FinishAuctionUseCase|
+    if (auctionWinnerFound?) then (yes)
+      :auctionWinnerFoundEvent;
+      :ReserveSlotForAuctionWinnerUseCase|
+      :slotReservedEvent;
+    else (no)
+      :makeSlotAvailableCommand;
+      :MakeSlotAvailableUseCase|
+      :slotMadeAvailableEvent;
+    endif
+  endif
+  stop
+fork again
+  :ScheduleNextSlotUseCase|
+  :OpenNextSlotCommand;
+  (B)
+  detach
+  (B)
+@enduml

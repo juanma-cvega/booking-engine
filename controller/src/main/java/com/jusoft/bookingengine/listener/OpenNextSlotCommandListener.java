@@ -13,12 +13,12 @@ import org.springframework.context.event.EventListener;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class OpenNextSlotCommandListener implements MessageListener {
 
-  private final CreateSlotUseCase openNextSlotUseCase;
+  private final CreateSlotUseCase createSlotUseCase;
 
   @EventListener(OpenNextSlotMessage.class)
   public void openNextSlot(OpenNextSlotMessage command) {
     log.info("OpenNextSlotCommand consumed: roomId={}", command.getRoomId());
-    SlotView slotCreated = openNextSlotUseCase.createSlotFor(new OpenNextSlotCommand(command.getRoomId()));
+    SlotView slotCreated = createSlotUseCase.createSlotFor(new OpenNextSlotCommand(command.getRoomId()));
     log.info("OpenNextSlotCommand processed. Slot created: slotId={}, roomId={}, startDate={}, endDate={}",
       slotCreated.getId(), slotCreated.getRoomId(), slotCreated.getOpenDate().getStartTime(), slotCreated.getOpenDate().getEndTime());
   }

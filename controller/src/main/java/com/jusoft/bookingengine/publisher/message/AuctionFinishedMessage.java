@@ -7,6 +7,5 @@ import lombok.Data;
 public class AuctionFinishedMessage implements InfrastructureMessage {
 
   private final long auctionId;
-  private final long slotId;
 
 }

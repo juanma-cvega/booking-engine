@@ -1,7 +1,6 @@
 package com.jusoft.bookingengine.usecase;
 
 import com.jusoft.bookingengine.component.auction.api.AuctionComponent;
-import com.jusoft.bookingengine.component.auction.api.AuctionNotFoundException;
 import com.jusoft.bookingengine.component.auction.api.AuctionView;
 import com.jusoft.bookingengine.component.auction.api.FinishAuctionCommand;
 import com.jusoft.bookingengine.strategy.auctionwinner.api.AuctionStrategyRegistrar;
@@ -15,9 +14,8 @@ public class FinishAuctionUseCase {
   private final AuctionStrategyRegistrar auctionStrategyRegistrar;
 
   public void finishAuction(long auctionId) {
-    AuctionView auction = auctionComponent.find(auctionId).orElseThrow(
-      () -> new AuctionNotFoundException(auctionId));
+    AuctionView auction = auctionComponent.find(auctionId);
     AuctionWinnerStrategy strategy = auctionStrategyRegistrar.createStrategyWith(auction.getAuctionConfigInfo());
-    auctionComponent.finishAuction(new FinishAuctionCommand(auctionId, strategy));
+    auctionComponent.finishAuction(FinishAuctionCommand.of(auctionId, strategy));
   }
 }

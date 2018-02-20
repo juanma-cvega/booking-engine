@@ -82,7 +82,12 @@ public class UseCaseConfig {
 
   @Bean
   public StartAuctionUseCase startAuctionUseCase() {
-    return new StartAuctionUseCase(auctionComponent, schedulerComponent);
+    return new StartAuctionUseCase(auctionComponent);
+  }
+
+  @Bean
+  public ScheduleFinishAuctionUseCase scheduleFinishAuctionUseCase() {
+    return new ScheduleFinishAuctionUseCase(schedulerComponent);
   }
 
   @Bean

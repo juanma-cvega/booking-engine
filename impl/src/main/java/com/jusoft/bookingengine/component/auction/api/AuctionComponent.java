@@ -1,7 +1,5 @@
 package com.jusoft.bookingengine.component.auction.api;
 
-import java.util.Optional;
-
 public interface AuctionComponent {
 
   AuctionView startAuction(StartAuctionCommand createAuctionCommand);
@@ -10,5 +8,5 @@ public interface AuctionComponent {
 
   void finishAuction(FinishAuctionCommand finishAuctionCommand);
 
-  Optional<AuctionView> find(long auctionId);
+  AuctionView find(long auctionId);
 }

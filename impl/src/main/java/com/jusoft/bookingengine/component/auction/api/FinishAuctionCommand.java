@@ -4,7 +4,7 @@ import com.jusoft.bookingengine.strategy.auctionwinner.api.AuctionWinnerStrategy
 import lombok.Data;
 import lombok.NonNull;
 
-@Data
+@Data(staticConstructor = "of")
 public class FinishAuctionCommand {
 
   private final long auctionId;

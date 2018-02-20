@@ -37,7 +37,6 @@ public class InfrastructureMessageFactoryTest {
     assertThat(message).isInstanceOf(AuctionFinishedMessage.class);
     AuctionFinishedMessage auctionFinishedMessage = (AuctionFinishedMessage) message;
     assertThat(auctionFinishedMessage.getAuctionId()).isEqualTo(AUCTION_FINISHED_EVENT.getAuctionId());
-    assertThat(auctionFinishedMessage.getSlotId()).isEqualTo(AUCTION_FINISHED_EVENT.getSlotId());
   }
 
   @Test

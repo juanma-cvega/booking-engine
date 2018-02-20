@@ -10,7 +10,7 @@ public class FinishAuctionCommandTest {
 
   @Test
   public void nullAuctionConfigFailsConstructor() {
-    assertThatThrownBy(() -> new FinishAuctionCommand(AUCTION_ID, null))
+    assertThatThrownBy(() -> FinishAuctionCommand.of(AUCTION_ID, null))
       .isInstanceOf(NullPointerException.class);
   }
 }

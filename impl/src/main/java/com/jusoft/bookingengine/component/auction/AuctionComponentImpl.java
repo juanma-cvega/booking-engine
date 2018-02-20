@@ -2,6 +2,7 @@ package com.jusoft.bookingengine.component.auction;
 
 import com.jusoft.bookingengine.component.auction.api.AuctionComponent;
 import com.jusoft.bookingengine.component.auction.api.AuctionNotFoundException;
+import com.jusoft.bookingengine.component.auction.api.AuctionStartedEvent;
 import com.jusoft.bookingengine.component.auction.api.AuctionView;
 import com.jusoft.bookingengine.component.auction.api.AuctionWinnerFoundEvent;
 import com.jusoft.bookingengine.component.auction.api.FinishAuctionCommand;
@@ -26,6 +27,9 @@ class AuctionComponentImpl implements AuctionComponent {
   public AuctionView startAuction(StartAuctionCommand command) {
     Auction newAuction = auctionFactory.createFrom(command);
     auctionRepository.save(newAuction);
+    messagePublisher.publish(AuctionStartedEvent.of(newAuction.getId(),
+      newAuction.getReferenceId(),
+      newAuction.getOpenDate()));
     return auctionFactory.createFrom(newAuction);
   }
 
@@ -45,14 +49,15 @@ class AuctionComponentImpl implements AuctionComponent {
     Optional<Long> winnerFound = auction.findAuctionWinner(command.getAuctionWinnerStrategy());
     if (winnerFound.isPresent()) {
       Long auctionWinner = winnerFound.get();
-      messagePublisher.publish(new AuctionWinnerFoundEvent(auction.getId(), auctionWinner, auction.getReferenceId()));
+      messagePublisher.publish(AuctionWinnerFoundEvent.of(auction.getId(), auctionWinner, auction.getReferenceId()));
     } else {
-      messagePublisher.publish(new MakeSlotAvailableCommand(auction.getReferenceId()));
+      messagePublisher.publish(MakeSlotAvailableCommand.of(auction.getReferenceId()));
     }
   }
 
   @Override
-  public Optional<AuctionView> find(long auctionId) {
-    return auctionRepository.find(auctionId).map(auctionFactory::createFrom);
+  public AuctionView find(long auctionId) {
+    Auction auction = auctionRepository.find(auctionId).orElseThrow(() -> new AuctionNotFoundException(auctionId));
+    return auctionFactory.createFrom(auction);
   }
 }

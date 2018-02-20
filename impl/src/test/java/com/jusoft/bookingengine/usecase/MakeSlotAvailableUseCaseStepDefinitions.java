@@ -21,7 +21,7 @@ public class MakeSlotAvailableUseCaseStepDefinitions extends AbstractUseCaseStep
 
   public MakeSlotAvailableUseCaseStepDefinitions() {
     When("^the slot is made available$", () ->
-      makeSlotAvailableUseCase.makeSlotAvailable(new MakeSlotAvailableCommand(slotCreated.getId())));
+      makeSlotAvailableUseCase.makeSlotAvailable(MakeSlotAvailableCommand.of(slotCreated.getId())));
     Then("^the slot should be available$", () -> {
       SlotView slot = slotComponent.find(slotCreated.getId());
       assertThat(slot.getState()).isEqualTo(SlotState.AVAILABLE);
