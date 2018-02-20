@@ -5,9 +5,9 @@ import com.jusoft.bookingengine.publisher.Message;
 import com.jusoft.bookingengine.publisher.message.AuctionFinishedMessage;
 import com.jusoft.bookingengine.publisher.message.AuctionWinnerFoundMessage;
 import com.jusoft.bookingengine.publisher.message.BookingCreatedMessage;
-import com.jusoft.bookingengine.publisher.message.OpenNextSlotMessage;
 import com.jusoft.bookingengine.publisher.message.RoomCreatedMessage;
 import com.jusoft.bookingengine.publisher.message.SlotCreatedMessage;
+import com.jusoft.bookingengine.publisher.message.SlotRequiredMessage;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ import static com.jusoft.bookingengine.fixtures.AuctionFixtures.AUCTION_FINISHED
 import static com.jusoft.bookingengine.fixtures.AuctionFixtures.AUCTION_WINNER_FOUND_EVENT;
 import static com.jusoft.bookingengine.fixtures.BookingFixtures.BOOKING_CREATED_EVENT;
 import static com.jusoft.bookingengine.fixtures.RoomFixtures.ROOM_CREATED_EVENT;
-import static com.jusoft.bookingengine.fixtures.SlotFixtures.OPEN_NEXT_SLOT_COMMAND;
+import static com.jusoft.bookingengine.fixtures.RoomFixtures.SLOT_REQUIRED_EVENT;
 import static com.jusoft.bookingengine.fixtures.SlotFixtures.SLOT_CREATED_EVENT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -62,12 +62,12 @@ public class InfrastructureMessageFactoryTest {
   }
 
   @Test
-  public void create_from_open_next_slot_command_should_create_an_open_next_slot_message() {
-    InfrastructureMessage message = infrastructureMessageFactory.createFrom(OPEN_NEXT_SLOT_COMMAND);
+  public void create_from_slot_required_event_should_create_a_slot_required_message() {
+    InfrastructureMessage message = infrastructureMessageFactory.createFrom(SLOT_REQUIRED_EVENT);
 
-    assertThat(message).isInstanceOf(OpenNextSlotMessage.class);
-    OpenNextSlotMessage openNextSlotMessage = (OpenNextSlotMessage) message;
-    assertThat(openNextSlotMessage.getRoomId()).isEqualTo(OPEN_NEXT_SLOT_COMMAND.getRoomId());
+    assertThat(message).isInstanceOf(SlotRequiredMessage.class);
+    SlotRequiredMessage openNextSlotMessage = (SlotRequiredMessage) message;
+    assertThat(openNextSlotMessage.getRoomId()).isEqualTo(SLOT_REQUIRED_EVENT.getRoomId());
   }
 
   @Test

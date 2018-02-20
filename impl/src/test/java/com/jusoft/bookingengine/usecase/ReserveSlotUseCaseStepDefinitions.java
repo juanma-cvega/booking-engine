@@ -4,7 +4,6 @@ import com.jusoft.bookingengine.component.booking.api.SlotAlreadyReservedExcepti
 import com.jusoft.bookingengine.component.booking.api.SlotNotAvailableException;
 import com.jusoft.bookingengine.component.booking.api.SlotPendingAuctionException;
 import com.jusoft.bookingengine.component.member.api.UserNotMemberException;
-import com.jusoft.bookingengine.component.slot.api.ReserveSlotCommand;
 import com.jusoft.bookingengine.component.slot.api.SlotManagerComponent;
 import com.jusoft.bookingengine.component.slot.api.SlotReservedEvent;
 import com.jusoft.bookingengine.component.slot.api.SlotState;
@@ -33,9 +32,9 @@ public class ReserveSlotUseCaseStepDefinitions extends AbstractUseCaseStepDefini
       assertThat(exception.getClubId()).isEqualTo(clubCreated.getId());
     });
     When("^the slot is reserved by user (\\d+)$", (Long userId) ->
-      reserveSlotUseCase.reserveSlot(ReserveSlotCommand.of(slotCreated.getId(), userId)));
+      reserveSlotUseCase.reserveSlot(slotCreated.getId(), userId));
     When("^the user (\\d+) tries to reserve the slot$", (Long userId) ->
-      storeException(() -> reserveSlotUseCase.reserveSlot(ReserveSlotCommand.of(slotCreated.getId(), userId))));
+      storeException(() -> reserveSlotUseCase.reserveSlot(slotCreated.getId(), userId)));
     Then("^the slot should be reserved$", () -> {
       SlotView slot = slotManagerComponent.find(slotCreated.getId());
       assertThat(slot.getState()).isEqualTo(SlotState.RESERVED);

@@ -1,6 +1,5 @@
 package com.jusoft.bookingengine.usecase;
 
-import com.jusoft.bookingengine.component.slot.api.MakeSlotAvailableCommand;
 import com.jusoft.bookingengine.component.slot.api.SlotMadeAvailableEvent;
 import com.jusoft.bookingengine.component.slot.api.SlotManagerComponent;
 import com.jusoft.bookingengine.component.slot.api.SlotState;
@@ -21,7 +20,7 @@ public class MakeSlotAvailableUseCaseStepDefinitions extends AbstractUseCaseStep
 
   public MakeSlotAvailableUseCaseStepDefinitions() {
     When("^the slot is made available$", () ->
-      makeSlotAvailableUseCase.makeSlotAvailable(MakeSlotAvailableCommand.of(slotCreated.getId())));
+      makeSlotAvailableUseCase.makeSlotAvailable(slotCreated.getId()));
     Then("^the slot should be available$", () -> {
       SlotView slot = slotManagerComponent.find(slotCreated.getId());
       assertThat(slot.getState()).isEqualTo(SlotState.AVAILABLE);

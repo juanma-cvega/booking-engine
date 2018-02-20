@@ -2,7 +2,6 @@ package com.jusoft.bookingengine.usecase;
 
 import com.jusoft.bookingengine.component.booking.api.BookingManagerComponent;
 import com.jusoft.bookingengine.component.booking.api.BookingNotFoundException;
-import com.jusoft.bookingengine.component.booking.api.CancelBookingCommand;
 import com.jusoft.bookingengine.component.booking.api.SlotNotAvailableException;
 import com.jusoft.bookingengine.component.booking.api.WrongBookingUserException;
 import com.jusoft.bookingengine.config.AbstractUseCaseStepDefinitions;
@@ -31,11 +30,11 @@ public class CancelBookingUseCaseStepDefinitions extends AbstractUseCaseStepDefi
     Given("^the slot start time is passed$", () ->
       clock.setClock(Clock.fixed(Instant.now().plus(20, ChronoUnit.DAYS), ZoneId.systemDefault())));
     When("^the user (.*) cancels the booking from user (.*)$", (Long userToCancel, Long userOwner) ->
-      storeException(() -> cancelBookingUseCase.cancel(CancelBookingCommand.of(userToCancel, bookingCreated.getId()))));
+      storeException(() -> cancelBookingUseCase.cancel(userToCancel, bookingCreated.getId())));
     When("^the user (.*) cancels his booking$", (Long userId) ->
-      cancelBookingUseCase.cancel(CancelBookingCommand.of(userId, bookingCreated.getId())));
+      cancelBookingUseCase.cancel(userId, bookingCreated.getId()));
     When("^the user (\\d+) tries to cancel his booking$", (Long userId) ->
-      storeException(() -> cancelBookingUseCase.cancel(CancelBookingCommand.of(userId, bookingCreated.getId()))));
+      storeException(() -> cancelBookingUseCase.cancel(userId, bookingCreated.getId())));
     Then("^the user (.*) should not see that booking in his list$", (Long userId) ->
       assertThatExceptionOfType(BookingNotFoundException.class)
         .isThrownBy(() -> bookingManagerComponent.find(bookingCreated.getId())));

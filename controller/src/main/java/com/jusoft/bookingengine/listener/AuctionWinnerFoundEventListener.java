@@ -1,6 +1,5 @@
 package com.jusoft.bookingengine.listener;
 
-import com.jusoft.bookingengine.component.slot.api.ReserveSlotCommand;
 import com.jusoft.bookingengine.publisher.message.AuctionWinnerFoundMessage;
 import com.jusoft.bookingengine.usecase.ReserveSlotForAuctionWinnerUseCase;
 import lombok.AllArgsConstructor;
@@ -17,6 +16,6 @@ class AuctionWinnerFoundEventListener implements MessageListener {
   public void bookSlotForAuctionWinner(AuctionWinnerFoundMessage event) {
     log.info("AuctionWinnerFoundEvent consumed: auctionId={}, userId={}, slotId={}",
       event.getAuctionId(), event.getAuctionWinnerId(), event.getSlotId());
-    reserveSlotForAuctionWinnerUseCase.reserveSlotForAuctionWinner(ReserveSlotCommand.of(event.getSlotId(), event.getAuctionWinnerId()));
+    reserveSlotForAuctionWinnerUseCase.reserveSlotForAuctionWinner(event.getSlotId(), event.getAuctionWinnerId());
   }
 }

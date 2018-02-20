@@ -2,7 +2,6 @@ package com.jusoft.bookingengine.fixtures;
 
 import com.jusoft.bookingengine.component.booking.api.BookingCreatedEvent;
 import com.jusoft.bookingengine.component.booking.api.BookingView;
-import com.jusoft.bookingengine.component.booking.api.CancelBookingCommand;
 import com.jusoft.bookingengine.component.booking.api.CreateBookingCommand;
 import com.jusoft.bookingengine.controller.booking.BookingResources;
 import com.jusoft.bookingengine.controller.booking.api.BookingResource;
@@ -25,7 +24,6 @@ public class BookingFixtures {
 
   public static final long BOOKING_TIME = 123455678;
   public static final ZonedDateTime BOOKING_TIME_DATE = TimeUtil.getLocalDateTimeFrom(BOOKING_TIME);
-  public static final CancelBookingCommand CANCEL_BOOKING_COMMAND = CancelBookingCommand.of(USER_ID_1, BOOKING_ID_1);
 
   public static final BookingView BOOKING_1 = BookingView.of(BOOKING_ID_1, USER_ID_1, BOOKING_TIME_DATE, SlotFixtures.SLOT_ID_1);
   public static final BookingView BOOKING_2 = BookingView.of(BOOKING_ID_2, USER_ID_1, BOOKING_TIME_DATE, SlotFixtures.SLOT_ID_2);

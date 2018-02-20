@@ -1,6 +1,7 @@
 package com.jusoft.bookingengine.fixtures;
 
 import com.jusoft.bookingengine.component.room.api.RoomCreatedEvent;
+import com.jusoft.bookingengine.component.room.api.SlotRequiredEvent;
 import com.jusoft.bookingengine.component.timer.OpenTime;
 import com.jusoft.bookingengine.strategy.auctionwinner.api.AuctionConfigInfo;
 import com.jusoft.bookingengine.strategy.auctionwinner.api.NoAuctionConfigInfo;
@@ -31,4 +32,5 @@ public class RoomFixtures {
   public static final AuctionConfigInfo AUCTION_CONFIG_INFO = new NoAuctionConfigInfo();
 
   public static final RoomCreatedEvent ROOM_CREATED_EVENT = RoomCreatedEvent.of(ROOM_ID, SLOT_DURATION_IN_MINUTES, OPEN_TIMES, AVAILABLE_DAYS, IS_ACTIVE, AUCTION_CONFIG_INFO);
+  public static final SlotRequiredEvent SLOT_REQUIRED_EVENT = SlotRequiredEvent.of(ROOM_ID);
 }

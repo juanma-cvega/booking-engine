@@ -6,7 +6,7 @@ repeat
 fork
   :VerifyAuctionRequirementForSlotUseCase|
   if (auctionRequired?) then (yes)
-    :startAuctionCommand;
+    :auctionRequiredEvent;
     :StartAuctionUseCase|
     :auctionStartedEvent;
     :ScheduleFinishActionUseCase|
@@ -20,7 +20,7 @@ fork
       :ReserveSlotForAuctionWinnerUseCase|
       :slotReservedEvent;
     else (no)
-      :makeSlotAvailableCommand;
+      :auctionUnsuccessfulEvent;
       :MakeSlotAvailableUseCase|
       :slotMadeAvailableEvent;
     endif

@@ -3,8 +3,8 @@ package com.jusoft.bookingengine.publisher.factory;
 import com.jusoft.bookingengine.component.auction.api.AuctionFinishedEvent;
 import com.jusoft.bookingengine.component.auction.api.AuctionWinnerFoundEvent;
 import com.jusoft.bookingengine.component.booking.api.BookingCreatedEvent;
-import com.jusoft.bookingengine.component.room.api.OpenNextSlotCommand;
 import com.jusoft.bookingengine.component.room.api.RoomCreatedEvent;
+import com.jusoft.bookingengine.component.room.api.SlotRequiredEvent;
 import com.jusoft.bookingengine.component.slot.api.SlotCreatedEvent;
 import com.jusoft.bookingengine.publisher.Message;
 import org.springframework.context.annotation.Bean;
@@ -27,7 +27,7 @@ public class InfrastructureMessageFactoryConfig {
     factories.put(AuctionFinishedEvent.class, new AuctionFinishedMessageFactory());
     factories.put(AuctionWinnerFoundEvent.class, new AuctionWinnerFoundMessageFactory());
     factories.put(BookingCreatedEvent.class, new BookingCreatedMessageFactory());
-    factories.put(OpenNextSlotCommand.class, new OpenNextSlotMessageFactory());
+    factories.put(SlotRequiredEvent.class, new SlotRequiredMessageFactory());
     factories.put(RoomCreatedEvent.class, new RoomCreatedMessageFactory());
     factories.put(SlotCreatedEvent.class, new SlotCreatedMessageFactory());
     return factories;

@@ -1,7 +1,6 @@
 package com.jusoft.bookingengine.usecase;
 
-import com.jusoft.bookingengine.component.auction.api.StartAuctionCommand;
-import com.jusoft.bookingengine.component.room.api.VerifyAuctionRequirementForSlotCommand;
+import com.jusoft.bookingengine.component.room.api.AuctionRequiredEvent;
 import com.jusoft.bookingengine.config.AbstractUseCaseStepDefinitions;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -17,13 +16,13 @@ public class VerifyAuctionRequirementForSlotUseCaseStepDefinitions extends Abstr
 
   public VerifyAuctionRequirementForSlotUseCaseStepDefinitions() {
     When("^the room is asked whether the slot needs an auction$", () ->
-      verifyAuctionRequirementForSlotUseCase.isAuctionRequiredForSlot(VerifyAuctionRequirementForSlotCommand.of(roomCreated.getId(), slotCreated.getId())));
-    Then("^a request to create an auction should be published$", () -> {
-      StartAuctionCommand command = verifyAndGetMessageOfType(StartAuctionCommand.class);
-      assertThat(command.getReferenceId()).isEqualTo(slotCreated.getId());
-      assertThat(command.getAuctionConfigInfo()).isEqualTo(roomCreated.getAuctionConfigInfo());
+      verifyAuctionRequirementForSlotUseCase.isAuctionRequiredFor(roomCreated.getId(), slotCreated.getId()));
+    Then("^an event of an auction required should be published$", () -> {
+      AuctionRequiredEvent event = verifyAndGetMessageOfType(AuctionRequiredEvent.class);
+      assertThat(event.getSlotId()).isEqualTo(slotCreated.getId());
+      assertThat(event.getAuctionConfigInfo()).isEqualTo(roomCreated.getAuctionConfigInfo());
     });
-    Then("^a request to create an auction should not be published$", () ->
+    Then("^an event of an auction required should not be published$", () ->
       verifyZeroInteractions(messagePublisher));
   }
 }

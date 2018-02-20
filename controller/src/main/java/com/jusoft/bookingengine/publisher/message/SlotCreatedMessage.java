@@ -6,7 +6,7 @@ import com.jusoft.bookingengine.publisher.InfrastructureMessage;
 import lombok.Data;
 import lombok.NonNull;
 
-@Data
+@Data(staticConstructor = "of")
 public class SlotCreatedMessage implements InfrastructureMessage {
 
   private final long slotId;

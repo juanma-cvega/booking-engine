@@ -1,7 +1,6 @@
 package com.jusoft.bookingengine.usecase;
 
 import com.jusoft.bookingengine.component.club.api.ClubAuthorizationException;
-import com.jusoft.bookingengine.component.club.api.FindJoinRequestCommand;
 import com.jusoft.bookingengine.component.club.api.JoinRequest;
 import com.jusoft.bookingengine.config.AbstractUseCaseStepDefinitions;
 import cucumber.api.DataTable;
@@ -23,9 +22,9 @@ public class FindJoinRequestsUseCaseStepDefinitions extends AbstractUseCaseStepD
 
   public FindJoinRequestsUseCaseStepDefinitions() {
     When("^admin (\\d+) looks for all join requests created", (Long adminId) ->
-      joinRequestsFound = findJoinRequestsUseCase.findJoinRequests(FindJoinRequestCommand.of(adminId, clubCreated.getId())));
+      joinRequestsFound = findJoinRequestsUseCase.findJoinRequests(adminId, clubCreated.getId()));
     When("^user (\\d+) looks for all join requests created", (Long adminId) ->
-      storeException(() -> joinRequestsFound = findJoinRequestsUseCase.findJoinRequests(FindJoinRequestCommand.of(adminId, clubCreated.getId()))));
+      storeException(() -> joinRequestsFound = findJoinRequestsUseCase.findJoinRequests(clubCreated.getId(), adminId)));
     Then("^the admin should be able to see the list of join requests containing requests for users$", (DataTable userIdsDataTable) -> {
       List<Long> userIds = userIdsDataTable.asList(Long.class);
       assertThat(joinRequestsFound).extracting("userId").hasSameElementsAs(userIds);

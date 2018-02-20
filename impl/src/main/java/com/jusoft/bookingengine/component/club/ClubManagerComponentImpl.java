@@ -10,7 +10,6 @@ import com.jusoft.bookingengine.component.club.api.ClubWithNameNotFoundException
 import com.jusoft.bookingengine.component.club.api.CreateClubCommand;
 import com.jusoft.bookingengine.component.club.api.CreateJoinRequestCommand;
 import com.jusoft.bookingengine.component.club.api.DenyJoinRequestCommand;
-import com.jusoft.bookingengine.component.club.api.FindJoinRequestCommand;
 import com.jusoft.bookingengine.component.club.api.JoinRequest;
 import com.jusoft.bookingengine.component.club.api.JoinRequestAcceptedEvent;
 import com.jusoft.bookingengine.component.club.api.JoinRequestCreatedEvent;
@@ -70,10 +69,10 @@ class ClubManagerComponentImpl implements ClubManagerComponent {
   }
 
   @Override
-  public Set<JoinRequest> findJoinRequests(FindJoinRequestCommand command) {
-    Club club = findBy(command.getClubId());
-    if (!club.isAdmin(command.getAdminId())) {
-      throw new ClubAuthorizationException(command.getAdminId(), command.getClubId());
+  public Set<JoinRequest> findJoinRequests(long clubId, long adminId) {
+    Club club = findBy(clubId);
+    if (!club.isAdmin(adminId)) {
+      throw new ClubAuthorizationException(adminId, clubId);
     }
     return club.getJoinRequests();
   }

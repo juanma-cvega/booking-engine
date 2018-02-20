@@ -2,7 +2,6 @@ package com.jusoft.bookingengine.usecase;
 
 import com.jusoft.bookingengine.component.club.api.AcceptJoinRequestCommand;
 import com.jusoft.bookingengine.component.club.api.ClubManagerComponent;
-import com.jusoft.bookingengine.component.club.api.FindJoinRequestCommand;
 import com.jusoft.bookingengine.component.club.api.JoinRequest;
 import com.jusoft.bookingengine.component.club.api.JoinRequestAcceptedEvent;
 import com.jusoft.bookingengine.component.member.api.MemberManagerComponent;
@@ -37,7 +36,7 @@ public class AcceptJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStep
       acceptJoinRequestUseCase.acceptJoinRequest(AcceptJoinRequestCommand.of(joinRequestFromUser.getId(), clubCreated.getId(), adminId));
     });
     Then("^the club should not have the join request for user (\\d+) anymore$", (Long userId) -> {
-      Set<JoinRequest> joinRequests = clubManagerComponent.findJoinRequests(FindJoinRequestCommand.of(clubAdmin, clubCreated.getId()));
+      Set<JoinRequest> joinRequests = clubManagerComponent.findJoinRequests(clubAdmin, clubCreated.getId());
       assertThat(joinRequests.stream().anyMatch(joinRequest -> joinRequest.getUserId() == userId)).isFalse();
     });
     Then("^a notification of a join request accepted for user (\\d+) should be published$", (Long userId) -> {

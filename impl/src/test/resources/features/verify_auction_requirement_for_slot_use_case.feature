@@ -15,7 +15,7 @@ Feature: As an admin, I want the system to decide whether a slot needs an auctio
     And a slot is created
     And that sets the background
     When the room is asked whether the slot needs an auction
-    Then a request to create an auction should be published
+    Then an event of an auction required should be published
 
   Scenario: As an admin, I want the system not to publish a notification of an auction needed when the room is not configured
   to use auctions
@@ -25,4 +25,4 @@ Feature: As an admin, I want the system to decide whether a slot needs an auctio
     And a slot is created
     And that sets the background
     When the room is asked whether the slot needs an auction
-    Then a request to create an auction should not be published
+    Then an event of an auction required should not be published

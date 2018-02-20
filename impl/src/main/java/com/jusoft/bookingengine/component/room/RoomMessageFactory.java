@@ -1,6 +1,5 @@
 package com.jusoft.bookingengine.component.room;
 
-import com.jusoft.bookingengine.component.auction.api.StartAuctionCommand;
 import com.jusoft.bookingengine.component.room.api.RoomCreatedEvent;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -16,9 +15,5 @@ class RoomMessageFactory {
       room.getAvailableDays(),
       room.isActive(),
       room.getAuctionConfigInfo());
-  }
-
-  StartAuctionCommand startAuctionCommand(Room room, long slotId) {
-    return StartAuctionCommand.of(slotId, room.getAuctionConfigInfo());
   }
 }

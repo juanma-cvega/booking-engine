@@ -10,7 +10,7 @@ class AuctionWinnerFoundMessageFactory implements MessageFactory<AuctionWinnerFo
 
   @Override
   public AuctionWinnerFoundMessage createFrom(AuctionWinnerFoundEvent message) {
-    return new AuctionWinnerFoundMessage(
+    return AuctionWinnerFoundMessage.of(
       message.getAuctionId(),
       message.getAuctionWinnerId(),
       message.getSlotId()

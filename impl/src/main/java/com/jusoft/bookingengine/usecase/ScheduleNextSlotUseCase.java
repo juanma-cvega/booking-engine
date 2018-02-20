@@ -1,8 +1,8 @@
 package com.jusoft.bookingengine.usecase;
 
-import com.jusoft.bookingengine.component.room.api.OpenNextSlotCommand;
 import com.jusoft.bookingengine.component.room.api.RoomManagerComponent;
 import com.jusoft.bookingengine.component.room.api.RoomView;
+import com.jusoft.bookingengine.component.room.api.SlotRequiredEvent;
 import com.jusoft.bookingengine.component.scheduler.api.SchedulerComponent;
 import com.jusoft.bookingengine.strategy.slotcreation.api.SlotCreationStrategy;
 import com.jusoft.bookingengine.strategy.slotcreation.api.SlotCreationStrategyRegistrar;
@@ -20,6 +20,6 @@ public class ScheduleNextSlotUseCase {
   public void scheduleNextSlot(long roomId) {
     RoomView room = roomManagerComponent.find(roomId);
     SlotCreationStrategy strategy = slotCreationStrategyRegistrar.createStrategyWith(room.getSlotCreationConfigInfo());
-    schedulerComponent.schedule(strategy.nextSlotCreationTimeFor(room.getId()), OpenNextSlotCommand.of(roomId));
+    schedulerComponent.schedule(strategy.nextSlotCreationTimeFor(room.getId()), SlotRequiredEvent.of(roomId));
   }
 }

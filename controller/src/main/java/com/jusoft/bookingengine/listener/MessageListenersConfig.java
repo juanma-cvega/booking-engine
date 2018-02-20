@@ -39,8 +39,8 @@ public class MessageListenersConfig {
   private VerifyAuctionRequirementForSlotUseCase verifyAuctionRequirementForSlotUseCase;
 
   @Bean
-  public OpenNextSlotCommandListener createSlotCommandListener() {
-    return new OpenNextSlotCommandListener(openNextSlotUseCase);
+  public SlotRequiredEventListener createSlotCommandListener() {
+    return new SlotRequiredEventListener(openNextSlotUseCase);
   }
 
   @Bean

@@ -1,6 +1,5 @@
 package com.jusoft.bookingengine.listener;
 
-import com.jusoft.bookingengine.component.room.api.OpenNextSlotCommand;
 import com.jusoft.bookingengine.component.slot.api.SlotView;
 import com.jusoft.bookingengine.publisher.message.RoomCreatedMessage;
 import com.jusoft.bookingengine.usecase.CreateSlotUseCase;
@@ -18,7 +17,7 @@ class RoomCreatedEventListener implements MessageListener {
   @EventListener(RoomCreatedMessage.class)
   public void openFirstSlot(RoomCreatedMessage event) {
     log.info("RoomCreatedEvent consumed: roomId={}", event.getRoomId());
-    SlotView slotCreated = openNextSlotUseCase.createSlotFor(OpenNextSlotCommand.of(event.getRoomId()));
+    SlotView slotCreated = openNextSlotUseCase.createSlotFor(event.getRoomId());
     log.info("RoomCreatedEvent processed: roomId={}, slotId={} ", slotCreated.getRoomId(), slotCreated.getId());
   }
 }

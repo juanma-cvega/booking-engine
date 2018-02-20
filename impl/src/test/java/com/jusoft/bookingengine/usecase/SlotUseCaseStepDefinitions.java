@@ -1,6 +1,5 @@
 package com.jusoft.bookingengine.usecase;
 
-import com.jusoft.bookingengine.component.room.api.OpenNextSlotCommand;
 import com.jusoft.bookingengine.component.slot.api.SlotCreatedEvent;
 import com.jusoft.bookingengine.component.slot.api.SlotManagerComponent;
 import com.jusoft.bookingengine.component.slot.api.SlotView;
@@ -26,9 +25,9 @@ public class SlotUseCaseStepDefinitions extends AbstractUseCaseStepDefinitions {
 
   public SlotUseCaseStepDefinitions() {
     When("^a slot is created$", () ->
-      slotCreated = openNextSlotUseCase.createSlotFor(OpenNextSlotCommand.of(roomCreated.getId())));
+      slotCreated = openNextSlotUseCase.createSlotFor(roomCreated.getId()));
     When("(.*) slots are created", (Integer slotsToCreate) ->
-      IntStream.range(0, slotsToCreate).forEach((index) -> openNextSlotUseCase.createSlotFor(OpenNextSlotCommand.of(roomCreated.getId()))));
+      IntStream.range(0, slotsToCreate).forEach((index) -> openNextSlotUseCase.createSlotFor(roomCreated.getId())));
     Then("^a notification of a created slot starting at (.*) and ending at (.*) should be published$", (String startTime, String endTime) -> {
       ZonedDateTime startDate = getDateFrom(startTime);
       ZonedDateTime endDate = getDateFrom(endTime);

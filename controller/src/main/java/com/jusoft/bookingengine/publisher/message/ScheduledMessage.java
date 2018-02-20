@@ -6,7 +6,7 @@ import lombok.NonNull;
 
 import java.time.ZonedDateTime;
 
-@Data
+@Data(staticConstructor = "of")
 public class ScheduledMessage implements InfrastructureMessage {
 
   @NonNull

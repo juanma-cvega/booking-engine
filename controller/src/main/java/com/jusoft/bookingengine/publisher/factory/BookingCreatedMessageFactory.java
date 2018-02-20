@@ -9,7 +9,7 @@ import lombok.AllArgsConstructor;
 class BookingCreatedMessageFactory implements MessageFactory<BookingCreatedEvent, BookingCreatedMessage> {
   @Override
   public BookingCreatedMessage createFrom(BookingCreatedEvent message) {
-    return new BookingCreatedMessage(
+    return BookingCreatedMessage.of(
       message.getBookingId(),
       message.getUserId(),
       message.getSlotId());

@@ -10,7 +10,7 @@ class AuctionFinishedMessageFactory implements MessageFactory<AuctionFinishedEve
 
   @Override
   public AuctionFinishedMessage createFrom(AuctionFinishedEvent message) {
-    return new AuctionFinishedMessage(
+    return AuctionFinishedMessage.of(
       message.getAuctionId());
   }
 }

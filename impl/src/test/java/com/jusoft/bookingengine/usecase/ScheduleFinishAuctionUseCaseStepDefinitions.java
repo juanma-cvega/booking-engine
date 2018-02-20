@@ -3,7 +3,6 @@ package com.jusoft.bookingengine.usecase;
 import com.jusoft.bookingengine.component.auction.api.AuctionFinishedEvent;
 import com.jusoft.bookingengine.component.scheduler.ScheduledTask;
 import com.jusoft.bookingengine.config.AbstractUseCaseStepDefinitions;
-import com.jusoft.bookingengine.usecase.api.ScheduleFinishAuctionUseCaseInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -28,7 +27,7 @@ public class ScheduleFinishAuctionUseCaseStepDefinitions extends AbstractUseCase
       assertThat(tasks.get(0).getTask().isDone()).isFalse();
     });
     When("^the auction is scheduled to finish$", () ->
-      scheduleFinishAuctionUseCase.scheduleFinishAuction(ScheduleFinishAuctionUseCaseInfo.of(auctionCreated.getId(), auctionCreated.getOpenDate())));
+      scheduleFinishAuctionUseCase.scheduleFinishAuction(auctionCreated.getId(), auctionCreated.getOpenDate()));
 
   }
 }

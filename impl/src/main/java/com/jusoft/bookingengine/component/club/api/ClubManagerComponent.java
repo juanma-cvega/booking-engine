@@ -16,7 +16,7 @@ public interface ClubManagerComponent {
 
   void denyAccessRequest(DenyJoinRequestCommand acceptAccessRequestCommand);
 
-  Set<JoinRequest> findJoinRequests(FindJoinRequestCommand command);
+  Set<JoinRequest> findJoinRequests(long clubId, long adminId);
 
   JoinRequest createJoinRequest(CreateJoinRequestCommand command);
 }

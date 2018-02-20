@@ -1,7 +1,6 @@
 package com.jusoft.bookingengine.usecase;
 
 import com.jusoft.bookingengine.component.room.api.NextSlotConfig;
-import com.jusoft.bookingengine.component.room.api.OpenNextSlotCommand;
 import com.jusoft.bookingengine.component.room.api.RoomManagerComponent;
 import com.jusoft.bookingengine.component.slot.api.CreateSlotCommand;
 import com.jusoft.bookingengine.component.slot.api.SlotManagerComponent;
@@ -14,12 +13,12 @@ public class CreateSlotUseCase {
   private final RoomManagerComponent roomManagerComponent;
   private final SlotManagerComponent slotManagerComponent;
 
-  public SlotView createSlotFor(OpenNextSlotCommand command) {
-    NextSlotConfig nextSlotOpenDate = slotManagerComponent.findLastCreatedFor(command.getRoomId())
-      .map(slot -> roomManagerComponent.findNextSlotOpenDate(slot.getOpenDate().getEndTime(), command.getRoomId()))
-      .orElse(roomManagerComponent.findFirstSlotOpenDate(command.getRoomId()));
+  public SlotView createSlotFor(long roomId) {
+    NextSlotConfig nextSlotOpenDate = slotManagerComponent.findLastCreatedFor(roomId)
+      .map(slot -> roomManagerComponent.findNextSlotOpenDate(slot.getOpenDate().getEndTime(), roomId))
+      .orElse(roomManagerComponent.findFirstSlotOpenDate(roomId));
 
-    return slotManagerComponent.create(CreateSlotCommand.of(command.getRoomId(),
+    return slotManagerComponent.create(CreateSlotCommand.of(roomId,
       nextSlotOpenDate.getOpenDate(),
       nextSlotOpenDate.getState()));
   }

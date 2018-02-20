@@ -3,10 +3,10 @@ package com.jusoft.bookingengine.component.auction;
 import com.jusoft.bookingengine.component.auction.api.AuctionManagerComponent;
 import com.jusoft.bookingengine.component.auction.api.AuctionNotFoundException;
 import com.jusoft.bookingengine.component.auction.api.AuctionStartedEvent;
+import com.jusoft.bookingengine.component.auction.api.AuctionUnsuccessfulEvent;
 import com.jusoft.bookingengine.component.auction.api.AuctionView;
 import com.jusoft.bookingengine.component.auction.api.AuctionWinnerFoundEvent;
 import com.jusoft.bookingengine.component.auction.api.StartAuctionCommand;
-import com.jusoft.bookingengine.component.slot.api.MakeSlotAvailableCommand;
 import com.jusoft.bookingengine.publisher.MessagePublisher;
 import com.jusoft.bookingengine.strategy.auctionwinner.api.AuctionWinnerStrategy;
 import lombok.AccessLevel;
@@ -51,7 +51,7 @@ class AuctionManagerComponentImpl implements AuctionManagerComponent {
       Long auctionWinner = winnerFound.get();
       messagePublisher.publish(AuctionWinnerFoundEvent.of(auction.getId(), auctionWinner, auction.getReferenceId()));
     } else {
-      messagePublisher.publish(MakeSlotAvailableCommand.of(auction.getReferenceId()));
+      messagePublisher.publish(AuctionUnsuccessfulEvent.of(auction.getId(), auction.getReferenceId()));
     }
   }
 

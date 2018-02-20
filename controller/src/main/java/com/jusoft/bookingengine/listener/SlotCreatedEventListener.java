@@ -1,6 +1,5 @@
 package com.jusoft.bookingengine.listener;
 
-import com.jusoft.bookingengine.component.room.api.VerifyAuctionRequirementForSlotCommand;
 import com.jusoft.bookingengine.publisher.message.SlotCreatedMessage;
 import com.jusoft.bookingengine.usecase.ScheduleNextSlotUseCase;
 import com.jusoft.bookingengine.usecase.VerifyAuctionRequirementForSlotUseCase;
@@ -27,6 +26,6 @@ class SlotCreatedEventListener implements MessageListener {
   public void startAuction(SlotCreatedMessage event) {
     log.info("SlotCreatedEvent consumed for auction: slotId={}, roomId={}, openDate={}, endTime={}",
       event.getSlotId(), event.getRoomId(), event.getOpenDate());
-    verifyAuctionRequirementForSlotUseCase.isAuctionRequiredForSlot(VerifyAuctionRequirementForSlotCommand.of(event.getRoomId(), event.getSlotId()));
+    verifyAuctionRequirementForSlotUseCase.isAuctionRequiredFor(event.getRoomId(), event.getSlotId());
   }
 }

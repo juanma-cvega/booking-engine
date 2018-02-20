@@ -1,5 +1,6 @@
 package com.jusoft.bookingengine.component.room;
 
+import com.jusoft.bookingengine.component.room.api.AuctionRequiredEvent;
 import com.jusoft.bookingengine.component.room.api.CreateRoomCommand;
 import com.jusoft.bookingengine.component.room.api.NextSlotConfig;
 import com.jusoft.bookingengine.component.room.api.RoomManagerComponent;
@@ -50,7 +51,7 @@ class RoomManagerComponentImpl implements RoomManagerComponent {
   public void verifyAuctionRequirementFor(long roomId, long slotId) {
     Room room = findRoom(roomId);
     if (room.isAuctionRequired()) {
-      messagePublisher.publish(roomMessageFactory.startAuctionCommand(room, slotId));
+      messagePublisher.publish(AuctionRequiredEvent.of(slotId, room.getAuctionConfigInfo()));
     }
   }
 

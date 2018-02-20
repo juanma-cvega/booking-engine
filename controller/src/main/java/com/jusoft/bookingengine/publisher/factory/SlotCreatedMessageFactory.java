@@ -9,7 +9,7 @@ import lombok.AllArgsConstructor;
 class SlotCreatedMessageFactory implements MessageFactory<SlotCreatedEvent, SlotCreatedMessage> {
   @Override
   public SlotCreatedMessage createFrom(SlotCreatedEvent message) {
-    return new SlotCreatedMessage(
+    return SlotCreatedMessage.of(
       message.getSlotId(),
       message.getRoomId(),
       message.getState(),

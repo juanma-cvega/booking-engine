@@ -8,7 +8,7 @@ import lombok.NonNull;
 import java.time.DayOfWeek;
 import java.util.List;
 
-@Data
+@Data(staticConstructor = "of")
 public class RoomCreatedMessage implements InfrastructureMessage {
 
   private final long roomId;

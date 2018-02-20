@@ -1,7 +1,7 @@
 package com.jusoft.bookingengine.usecase;
 
+import com.jusoft.bookingengine.component.auction.api.AuctionUnsuccessfulEvent;
 import com.jusoft.bookingengine.component.auction.api.AuctionWinnerFoundEvent;
-import com.jusoft.bookingengine.component.slot.api.MakeSlotAvailableCommand;
 import com.jusoft.bookingengine.config.AbstractUseCaseStepDefinitions;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -28,8 +28,8 @@ public class FinishAuctionUseCaseStepDefinitions extends AbstractUseCaseStepDefi
       assertThat(auctionCreated.getId()).isEqualTo(auctionWinnerFoundEvent.getAuctionId());
     });
     Then("^a notification saying the slot can be made available should be published$", () -> {
-      MakeSlotAvailableCommand makeSlotAvailableCommand = verifyAndGetMessageOfType(MakeSlotAvailableCommand.class);
-      assertThat(makeSlotAvailableCommand.getSlotId()).isEqualTo(slotCreated.getId());
+      AuctionUnsuccessfulEvent command = verifyAndGetMessageOfType(AuctionUnsuccessfulEvent.class);
+      assertThat(command.getReferenceId()).isEqualTo(slotCreated.getId());
     });
   }
 }
