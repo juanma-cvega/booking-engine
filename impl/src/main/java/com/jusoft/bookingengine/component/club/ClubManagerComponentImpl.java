@@ -2,8 +2,8 @@ package com.jusoft.bookingengine.component.club;
 
 import com.jusoft.bookingengine.component.club.api.AcceptJoinRequestCommand;
 import com.jusoft.bookingengine.component.club.api.ClubAuthorizationException;
-import com.jusoft.bookingengine.component.club.api.ClubComponent;
 import com.jusoft.bookingengine.component.club.api.ClubCreatedEvent;
+import com.jusoft.bookingengine.component.club.api.ClubManagerComponent;
 import com.jusoft.bookingengine.component.club.api.ClubNotFoundException;
 import com.jusoft.bookingengine.component.club.api.ClubView;
 import com.jusoft.bookingengine.component.club.api.ClubWithNameNotFoundException;
@@ -22,7 +22,7 @@ import lombok.AllArgsConstructor;
 import java.util.Set;
 
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-class ClubComponentImpl implements ClubComponent {
+class ClubManagerComponentImpl implements ClubManagerComponent {
 
   private final ClubFactory clubFactory;
   private final JoinRequestFactory joinRequestFactory;

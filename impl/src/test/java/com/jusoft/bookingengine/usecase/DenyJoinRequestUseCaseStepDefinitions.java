@@ -1,9 +1,9 @@
 package com.jusoft.bookingengine.usecase;
 
-import com.jusoft.bookingengine.component.club.api.ClubComponent;
+import com.jusoft.bookingengine.component.club.api.ClubManagerComponent;
 import com.jusoft.bookingengine.component.club.api.DenyJoinRequestCommand;
 import com.jusoft.bookingengine.component.club.api.JoinRequestDeniedEvent;
-import com.jusoft.bookingengine.component.member.api.MemberComponent;
+import com.jusoft.bookingengine.component.member.api.MemberManagerComponent;
 import com.jusoft.bookingengine.config.AbstractUseCaseStepDefinitions;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -16,9 +16,9 @@ import static org.mockito.Mockito.verify;
 public class DenyJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStepDefinitions {
 
   @Autowired
-  private MemberComponent memberComponent;
+  private MemberManagerComponent memberManagerComponent;
   @Autowired
-  private ClubComponent clubComponent;
+  private ClubManagerComponent clubManagerComponent;
 
   @Autowired
   private DenyJoinRequestUseCase denyJoinRequestUseCase;

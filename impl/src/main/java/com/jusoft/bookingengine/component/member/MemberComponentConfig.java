@@ -1,6 +1,6 @@
 package com.jusoft.bookingengine.component.member;
 
-import com.jusoft.bookingengine.component.member.api.MemberComponent;
+import com.jusoft.bookingengine.component.member.api.MemberManagerComponent;
 import com.jusoft.bookingengine.publisher.MessagePublisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -17,8 +17,8 @@ public class MemberComponentConfig {
   private MessagePublisher messagePublisher;
 
   @Bean
-  public MemberComponent memberComponent() {
-    return new MemberComponentImpl(memberFactory(), repository(), messagePublisher);
+  public MemberManagerComponent memberComponent() {
+    return new MemberManagerComponentImpl(memberFactory(), repository(), messagePublisher);
   }
 
   private MemberFactory memberFactory() {

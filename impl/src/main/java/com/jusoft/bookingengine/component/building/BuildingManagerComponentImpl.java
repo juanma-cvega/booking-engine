@@ -1,7 +1,7 @@
 package com.jusoft.bookingengine.component.building;
 
-import com.jusoft.bookingengine.component.building.api.BuildingComponent;
 import com.jusoft.bookingengine.component.building.api.BuildingCreatedEvent;
+import com.jusoft.bookingengine.component.building.api.BuildingManagerComponent;
 import com.jusoft.bookingengine.component.building.api.BuildingNotFoundException;
 import com.jusoft.bookingengine.component.building.api.BuildingView;
 import com.jusoft.bookingengine.component.building.api.CreateBuildingCommand;
@@ -10,7 +10,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-class BuildingComponentImpl implements BuildingComponent {
+class BuildingManagerComponentImpl implements BuildingManagerComponent {
 
   private final BuildingFactory buildingFactory;
   private final BuildingRepository repository;

@@ -1,8 +1,8 @@
 package com.jusoft.bookingengine.component.booking;
 
 import com.jusoft.bookingengine.component.booking.api.BookingCanceledEvent;
-import com.jusoft.bookingengine.component.booking.api.BookingComponent;
 import com.jusoft.bookingengine.component.booking.api.BookingCreatedEvent;
+import com.jusoft.bookingengine.component.booking.api.BookingManagerComponent;
 import com.jusoft.bookingengine.component.booking.api.BookingNotFoundException;
 import com.jusoft.bookingengine.component.booking.api.BookingView;
 import com.jusoft.bookingengine.component.booking.api.CancelBookingCommand;
@@ -18,7 +18,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-class BookingComponentImpl implements BookingComponent {
+class BookingManagerComponentImpl implements BookingManagerComponent {
 
   private final BookingRepository bookingRepository;
   private final BookingFactory bookingFactory;

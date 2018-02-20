@@ -1,6 +1,6 @@
 package com.jusoft.bookingengine.component.club;
 
-import com.jusoft.bookingengine.component.club.api.ClubComponent;
+import com.jusoft.bookingengine.component.club.api.ClubManagerComponent;
 import com.jusoft.bookingengine.publisher.MessagePublisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -18,8 +18,8 @@ public class ClubComponentConfig {
   private MessagePublisher messagePublisher;
 
   @Bean
-  public ClubComponent clubComponent() {
-    return new ClubComponentImpl(buildingFactory(), joinRequestFactory(), repository(), messagePublisher);
+  public ClubManagerComponent clubComponent() {
+    return new ClubManagerComponentImpl(buildingFactory(), joinRequestFactory(), repository(), messagePublisher);
   }
 
   private JoinRequestFactory joinRequestFactory() {

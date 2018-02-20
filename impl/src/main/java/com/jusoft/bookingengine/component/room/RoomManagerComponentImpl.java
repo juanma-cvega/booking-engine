@@ -2,7 +2,7 @@ package com.jusoft.bookingengine.component.room;
 
 import com.jusoft.bookingengine.component.room.api.CreateRoomCommand;
 import com.jusoft.bookingengine.component.room.api.NextSlotConfig;
-import com.jusoft.bookingengine.component.room.api.RoomComponent;
+import com.jusoft.bookingengine.component.room.api.RoomManagerComponent;
 import com.jusoft.bookingengine.component.room.api.RoomNotFoundException;
 import com.jusoft.bookingengine.component.room.api.RoomView;
 import com.jusoft.bookingengine.component.room.api.VerifyAuctionRequirementForSlotCommand;
@@ -14,7 +14,7 @@ import java.time.Clock;
 import java.time.ZonedDateTime;
 
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-class RoomComponentImpl implements RoomComponent {
+class RoomManagerComponentImpl implements RoomManagerComponent {
 
   private final RoomRepository roomRepository;
   private final RoomFactory roomFactory;

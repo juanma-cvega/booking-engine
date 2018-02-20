@@ -4,7 +4,7 @@ import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Set;
 
-public interface BookingComponent {
+public interface BookingManagerComponent {
 
   BookingView book(CreateBookingCommand createBookingCommand);
 

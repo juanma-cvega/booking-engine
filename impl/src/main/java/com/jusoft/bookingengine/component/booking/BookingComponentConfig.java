@@ -1,6 +1,6 @@
 package com.jusoft.bookingengine.component.booking;
 
-import com.jusoft.bookingengine.component.booking.api.BookingComponent;
+import com.jusoft.bookingengine.component.booking.api.BookingManagerComponent;
 import com.jusoft.bookingengine.publisher.MessagePublisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -21,8 +21,8 @@ public class BookingComponentConfig {
   private Clock clock;
 
   @Bean
-  public BookingComponent bookingComponent() {
-    return new BookingComponentImpl(bookingRepository(), bookingFactory(), messagePublisher);
+  public BookingManagerComponent bookingComponent() {
+    return new BookingManagerComponentImpl(bookingRepository(), bookingFactory(), messagePublisher);
   }
 
   private BookingFactory bookingFactory() {

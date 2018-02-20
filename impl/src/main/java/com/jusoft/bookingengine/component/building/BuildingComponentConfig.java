@@ -1,6 +1,6 @@
 package com.jusoft.bookingengine.component.building;
 
-import com.jusoft.bookingengine.component.building.api.BuildingComponent;
+import com.jusoft.bookingengine.component.building.api.BuildingManagerComponent;
 import com.jusoft.bookingengine.publisher.MessagePublisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -17,8 +17,8 @@ public class BuildingComponentConfig {
   private MessagePublisher messagePublisher;
 
   @Bean
-  public BuildingComponent buildingComponent() {
-    return new BuildingComponentImpl(buildingFactory(), repository(), messagePublisher);
+  public BuildingManagerComponent buildingComponent() {
+    return new BuildingManagerComponentImpl(buildingFactory(), repository(), messagePublisher);
   }
 
   private BuildingFactory buildingFactory() {

@@ -1,8 +1,8 @@
 package com.jusoft.bookingengine.usecase;
 
 import com.jusoft.bookingengine.component.room.api.OpenNextSlotCommand;
-import com.jusoft.bookingengine.component.slot.api.SlotComponent;
 import com.jusoft.bookingengine.component.slot.api.SlotCreatedEvent;
+import com.jusoft.bookingengine.component.slot.api.SlotManagerComponent;
 import com.jusoft.bookingengine.component.slot.api.SlotView;
 import com.jusoft.bookingengine.config.AbstractUseCaseStepDefinitions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ import static org.mockito.Mockito.verify;
 public class SlotUseCaseStepDefinitions extends AbstractUseCaseStepDefinitions {
 
   @Autowired
-  private SlotComponent slotComponent;
+  private SlotManagerComponent slotManagerComponent;
   @Autowired
   private CreateSlotUseCase openNextSlotUseCase;
 
@@ -52,7 +52,7 @@ public class SlotUseCaseStepDefinitions extends AbstractUseCaseStepDefinitions {
   }
 
   private void verifySlotCreatedStored(ZonedDateTime startDate, ZonedDateTime endDate) {
-    SlotView slotStored = slotComponent.find(slotCreated.getId());
+    SlotView slotStored = slotManagerComponent.find(slotCreated.getId());
     assertThat(slotCreated.getId())
       .isEqualTo(slotStored.getId());
     assertThat(slotCreated.getRoomId())

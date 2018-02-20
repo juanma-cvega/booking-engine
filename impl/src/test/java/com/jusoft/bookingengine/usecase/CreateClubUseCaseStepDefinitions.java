@@ -1,7 +1,7 @@
 package com.jusoft.bookingengine.usecase;
 
-import com.jusoft.bookingengine.component.club.api.ClubComponent;
 import com.jusoft.bookingengine.component.club.api.ClubCreatedEvent;
+import com.jusoft.bookingengine.component.club.api.ClubManagerComponent;
 import com.jusoft.bookingengine.component.club.api.ClubView;
 import com.jusoft.bookingengine.component.club.api.CreateClubCommand;
 import com.jusoft.bookingengine.config.AbstractUseCaseStepDefinitions;
@@ -18,7 +18,7 @@ import static org.mockito.Mockito.verify;
 public class CreateClubUseCaseStepDefinitions extends AbstractUseCaseStepDefinitions {
 
   @Autowired
-  private ClubComponent clubComponent;
+  private ClubManagerComponent clubManagerComponent;
 
   @Autowired
   private CreateClubUseCase createClubUseCase;
@@ -41,7 +41,7 @@ public class CreateClubUseCaseStepDefinitions extends AbstractUseCaseStepDefinit
       clubAdmin = userId;
     });
     Then("^the club should be stored with user (.*) as admin$", (Long userId) -> {
-      ClubView clubFound = clubComponent.find(clubCreated.getId());
+      ClubView clubFound = clubManagerComponent.find(clubCreated.getId());
       assertThat(clubFound.getDescription()).isEqualTo(clubCreated.getDescription());
       assertThat(clubFound.getAdmins()).containsExactly(userId);
     });

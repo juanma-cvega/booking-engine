@@ -1,6 +1,6 @@
 package com.jusoft.bookingengine.usecase;
 
-import com.jusoft.bookingengine.component.auction.api.AuctionComponent;
+import com.jusoft.bookingengine.component.auction.api.AuctionManagerComponent;
 import com.jusoft.bookingengine.component.auction.api.AuctionView;
 import com.jusoft.bookingengine.component.auction.api.FinishAuctionCommand;
 import com.jusoft.bookingengine.strategy.auctionwinner.api.AuctionStrategyRegistrar;
@@ -10,12 +10,12 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class FinishAuctionUseCase {
 
-  private final AuctionComponent auctionComponent;
+  private final AuctionManagerComponent auctionManagerComponent;
   private final AuctionStrategyRegistrar auctionStrategyRegistrar;
 
   public void finishAuction(long auctionId) {
-    AuctionView auction = auctionComponent.find(auctionId);
+    AuctionView auction = auctionManagerComponent.find(auctionId);
     AuctionWinnerStrategy strategy = auctionStrategyRegistrar.createStrategyWith(auction.getAuctionConfigInfo());
-    auctionComponent.finishAuction(FinishAuctionCommand.of(auctionId, strategy));
+    auctionManagerComponent.finishAuction(FinishAuctionCommand.of(auctionId, strategy));
   }
 }

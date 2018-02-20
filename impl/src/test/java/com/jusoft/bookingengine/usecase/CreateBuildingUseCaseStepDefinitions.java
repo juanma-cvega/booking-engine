@@ -1,7 +1,7 @@
 package com.jusoft.bookingengine.usecase;
 
-import com.jusoft.bookingengine.component.building.api.BuildingComponent;
 import com.jusoft.bookingengine.component.building.api.BuildingCreatedEvent;
+import com.jusoft.bookingengine.component.building.api.BuildingManagerComponent;
 import com.jusoft.bookingengine.component.building.api.BuildingView;
 import com.jusoft.bookingengine.component.building.api.CreateBuildingCommand;
 import com.jusoft.bookingengine.component.club.api.ClubNotFoundException;
@@ -20,7 +20,7 @@ public class CreateBuildingUseCaseStepDefinitions extends AbstractUseCaseStepDef
 
   public static final int NON_EXISTING_CLUB_ID = 567;
   @Autowired
-  private BuildingComponent buildingComponent;
+  private BuildingManagerComponent buildingManagerComponent;
 
   @Autowired
   private CreateBuildingUseCase createBuildingUseCase;
@@ -30,7 +30,7 @@ public class CreateBuildingUseCaseStepDefinitions extends AbstractUseCaseStepDef
       buildingCreated = createBuildingUseCase.createBuildingFrom(
         new CreateBuildingCommand(clubCreated.getId(), ADDRESS, BUILDING_DESCRIPTION)));
     Then("^the building should be stored$", () -> {
-      BuildingView buildingView = buildingComponent.find(buildingCreated.getId());
+      BuildingView buildingView = buildingManagerComponent.find(buildingCreated.getId());
       assertThat(buildingView.getAddress()).isEqualTo(buildingCreated.getAddress());
       assertThat(buildingView.getClubId()).isEqualTo(buildingCreated.getClubId());
       assertThat(buildingView.getDescription()).isEqualTo(buildingCreated.getDescription());

@@ -5,7 +5,7 @@ import com.jusoft.bookingengine.component.booking.api.SlotNotAvailableException;
 import com.jusoft.bookingengine.component.booking.api.SlotPendingAuctionException;
 import com.jusoft.bookingengine.component.member.api.UserNotMemberException;
 import com.jusoft.bookingengine.component.slot.api.ReserveSlotCommand;
-import com.jusoft.bookingengine.component.slot.api.SlotComponent;
+import com.jusoft.bookingengine.component.slot.api.SlotManagerComponent;
 import com.jusoft.bookingengine.component.slot.api.SlotReservedEvent;
 import com.jusoft.bookingengine.component.slot.api.SlotState;
 import com.jusoft.bookingengine.component.slot.api.SlotView;
@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ReserveSlotUseCaseStepDefinitions extends AbstractUseCaseStepDefinitions {
 
   @Autowired
-  private SlotComponent slotComponent;
+  private SlotManagerComponent slotManagerComponent;
 
   @Autowired
   private ReserveSlotUseCase reserveSlotUseCase;
@@ -37,7 +37,7 @@ public class ReserveSlotUseCaseStepDefinitions extends AbstractUseCaseStepDefini
     When("^the user (\\d+) tries to reserve the slot$", (Long userId) ->
       storeException(() -> reserveSlotUseCase.reserveSlot(ReserveSlotCommand.of(slotCreated.getId(), userId))));
     Then("^the slot should be reserved$", () -> {
-      SlotView slot = slotComponent.find(slotCreated.getId());
+      SlotView slot = slotManagerComponent.find(slotCreated.getId());
       assertThat(slot.getState()).isEqualTo(SlotState.RESERVED);
     });
     Then("^a notification of a slot reserved by user (\\d+) should be published$", (Long userId) -> {

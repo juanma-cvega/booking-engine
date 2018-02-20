@@ -1,6 +1,6 @@
 package com.jusoft.bookingengine.usecase;
 
-import com.jusoft.bookingengine.component.booking.api.BookingComponent;
+import com.jusoft.bookingengine.component.booking.api.BookingManagerComponent;
 import com.jusoft.bookingengine.component.booking.api.BookingNotFoundException;
 import com.jusoft.bookingengine.component.booking.api.CancelBookingCommand;
 import com.jusoft.bookingengine.component.booking.api.SlotNotAvailableException;
@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 public class CancelBookingUseCaseStepDefinitions extends AbstractUseCaseStepDefinitions {
 
   @Autowired
-  private BookingComponent bookingComponent;
+  private BookingManagerComponent bookingManagerComponent;
 
   @Autowired
   private CancelBookingUseCase cancelBookingUseCase;
@@ -39,7 +39,7 @@ public class CancelBookingUseCaseStepDefinitions extends AbstractUseCaseStepDefi
     });
     Then("^the user (.*) should not see that booking in his list$", (Long userId) ->
       assertThatExceptionOfType(BookingNotFoundException.class)
-        .isThrownBy(() -> bookingComponent.find(userId, bookingCreated.getId())));
+        .isThrownBy(() -> bookingManagerComponent.find(userId, bookingCreated.getId())));
     Then("^the user should be notified the booking is already started$", () -> {
       assertThat(exceptionThrown).isNotNull().isInstanceOf(SlotNotAvailableException.class);
       SlotNotAvailableException exceptionThrown = (SlotNotAvailableException) DataHolder.exceptionThrown;

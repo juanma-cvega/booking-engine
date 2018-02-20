@@ -1,7 +1,7 @@
 //package com.jusoft.bookingengine.component.booking;
 //
 //import com.jusoft.bookingengine.component.AbstractStepDefinitions;
-//import com.jusoft.bookingengine.component.booking.api.BookingComponent;
+//import com.jusoft.bookingengine.component.booking.api.BookingManagerComponent;
 //import com.jusoft.bookingengine.component.booking.api.BookingCreatedEvent;
 //import com.jusoft.bookingengine.component.booking.api.BookingNotFoundException;
 //import com.jusoft.bookingengine.component.booking.api.BookingView;
@@ -12,7 +12,7 @@
 //import com.jusoft.bookingengine.component.booking.api.SlotPendingAuctionException;
 //import com.jusoft.bookingengine.component.booking.api.WrongBookingUserException;
 //import com.jusoft.bookingengine.fixture.CommonFixtures;
-//import com.jusoft.bookingengine.component.slot.api.SlotComponent;
+//import com.jusoft.bookingengine.component.slot.api.SlotManagerComponent;
 //import com.jusoft.bookingengine.holder.BookingHolder;
 //import com.jusoft.bookingengine.holder.RoomHolder;
 //import com.jusoft.bookingengine.holder.SlotHolder;
@@ -44,10 +44,10 @@
 //  private AddBidderToAuctionUseCase addBidderToAuctionUseCase;
 //
 //  @Autowired
-//  private BookingComponent bookingComponent;
+//  private BookingManagerComponent bookingComponent;
 //
 //  @Autowired
-//  private SlotComponent slotComponent;
+//  private SlotManagerComponent slotComponent;
 //
 //  @Autowired
 //  private BookingHolder bookingHolder;

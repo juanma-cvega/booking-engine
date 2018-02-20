@@ -1,15 +1,15 @@
 package com.jusoft.bookingengine.usecase;
 
 import com.jusoft.bookingengine.component.club.api.AcceptJoinRequestCommand;
-import com.jusoft.bookingengine.component.club.api.ClubComponent;
+import com.jusoft.bookingengine.component.club.api.ClubManagerComponent;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class AcceptJoinRequestUseCase {
 
-  private final ClubComponent clubComponent;
+  private final ClubManagerComponent clubManagerComponent;
 
   public void acceptJoinRequest(AcceptJoinRequestCommand command) {
-    clubComponent.acceptAccessRequest(command);
+    clubManagerComponent.acceptAccessRequest(command);
   }
 }

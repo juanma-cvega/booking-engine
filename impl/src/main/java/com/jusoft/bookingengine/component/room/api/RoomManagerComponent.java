@@ -2,7 +2,7 @@ package com.jusoft.bookingengine.component.room.api;
 
 import java.time.ZonedDateTime;
 
-public interface RoomComponent {
+public interface RoomManagerComponent {
 
   RoomView create(CreateRoomCommand createRoomCommand);
 

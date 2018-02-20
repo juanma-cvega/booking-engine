@@ -1,6 +1,6 @@
 package com.jusoft.bookingengine.component.room;
 
-import com.jusoft.bookingengine.component.room.api.RoomComponent;
+import com.jusoft.bookingengine.component.room.api.RoomManagerComponent;
 import com.jusoft.bookingengine.publisher.MessagePublisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -20,8 +20,8 @@ public class RoomComponentConfig {
   private Clock clock;
 
   @Bean
-  public RoomComponent roomComponent() {
-    return new RoomComponentImpl(roomRepository(), roomFactory(), roomEventFactory(), messagePublisher, clock);
+  public RoomManagerComponent roomComponent() {
+    return new RoomManagerComponentImpl(roomRepository(), roomFactory(), roomEventFactory(), messagePublisher, clock);
   }
 
   private RoomFactory roomFactory() {

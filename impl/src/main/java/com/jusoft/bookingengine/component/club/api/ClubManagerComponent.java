@@ -2,7 +2,7 @@ package com.jusoft.bookingengine.component.club.api;
 
 import java.util.Set;
 
-public interface ClubComponent {
+public interface ClubManagerComponent {
 
   ClubView create(CreateClubCommand command);
 

@@ -2,7 +2,7 @@
 //
 //import com.jusoft.bookingengine.component.AbstractStepDefinitions;
 //import com.jusoft.bookingengine.fixture.CommonFixtures;
-//import com.jusoft.bookingengine.component.slot.api.SlotComponent;
+//import com.jusoft.bookingengine.component.slot.api.SlotManagerComponent;
 //import com.jusoft.bookingengine.component.slot.api.SlotNotFoundException;
 //import org.springframework.beans.factory.annotation.Autowired;
 //
@@ -13,7 +13,7 @@
 //  private static final Long ANY_SLOT_ID = 44444L;
 //
 //  @Autowired
-//  private SlotComponent slotComponent;
+//  private SlotManagerComponent slotComponent;
 //
 //  private RuntimeException exceptionThrown;
 //

@@ -1,6 +1,6 @@
 package com.jusoft.bookingengine.component.slot;
 
-import com.jusoft.bookingengine.component.slot.api.SlotComponent;
+import com.jusoft.bookingengine.component.slot.api.SlotManagerComponent;
 import com.jusoft.bookingengine.publisher.MessagePublisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -22,8 +22,8 @@ public class SlotComponentConfig {
   private MessagePublisher messagePublisher;
 
   @Bean
-  public SlotComponent slotComponent() {
-    return new SlotComponentImpl(slotRepository(), slotFactory(), slotEventFactory(), messagePublisher, clock);
+  public SlotManagerComponent slotComponent() {
+    return new SlotManagerComponentImpl(slotRepository(), slotFactory(), slotEventFactory(), messagePublisher, clock);
   }
 
   private SlotEventFactory slotEventFactory() {

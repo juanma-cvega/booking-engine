@@ -1,15 +1,15 @@
 package com.jusoft.bookingengine.component.member;
 
 import com.jusoft.bookingengine.component.member.api.CreateMemberCommand;
-import com.jusoft.bookingengine.component.member.api.MemberComponent;
 import com.jusoft.bookingengine.component.member.api.MemberCreatedEvent;
+import com.jusoft.bookingengine.component.member.api.MemberManagerComponent;
 import com.jusoft.bookingengine.component.member.api.MemberView;
 import com.jusoft.bookingengine.publisher.MessagePublisher;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-class MemberComponentImpl implements MemberComponent {
+class MemberManagerComponentImpl implements MemberManagerComponent {
 
   private MemberFactory memberFactory;
   private MemberRepository repository;

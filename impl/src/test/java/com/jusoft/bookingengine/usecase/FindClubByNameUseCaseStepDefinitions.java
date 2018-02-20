@@ -1,6 +1,6 @@
 package com.jusoft.bookingengine.usecase;
 
-import com.jusoft.bookingengine.component.club.api.ClubComponent;
+import com.jusoft.bookingengine.component.club.api.ClubManagerComponent;
 import com.jusoft.bookingengine.component.club.api.ClubView;
 import com.jusoft.bookingengine.config.AbstractUseCaseStepDefinitions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class FindClubByNameUseCaseStepDefinitions extends AbstractUseCaseStepDefinitions {
 
   @Autowired
-  private ClubComponent clubComponent;
+  private ClubManagerComponent clubManagerComponent;
 
   @Autowired
   private FindClubByNameUseCase findClubByNameUseCase;

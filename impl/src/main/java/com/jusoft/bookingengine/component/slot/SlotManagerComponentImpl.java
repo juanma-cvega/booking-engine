@@ -2,7 +2,7 @@ package com.jusoft.bookingengine.component.slot;
 
 import com.jusoft.bookingengine.component.slot.api.CreateSlotCommand;
 import com.jusoft.bookingengine.component.slot.api.ReserveSlotCommand;
-import com.jusoft.bookingengine.component.slot.api.SlotComponent;
+import com.jusoft.bookingengine.component.slot.api.SlotManagerComponent;
 import com.jusoft.bookingengine.component.slot.api.SlotNotFoundException;
 import com.jusoft.bookingengine.component.slot.api.SlotView;
 import com.jusoft.bookingengine.publisher.MessagePublisher;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-class SlotComponentImpl implements SlotComponent {
+class SlotManagerComponentImpl implements SlotManagerComponent {
 
   private final SlotRepository slotRepository;
   private final SlotFactory slotFactory;

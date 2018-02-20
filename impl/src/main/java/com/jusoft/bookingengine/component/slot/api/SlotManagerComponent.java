@@ -3,7 +3,7 @@ package com.jusoft.bookingengine.component.slot.api;
 import java.util.List;
 import java.util.Optional;
 
-public interface SlotComponent {
+public interface SlotManagerComponent {
 
   SlotView create(CreateSlotCommand createSlotCommand);
 

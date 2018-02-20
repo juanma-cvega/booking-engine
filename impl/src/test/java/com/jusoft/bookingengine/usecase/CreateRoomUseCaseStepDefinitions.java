@@ -1,11 +1,11 @@
 package com.jusoft.bookingengine.usecase;
 
 import com.google.common.collect.Iterables;
-import com.jusoft.bookingengine.component.room.api.RoomComponent;
 import com.jusoft.bookingengine.component.room.api.RoomCreatedEvent;
+import com.jusoft.bookingengine.component.room.api.RoomManagerComponent;
 import com.jusoft.bookingengine.component.room.api.RoomView;
 import com.jusoft.bookingengine.component.room.api.RoomWithoutBuildingException;
-import com.jusoft.bookingengine.component.slot.api.SlotComponent;
+import com.jusoft.bookingengine.component.slot.api.SlotManagerComponent;
 import com.jusoft.bookingengine.component.slot.api.SlotView;
 import com.jusoft.bookingengine.component.timer.OpenTime;
 import com.jusoft.bookingengine.config.AbstractUseCaseStepDefinitions;
@@ -30,9 +30,9 @@ public class CreateRoomUseCaseStepDefinitions extends AbstractUseCaseStepDefinit
 
   public static final long NON_EXISTING_BUILDING_ID = 5667L;
   @Autowired
-  private RoomComponent roomComponent;
+  private RoomManagerComponent roomManagerComponent;
   @Autowired
-  private SlotComponent slotComponent;
+  private SlotManagerComponent slotManagerComponent;
 
   @Autowired
   private CreateRoomUseCase createRoomUseCase;
@@ -42,7 +42,7 @@ public class CreateRoomUseCaseStepDefinitions extends AbstractUseCaseStepDefinit
     When("^a room is created$", () ->
       roomCreated = createRoomUseCase.createRoom(CREATE_ROOM_COMMAND.apply(buildingCreated.getId())));
     Then("^the room should be stored", () -> {
-      RoomView roomView = roomComponent.find(roomCreated.getId());
+      RoomView roomView = roomManagerComponent.find(roomCreated.getId());
       assertThat(roomView.getId()).isEqualTo(roomCreated.getId());
       assertThat(roomView.getBuildingId()).isEqualTo(roomCreated.getBuildingId());
       assertThat(roomView.getSlotDurationInMinutes()).isEqualTo(roomCreated.getSlotDurationInMinutes());
@@ -74,24 +74,24 @@ public class CreateRoomUseCaseStepDefinitions extends AbstractUseCaseStepDefinit
     When("^the room is created with that configuration$", () ->
       roomCreated = createRoomUseCase.createRoom(roomBuilder.build(buildingCreated.getId())));
     Then("^(.*) slots should have been created$", (Integer slotsToBeCreated) ->
-      assertThat(slotComponent.findOpenSlotsFor(roomCreated.getId())).hasSize(slotsToBeCreated));
+      assertThat(slotManagerComponent.findOpenSlotsFor(roomCreated.getId())).hasSize(slotsToBeCreated));
     Then("^the first slot should start at (.*)$", (String startTime) -> {
-      SlotView slot = slotComponent.findOpenSlotsFor(roomCreated.getId()).get(0);
+      SlotView slot = slotManagerComponent.findOpenSlotsFor(roomCreated.getId()).get(0);
       LocalTime time = LocalTime.parse(startTime);
       assertThat(slot.getOpenDate().getStartTime().toLocalTime()).isBetween(time, time);
     });
     Then("^the last slot should start at (.*)$", (String startTime) -> {
-      SlotView slot = Iterables.getLast(slotComponent.findOpenSlotsFor(roomCreated.getId()));
+      SlotView slot = Iterables.getLast(slotManagerComponent.findOpenSlotsFor(roomCreated.getId()));
       LocalTime time = LocalTime.parse(startTime);
       assertThat(slot.getOpenDate().getStartTime().toLocalTime()).isBetween(time, time);
     });
     Then("^the last slot should start the day after$", () -> {
-      SlotView slot = Iterables.getLast(slotComponent.findOpenSlotsFor(roomCreated.getId()));
+      SlotView slot = Iterables.getLast(slotManagerComponent.findOpenSlotsFor(roomCreated.getId()));
       LocalDate date = LocalDate.now(clock).plusDays(1);
       assertThat(slot.getOpenDate().getStartTime().toLocalDate()).isAfterOrEqualTo(date).isBeforeOrEqualTo(date);
     });
     Then("^the first slot should start the day after$", () -> {
-      SlotView slot = slotComponent.findOpenSlotsFor(roomCreated.getId()).get(0);
+      SlotView slot = slotManagerComponent.findOpenSlotsFor(roomCreated.getId()).get(0);
       LocalDate date = LocalDate.now(clock).plusDays(1);
       assertThat(slot.getOpenDate().getStartTime().toLocalDate()).isAfterOrEqualTo(date).isBeforeOrEqualTo(date);
     });

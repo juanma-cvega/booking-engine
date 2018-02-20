@@ -1,6 +1,6 @@
 package com.jusoft.bookingengine.usecase;
 
-import com.jusoft.bookingengine.component.club.api.ClubComponent;
+import com.jusoft.bookingengine.component.club.api.ClubManagerComponent;
 import com.jusoft.bookingengine.component.club.api.CreateJoinRequestCommand;
 import com.jusoft.bookingengine.component.club.api.FindJoinRequestCommand;
 import com.jusoft.bookingengine.component.club.api.JoinRequest;
@@ -25,7 +25,7 @@ import static org.mockito.Mockito.verify;
 public class CreateJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStepDefinitions {
 
   @Autowired
-  private ClubComponent clubComponent;
+  private ClubManagerComponent clubManagerComponent;
 
   @Autowired
   private CreateJoinRequestUseCase createJoinRequestUseCase;
@@ -37,7 +37,7 @@ public class CreateJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStep
     });
     Then("^the club should have a? join requests? created for users?$", (DataTable userIdsDataTable) -> {
       List<Long> userIds = userIdsDataTable.asList(Long.class);
-      Set<JoinRequest> joinRequests = clubComponent.findJoinRequests(new FindJoinRequestCommand(clubAdmin, clubCreated.getId()));
+      Set<JoinRequest> joinRequests = clubManagerComponent.findJoinRequests(new FindJoinRequestCommand(clubAdmin, clubCreated.getId()));
       assertThat(joinRequests).hasSize(userIds.size());
       assertThat(joinRequests).extracting("userId").hasSameElementsAs(userIds);
     });

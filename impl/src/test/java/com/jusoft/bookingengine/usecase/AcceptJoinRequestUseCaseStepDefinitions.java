@@ -1,12 +1,11 @@
 package com.jusoft.bookingengine.usecase;
 
 import com.jusoft.bookingengine.component.club.api.AcceptJoinRequestCommand;
-import com.jusoft.bookingengine.component.club.api.ClubComponent;
-import com.jusoft.bookingengine.component.club.api.ClubView;
+import com.jusoft.bookingengine.component.club.api.ClubManagerComponent;
 import com.jusoft.bookingengine.component.club.api.FindJoinRequestCommand;
 import com.jusoft.bookingengine.component.club.api.JoinRequest;
 import com.jusoft.bookingengine.component.club.api.JoinRequestAcceptedEvent;
-import com.jusoft.bookingengine.component.member.api.MemberComponent;
+import com.jusoft.bookingengine.component.member.api.MemberManagerComponent;
 import com.jusoft.bookingengine.config.AbstractUseCaseStepDefinitions;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -22,9 +21,9 @@ import static org.mockito.Mockito.verify;
 public class AcceptJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStepDefinitions {
 
   @Autowired
-  private MemberComponent memberComponent;
+  private MemberManagerComponent memberManagerComponent;
   @Autowired
-  private ClubComponent clubComponent;
+  private ClubManagerComponent clubManagerComponent;
 
   @Autowired
   private AcceptJoinRequestUseCase acceptJoinRequestUseCase;
@@ -38,7 +37,7 @@ public class AcceptJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStep
       acceptJoinRequestUseCase.acceptJoinRequest(new AcceptJoinRequestCommand(joinRequestFromUser.getId(), clubCreated.getId(), adminId));
     });
     Then("^the club should not have the join request for user (\\d+) anymore$", (Long userId) -> {
-      Set<JoinRequest> joinRequests = clubComponent.findJoinRequests(new FindJoinRequestCommand(clubAdmin, clubCreated.getId()));
+      Set<JoinRequest> joinRequests = clubManagerComponent.findJoinRequests(new FindJoinRequestCommand(clubAdmin, clubCreated.getId()));
       assertThat(joinRequests.stream().anyMatch(joinRequest -> joinRequest.getUserId() == userId)).isFalse();
     });
     Then("^a notification of a join request accepted for user (\\d+) should be published$", (Long userId) -> {

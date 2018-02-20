@@ -1,10 +1,10 @@
 package com.jusoft.bookingengine.usecase;
 
-import com.jusoft.bookingengine.component.booking.api.BookingComponent;
 import com.jusoft.bookingengine.component.booking.api.BookingCreatedEvent;
+import com.jusoft.bookingengine.component.booking.api.BookingManagerComponent;
 import com.jusoft.bookingengine.component.booking.api.BookingView;
 import com.jusoft.bookingengine.component.booking.api.CreateBookingCommand;
-import com.jusoft.bookingengine.component.slot.api.SlotComponent;
+import com.jusoft.bookingengine.component.slot.api.SlotManagerComponent;
 import com.jusoft.bookingengine.config.AbstractUseCaseStepDefinitions;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -20,9 +20,9 @@ import static org.mockito.Mockito.verify;
 public class CreateBookingUseCaseStepDefinitions extends AbstractUseCaseStepDefinitions {
 
   @Autowired
-  private BookingComponent bookingComponent;
+  private BookingManagerComponent bookingManagerComponent;
   @Autowired
-  private SlotComponent slotComponent;
+  private SlotManagerComponent slotManagerComponent;
 
   @Autowired
   private CreateBookingUseCase createBookingUseCase;
@@ -31,7 +31,7 @@ public class CreateBookingUseCaseStepDefinitions extends AbstractUseCaseStepDefi
     When("^there is a booking created by user (.*)$", (Long userId) ->
       storeBooking(() -> bookSlot(userId)));
     Then("^the slot should be booked by the user (.*)$", (Long userId) -> {
-      BookingView booking = bookingComponent.find(userId, bookingCreated.getId());
+      BookingView booking = bookingManagerComponent.find(userId, bookingCreated.getId());
       assertThat(booking.getSlotId()).isEqualTo(bookingCreated.getSlotId());
       assertThat(booking.getUserId()).isEqualTo(bookingCreated.getUserId());
       assertThat(booking.getBookingTime()).isEqualTo(bookingCreated.getBookingTime());
@@ -45,7 +45,7 @@ public class CreateBookingUseCaseStepDefinitions extends AbstractUseCaseStepDefi
       assertThat(bookingCreatedEvent.getSlotId()).isEqualTo(bookingCreated.getSlotId());
     });
     When("^the user (.*) asks for his bookings$", (Long userId) ->
-      bookingsFetched = bookingComponent.getFor(userId));
+      bookingsFetched = bookingManagerComponent.getFor(userId));
     Then("^the user should see all slots booked by him$", () ->
       assertThat(bookingsFetched).hasSameElementsAs(bookingsCreated));
   }

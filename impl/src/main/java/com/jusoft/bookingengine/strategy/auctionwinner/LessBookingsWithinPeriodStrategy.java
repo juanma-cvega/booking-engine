@@ -1,7 +1,7 @@
 package com.jusoft.bookingengine.strategy.auctionwinner;
 
 import com.jusoft.bookingengine.component.auction.api.Bid;
-import com.jusoft.bookingengine.component.booking.api.BookingComponent;
+import com.jusoft.bookingengine.component.booking.api.BookingManagerComponent;
 import com.jusoft.bookingengine.component.booking.api.BookingView;
 import com.jusoft.bookingengine.strategy.auctionwinner.api.AuctionWinnerStrategy;
 import com.jusoft.bookingengine.strategy.auctionwinner.api.LessBookingsWithinPeriodConfigInfo;
@@ -28,7 +28,7 @@ import static java.util.stream.Collectors.toSet;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class LessBookingsWithinPeriodStrategy implements AuctionWinnerStrategy {
 
-  private final BookingComponent bookingComponent;
+  private final BookingManagerComponent bookingManagerComponent;
   private final Clock clock;
   private final LessBookingsWithinPeriodConfigInfo config;
 
@@ -38,7 +38,7 @@ class LessBookingsWithinPeriodStrategy implements AuctionWinnerStrategy {
     if (!bids.isEmpty()) {
       ZonedDateTime endPeriod = ZonedDateTime.now(clock).plusDays(config.getEndRangeTimeInDays());
       Set<Long> bidders = bids.stream().map(Bid::getUserId).collect(toSet());
-      List<BookingView> usersBookingsFound = bookingComponent.findUsersBookingsUntilFor(endPeriod, bidders);
+      List<BookingView> usersBookingsFound = bookingManagerComponent.findUsersBookingsUntilFor(endPeriod, bidders);
       Set<Long> usersWithLessBookings = bidders.stream()
         .collect(groupingByUserToNumberOfBookings(usersBookingsFound)).entrySet().stream()
         .collect(groupingByNumberOfBookingsToUsers()).entrySet().stream()

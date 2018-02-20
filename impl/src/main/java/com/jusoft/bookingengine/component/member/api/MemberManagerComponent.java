@@ -1,6 +1,6 @@
 package com.jusoft.bookingengine.component.member.api;
 
-public interface MemberComponent {
+public interface MemberManagerComponent {
 
   MemberView createMember(CreateMemberCommand command);
 

@@ -1,7 +1,7 @@
 package com.jusoft.bookingengine.usecase;
 
-import com.jusoft.bookingengine.component.auction.api.AuctionComponent;
 import com.jusoft.bookingengine.component.auction.api.AuctionFinishedException;
+import com.jusoft.bookingengine.component.auction.api.AuctionManagerComponent;
 import com.jusoft.bookingengine.component.auction.api.AuctionView;
 import com.jusoft.bookingengine.component.auction.api.Bid;
 import com.jusoft.bookingengine.config.AbstractUseCaseStepDefinitions;
@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class AddBidderToAuctionUseCaseStepDefinitions extends AbstractUseCaseStepDefinitions {
 
   @Autowired
-  private AuctionComponent auctionComponent;
+  private AuctionManagerComponent auctionManagerComponent;
   @Autowired
   private AddBidderToAuctionUseCase addBidderToAuctionUseCase;
 
@@ -24,7 +24,7 @@ public class AddBidderToAuctionUseCaseStepDefinitions extends AbstractUseCaseSte
     When("^user (.*) tries to bid on the auction$", (Long userId) ->
       storeException(() -> addBidderToAuctionUseCase.addBidderTo(auctionCreated.getId(), userId)));
     Then("^the auction should contain the user (\\d+) bid created at (.*)$", (Integer userId, String creationTime) -> {
-      AuctionView auction = auctionComponent.find(auctionCreated.getId());
+      AuctionView auction = auctionManagerComponent.find(auctionCreated.getId());
       assertThat(auction.getBidders()).contains(new Bid(userId, getDateFrom(creationTime)));
     });
     Then("^the user should be notified the auction is finished$", () -> {

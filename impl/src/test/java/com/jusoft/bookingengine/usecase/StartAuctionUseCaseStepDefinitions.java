@@ -1,6 +1,6 @@
 package com.jusoft.bookingengine.usecase;
 
-import com.jusoft.bookingengine.component.auction.api.AuctionComponent;
+import com.jusoft.bookingengine.component.auction.api.AuctionManagerComponent;
 import com.jusoft.bookingengine.component.auction.api.AuctionNotFoundException;
 import com.jusoft.bookingengine.component.auction.api.AuctionStartedEvent;
 import com.jusoft.bookingengine.component.auction.api.AuctionView;
@@ -21,7 +21,7 @@ import static org.mockito.Mockito.verifyZeroInteractions;
 public class StartAuctionUseCaseStepDefinitions extends AbstractUseCaseStepDefinitions {
 
   @Autowired
-  private AuctionComponent auctionComponent;
+  private AuctionManagerComponent auctionManagerComponent;
 
   @Autowired
   private StartAuctionUseCase startAuctionUseCase;
@@ -30,7 +30,7 @@ public class StartAuctionUseCaseStepDefinitions extends AbstractUseCaseStepDefin
     When("^an auction is created for the slot$", () ->
       auctionCreated = startAuctionUseCase.startAuction(new StartAuctionCommand(slotCreated.getId(), roomCreated.getAuctionConfigInfo())));
     Then("^the auction should be stored$", () -> {
-      AuctionView auction = auctionComponent.find(DataHolder.auctionCreated.getId());
+      AuctionView auction = auctionManagerComponent.find(DataHolder.auctionCreated.getId());
       assertThat(auction.getBidders()).hasSameElementsAs(DataHolder.auctionCreated.getBidders());
       assertThat(auction.getOpenDate().getEndTime()).isEqualTo(DataHolder.auctionCreated.getOpenDate().getEndTime());
       assertThat(auction.getReferenceId()).isEqualTo(DataHolder.auctionCreated.getReferenceId());
@@ -38,7 +38,7 @@ public class StartAuctionUseCaseStepDefinitions extends AbstractUseCaseStepDefin
     });
     Then("^the auction shouldn't exist$", () -> {
       assertThat(auctionCreated).isNull();
-      assertThatThrownBy(() -> auctionComponent.addBidderTo(slotCreated.getId(), 0))
+      assertThatThrownBy(() -> auctionManagerComponent.addBidderTo(slotCreated.getId(), 0))
         .isInstanceOf(AuctionNotFoundException.class);
     });
     Then("^an auction finished event shouldn't be scheduled to be published$", () ->

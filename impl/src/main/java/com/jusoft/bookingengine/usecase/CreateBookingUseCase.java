@@ -1,6 +1,6 @@
 package com.jusoft.bookingengine.usecase;
 
-import com.jusoft.bookingengine.component.booking.api.BookingComponent;
+import com.jusoft.bookingengine.component.booking.api.BookingManagerComponent;
 import com.jusoft.bookingengine.component.booking.api.BookingView;
 import com.jusoft.bookingengine.component.booking.api.CreateBookingCommand;
 import lombok.AllArgsConstructor;
@@ -8,9 +8,9 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class CreateBookingUseCase {
 
-  private final BookingComponent bookingComponent;
+  private final BookingManagerComponent bookingManagerComponent;
 
   public BookingView book(CreateBookingCommand createBookingCommand) {
-    return bookingComponent.book(createBookingCommand);
+    return bookingManagerComponent.book(createBookingCommand);
   }
 }

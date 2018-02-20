@@ -1,13 +1,13 @@
 package com.jusoft.bookingengine.usecase;
 
-import com.jusoft.bookingengine.component.auction.api.AuctionComponent;
-import com.jusoft.bookingengine.component.booking.api.BookingComponent;
-import com.jusoft.bookingengine.component.building.api.BuildingComponent;
-import com.jusoft.bookingengine.component.club.api.ClubComponent;
-import com.jusoft.bookingengine.component.member.api.MemberComponent;
-import com.jusoft.bookingengine.component.room.api.RoomComponent;
+import com.jusoft.bookingengine.component.auction.api.AuctionManagerComponent;
+import com.jusoft.bookingengine.component.booking.api.BookingManagerComponent;
+import com.jusoft.bookingengine.component.building.api.BuildingManagerComponent;
+import com.jusoft.bookingengine.component.club.api.ClubManagerComponent;
+import com.jusoft.bookingengine.component.member.api.MemberManagerComponent;
+import com.jusoft.bookingengine.component.room.api.RoomManagerComponent;
 import com.jusoft.bookingengine.component.scheduler.api.SchedulerComponent;
-import com.jusoft.bookingengine.component.slot.api.SlotComponent;
+import com.jusoft.bookingengine.component.slot.api.SlotManagerComponent;
 import com.jusoft.bookingengine.publisher.MessagePublisher;
 import com.jusoft.bookingengine.strategy.auctionwinner.api.AuctionStrategyRegistrar;
 import com.jusoft.bookingengine.strategy.slotcreation.api.SlotCreationStrategyRegistrar;
@@ -21,19 +21,19 @@ import java.time.Clock;
 public class UseCaseConfig {
 
   @Autowired
-  private AuctionComponent auctionComponent;
+  private AuctionManagerComponent auctionManagerComponent;
   @Autowired
-  private RoomComponent roomComponent;
+  private RoomManagerComponent roomManagerComponent;
   @Autowired
-  private SlotComponent slotComponent;
+  private SlotManagerComponent slotManagerComponent;
   @Autowired
-  private BookingComponent bookingComponent;
+  private BookingManagerComponent bookingManagerComponent;
   @Autowired
-  private BuildingComponent buildingComponent;
+  private BuildingManagerComponent buildingManagerComponent;
   @Autowired
-  private ClubComponent clubComponent;
+  private ClubManagerComponent clubManagerComponent;
   @Autowired
-  private MemberComponent memberComponent;
+  private MemberManagerComponent memberManagerComponent;
   @Autowired
   private SchedulerComponent schedulerComponent;
   @Autowired
@@ -47,42 +47,42 @@ public class UseCaseConfig {
 
   @Bean
   public AddBidderToAuctionUseCase addBidderToAuctionUseCase() {
-    return new AddBidderToAuctionUseCase(auctionComponent);
+    return new AddBidderToAuctionUseCase(auctionManagerComponent);
   }
 
   @Bean
   public CancelBookingUseCase cancelBookingUseCase() {
-    return new CancelBookingUseCase(bookingComponent, slotComponent);
+    return new CancelBookingUseCase(bookingManagerComponent, slotManagerComponent);
   }
 
   @Bean
   public CreateBookingUseCase createBookingUseCase() {
-    return new CreateBookingUseCase(bookingComponent);
+    return new CreateBookingUseCase(bookingManagerComponent);
   }
 
   @Bean
   public CreateRoomUseCase createRoomUseCase() {
-    return new CreateRoomUseCase(roomComponent, buildingComponent);
+    return new CreateRoomUseCase(roomManagerComponent, buildingManagerComponent);
   }
 
   @Bean
   public FinishAuctionUseCase finishAuctionUseCase() {
-    return new FinishAuctionUseCase(auctionComponent, auctionStrategyRegistrar);
+    return new FinishAuctionUseCase(auctionManagerComponent, auctionStrategyRegistrar);
   }
 
   @Bean
   public CreateSlotUseCase openNextSlotUseCase() {
-    return new CreateSlotUseCase(roomComponent, slotComponent);
+    return new CreateSlotUseCase(roomManagerComponent, slotManagerComponent);
   }
 
   @Bean
   public ScheduleNextSlotUseCase scheduleNextSlotUseCase() {
-    return new ScheduleNextSlotUseCase(roomComponent, schedulerComponent, slotCreationStrategyRegistrar);
+    return new ScheduleNextSlotUseCase(roomManagerComponent, schedulerComponent, slotCreationStrategyRegistrar);
   }
 
   @Bean
   public StartAuctionUseCase startAuctionUseCase() {
-    return new StartAuctionUseCase(auctionComponent);
+    return new StartAuctionUseCase(auctionManagerComponent);
   }
 
   @Bean
@@ -92,61 +92,61 @@ public class UseCaseConfig {
 
   @Bean
   public CreateBuildingUseCase createBuildingUseCase() {
-    return new CreateBuildingUseCase(clubComponent, buildingComponent);
+    return new CreateBuildingUseCase(clubManagerComponent, buildingManagerComponent);
   }
 
   @Bean
   public CreateClubUseCase createClubUseCase() {
-    return new CreateClubUseCase(clubComponent);
+    return new CreateClubUseCase(clubManagerComponent);
   }
 
   @Bean
   public AcceptJoinRequestUseCase acceptJoinRequestUseCase() {
-    return new AcceptJoinRequestUseCase(clubComponent);
+    return new AcceptJoinRequestUseCase(clubManagerComponent);
   }
 
   @Bean
   public DenyJoinRequestUseCase denyJoinRequestUseCase() {
-    return new DenyJoinRequestUseCase(clubComponent);
+    return new DenyJoinRequestUseCase(clubManagerComponent);
   }
 
   @Bean
   public FindClubByNameUseCase findClubByNameUseCase() {
-    return new FindClubByNameUseCase(clubComponent);
+    return new FindClubByNameUseCase(clubManagerComponent);
   }
 
   @Bean
   public CreateJoinRequestUseCase createJoinRequestUseCase() {
-    return new CreateJoinRequestUseCase(clubComponent);
+    return new CreateJoinRequestUseCase(clubManagerComponent);
   }
 
   @Bean
   public CreateMemberUseCase createMemberUseCase() {
-    return new CreateMemberUseCase(memberComponent);
+    return new CreateMemberUseCase(memberManagerComponent);
   }
 
   @Bean
   public FindJoinRequestsUseCase findJoinRequestsUseCase() {
-    return new FindJoinRequestsUseCase(clubComponent);
+    return new FindJoinRequestsUseCase(clubManagerComponent);
   }
 
   @Bean
   public MakeSlotAvailableUseCase makeSlotAvailableUseCase() {
-    return new MakeSlotAvailableUseCase(slotComponent);
+    return new MakeSlotAvailableUseCase(slotManagerComponent);
   }
 
   @Bean
   public ReserveSlotForAuctionWinnerUseCase reserveSlotForAuctionWinnerUseCase() {
-    return new ReserveSlotForAuctionWinnerUseCase(slotComponent);
+    return new ReserveSlotForAuctionWinnerUseCase(slotManagerComponent);
   }
 
   @Bean
   public ReserveSlotUseCase reserveSlotUseCase() {
-    return new ReserveSlotUseCase(slotComponent, roomComponent, buildingComponent, memberComponent);
+    return new ReserveSlotUseCase(slotManagerComponent, roomManagerComponent, buildingManagerComponent, memberManagerComponent);
   }
 
   @Bean
   public VerifyAuctionRequirementForSlotUseCase verifyAuctionRequirementForSlotUseCase() {
-    return new VerifyAuctionRequirementForSlotUseCase(roomComponent);
+    return new VerifyAuctionRequirementForSlotUseCase(roomManagerComponent);
   }
 }

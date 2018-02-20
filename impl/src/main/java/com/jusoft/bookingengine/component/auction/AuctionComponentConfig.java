@@ -1,7 +1,7 @@
 package com.jusoft.bookingengine.component.auction;
 
-import com.jusoft.bookingengine.component.auction.api.AuctionComponent;
-import com.jusoft.bookingengine.component.booking.api.BookingComponent;
+import com.jusoft.bookingengine.component.auction.api.AuctionManagerComponent;
+import com.jusoft.bookingengine.component.booking.api.BookingManagerComponent;
 import com.jusoft.bookingengine.publisher.MessagePublisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -19,13 +19,13 @@ public class AuctionComponentConfig {
   @Autowired
   private MessagePublisher messagePublisher;
   @Autowired
-  private BookingComponent bookingComponent;
+  private BookingManagerComponent bookingManagerComponent;
   @Autowired
   private Clock clock;
 
   @Bean
-  public AuctionComponent auctionComponent() {
-    return new AuctionComponentImpl(auctionRepository(), auctionFactory(), messagePublisher, clock);
+  public AuctionManagerComponent auctionComponent() {
+    return new AuctionManagerComponentImpl(auctionRepository(), auctionFactory(), messagePublisher, clock);
   }
 
   private AuctionRepository auctionRepository() {

@@ -1,6 +1,6 @@
 package com.jusoft.bookingengine.component.auction.api;
 
-public interface AuctionComponent {
+public interface AuctionManagerComponent {
 
   AuctionView startAuction(StartAuctionCommand createAuctionCommand);
 

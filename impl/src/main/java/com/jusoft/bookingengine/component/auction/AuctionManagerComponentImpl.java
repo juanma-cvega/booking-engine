@@ -1,6 +1,6 @@
 package com.jusoft.bookingengine.component.auction;
 
-import com.jusoft.bookingengine.component.auction.api.AuctionComponent;
+import com.jusoft.bookingengine.component.auction.api.AuctionManagerComponent;
 import com.jusoft.bookingengine.component.auction.api.AuctionNotFoundException;
 import com.jusoft.bookingengine.component.auction.api.AuctionStartedEvent;
 import com.jusoft.bookingengine.component.auction.api.AuctionView;
@@ -16,7 +16,7 @@ import java.time.Clock;
 import java.util.Optional;
 
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-class AuctionComponentImpl implements AuctionComponent {
+class AuctionManagerComponentImpl implements AuctionManagerComponent {
 
   private final AuctionRepository auctionRepository;
   private final AuctionFactory auctionFactory;

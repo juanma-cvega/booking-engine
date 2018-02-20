@@ -6,10 +6,10 @@
 //import com.jusoft.bookingengine.component.mock.ClockStub;
 //import com.jusoft.bookingengine.component.mock.MessagesSink;
 //import com.jusoft.bookingengine.component.room.api.OpenNextSlotCommand;
-//import com.jusoft.bookingengine.component.room.api.RoomComponent;
+//import com.jusoft.bookingengine.component.room.api.RoomManagerComponent;
 //import com.jusoft.bookingengine.component.scheduler.ScheduledTask;
 //import com.jusoft.bookingengine.publisher.Message;
-//import com.jusoft.bookingengine.component.slot.api.SlotComponent;
+//import com.jusoft.bookingengine.component.slot.api.SlotManagerComponent;
 //import com.jusoft.bookingengine.component.slot.api.SlotCreatedEvent;
 //import com.jusoft.bookingengine.component.slot.api.SlotView;
 //import com.jusoft.bookingengine.component.timer.OpenTime;
@@ -36,10 +36,10 @@
 //  private CreateRoomUseCase roomUseCase;
 //
 //  @Autowired
-//  private RoomComponent roomComponent;
+//  private RoomManagerComponent roomComponent;
 //
 //  @Autowired
-//  private SlotComponent slotComponent;
+//  private SlotManagerComponent slotComponent;
 //
 //  @Autowired
 //  private RoomHolder roomHolder;

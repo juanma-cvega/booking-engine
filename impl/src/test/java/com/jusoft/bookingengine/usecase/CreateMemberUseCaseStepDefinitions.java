@@ -1,8 +1,8 @@
 package com.jusoft.bookingengine.usecase;
 
 import com.jusoft.bookingengine.component.member.api.CreateMemberCommand;
-import com.jusoft.bookingengine.component.member.api.MemberComponent;
 import com.jusoft.bookingengine.component.member.api.MemberCreatedEvent;
+import com.jusoft.bookingengine.component.member.api.MemberManagerComponent;
 import com.jusoft.bookingengine.config.AbstractUseCaseStepDefinitions;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -14,7 +14,7 @@ import static org.mockito.Mockito.verify;
 public class CreateMemberUseCaseStepDefinitions extends AbstractUseCaseStepDefinitions {
 
   @Autowired
-  private MemberComponent memberComponent;
+  private MemberManagerComponent memberManagerComponent;
 
   @Autowired
   private CreateMemberUseCase createMemberUseCase;
@@ -23,7 +23,7 @@ public class CreateMemberUseCaseStepDefinitions extends AbstractUseCaseStepDefin
     When("^the accepted join request for user (\\d+) is processed$", (Long userId) ->
       memberCreated = createMemberUseCase.addMemberToClubUseCase(new CreateMemberCommand(userId, clubCreated.getId())));
     Then("^the user (\\d+) should be a member of club$", (Long userId) ->
-      assertThat(memberComponent.isMemberOf(clubCreated.getId(), userId)).isTrue());
+      assertThat(memberManagerComponent.isMemberOf(clubCreated.getId(), userId)).isTrue());
     Then("^a notification of a new membership for user (\\d+) has been created should be published$", (Long userId) -> {
       verify(messagePublisher).publish(messageCaptor.capture());
       assertThat(messageCaptor.getValue()).isInstanceOf(MemberCreatedEvent.class);

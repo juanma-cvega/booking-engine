@@ -1,7 +1,7 @@
 package com.jusoft.bookingengine.strategy.auctionwinner;
 
 import com.google.common.collect.ImmutableMap;
-import com.jusoft.bookingengine.component.booking.api.BookingComponent;
+import com.jusoft.bookingengine.component.booking.api.BookingManagerComponent;
 import com.jusoft.bookingengine.strategy.auctionwinner.api.AuctionConfigInfo;
 import com.jusoft.bookingengine.strategy.auctionwinner.api.AuctionStrategyRegistrar;
 import com.jusoft.bookingengine.strategy.auctionwinner.api.AuctionWinnerStrategyFactory;
@@ -18,7 +18,7 @@ import java.util.Map;
 public class AuctionWinnerStrategyConfig {
 
   @Autowired
-  private BookingComponent bookingComponent;
+  private BookingManagerComponent bookingManagerComponent;
   @Autowired
   private Clock clock;
 
@@ -35,7 +35,7 @@ public class AuctionWinnerStrategyConfig {
   }
 
   private LessBookingsWithinPeriodStrategyFactory lessBookingsWithinPeriodStrategyFactory() {
-    return new LessBookingsWithinPeriodStrategyFactory(bookingComponent, clock);
+    return new LessBookingsWithinPeriodStrategyFactory(bookingManagerComponent, clock);
   }
 
   private NoAuctionStrategyFactory noAuctionStrategyFactory() {

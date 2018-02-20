@@ -1,6 +1,6 @@
 package com.jusoft.bookingengine.component.building.api;
 
-public interface BuildingComponent {
+public interface BuildingManagerComponent {
 
   BuildingView create(CreateBuildingCommand command);
 

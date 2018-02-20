@@ -1,7 +1,7 @@
 package com.jusoft.bookingengine.strategy.slotcreation;
 
 import com.google.common.collect.ImmutableMap;
-import com.jusoft.bookingengine.component.slot.api.SlotComponent;
+import com.jusoft.bookingengine.component.slot.api.SlotManagerComponent;
 import com.jusoft.bookingengine.strategy.slotcreation.api.MaxNumberOfSlotsStrategyConfigInfo;
 import com.jusoft.bookingengine.strategy.slotcreation.api.SlotCreationConfigInfo;
 import com.jusoft.bookingengine.strategy.slotcreation.api.SlotCreationStrategyFactory;
@@ -17,7 +17,7 @@ import java.util.Map;
 public class SlotCreationConfig {
 
   @Autowired
-  private SlotComponent slotComponent;
+  private SlotManagerComponent slotManagerComponent;
   @Autowired
   private Clock clock;
 
@@ -31,6 +31,6 @@ public class SlotCreationConfig {
   }
 
   private MaxNumberOfSlotsStrategyFactory maxNumberOfSlotsStrategyFactory() {
-    return new MaxNumberOfSlotsStrategyFactory(slotComponent, clock);
+    return new MaxNumberOfSlotsStrategyFactory(slotManagerComponent, clock);
   }
 }
