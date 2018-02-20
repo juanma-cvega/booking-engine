@@ -16,26 +16,26 @@ public class CreateRoomCommandTest {
 
   @Test
   public void null_slots_creation_strategy_config_info_should_fail_constructor() {
-    assertThatThrownBy(() -> new CreateRoomCommand(BUILDING_ID, MAX_NUMBER_OF_SLOTS_STRATEGY_CONFIG_INFO, SLOT_DURATION_IN_MINUTES, null, AVAILABLE_DAYS, IS_ACTIVE, NO_AUCTION_CONFIG))
+    assertThatThrownBy(() -> CreateRoomCommand.of(BUILDING_ID, MAX_NUMBER_OF_SLOTS_STRATEGY_CONFIG_INFO, SLOT_DURATION_IN_MINUTES, null, AVAILABLE_DAYS, IS_ACTIVE, NO_AUCTION_CONFIG))
       .isInstanceOf(NullPointerException.class);
   }
 
 
   @Test
   public void null_open_times_should_fail_constructor() {
-    assertThatThrownBy(() -> new CreateRoomCommand(BUILDING_ID, MAX_NUMBER_OF_SLOTS_STRATEGY_CONFIG_INFO, SLOT_DURATION_IN_MINUTES, null, AVAILABLE_DAYS, IS_ACTIVE, NO_AUCTION_CONFIG))
+    assertThatThrownBy(() -> CreateRoomCommand.of(BUILDING_ID, MAX_NUMBER_OF_SLOTS_STRATEGY_CONFIG_INFO, SLOT_DURATION_IN_MINUTES, null, AVAILABLE_DAYS, IS_ACTIVE, NO_AUCTION_CONFIG))
       .isInstanceOf(NullPointerException.class);
   }
 
   @Test
   public void null_available_days_should_fail_constructor() {
-    assertThatThrownBy(() -> new CreateRoomCommand(BUILDING_ID, MAX_NUMBER_OF_SLOTS_STRATEGY_CONFIG_INFO, SLOT_DURATION_IN_MINUTES, OPEN_TIMES, null, IS_ACTIVE, NO_AUCTION_CONFIG))
+    assertThatThrownBy(() -> CreateRoomCommand.of(BUILDING_ID, MAX_NUMBER_OF_SLOTS_STRATEGY_CONFIG_INFO, SLOT_DURATION_IN_MINUTES, OPEN_TIMES, null, IS_ACTIVE, NO_AUCTION_CONFIG))
       .isInstanceOf(NullPointerException.class);
   }
 
   @Test
   public void null_auction_config_should_fail_constructor() {
-    assertThatThrownBy(() -> new CreateRoomCommand(BUILDING_ID, MAX_NUMBER_OF_SLOTS_STRATEGY_CONFIG_INFO, SLOT_DURATION_IN_MINUTES, OPEN_TIMES, AVAILABLE_DAYS, IS_ACTIVE, null))
+    assertThatThrownBy(() -> CreateRoomCommand.of(BUILDING_ID, MAX_NUMBER_OF_SLOTS_STRATEGY_CONFIG_INFO, SLOT_DURATION_IN_MINUTES, OPEN_TIMES, AVAILABLE_DAYS, IS_ACTIVE, null))
       .isInstanceOf(NullPointerException.class);
   }
 }

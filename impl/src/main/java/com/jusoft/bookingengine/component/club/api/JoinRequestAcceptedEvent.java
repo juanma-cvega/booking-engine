@@ -3,7 +3,7 @@ package com.jusoft.bookingengine.component.club.api;
 import com.jusoft.bookingengine.publisher.Event;
 import lombok.Data;
 
-@Data
+@Data(staticConstructor = "of")
 public class JoinRequestAcceptedEvent implements Event {
 
   private final long accessRequestId;

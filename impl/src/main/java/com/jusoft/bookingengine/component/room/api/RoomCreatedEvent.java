@@ -9,7 +9,7 @@ import lombok.NonNull;
 import java.time.DayOfWeek;
 import java.util.List;
 
-@Data
+@Data(staticConstructor = "of")
 public class RoomCreatedEvent implements Event {
 
   private final long roomId;
@@ -19,5 +19,6 @@ public class RoomCreatedEvent implements Event {
   @NonNull
   private final List<DayOfWeek> availableDays;
   private final boolean active;
+  @NonNull
   private final AuctionConfigInfo auctionConfigInfo;
 }

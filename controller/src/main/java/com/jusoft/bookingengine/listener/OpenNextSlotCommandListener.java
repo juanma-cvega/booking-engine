@@ -18,7 +18,7 @@ class OpenNextSlotCommandListener implements MessageListener {
   @EventListener(OpenNextSlotMessage.class)
   public void openNextSlot(OpenNextSlotMessage command) {
     log.info("OpenNextSlotCommand consumed: roomId={}", command.getRoomId());
-    SlotView slotCreated = createSlotUseCase.createSlotFor(new OpenNextSlotCommand(command.getRoomId()));
+    SlotView slotCreated = createSlotUseCase.createSlotFor(OpenNextSlotCommand.of(command.getRoomId()));
     log.info("OpenNextSlotCommand processed. Slot created: slotId={}, roomId={}, startDate={}, endDate={}",
       slotCreated.getId(), slotCreated.getRoomId(), slotCreated.getOpenDate().getStartTime(), slotCreated.getOpenDate().getEndTime());
   }

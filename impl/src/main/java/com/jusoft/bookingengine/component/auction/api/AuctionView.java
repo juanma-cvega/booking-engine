@@ -2,12 +2,15 @@ package com.jusoft.bookingengine.component.auction.api;
 
 import com.jusoft.bookingengine.component.timer.OpenDate;
 import com.jusoft.bookingengine.strategy.auctionwinner.api.AuctionConfigInfo;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NonNull;
 
 import java.util.HashSet;
 import java.util.Set;
 
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Data
 public class AuctionView {
 
@@ -20,16 +23,12 @@ public class AuctionView {
   @NonNull
   private final Set<Bid> bidders;
 
-  public AuctionView(long id,
-                     long referenceId,
-                     OpenDate openDate,
-                     AuctionConfigInfo auctionConfigInfo,
-                     Set<Bid> bidders) {
-    this.id = id;
-    this.referenceId = referenceId;
-    this.openDate = openDate;
-    this.auctionConfigInfo = auctionConfigInfo;
-    this.bidders = new HashSet<>(bidders);
+  public static AuctionView of(long id,
+                               long referenceId,
+                               OpenDate openDate,
+                               AuctionConfigInfo auctionConfigInfo,
+                               Set<Bid> bidders) {
+    return new AuctionView(id, referenceId, openDate, auctionConfigInfo, new HashSet<>(bidders));
   }
 
   public Set<Bid> getBidders() {

@@ -28,7 +28,7 @@ public class StartAuctionUseCaseStepDefinitions extends AbstractUseCaseStepDefin
 
   public StartAuctionUseCaseStepDefinitions() {
     When("^an auction is created for the slot$", () ->
-      auctionCreated = startAuctionUseCase.startAuction(new StartAuctionCommand(slotCreated.getId(), roomCreated.getAuctionConfigInfo())));
+      auctionCreated = startAuctionUseCase.startAuction(StartAuctionCommand.of(slotCreated.getId(), roomCreated.getAuctionConfigInfo())));
     Then("^the auction should be stored$", () -> {
       AuctionView auction = auctionManagerComponent.find(DataHolder.auctionCreated.getId());
       assertThat(auction.getBidders()).hasSameElementsAs(DataHolder.auctionCreated.getBidders());

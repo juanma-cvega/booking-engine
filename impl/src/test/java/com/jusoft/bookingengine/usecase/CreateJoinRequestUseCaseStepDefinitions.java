@@ -32,12 +32,12 @@ public class CreateJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStep
 
   public CreateJoinRequestUseCaseStepDefinitions() {
     When("^user (\\d+) issues a join request$", (Long userId) -> {
-      joinRequestCreated = createJoinRequestUseCase.createJoinRequest(new CreateJoinRequestCommand(clubCreated.getId(), userId));
+      joinRequestCreated = createJoinRequestUseCase.createJoinRequest(CreateJoinRequestCommand.of(clubCreated.getId(), userId));
       joinRequestsCreated.add(joinRequestCreated);
     });
     Then("^the club should have a? join requests? created for users?$", (DataTable userIdsDataTable) -> {
       List<Long> userIds = userIdsDataTable.asList(Long.class);
-      Set<JoinRequest> joinRequests = clubManagerComponent.findJoinRequests(new FindJoinRequestCommand(clubAdmin, clubCreated.getId()));
+      Set<JoinRequest> joinRequests = clubManagerComponent.findJoinRequests(FindJoinRequestCommand.of(clubAdmin, clubCreated.getId()));
       assertThat(joinRequests).hasSize(userIds.size());
       assertThat(joinRequests).extracting("userId").hasSameElementsAs(userIds);
     });

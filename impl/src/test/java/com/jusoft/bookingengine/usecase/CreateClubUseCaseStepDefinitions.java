@@ -25,19 +25,19 @@ public class CreateClubUseCaseStepDefinitions extends AbstractUseCaseStepDefinit
 
   public CreateClubUseCaseStepDefinitions() {
     When("^a club is created$", () -> {
-      clubCreated = createClubUseCase.createClubFrom(new CreateClubCommand(CLUB_NAME, CLUB_DESCRIPTION, USER_ID_1));
+      clubCreated = createClubUseCase.createClubFrom(CreateClubCommand.of(CLUB_NAME, CLUB_DESCRIPTION, USER_ID_1));
       clubAdmin = USER_ID_1;
     });
     When("^a club is created by user (.*)$", (Long userId) -> {
-      clubCreated = createClubUseCase.createClubFrom(new CreateClubCommand(CLUB_NAME, CLUB_DESCRIPTION, userId));
+      clubCreated = createClubUseCase.createClubFrom(CreateClubCommand.of(CLUB_NAME, CLUB_DESCRIPTION, userId));
       clubAdmin = userId;
     });
     When("^a club is created with name (.*)$", (String clubName) -> {
-      clubCreated = createClubUseCase.createClubFrom(new CreateClubCommand(clubName, CLUB_DESCRIPTION, USER_ID_1));
+      clubCreated = createClubUseCase.createClubFrom(CreateClubCommand.of(clubName, CLUB_DESCRIPTION, USER_ID_1));
       clubAdmin = USER_ID_1;
     });
     When("^a club with name (.*) is created by user (.*)$", (String clubName, Long userId) -> {
-      clubCreated = createClubUseCase.createClubFrom(new CreateClubCommand(clubName, CLUB_DESCRIPTION, userId));
+      clubCreated = createClubUseCase.createClubFrom(CreateClubCommand.of(clubName, CLUB_DESCRIPTION, userId));
       clubAdmin = userId;
     });
     Then("^the club should be stored with user (.*) as admin$", (Long userId) -> {

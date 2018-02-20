@@ -11,5 +11,5 @@ public class BuildingFixtures {
   public static final String ZIP_CODE = "any zip code";
   public static final String STREET = "any street";
   public static final String BUILDING_DESCRIPTION = "building description";
-  public static final Address ADDRESS = new Address(STREET, ZIP_CODE, CITY);
+  public static final Address ADDRESS = Address.of(STREET, ZIP_CODE, CITY);
 }

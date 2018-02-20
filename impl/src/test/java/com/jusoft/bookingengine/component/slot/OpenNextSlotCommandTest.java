@@ -12,11 +12,11 @@ public class OpenNextSlotCommandTest {
 
   @Test
   public void null_open_date_fails_constructor() {
-    assertThatThrownBy(() -> new CreateSlotCommand(ROOM_ID, null, STATE)).isInstanceOf(NullPointerException.class);
+    assertThatThrownBy(() -> CreateSlotCommand.of(ROOM_ID, null, STATE)).isInstanceOf(NullPointerException.class);
   }
 
   @Test
   public void null_state_fails_constructor() {
-    assertThatThrownBy(() -> new CreateSlotCommand(ROOM_ID, OPEN_DATE, null)).isInstanceOf(NullPointerException.class);
+    assertThatThrownBy(() -> CreateSlotCommand.of(ROOM_ID, OPEN_DATE, null)).isInstanceOf(NullPointerException.class);
   }
 }

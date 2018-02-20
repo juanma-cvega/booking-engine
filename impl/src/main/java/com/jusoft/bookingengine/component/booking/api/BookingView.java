@@ -5,7 +5,7 @@ import lombok.NonNull;
 
 import java.time.ZonedDateTime;
 
-@Data
+@Data(staticConstructor = "of")
 public class BookingView {
 
   private final long id;

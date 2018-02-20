@@ -30,5 +30,5 @@ public class RoomFixtures {
   public static final boolean IS_ACTIVE = true;
   public static final AuctionConfigInfo AUCTION_CONFIG_INFO = new NoAuctionConfigInfo();
 
-  public static final RoomCreatedEvent ROOM_CREATED_EVENT = new RoomCreatedEvent(ROOM_ID, SLOT_DURATION_IN_MINUTES, OPEN_TIMES, AVAILABLE_DAYS, IS_ACTIVE, AUCTION_CONFIG_INFO);
+  public static final RoomCreatedEvent ROOM_CREATED_EVENT = RoomCreatedEvent.of(ROOM_ID, SLOT_DURATION_IN_MINUTES, OPEN_TIMES, AVAILABLE_DAYS, IS_ACTIVE, AUCTION_CONFIG_INFO);
 }

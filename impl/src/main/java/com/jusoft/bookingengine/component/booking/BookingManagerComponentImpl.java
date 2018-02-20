@@ -37,7 +37,7 @@ class BookingManagerComponentImpl implements BookingManagerComponent {
   public BookingView book(CreateBookingCommand createBookingCommand) {
     Booking newBooking = bookingFactory.create(createBookingCommand);
     bookingRepository.save(newBooking);
-    messagePublisher.publish(new BookingCreatedEvent(newBooking.getId(), newBooking.getUserId(), newBooking.getSlotId()));
+    messagePublisher.publish(BookingCreatedEvent.of(newBooking.getId(), newBooking.getUserId(), newBooking.getSlotId()));
     return bookingFactory.create(newBooking);
   }
 
@@ -45,7 +45,7 @@ class BookingManagerComponentImpl implements BookingManagerComponent {
   public void cancel(CancelBookingCommand cancelBookingCommand) {
     boolean isDeleted = bookingRepository.delete(cancelBookingCommand.getBookingId(), deleteBookingIfOwner(cancelBookingCommand.getUserId()));
     if (isDeleted) {
-      messagePublisher.publish(new BookingCanceledEvent(cancelBookingCommand.getBookingId()));
+      messagePublisher.publish(BookingCanceledEvent.of(cancelBookingCommand.getBookingId()));
     }
   }
 

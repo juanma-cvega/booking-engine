@@ -24,7 +24,7 @@ class RoomFactory {
   }
 
   RoomView createFrom(Room room) {
-    return new RoomView(room.getId(),
+    return RoomView.of(room.getId(),
       room.getBuildingId(),
       room.getSlotCreationConfigInfo(),
       room.getSlotDurationInMinutes(),

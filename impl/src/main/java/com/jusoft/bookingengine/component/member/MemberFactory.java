@@ -20,7 +20,7 @@ class MemberFactory {
   }
 
   public MemberView createFrom(Member member) {
-    return new MemberView(
+    return MemberView.of(
       member.getId(),
       member.getUserId(),
       member.getClubId(),

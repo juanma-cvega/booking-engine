@@ -21,7 +21,7 @@ public class CreateMemberUseCaseStepDefinitions extends AbstractUseCaseStepDefin
 
   public CreateMemberUseCaseStepDefinitions() {
     When("^the accepted join request for user (\\d+) is processed$", (Long userId) ->
-      memberCreated = createMemberUseCase.addMemberToClubUseCase(new CreateMemberCommand(userId, clubCreated.getId())));
+      memberCreated = createMemberUseCase.addMemberToClubUseCase(CreateMemberCommand.of(userId, clubCreated.getId())));
     Then("^the user (\\d+) should be a member of club$", (Long userId) ->
       assertThat(memberManagerComponent.isMemberOf(clubCreated.getId(), userId)).isTrue());
     Then("^a notification of a new membership for user (\\d+) has been created should be published$", (Long userId) -> {

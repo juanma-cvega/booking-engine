@@ -31,12 +31,11 @@ public class CancelBookingUseCaseStepDefinitions extends AbstractUseCaseStepDefi
     Given("^the slot start time is passed$", () ->
       clock.setClock(Clock.fixed(Instant.now().plus(20, ChronoUnit.DAYS), ZoneId.systemDefault())));
     When("^the user (.*) cancels the booking from user (.*)$", (Long userToCancel, Long userOwner) ->
-      storeException(() -> cancelBookingUseCase.cancel(new CancelBookingCommand(userToCancel, bookingCreated.getId()))));
+      storeException(() -> cancelBookingUseCase.cancel(CancelBookingCommand.of(userToCancel, bookingCreated.getId()))));
     When("^the user (.*) cancels his booking$", (Long userId) ->
-      cancelBookingUseCase.cancel(new CancelBookingCommand(userId, bookingCreated.getId())));
-    When("^the user (\\d+) tries to cancel his booking$", (Long userId) -> {
-      storeException(() -> cancelBookingUseCase.cancel(new CancelBookingCommand(userId, bookingCreated.getId())));
-    });
+      cancelBookingUseCase.cancel(CancelBookingCommand.of(userId, bookingCreated.getId())));
+    When("^the user (\\d+) tries to cancel his booking$", (Long userId) ->
+      storeException(() -> cancelBookingUseCase.cancel(CancelBookingCommand.of(userId, bookingCreated.getId()))));
     Then("^the user (.*) should not see that booking in his list$", (Long userId) ->
       assertThatExceptionOfType(BookingNotFoundException.class)
         .isThrownBy(() -> bookingManagerComponent.find(userId, bookingCreated.getId())));

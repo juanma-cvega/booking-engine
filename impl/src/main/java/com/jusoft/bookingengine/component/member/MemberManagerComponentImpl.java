@@ -19,7 +19,7 @@ class MemberManagerComponentImpl implements MemberManagerComponent {
   public MemberView createMember(CreateMemberCommand command) {
     Member member = memberFactory.createFrom(command);
     repository.save(member);
-    messagePublisher.publish(new MemberCreatedEvent(member.getId(), member.getUserId(), member.getClubId()));
+    messagePublisher.publish(MemberCreatedEvent.of(member.getId(), member.getUserId(), member.getClubId()));
     return memberFactory.createFrom(member);
   }
 

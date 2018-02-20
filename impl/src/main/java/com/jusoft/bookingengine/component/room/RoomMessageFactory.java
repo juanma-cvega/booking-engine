@@ -5,15 +5,11 @@ import com.jusoft.bookingengine.component.room.api.RoomCreatedEvent;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
-import java.time.Clock;
-
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class RoomMessageFactory {
 
-  private final Clock clock;
-
   RoomCreatedEvent roomCreatedEvent(Room room) {
-    return new RoomCreatedEvent(
+    return RoomCreatedEvent.of(
       room.getId(),
       room.getSlotDurationInMinutes(),
       room.getOpenTimesPerDay(),
@@ -23,6 +19,6 @@ class RoomMessageFactory {
   }
 
   StartAuctionCommand startAuctionCommand(Room room, long slotId) {
-    return new StartAuctionCommand(slotId, room.getAuctionConfigInfo());
+    return StartAuctionCommand.of(slotId, room.getAuctionConfigInfo());
   }
 }

@@ -33,7 +33,7 @@ public class ScheduleNextSlotUseCaseStepDefinitions extends AbstractUseCaseStepD
     Then("^a command to open the next slot for the room should be scheduled to be published at (.*)$", (String localTime) -> {
       assertThat(tasks).hasSize(1);
       assertThat(tasks.get(0).getExecutionTime()).isEqualTo(getDateFrom(localTime));
-      assertThat(tasks.get(0).getScheduledEvent()).isEqualTo(new OpenNextSlotCommand(roomCreated.getId()));
+      assertThat(tasks.get(0).getScheduledEvent()).isEqualTo(OpenNextSlotCommand.of(roomCreated.getId()));
       assertThat(tasks.get(0).getTask().isDone()).isFalse();
     });
   }

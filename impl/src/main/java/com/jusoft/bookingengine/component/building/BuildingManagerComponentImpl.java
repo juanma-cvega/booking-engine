@@ -20,7 +20,7 @@ class BuildingManagerComponentImpl implements BuildingManagerComponent {
   public BuildingView create(CreateBuildingCommand command) {
     Building building = buildingFactory.createFrom(command);
     repository.save(building);
-    messagePublisher.publish(new BuildingCreatedEvent(building.getId(), building.getAddress(), building.getDescription()));
+    messagePublisher.publish(BuildingCreatedEvent.of(building.getId(), building.getAddress(), building.getDescription()));
     return buildingFactory.createFrom(building);
   }
 

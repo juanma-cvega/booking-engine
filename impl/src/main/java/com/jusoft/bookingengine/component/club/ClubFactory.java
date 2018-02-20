@@ -22,7 +22,7 @@ class ClubFactory {
   }
 
   public ClubView createFrom(Club club) {
-    return new ClubView(
+    return ClubView.of(
       club.getId(),
       club.getName(),
       club.getDescription(),

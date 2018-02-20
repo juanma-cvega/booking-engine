@@ -34,10 +34,10 @@ public class AcceptJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStep
         .filter(joinRequest -> joinRequest.getUserId() == userId)
         .findFirst()
         .orElseThrow(() -> new IllegalArgumentException("User does not have a join request created"));
-      acceptJoinRequestUseCase.acceptJoinRequest(new AcceptJoinRequestCommand(joinRequestFromUser.getId(), clubCreated.getId(), adminId));
+      acceptJoinRequestUseCase.acceptJoinRequest(AcceptJoinRequestCommand.of(joinRequestFromUser.getId(), clubCreated.getId(), adminId));
     });
     Then("^the club should not have the join request for user (\\d+) anymore$", (Long userId) -> {
-      Set<JoinRequest> joinRequests = clubManagerComponent.findJoinRequests(new FindJoinRequestCommand(clubAdmin, clubCreated.getId()));
+      Set<JoinRequest> joinRequests = clubManagerComponent.findJoinRequests(FindJoinRequestCommand.of(clubAdmin, clubCreated.getId()));
       assertThat(joinRequests.stream().anyMatch(joinRequest -> joinRequest.getUserId() == userId)).isFalse();
     });
     Then("^a notification of a join request accepted for user (\\d+) should be published$", (Long userId) -> {

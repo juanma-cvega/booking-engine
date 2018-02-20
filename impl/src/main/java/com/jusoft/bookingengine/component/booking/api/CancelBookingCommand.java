@@ -3,7 +3,7 @@ package com.jusoft.bookingengine.component.booking.api;
 import com.jusoft.bookingengine.publisher.Command;
 import lombok.Data;
 
-@Data
+@Data(staticConstructor = "of")
 public class CancelBookingCommand implements Command {
 
   private final long userId;

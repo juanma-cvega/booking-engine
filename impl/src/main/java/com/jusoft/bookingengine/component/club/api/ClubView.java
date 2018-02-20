@@ -4,7 +4,7 @@ import lombok.Data;
 
 import java.util.Set;
 
-@Data
+@Data(staticConstructor = "of")
 public class ClubView {
 
   private final long id;

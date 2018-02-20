@@ -78,7 +78,7 @@ public class DataHolder {
     public AuctionConfigInfo auctionConfigInfo;
 
     public CreateRoomCommand build(long buildingId) {
-      return new CreateRoomCommand(
+      return CreateRoomCommand.of(
         buildingId,
         slotCreationConfigInfo == null ? MAX_NUMBER_OF_SLOTS_STRATEGY_CONFIG_INFO : slotCreationConfigInfo,
         slotDurationInMinutes == null ? SLOT_DURATION_IN_MINUTES : slotDurationInMinutes,

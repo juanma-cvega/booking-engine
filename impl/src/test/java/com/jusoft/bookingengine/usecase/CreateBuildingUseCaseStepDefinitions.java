@@ -28,7 +28,7 @@ public class CreateBuildingUseCaseStepDefinitions extends AbstractUseCaseStepDef
   public CreateBuildingUseCaseStepDefinitions() {
     When("^a building is created$", () ->
       buildingCreated = createBuildingUseCase.createBuildingFrom(
-        new CreateBuildingCommand(clubCreated.getId(), ADDRESS, BUILDING_DESCRIPTION)));
+        CreateBuildingCommand.of(clubCreated.getId(), ADDRESS, BUILDING_DESCRIPTION)));
     Then("^the building should be stored$", () -> {
       BuildingView buildingView = buildingManagerComponent.find(buildingCreated.getId());
       assertThat(buildingView.getAddress()).isEqualTo(buildingCreated.getAddress());
@@ -43,9 +43,8 @@ public class CreateBuildingUseCaseStepDefinitions extends AbstractUseCaseStepDef
       assertThat(buildingCreatedEvent.getAddress()).isEqualTo(buildingCreated.getAddress());
       assertThat(buildingCreatedEvent.getDescription()).isEqualTo(buildingCreated.getDescription());
     });
-    When("^a building is created for a non existing club$", () -> {
-      storeException(() -> createBuildingUseCase.createBuildingFrom(new CreateBuildingCommand(NON_EXISTING_CLUB_ID, ADDRESS, BUILDING_DESCRIPTION)));
-    });
+    When("^a building is created for a non existing club$", () ->
+      storeException(() -> createBuildingUseCase.createBuildingFrom(CreateBuildingCommand.of(NON_EXISTING_CLUB_ID, ADDRESS, BUILDING_DESCRIPTION))));
     Then("^the user should be notified the club does not exist$", () -> {
       assertThat(exceptionThrown).isInstanceOf(ClubNotFoundException.class);
       ClubNotFoundException exception = (ClubNotFoundException) exceptionThrown;

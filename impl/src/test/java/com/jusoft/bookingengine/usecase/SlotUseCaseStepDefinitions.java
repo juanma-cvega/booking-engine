@@ -26,9 +26,9 @@ public class SlotUseCaseStepDefinitions extends AbstractUseCaseStepDefinitions {
 
   public SlotUseCaseStepDefinitions() {
     When("^a slot is created$", () ->
-      slotCreated = openNextSlotUseCase.createSlotFor(new OpenNextSlotCommand(roomCreated.getId())));
+      slotCreated = openNextSlotUseCase.createSlotFor(OpenNextSlotCommand.of(roomCreated.getId())));
     When("(.*) slots are created", (Integer slotsToCreate) ->
-      IntStream.range(0, slotsToCreate).forEach((index) -> openNextSlotUseCase.createSlotFor(new OpenNextSlotCommand(roomCreated.getId()))));
+      IntStream.range(0, slotsToCreate).forEach((index) -> openNextSlotUseCase.createSlotFor(OpenNextSlotCommand.of(roomCreated.getId()))));
     Then("^a notification of a created slot starting at (.*) and ending at (.*) should be published$", (String startTime, String endTime) -> {
       ZonedDateTime startDate = getDateFrom(startTime);
       ZonedDateTime endDate = getDateFrom(endTime);

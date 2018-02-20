@@ -42,7 +42,7 @@ public class RoomFixtures {
   public static final AuctionConfigInfo NO_AUCTION_CONFIG = new NoAuctionConfigInfo();
 
   public static final Function<Long, CreateRoomCommand> CREATE_ROOM_COMMAND = (buildingId) ->
-    new CreateRoomCommand(buildingId, MAX_NUMBER_OF_SLOTS_STRATEGY_CONFIG_INFO,
+    CreateRoomCommand.of(buildingId, MAX_NUMBER_OF_SLOTS_STRATEGY_CONFIG_INFO,
       SLOT_DURATION_IN_MINUTES, OPEN_TIMES, AVAILABLE_DAYS, IS_ACTIVE, NO_AUCTION_CONFIG);
 
 }

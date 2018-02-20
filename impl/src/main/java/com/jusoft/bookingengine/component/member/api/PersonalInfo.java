@@ -5,12 +5,13 @@ import lombok.NonNull;
 
 import java.time.LocalDateTime;
 
-@Data
+@Data(staticConstructor = "of")
 public class PersonalInfo {
 
   @NonNull
   private final String name;
   @NonNull
   private final String surname;
+  @NonNull
   private final LocalDateTime dateOfBirth;
 }

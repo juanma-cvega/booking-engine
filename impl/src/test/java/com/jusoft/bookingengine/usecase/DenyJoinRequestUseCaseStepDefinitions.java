@@ -25,7 +25,7 @@ public class DenyJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStepDe
 
   public DenyJoinRequestUseCaseStepDefinitions() {
     When("^admin (\\d+) denies the join request created by user (\\d+)$", (Long adminId, Long userId) ->
-      denyJoinRequestUseCase.denyJoinRequest(new DenyJoinRequestCommand(joinRequestCreated.getId(), clubCreated.getId(), clubAdmin)));
+      denyJoinRequestUseCase.denyJoinRequest(DenyJoinRequestCommand.of(joinRequestCreated.getId(), clubCreated.getId(), clubAdmin)));
     Then("^a notification of a join request denied for user (\\d+) should be published$", (Long userId) -> {
       verify(messagePublisher).publish(messageCaptor.capture());
       assertThat(messageCaptor.getValue()).isInstanceOf(JoinRequestDeniedEvent.class);

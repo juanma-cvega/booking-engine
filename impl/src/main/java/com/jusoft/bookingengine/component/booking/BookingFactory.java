@@ -27,7 +27,7 @@ class BookingFactory {
   }
 
   BookingView create(Booking booking) {
-    return new BookingView(booking.getId(),
+    return BookingView.of(booking.getId(),
       booking.getUserId(),
       booking.getBookingTime(),
       booking.getSlotId());

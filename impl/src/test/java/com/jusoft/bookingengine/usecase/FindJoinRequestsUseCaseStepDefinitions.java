@@ -23,9 +23,9 @@ public class FindJoinRequestsUseCaseStepDefinitions extends AbstractUseCaseStepD
 
   public FindJoinRequestsUseCaseStepDefinitions() {
     When("^admin (\\d+) looks for all join requests created", (Long adminId) ->
-      joinRequestsFound = findJoinRequestsUseCase.findJoinRequests(new FindJoinRequestCommand(adminId, clubCreated.getId())));
+      joinRequestsFound = findJoinRequestsUseCase.findJoinRequests(FindJoinRequestCommand.of(adminId, clubCreated.getId())));
     When("^user (\\d+) looks for all join requests created", (Long adminId) ->
-      storeException(() -> joinRequestsFound = findJoinRequestsUseCase.findJoinRequests(new FindJoinRequestCommand(adminId, clubCreated.getId()))));
+      storeException(() -> joinRequestsFound = findJoinRequestsUseCase.findJoinRequests(FindJoinRequestCommand.of(adminId, clubCreated.getId()))));
     Then("^the admin should be able to see the list of join requests containing requests for users$", (DataTable userIdsDataTable) -> {
       List<Long> userIds = userIdsDataTable.asList(Long.class);
       assertThat(joinRequestsFound).extracting("userId").hasSameElementsAs(userIds);

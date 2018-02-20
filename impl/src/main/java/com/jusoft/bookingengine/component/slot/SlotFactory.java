@@ -27,7 +27,7 @@ class SlotFactory {
   }
 
   SlotView createFrom(Slot slot) {
-    return new SlotView(slot.getId(),
+    return SlotView.of(slot.getId(),
       slot.getRoomId(),
       com.jusoft.bookingengine.component.slot.api.SlotState.valueOf(slot.getState().name()),
       slot.getCreationTime(),

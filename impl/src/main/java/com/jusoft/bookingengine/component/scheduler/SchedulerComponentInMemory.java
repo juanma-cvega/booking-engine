@@ -29,7 +29,7 @@ class SchedulerComponentInMemory implements SchedulerComponent {
   @Override
   public void schedule(ZonedDateTime executionTime, Message scheduledEvent) {
     ScheduledFuture<?> schedule = scheduledExecutorService.schedule(createCommand(scheduledEvent), getDelay(executionTime), MILLISECONDS);
-    scheduledTasks.add(new ScheduledTask(schedule, scheduledEvent, executionTime));
+    scheduledTasks.add(ScheduledTask.of(schedule, scheduledEvent, executionTime));
   }
 
   private Runnable createCommand(Message scheduledEvent) {

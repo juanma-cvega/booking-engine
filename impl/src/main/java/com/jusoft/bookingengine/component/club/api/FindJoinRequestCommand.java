@@ -3,7 +3,7 @@ package com.jusoft.bookingengine.component.club.api;
 import com.jusoft.bookingengine.publisher.Command;
 import lombok.Data;
 
-@Data
+@Data(staticConstructor = "of")
 public class FindJoinRequestCommand implements Command {
 
   private final long adminId;

@@ -26,7 +26,7 @@ public class SlotFixtures {
 
   public static final SlotResource SLOT_RESOURCE_1 = new SlotResource(SLOT_ID_1, ROOM_ID, START_TIME, END_TIME);
 
-  public static final OpenNextSlotCommand OPEN_NEXT_SLOT_COMMAND = new OpenNextSlotCommand(ROOM_ID);
-  public static final SlotCreatedEvent SLOT_CREATED_EVENT = new SlotCreatedEvent(SLOT_ID_1, ROOM_ID, SLOT_STATE, OPEN_DATE);
+  public static final OpenNextSlotCommand OPEN_NEXT_SLOT_COMMAND = OpenNextSlotCommand.of(ROOM_ID);
+  public static final SlotCreatedEvent SLOT_CREATED_EVENT = SlotCreatedEvent.of(SLOT_ID_1, ROOM_ID, SLOT_STATE, OPEN_DATE);
 
 }

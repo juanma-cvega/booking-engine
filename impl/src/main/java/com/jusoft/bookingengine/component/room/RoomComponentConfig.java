@@ -34,7 +34,7 @@ public class RoomComponentConfig {
   }
 
   private RoomMessageFactory roomEventFactory() {
-    return new RoomMessageFactory(clock);
+    return new RoomMessageFactory();
   }
 
   private RoomRepository roomRepository() {

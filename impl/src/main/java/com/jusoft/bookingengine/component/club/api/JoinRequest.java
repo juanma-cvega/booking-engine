@@ -2,7 +2,7 @@ package com.jusoft.bookingengine.component.club.api;
 
 import lombok.Data;
 
-@Data
+@Data(staticConstructor = "of")
 public class JoinRequest {
 
   private final long id;
