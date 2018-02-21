@@ -58,23 +58,15 @@ class BookingRepositoryInMemory implements BookingRepository {
   public Optional<Booking> find(long bookingId) {
     Booking value = store.get(bookingId);
     if (value != null) {
-      return Optional.of(copyBooking(value));
+      return Optional.of(value);
     }
     return Optional.empty();
-  }
-
-  private Booking copyBooking(Booking value) {
-    return new Booking(value.getId(),
-      value.getUserId(),
-      value.getBookingTime(),
-      value.getSlotId());
   }
 
   @Override
   public List<Booking> getByUser(long userId) {
     return store.values().stream()
       .filter(booking -> Long.compare(userId, booking.getUserId()) == 0)
-      .map(this::copyBooking)
       .collect(toList());
   }
 
@@ -83,7 +75,6 @@ class BookingRepositoryInMemory implements BookingRepository {
     return store.values().stream()
       .filter(byBookingBelongsToUserFrom(users))
       .filter(byBookingCreatedBeforeOrAt(endTime))
-      .map(this::copyBooking)
       .collect(toList());
   }
 

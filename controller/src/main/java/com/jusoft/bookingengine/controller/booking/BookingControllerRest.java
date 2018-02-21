@@ -69,7 +69,7 @@ class BookingControllerRest {
   @ResponseBody
   public BookingResources getFor(@PathVariable long userId) {
     log.info("Create booking request received: userId={}", userId);
-    List<BookingView> bookings = bookingManagerComponent.getFor(userId);
+    List<BookingView> bookings = bookingManagerComponent.findAllBy(userId);
     BookingResources bookingResources = bookingResourceFactory.createFrom(bookings);
     log.info("Create booking request finished: userId={}, bookings={}", userId, bookingResources.getBookings().size());
     return bookingResources;

@@ -12,7 +12,6 @@ import java.util.function.Supplier;
 
 import static com.jusoft.bookingengine.holder.DataHolder.bookingCreated;
 import static com.jusoft.bookingengine.holder.DataHolder.bookingsCreated;
-import static com.jusoft.bookingengine.holder.DataHolder.bookingsFetched;
 import static com.jusoft.bookingengine.holder.DataHolder.slotCreated;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
@@ -44,10 +43,6 @@ public class CreateBookingUseCaseStepDefinitions extends AbstractUseCaseStepDefi
       assertThat(bookingCreatedEvent.getBookingId()).isEqualTo(bookingCreated.getId());
       assertThat(bookingCreatedEvent.getSlotId()).isEqualTo(bookingCreated.getSlotId());
     });
-    When("^the user (.*) asks for his bookings$", (Long userId) ->
-      bookingsFetched = bookingManagerComponent.getFor(userId));
-    Then("^the user should see all slots booked by him$", () ->
-      assertThat(bookingsFetched).hasSameElementsAs(bookingsCreated));
   }
 
   private BookingView bookSlot(Long userId) {

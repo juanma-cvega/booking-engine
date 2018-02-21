@@ -118,7 +118,7 @@ public class BookingControllerRestTest {
 
   @Test
   public void getFor() throws Exception {
-    when(mockBookingManagerComponent.getFor(USER_ID_1)).thenReturn(BOOKINGS);
+    when(mockBookingManagerComponent.findAllBy(USER_ID_1)).thenReturn(BOOKINGS);
     when(mockBookingResourceFactory.createFrom(BOOKINGS)).thenReturn(BOOKING_RESOURCES);
 
     String cancelUrl = String.format(GET_FOR_URL_TEMPLATE, USER_ID_1);

@@ -149,4 +149,9 @@ public class UseCaseConfig {
   public VerifyAuctionRequirementForSlotUseCase verifyAuctionRequirementForSlotUseCase() {
     return new VerifyAuctionRequirementForSlotUseCase(roomManagerComponent);
   }
+
+  @Bean
+  public GetBookingsUseCase getBookingsUseCase() {
+    return new GetBookingsUseCase(bookingManagerComponent);
+  }
 }

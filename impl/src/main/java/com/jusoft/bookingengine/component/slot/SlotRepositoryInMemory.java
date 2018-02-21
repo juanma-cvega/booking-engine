@@ -27,15 +27,7 @@ class SlotRepositoryInMemory implements SlotRepository {
 
   @Override
   public Optional<Slot> find(long slotId) {
-    Slot value = store.get(slotId);
-    if (value != null) {
-      return Optional.of(new Slot(value.getId(),
-        value.getRoomId(),
-        value.getCreationTime(),
-        value.getOpenDate(),
-        value.getState()));
-    }
-    return Optional.empty();
+    return Optional.ofNullable(store.get(slotId));
   }
 
   @Override

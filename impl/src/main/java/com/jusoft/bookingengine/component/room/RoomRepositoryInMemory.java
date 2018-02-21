@@ -18,17 +18,6 @@ class RoomRepositoryInMemory implements RoomRepository {
 
   @Override
   public Optional<Room> find(long roomId) {
-    Room value = store.get(roomId);
-    if (value != null) {
-      return Optional.of(new Room(value.getId(),
-        value.getBuildingId(),
-        value.getSlotCreationConfigInfo(),
-        value.getSlotDurationInMinutes(),
-        value.getOpenTimesPerDay(),
-        value.getAvailableDays(),
-        value.isActive(),
-        value.getAuctionConfigInfo()));
-    }
-    return Optional.empty();
+    return Optional.ofNullable(store.get(roomId));
   }
 }
