@@ -1,6 +1,7 @@
 package com.jusoft.bookingengine.usecase;
 
 import com.jusoft.bookingengine.component.club.api.AcceptJoinRequestCommand;
+import com.jusoft.bookingengine.component.club.api.ClubAuthorizationException;
 import com.jusoft.bookingengine.component.club.api.ClubManagerComponent;
 import com.jusoft.bookingengine.component.club.api.JoinRequest;
 import com.jusoft.bookingengine.component.club.api.JoinRequestAcceptedEvent;
@@ -12,10 +13,11 @@ import java.util.Set;
 
 import static com.jusoft.bookingengine.holder.DataHolder.clubAdmin;
 import static com.jusoft.bookingengine.holder.DataHolder.clubCreated;
+import static com.jusoft.bookingengine.holder.DataHolder.exceptionThrown;
 import static com.jusoft.bookingengine.holder.DataHolder.joinRequestCreated;
 import static com.jusoft.bookingengine.holder.DataHolder.joinRequestsCreated;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
 
 public class AcceptJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStepDefinitions {
 
@@ -35,18 +37,30 @@ public class AcceptJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStep
         .orElseThrow(() -> new IllegalArgumentException("User does not have a join request created"));
       acceptJoinRequestUseCase.acceptJoinRequest(AcceptJoinRequestCommand.of(joinRequestFromUser.getId(), clubCreated.getId(), adminId));
     });
+    When("^user (\\d+) accepts the join request created by user (\\d+)$", (Long notAdminId, Long userId) -> {
+      JoinRequest joinRequestForUser = joinRequestsCreated.stream()
+        .filter(joinRequest -> joinRequest.getUserId() == userId)
+        .findFirst()
+        .orElseThrow(() -> new RuntimeException(String.format("Unable to find join request for user %s", userId)));
+      storeException(() -> acceptJoinRequestUseCase.acceptJoinRequest(AcceptJoinRequestCommand.of(joinRequestForUser.getId(), clubCreated.getId(), notAdminId)));
+    });
     Then("^the club should not have the join request for user (\\d+) anymore$", (Long userId) -> {
       Set<JoinRequest> joinRequests = clubManagerComponent.findJoinRequests(clubAdmin, clubCreated.getId());
       assertThat(joinRequests.stream().anyMatch(joinRequest -> joinRequest.getUserId() == userId)).isFalse();
     });
     Then("^a notification of a join request accepted for user (\\d+) should be published$", (Long userId) -> {
-      verify(messagePublisher).publish(messageCaptor.capture());
-      assertThat(messageCaptor.getValue()).isInstanceOf(JoinRequestAcceptedEvent.class);
-      JoinRequestAcceptedEvent event = (JoinRequestAcceptedEvent) messageCaptor.getValue();
+      JoinRequestAcceptedEvent event = verifyAndGetMessageOfType(JoinRequestAcceptedEvent.class);
       assertThat(event.getClubId()).isEqualTo(clubCreated.getId());
       assertThat(event.getAccessRequestId()).isEqualTo(joinRequestCreated.getId());
       assertThat(event.getUserId()).isEqualTo(userId);
       assertThat(joinRequestCreated.getUserId()).isEqualTo(userId);
     });
+    Then("^the user (.*) should be notified he has no rights to accept join requests$", (Long userId) -> {
+      assertThat(exceptionThrown).isInstanceOf(ClubAuthorizationException.class);
+      ClubAuthorizationException exception = (ClubAuthorizationException) exceptionThrown;
+      assertThat(exception.getUserId()).isEqualTo(userId);
+    });
+    Then("^a notification of a join request accepted shouldn't be published$", () ->
+      verifyZeroInteractions(messagePublisher));
   }
 }
