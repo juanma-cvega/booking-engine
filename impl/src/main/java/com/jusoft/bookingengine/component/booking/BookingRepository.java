@@ -7,12 +7,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 interface BookingRepository extends Repository {
 
   void save(Booking newBooking);
 
-  boolean delete(long bookingId, Predicate<Booking> predicate);
+  boolean delete(long bookingId, Predicate<Booking> predicate, Supplier<RuntimeException> notEntityFoundException);
 
   Optional<Booking> find(long bookingId);
 

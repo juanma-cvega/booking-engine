@@ -41,10 +41,6 @@ class Club {
     this.joinRequests = new HashSet<>();
   }
 
-  boolean isAdmin(long adminId) {
-    return admins.contains(adminId);
-  }
-
   Set<Long> getAdmins() {
     return new HashSet<>(admins);
   }
@@ -73,7 +69,11 @@ class Club {
     return joinRequest;
   }
 
-  public void addJoinRequest(JoinRequest joinRequest) {
+  boolean isAdmin(long adminId) {
+    return admins.contains(adminId);
+  }
+
+  void addJoinRequest(JoinRequest joinRequest) {
     joinRequests.add(joinRequest);
   }
 }

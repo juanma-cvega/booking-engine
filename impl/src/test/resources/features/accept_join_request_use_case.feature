@@ -16,3 +16,10 @@ Feature: As an admin of a club, I want to be able to accept a join request from 
     Then the user 3 should be notified he has no rights to accept join requests
     And the club should have the join request for user 2
     And a notification of a join request accepted shouldn't be published
+
+  Scenario: As an admin, I shouldn't be able to accept a join request that does not exist
+    Given a club with name CLUB_NAME is created by user 1
+    And that sets the background
+    When admin 1 accepts the non existing join request 5
+    Then the admin should be notified the join request 5 does not exist
+    And a notification of a join request accepted shouldn't be published

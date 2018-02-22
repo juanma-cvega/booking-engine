@@ -1,6 +1,5 @@
 package com.jusoft.bookingengine.component.booking;
 
-import com.jusoft.bookingengine.component.booking.api.BookingNotFoundException;
 import com.jusoft.bookingengine.component.booking.api.SlotAlreadyReservedException;
 
 import java.time.ZonedDateTime;
@@ -11,6 +10,7 @@ import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import static com.jusoft.bookingengine.util.LockingTemplate.withLock;
 import static java.util.stream.Collectors.toList;
@@ -44,9 +44,9 @@ class BookingRepositoryInMemory implements BookingRepository {
   }
 
   @Override
-  public boolean delete(long bookingId, Predicate<Booking> predicate) {
+  public boolean delete(long bookingId, Predicate<Booking> predicate, Supplier<RuntimeException> notEntityFoundException) {
     boolean isRemoved = false;
-    Booking booking = find(bookingId).orElseThrow(() -> new BookingNotFoundException(bookingId));
+    Booking booking = find(bookingId).orElseThrow(notEntityFoundException);
     if (predicate.test(booking)) {
       Booking bookingRemoved = store.remove(bookingId);
       isRemoved = bookingRemoved != null;

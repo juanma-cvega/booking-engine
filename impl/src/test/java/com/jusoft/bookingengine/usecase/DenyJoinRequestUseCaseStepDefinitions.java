@@ -42,6 +42,8 @@ public class DenyJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStepDe
         .orElseThrow(() -> new RuntimeException(String.format("Unable to find join request for user %s", userId)));
       storeException(() -> denyJoinRequestUseCase.denyJoinRequest(DenyJoinRequestCommand.of(joinRequestForUser.getId(), clubCreated.getId(), notAdminId)));
     });
+    When("^admin (\\d+) denies the non existing join request (\\d+)$", (Long adminId, Long joinRequestId) ->
+      storeException(() -> denyJoinRequestUseCase.denyJoinRequest(DenyJoinRequestCommand.of(joinRequestId, clubCreated.getId(), adminId))));
     Then("^a notification of a join request denied for user (\\d+) should be published$", (Long userId) -> {
       JoinRequestDeniedEvent event = verifyAndGetMessageOfType(JoinRequestDeniedEvent.class);
       assertThat(event.getClubId()).isEqualTo(clubCreated.getId());

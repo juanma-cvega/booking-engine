@@ -33,10 +33,8 @@ class BookingManagerComponentImpl implements BookingManagerComponent {
 
   @Override
   public void cancel(long userId, long bookingId) {
-    boolean isDeleted = bookingRepository.delete(bookingId, deleteBookingIfOwner(userId));
-    if (isDeleted) {
-      messagePublisher.publish(BookingCanceledEvent.of(bookingId));
-    }
+    bookingRepository.delete(bookingId, deleteBookingIfOwner(userId), () -> new BookingNotFoundException(bookingId));
+    messagePublisher.publish(BookingCanceledEvent.of(bookingId));
   }
 
   private Predicate<Booking> deleteBookingIfOwner(long userId) {

@@ -5,6 +5,7 @@ import com.jusoft.bookingengine.component.club.api.ClubAuthorizationException;
 import com.jusoft.bookingengine.component.club.api.ClubManagerComponent;
 import com.jusoft.bookingengine.component.club.api.JoinRequest;
 import com.jusoft.bookingengine.component.club.api.JoinRequestAcceptedEvent;
+import com.jusoft.bookingengine.component.club.api.JoinRequestNotFoundException;
 import com.jusoft.bookingengine.component.member.api.MemberManagerComponent;
 import com.jusoft.bookingengine.config.AbstractUseCaseStepDefinitions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,8 @@ public class AcceptJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStep
         .orElseThrow(() -> new RuntimeException(String.format("Unable to find join request for user %s", userId)));
       storeException(() -> acceptJoinRequestUseCase.acceptJoinRequest(AcceptJoinRequestCommand.of(joinRequestForUser.getId(), clubCreated.getId(), notAdminId)));
     });
+    When("^admin (\\d+) accepts the non existing join request (.*)$", (Long adminId, Long joinRequestId) ->
+      storeException(() -> acceptJoinRequestUseCase.acceptJoinRequest(AcceptJoinRequestCommand.of(joinRequestId, clubCreated.getId(), adminId))));
     Then("^the club should not have the join request for user (\\d+) anymore$", (Long userId) -> {
       Set<JoinRequest> joinRequests = clubManagerComponent.findJoinRequests(clubAdmin, clubCreated.getId());
       assertThat(joinRequests.stream().anyMatch(joinRequest -> joinRequest.getUserId() == userId)).isFalse();
@@ -62,5 +65,11 @@ public class AcceptJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStep
     });
     Then("^a notification of a join request accepted shouldn't be published$", () ->
       verifyZeroInteractions(messagePublisher));
+    Then("^the admin should be notified the join request (.*) does not exist$", (Long joinRequestId) -> {
+      assertThat(exceptionThrown).isInstanceOf(JoinRequestNotFoundException.class);
+      JoinRequestNotFoundException exception = (JoinRequestNotFoundException) exceptionThrown;
+      assertThat(exception.getJoinRequestId()).isEqualTo(joinRequestId);
+      assertThat(exception.getClubId()).isEqualTo(clubCreated.getId());
+    });
   }
 }
