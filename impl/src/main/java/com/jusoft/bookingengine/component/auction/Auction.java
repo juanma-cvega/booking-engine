@@ -56,9 +56,9 @@ class Auction {
     bidders.add(new Bid(bidder, ZonedDateTime.now(clock)));
   }
 
-  public boolean isOpen(Clock clock) {
+  private boolean isOpen(Clock clock) {
     ZonedDateTime now = ZonedDateTime.now(clock);
-    return now.isBefore(openDate.getEndTime()) && (now.isAfter(openDate.getStartTime()) || now.isEqual(openDate.getStartTime()));
+    return now.isBefore(openDate.getEndTime()); //Now cannot be before start time as start time is always now at creation time
   }
 
   public Optional<Long> findAuctionWinner(AuctionWinnerStrategy strategy) {
