@@ -1,6 +1,7 @@
 package com.jusoft.bookingengine.usecase;
 
 import com.jusoft.bookingengine.component.auction.api.AuctionManagerComponent;
+import com.jusoft.bookingengine.component.authorization.api.AuthorizationComponent;
 import com.jusoft.bookingengine.component.booking.api.BookingManagerComponent;
 import com.jusoft.bookingengine.component.building.api.BuildingManagerComponent;
 import com.jusoft.bookingengine.component.club.api.ClubManagerComponent;
@@ -35,6 +36,8 @@ public class UseCaseConfig {
   @Autowired
   private MemberManagerComponent memberManagerComponent;
   @Autowired
+  private AuthorizationComponent authorizationComponent;
+  @Autowired
   private SchedulerComponent schedulerComponent;
   @Autowired
   private AuctionStrategyRegistrar auctionStrategyRegistrar;
@@ -47,7 +50,7 @@ public class UseCaseConfig {
 
   @Bean
   public AddBidderToAuctionUseCase addBidderToAuctionUseCase() {
-    return new AddBidderToAuctionUseCase(auctionManagerComponent);
+    return new AddBidderToAuctionUseCase(slotManagerComponent, auctionManagerComponent, roomManagerComponent, buildingManagerComponent, clubManagerComponent, authorizationComponent);
   }
 
   @Bean
@@ -142,7 +145,7 @@ public class UseCaseConfig {
 
   @Bean
   public ReserveSlotUseCase reserveSlotUseCase() {
-    return new ReserveSlotUseCase(slotManagerComponent, roomManagerComponent, buildingManagerComponent, memberManagerComponent);
+    return new ReserveSlotUseCase(slotManagerComponent, roomManagerComponent, buildingManagerComponent, authorizationComponent);
   }
 
   @Bean
