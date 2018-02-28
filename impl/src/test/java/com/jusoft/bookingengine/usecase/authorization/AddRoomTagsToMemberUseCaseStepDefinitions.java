@@ -39,5 +39,9 @@ public class AddRoomTagsToMemberUseCaseStepDefinitions extends AbstractUseCaseSt
       assertThat(member).isPresent();
       assertThat(member.get().getBuildings().get(buildingId).getRooms().get(roomId).getTags().get(status)).containsExactlyElementsOf(tags);
     });
+    When("^member (\\d+) is tried to be added tag for slot status (.*) to room (\\d+) in building (\\d+)$", (Long memberId, SlotStatus status, Long roomId, Long buildingId, DataTable tagsDataTable) -> {
+      List<Tag> tags = tagsDataTable.asList(String.class).stream().map(Tag::of).collect(Collectors.toList());
+      storeException(() -> addRoomTagsToMemberUseCase.addRoomTagsToMember(AddRoomTagsToMemberCommand.of(memberId, buildingId, roomId, status, tags)));
+    });
   }
 }

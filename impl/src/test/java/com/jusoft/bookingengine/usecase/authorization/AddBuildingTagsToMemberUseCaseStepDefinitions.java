@@ -3,6 +3,7 @@ package com.jusoft.bookingengine.usecase.authorization;
 import com.jusoft.bookingengine.component.authorization.api.AddBuildingTagsToMemberCommand;
 import com.jusoft.bookingengine.component.authorization.api.AuthorizationManagerComponent;
 import com.jusoft.bookingengine.component.authorization.api.BuildingView;
+import com.jusoft.bookingengine.component.authorization.api.MemberNotFoundException;
 import com.jusoft.bookingengine.component.authorization.api.MemberView;
 import com.jusoft.bookingengine.component.authorization.api.Tag;
 import com.jusoft.bookingengine.config.AbstractUseCaseStepDefinitions;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.jusoft.bookingengine.holder.DataHolder.exceptionThrown;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AddBuildingTagsToMemberUseCaseStepDefinitions extends AbstractUseCaseStepDefinitions {
@@ -39,6 +41,15 @@ public class AddBuildingTagsToMemberUseCaseStepDefinitions extends AbstractUseCa
       Optional<MemberView> club = authorizationManagerComponent.findMemberBy(memberId);
       assertThat(club).isPresent();
       assertThat(club.get().getBuildings().get(buildingId).getTags()).containsExactlyElementsOf(tags);
+    });
+    When("^member (\\d+) is tried to be added tag to building (\\d+)$", (Long memberId, Long buildingId, DataTable tagsDataTable) -> {
+      List<Tag> tags = tagsDataTable.asList(String.class).stream().map(Tag::of).collect(Collectors.toList());
+      storeException(() -> addBuildingTagsToMemberUseCase.addBuildingTagsToMember(AddBuildingTagsToMemberCommand.of(memberId, buildingId, tags)));
+    });
+    Then("^the admin should get a notification the member (.*) does not exist$", (Long memberId) -> {
+      assertThat(exceptionThrown).isInstanceOf(MemberNotFoundException.class);
+      MemberNotFoundException exception = (MemberNotFoundException) exceptionThrown;
+      assertThat(exception.getMemberId()).isEqualTo(memberId);
     });
   }
 }

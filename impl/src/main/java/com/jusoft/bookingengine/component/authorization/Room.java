@@ -9,9 +9,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
-import java.util.Map;
 
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 @Data
@@ -20,18 +19,18 @@ class Room {
 
   private final long id;
   @NonNull
-  private final Map<SlotStatus, List<Tag>> tagsBySlotStatus;
+  private final EnumMap<SlotStatus, List<Tag>> tagsBySlotStatus;
 
-  static Room of(long roomId, Map<SlotStatus, List<Tag>> tags) {
+  static Room of(long roomId, EnumMap<SlotStatus, List<Tag>> tags) {
     return new Room(roomId, tags);
   }
 
   static Room of(long roomId) {
-    return new Room(roomId, new HashMap<>());
+    return new Room(roomId, new EnumMap<>(SlotStatus.class));
   }
 
-  public Map<SlotStatus, List<Tag>> getTagsBySlotStatus() {
-    return new HashMap<>(tagsBySlotStatus);
+  public EnumMap<SlotStatus, List<Tag>> getTagsBySlotStatus() {
+    return new EnumMap<>(tagsBySlotStatus);
   }
 
   boolean isAuthorised(SlotStatus slotStatus, List<Tag> memberTags) {

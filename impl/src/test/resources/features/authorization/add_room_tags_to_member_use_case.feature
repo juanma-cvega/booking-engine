@@ -1,5 +1,10 @@
 Feature: As an admin, I want to add tags to a room that belongs to a member
 
+  Scenario: As an admin, I shouldn't be able to add a tag to a member that does not exist
+    When member 1 is tried to be added tag for slot status NORMAL to room 4 in building 2
+      | MY_BUILDING_TAG |
+    Then the admin should get a notification the member 1 does not exist
+
   Scenario: As an admin, I want to add a tag to a room
     Given member 1 is added to the list of members to manage its authorization
     When member 1 is added tag for slot status NORMAL to room 4 in building 2

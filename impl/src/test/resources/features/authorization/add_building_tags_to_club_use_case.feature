@@ -1,5 +1,10 @@
 Feature: As an admin, I want to add tags to a building that belongs to a club
 
+  Scenario: As an admin, I shouldn't be able to add a tag to a club that does not exist
+    When club 1 is tried to be added tag to building 1
+      | MY_BUILDING_TAG |
+    Then the admin should get a notification the club 1 does not exist
+
   Scenario: As an admin, I want to add a tag to a building
     Given club 1 is added to the list of clubs to manage its authorization
     When club 1 is added tag to building 1
