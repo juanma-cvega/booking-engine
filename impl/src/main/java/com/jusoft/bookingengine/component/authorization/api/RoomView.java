@@ -4,8 +4,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 
-import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 
 @Data(staticConstructor = "of")
 @EqualsAndHashCode(of = "id")
@@ -13,6 +13,6 @@ public class RoomView {
 
   private final long id;
   @NonNull
-  private final EnumMap<SlotStatus, List<Tag>> tags;
+  private final Map<SlotStatus, List<Tag>> tags;
 
 }

@@ -25,10 +25,6 @@ class Building {
   @NonNull
   private final List<Tag> tags;
 
-  static Building of(long buildingId, Map<Long, Room> rooms, List<Tag> tags) {
-    return new Building(buildingId, rooms, tags);
-  }
-
   static Building of(long buildingId) {
     return new Building(buildingId, new HashMap<>(), new ArrayList<>());
   }
