@@ -45,6 +45,7 @@ public class DataHolder {
 
   public static RuntimeException exceptionThrown;
   public static CreateRoomCommandBuilder roomBuilder;
+  public static Boolean authorizationGranted;
 
   public static void createRoomBuilder() {
     roomBuilder = new CreateRoomCommandBuilder();
@@ -64,6 +65,7 @@ public class DataHolder {
     clubAdmin = null;
     joinRequestsCreated = new HashSet<>();
     memberCreated = null;
+    authorizationGranted = null;
 
     exceptionThrown = null;
   }

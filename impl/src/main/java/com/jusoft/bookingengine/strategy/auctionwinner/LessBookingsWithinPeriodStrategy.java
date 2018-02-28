@@ -38,7 +38,7 @@ class LessBookingsWithinPeriodStrategy implements AuctionWinnerStrategy {
     if (!bids.isEmpty()) {
       ZonedDateTime endPeriod = ZonedDateTime.now(clock).plusDays(config.getEndRangeTimeInDays());
       Set<Long> bidders = bids.stream().map(Bid::getUserId).collect(toSet());
-      List<BookingView> usersBookingsFound = bookingManagerComponent.findUsersBookingsUntilFor(endPeriod, bidders);
+      List<BookingView> usersBookingsFound = bookingManagerComponent.findBookingsUntilFor(endPeriod, bidders);
       Set<Long> usersWithLessBookings = bidders.stream()
         .collect(groupingByUserToNumberOfBookings(usersBookingsFound)).entrySet().stream()
         .collect(groupingByNumberOfBookingsToUsers()).entrySet().stream()

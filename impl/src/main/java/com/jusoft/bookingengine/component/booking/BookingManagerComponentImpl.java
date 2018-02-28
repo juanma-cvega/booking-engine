@@ -58,7 +58,7 @@ class BookingManagerComponentImpl implements BookingManagerComponent {
   }
 
   @Override
-  public List<BookingView> findUsersBookingsUntilFor(ZonedDateTime endTime, Set<Long> users) {
+  public List<BookingView> findBookingsUntilFor(ZonedDateTime endTime, Set<Long> users) {
     return bookingFactory.create(bookingRepository.findBookingsUntilFor(endTime, users));
   }
 }

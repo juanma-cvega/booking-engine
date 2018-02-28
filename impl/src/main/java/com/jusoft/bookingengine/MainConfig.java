@@ -1,6 +1,7 @@
 package com.jusoft.bookingengine;
 
 import com.jusoft.bookingengine.component.auction.AuctionManagerComponentConfig;
+import com.jusoft.bookingengine.component.authorization.AuthorizationManagerComponentConfig;
 import com.jusoft.bookingengine.component.booking.BookingManagerComponentConfig;
 import com.jusoft.bookingengine.component.building.BuildingManagerComponentConfig;
 import com.jusoft.bookingengine.component.club.ClubManagerComponentConfig;
@@ -12,6 +13,7 @@ import com.jusoft.bookingengine.component.timer.TimerConfig;
 import com.jusoft.bookingengine.strategy.auctionwinner.AuctionWinnerStrategyConfig;
 import com.jusoft.bookingengine.strategy.slotcreation.SlotCreationConfig;
 import com.jusoft.bookingengine.usecase.UseCaseConfig;
+import com.jusoft.bookingengine.usecase.authorization.AuthorizationUseCaseConfig;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -28,6 +30,8 @@ import org.springframework.context.annotation.Import;
   MemberManagerComponentConfig.class,
   AuctionWinnerStrategyConfig.class,
   SlotCreationConfig.class,
-  UseCaseConfig.class})
+  AuthorizationManagerComponentConfig.class,
+  UseCaseConfig.class,
+  AuthorizationUseCaseConfig.class})
 public class MainConfig {
 }
