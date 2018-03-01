@@ -1,15 +1,15 @@
 package com.jusoft.bookingengine.listener;
 
-import com.jusoft.bookingengine.usecase.AddBidderToAuctionUseCase;
-import com.jusoft.bookingengine.usecase.CancelBookingUseCase;
-import com.jusoft.bookingengine.usecase.CreateBookingUseCase;
-import com.jusoft.bookingengine.usecase.CreateRoomUseCase;
-import com.jusoft.bookingengine.usecase.CreateSlotUseCase;
-import com.jusoft.bookingengine.usecase.FinishAuctionUseCase;
-import com.jusoft.bookingengine.usecase.ReserveSlotForAuctionWinnerUseCase;
-import com.jusoft.bookingengine.usecase.ScheduleNextSlotUseCase;
-import com.jusoft.bookingengine.usecase.StartAuctionUseCase;
-import com.jusoft.bookingengine.usecase.VerifyAuctionRequirementForSlotUseCase;
+import com.jusoft.bookingengine.usecase.auction.AddBidderToAuctionUseCase;
+import com.jusoft.bookingengine.usecase.booking.CancelBookingUseCase;
+import com.jusoft.bookingengine.usecase.booking.CreateBookingUseCase;
+import com.jusoft.bookingengine.usecase.room.CreateRoomUseCase;
+import com.jusoft.bookingengine.usecase.slot.CreateSlotUseCase;
+import com.jusoft.bookingengine.usecase.auction.FinishAuctionUseCase;
+import com.jusoft.bookingengine.usecase.slot.ReserveSlotForAuctionWinnerUseCase;
+import com.jusoft.bookingengine.usecase.slot.ScheduleNextSlotUseCase;
+import com.jusoft.bookingengine.usecase.auction.StartAuctionUseCase;
+import com.jusoft.bookingengine.usecase.room.VerifyAuctionRequirementForSlotUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

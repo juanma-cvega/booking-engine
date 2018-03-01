@@ -1,8 +1,8 @@
 package com.jusoft.bookingengine.listener;
 
 import com.jusoft.bookingengine.publisher.message.SlotCreatedMessage;
-import com.jusoft.bookingengine.usecase.ScheduleNextSlotUseCase;
-import com.jusoft.bookingengine.usecase.VerifyAuctionRequirementForSlotUseCase;
+import com.jusoft.bookingengine.usecase.slot.ScheduleNextSlotUseCase;
+import com.jusoft.bookingengine.usecase.room.VerifyAuctionRequirementForSlotUseCase;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

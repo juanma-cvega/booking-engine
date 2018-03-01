@@ -13,7 +13,7 @@
 //import com.jusoft.bookingengine.component.slot.api.SlotCreatedEvent;
 //import com.jusoft.bookingengine.component.slot.api.SlotView;
 //import com.jusoft.bookingengine.component.timer.OpenTime;
-//import com.jusoft.bookingengine.usecase.CreateRoomUseCase;
+//import com.jusoft.bookingengine.usecase.room.CreateRoomUseCase;
 //import lombok.extern.slf4j.Slf4j;
 //import org.springframework.beans.factory.annotation.Autowired;
 //

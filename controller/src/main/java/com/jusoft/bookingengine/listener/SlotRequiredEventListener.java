@@ -2,7 +2,7 @@ package com.jusoft.bookingengine.listener;
 
 import com.jusoft.bookingengine.component.slot.api.SlotView;
 import com.jusoft.bookingengine.publisher.message.SlotRequiredMessage;
-import com.jusoft.bookingengine.usecase.CreateSlotUseCase;
+import com.jusoft.bookingengine.usecase.slot.CreateSlotUseCase;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

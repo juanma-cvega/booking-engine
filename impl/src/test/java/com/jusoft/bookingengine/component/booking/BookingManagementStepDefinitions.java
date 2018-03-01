@@ -16,9 +16,9 @@
 //import com.jusoft.bookingengine.holder.BookingHolder;
 //import com.jusoft.bookingengine.holder.RoomHolder;
 //import com.jusoft.bookingengine.holder.SlotHolder;
-//import com.jusoft.bookingengine.usecase.AddBidderToAuctionUseCase;
-//import com.jusoft.bookingengine.usecase.CancelBookingUseCase;
-//import com.jusoft.bookingengine.usecase.CreateBookingUseCase;
+//import com.jusoft.bookingengine.usecase.auction.AddBidderToAuctionUseCase;
+//import com.jusoft.bookingengine.usecase.booking.CancelBookingUseCase;
+//import com.jusoft.bookingengine.usecase.booking.CreateBookingUseCase;
 //import org.assertj.core.api.Assertions;
 //import org.springframework.beans.factory.annotation.Autowired;
 //

@@ -1,7 +1,7 @@
 package com.jusoft.bookingengine.listener;
 
 import com.jusoft.bookingengine.publisher.message.AuctionWinnerFoundMessage;
-import com.jusoft.bookingengine.usecase.ReserveSlotForAuctionWinnerUseCase;
+import com.jusoft.bookingengine.usecase.slot.ReserveSlotForAuctionWinnerUseCase;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;

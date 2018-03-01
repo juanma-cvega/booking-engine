@@ -1,7 +1,7 @@
 package com.jusoft.bookingengine.listener;
 
 import com.jusoft.bookingengine.publisher.message.AuctionFinishedMessage;
-import com.jusoft.bookingengine.usecase.FinishAuctionUseCase;
+import com.jusoft.bookingengine.usecase.auction.FinishAuctionUseCase;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
