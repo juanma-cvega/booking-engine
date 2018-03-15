@@ -10,9 +10,13 @@ import com.jusoft.bookingengine.component.authorization.api.ClubNotFoundExceptio
 import com.jusoft.bookingengine.component.authorization.api.ClubView;
 import com.jusoft.bookingengine.component.authorization.api.MemberNotFoundException;
 import com.jusoft.bookingengine.component.authorization.api.MemberView;
+import com.jusoft.bookingengine.component.authorization.api.ReplaceSlotAuthenticationConfigForRoomCommand;
+import com.jusoft.bookingengine.component.authorization.api.SlotStatus;
 import com.jusoft.bookingengine.component.authorization.api.Tag;
+import com.jusoft.bookingengine.component.member.api.UserNotMemberException;
 import lombok.AllArgsConstructor;
 
+import java.time.Clock;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,13 +27,18 @@ public class AuthorizationManagerComponentImpl implements AuthorizationManagerCo
   private final MemberRepository memberRepository;
   private final ClubFactory clubFactory;
   private final MemberFactory memberFactory;
+  private final Clock clock;
 
   @Override
-  public boolean authoriseMemberFor(CheckAuthorizationCommand command) {
+  public boolean isAuthorised(CheckAuthorizationCommand command) {
     Club clubFound = findClubOrFail(command.getClubId());
-    Member memberFound = findMemberOrFail(command.getMemberId());
-    List<Tag> memberTags = memberFound.getTagsFor(command.getCoordinates());
-    return clubFound.isAuthorisedFor(command.getCoordinates(), memberTags);
+    SlotStatus slotStatus = clubFound.getSlotTypeFor(command.getCoordinates(), clock);
+    Member memberFound = findMemberOrFail(command.getUserId(), command.getClubId());
+    List<Tag> memberTags = memberFound.getTagsFor(
+      command.getCoordinates().getBuildingId(),
+      command.getCoordinates().getRoomId(),
+      slotStatus);
+    return clubFound.isAuthorisedFor(command.getCoordinates(), memberTags, slotStatus);
   }
 
   @Override
@@ -38,8 +47,8 @@ public class AuthorizationManagerComponentImpl implements AuthorizationManagerCo
   }
 
   @Override
-  public void createMember(long memberId) {
-    memberRepository.save(Member.of(memberId));
+  public void createMember(long memberId, long userId, long clubId) {
+    memberRepository.save(Member.of(memberId, userId, clubId));
   }
 
   @Override
@@ -67,6 +76,14 @@ public class AuthorizationManagerComponentImpl implements AuthorizationManagerCo
   }
 
   @Override
+  public void replaceSlotAuthenticationManagerForRoom(ReplaceSlotAuthenticationConfigForRoomCommand command) {
+    clubRepository.execute(command.getClubId(), club -> {
+      club.replaceSlotAuthorizationConfigForRoom(command);
+      return club;
+    }, () -> new ClubNotFoundException(command.getClubId()));
+  }
+
+  @Override
   public void addRoomTagsToMember(AddRoomTagsToMemberCommand command) {
     memberRepository.execute(command.getMemberId(), member -> {
       member.addTagsToRoom(command);
@@ -88,7 +105,8 @@ public class AuthorizationManagerComponentImpl implements AuthorizationManagerCo
     return clubRepository.find(clubId).orElseThrow(() -> new ClubNotFoundException(clubId));
   }
 
-  private Member findMemberOrFail(long memberId) {
-    return memberRepository.find(memberId).orElseThrow(() -> new MemberNotFoundException(memberId));
+  private Member findMemberOrFail(long userId, long clubId) {
+    return memberRepository.findByUserIdAndClubId(userId, clubId)
+      .orElseThrow(() -> new UserNotMemberException(userId, clubId));
   }
 }

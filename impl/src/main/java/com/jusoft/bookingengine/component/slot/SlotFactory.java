@@ -21,6 +21,8 @@ class SlotFactory {
   Slot createFrom(CreateSlotCommand request) {
     return new Slot(idGenerator.get(),
       request.getRoomId(),
+      request.getBuildingId(),
+      request.getClubId(),
       ZonedDateTime.now(clock),
       request.getOpenDate(),
       State.valueOf(request.getState().name()));
@@ -29,6 +31,8 @@ class SlotFactory {
   SlotView createFrom(Slot slot) {
     return SlotView.of(slot.getId(),
       slot.getRoomId(),
+      slot.getBuildingId(),
+      slot.getClubId(),
       com.jusoft.bookingengine.component.slot.api.SlotState.valueOf(slot.getState().name()),
       slot.getCreationTime(),
       slot.getOpenDate());

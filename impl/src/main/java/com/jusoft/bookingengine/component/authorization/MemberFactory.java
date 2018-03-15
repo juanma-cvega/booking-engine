@@ -1,8 +1,8 @@
 package com.jusoft.bookingengine.component.authorization;
 
-import com.jusoft.bookingengine.component.authorization.api.BuildingView;
+import com.jusoft.bookingengine.component.authorization.api.MemberBuildingView;
+import com.jusoft.bookingengine.component.authorization.api.MemberRoomView;
 import com.jusoft.bookingengine.component.authorization.api.MemberView;
-import com.jusoft.bookingengine.component.authorization.api.RoomView;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
@@ -14,24 +14,26 @@ class MemberFactory {
   MemberView createFrom(Member member) {
     return MemberView.of(
       member.getId(),
+      member.getUserId(),
+      member.getClubId(),
       member.getBuildings().values().stream()
-        .map(this::createBuildingFrom)
-        .collect(toMap(BuildingView::getId, building -> building))
+        .map(this::createBuildingHolderFrom)
+        .collect(toMap(MemberBuildingView::getId, building -> building))
     );
   }
 
-  private BuildingView createBuildingFrom(Building building) {
-    return BuildingView.of(
+  private MemberBuildingView createBuildingHolderFrom(MemberBuilding building) {
+    return MemberBuildingView.of(
       building.getId(),
       building.getRooms().values().stream()
-        .map(this::createRoomFrom)
-        .collect(toMap(RoomView::getId, room -> room)),
+        .map(this::createRoomHolderFrom)
+        .collect(toMap(MemberRoomView::getId, room -> room)),
       building.getTags()
     );
   }
 
-  private RoomView createRoomFrom(Room room) {
-    return RoomView.of(
+  private MemberRoomView createRoomHolderFrom(MemberRoom room) {
+    return MemberRoomView.of(
       room.getId(),
       room.getTagsBySlotStatus());
   }

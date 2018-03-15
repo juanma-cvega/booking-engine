@@ -6,10 +6,10 @@ ref over User, Gateway, SSO, BookingService, DB
  getAvailableSlots
 end ref
 
-User -> Gateway: POST /booking/room/{id}/slot/{id}/booking
+User -> Gateway: POST /booking/clubRoom/{id}/slot/{id}/booking
 Gateway -> SSO: authenticateUser(token)
 SSO -> Gateway: userDetails
-Gateway -> BookingService: POST /booking/room/{id}/user/{id}/slot/{id}/booking
+Gateway -> BookingService: POST /booking/clubRoom/{id}/user/{id}/slot/{id}/booking
 BookingService -> DB: updateSlot(userId, id, slotId)
 DB -> BookingService: slotUpdated
 BookingService -> Gateway: 204

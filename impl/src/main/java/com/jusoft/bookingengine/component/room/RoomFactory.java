@@ -12,8 +12,9 @@ class RoomFactory {
 
   private final Supplier<Long> idGenerator;
 
-  Room createFrom(CreateRoomCommand createRoomCommand) {
+  Room createFrom(CreateRoomCommand createRoomCommand, long clubId) {
     return new Room(idGenerator.get(),
+      clubId,
       createRoomCommand.getBuildingId(),
       createRoomCommand.getSlotCreationConfigInfo(),
       createRoomCommand.getSlotDurationInMinutes(),
@@ -25,6 +26,7 @@ class RoomFactory {
 
   RoomView createFrom(Room room) {
     return RoomView.of(room.getId(),
+      room.getClubId(),
       room.getBuildingId(),
       room.getSlotCreationConfigInfo(),
       room.getSlotDurationInMinutes(),

@@ -11,4 +11,6 @@ interface MemberRepository {
   void save(Member member);
 
   void execute(long memberId, UnaryOperator<Member> function, Supplier<RuntimeException> notFoundExceptionSupplier);
+
+  Optional<Member> findByUserIdAndClubId(long userId, long clubId);
 }

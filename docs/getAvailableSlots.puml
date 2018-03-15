@@ -2,10 +2,10 @@
 hide footbox
 
 actor User
-User -> Gateway: GET /booking/room/{id}
+User -> Gateway: GET /booking/clubRoom/{id}
 Gateway -> SSO: authenticateUser(token)
 SSO -> Gateway: userDetails
-Gateway -> BookingService: GET /booking/room/{id}
+Gateway -> BookingService: GET /booking/clubRoom/{id}
 database DB
 BookingService -> DB: getSlotsFor(id)
 DB -> BookingService: slots

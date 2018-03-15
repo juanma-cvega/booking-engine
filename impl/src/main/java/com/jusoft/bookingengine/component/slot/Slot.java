@@ -13,6 +13,8 @@ class Slot {
 
   private final long id;
   private final long roomId;
+  private final long buildingId;
+  private final long clubId;
   @NonNull
   private final ZonedDateTime creationTime;
   @NonNull
@@ -21,7 +23,7 @@ class Slot {
   private final State state;
 
   public Slot reserve(Clock clock) {
-    return new Slot(id, roomId, creationTime, openDate, state.getSlotState().reserve(this, clock));
+    return from(state.getSlotState().reserve(this, clock));
   }
 
   public boolean isAvailable(Clock clock) {
@@ -29,10 +31,14 @@ class Slot {
   }
 
   public Slot makeAvailable() {
-    return new Slot(id, roomId, creationTime, openDate, state.getSlotState().makeAvailable(this));
+    return from(state.getSlotState().makeAvailable(this));
   }
 
   public Slot reserveForAuctionWinner() {
-    return new Slot(id, roomId, creationTime, openDate, state.getSlotState().reserveForAuctionWinner(this));
+    return from(state.getSlotState().reserveForAuctionWinner(this));
+  }
+
+  private Slot from(State state) {
+    return new Slot(id, roomId, buildingId, clubId, creationTime, openDate, state);
   }
 }

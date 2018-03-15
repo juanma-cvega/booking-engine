@@ -11,6 +11,8 @@ import java.util.Map;
 public class MemberView {
 
   private final long id;
+  private final long userId;
+  private final long clubId;
   @NonNull
-  private final Map<Long, BuildingView> buildings;
+  private final Map<Long, MemberBuildingView> buildings;
 }

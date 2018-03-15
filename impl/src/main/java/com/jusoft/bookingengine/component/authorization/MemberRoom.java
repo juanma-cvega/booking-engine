@@ -16,28 +16,26 @@ import java.util.Map;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 @Data
 @EqualsAndHashCode(of = "id")
-class Room {
+class MemberRoom {
 
   private final long id;
   @NonNull
   private final EnumMap<SlotStatus, List<Tag>> tagsBySlotStatus;
 
-  static Room of(long roomId) {
-    return new Room(roomId, new EnumMap<>(SlotStatus.class));
+  static MemberRoom of(long roomId) {
+    return of(roomId, new EnumMap<>(SlotStatus.class));
+  }
+
+  static MemberRoom of(long roomId, EnumMap<SlotStatus, List<Tag>> tagsBySlotStatus) {
+    return new MemberRoom(roomId, tagsBySlotStatus);
   }
 
   public Map<SlotStatus, List<Tag>> getTagsBySlotStatus() {
     return new EnumMap<>(tagsBySlotStatus);
   }
 
-  boolean isAuthorised(SlotStatus slotStatus, List<Tag> memberTags) {
-    List<Tag> tagsFound = tagsBySlotStatus.getOrDefault(slotStatus, new ArrayList<>());
-    List<Tag> roomTags = new ArrayList<>(tagsFound);
-    roomTags.removeAll(memberTags);
-    return tagsFound.isEmpty() || tagsFound.size() != roomTags.size();
-  }
-
   public void addTags(SlotStatus status, List<Tag> tags) {
     tagsBySlotStatus.computeIfAbsent(status, slotStatus -> new ArrayList<>()).addAll(tags);
   }
+
 }

@@ -9,10 +9,9 @@ import java.util.Map;
 
 @Data(staticConstructor = "of")
 @EqualsAndHashCode(of = "id")
-public class RoomView {
+public class MemberRoomView {
 
   private final long id;
   @NonNull
   private final Map<SlotStatus, List<Tag>> tags;
-
 }

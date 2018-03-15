@@ -10,5 +10,5 @@ public class CheckAuthorizationCommand implements Command {
   @NonNull
   private final Coordinates coordinates;
   private final long clubId;
-  private final long memberId;
+  private final long userId;
 }

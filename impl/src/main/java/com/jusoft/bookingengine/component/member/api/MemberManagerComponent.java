@@ -6,4 +6,5 @@ public interface MemberManagerComponent {
 
   boolean isMemberOf(long clubId, long userId);
 
+  MemberView findByUserAndClub(long userId, long clubId);
 }

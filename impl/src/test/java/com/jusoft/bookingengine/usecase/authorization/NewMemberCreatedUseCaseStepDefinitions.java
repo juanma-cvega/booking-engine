@@ -18,8 +18,8 @@ public class NewMemberCreatedUseCaseStepDefinitions extends AbstractUseCaseStepD
   private NewMemberCreatedUseCase newMemberCreatedUseCase;
 
   public NewMemberCreatedUseCaseStepDefinitions() {
-    When("^member (\\d+) is added to the list of members to manage its authorization$", (Long memberId) ->
-      newMemberCreatedUseCase.createMember(memberId)
+    When("^user (.*) of club (.*) with member ID (.*) is added to the list of members to manage its authorization$", (Long userId, Long clubId, Long memberId) ->
+      newMemberCreatedUseCase.createMember(memberId, userId, clubId)
     );
     Then("^the member (\\d+) should be added to the list of members to manage its authorization$", (Long memberId) -> {
       Optional<MemberView> member = authorizationManagerComponent.findMemberBy(memberId);

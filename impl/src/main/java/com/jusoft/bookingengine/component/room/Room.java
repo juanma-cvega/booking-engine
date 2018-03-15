@@ -28,6 +28,7 @@ import static com.jusoft.bookingengine.component.slot.api.SlotState.IN_AUCTION;
 class Room {
 
   private final long id;
+  private final long clubId;
   private final long buildingId;
   private final SlotCreationConfigInfo slotCreationConfigInfo;
   private final int slotDurationInMinutes;
@@ -36,7 +37,7 @@ class Room {
   private final boolean active;
   private final AuctionConfigInfo auctionConfigInfo;
 
-  Room(long id, long buildingId, SlotCreationConfigInfo slotCreationConfigInfo, int slotDurationInMinutes, List<OpenTime> openTimesPerDay, List<DayOfWeek> availableDays,
+  Room(long id, long clubId, long buildingId, SlotCreationConfigInfo slotCreationConfigInfo, int slotDurationInMinutes, List<OpenTime> openTimesPerDay, List<DayOfWeek> availableDays,
        boolean active, AuctionConfigInfo auctionConfigInfo) {
     Validate.notNull(auctionConfigInfo);
     Validate.notNull(slotCreationConfigInfo);
@@ -44,6 +45,7 @@ class Room {
     Validate.notEmpty(availableDays);
     openTimesPerDay.sort(Comparator.comparing(OpenTime::getStartTime)); //Needed to ensure soonest open time is checked first
     this.id = id;
+    this.clubId = clubId;
     this.buildingId = buildingId;
     this.slotCreationConfigInfo = slotCreationConfigInfo;
     this.slotDurationInMinutes = slotDurationInMinutes;
@@ -83,7 +85,7 @@ class Room {
   NextSlotConfig findNextSlotDate(ZonedDateTime lastSlotEndTime, Clock clock) {
     ZonedDateTime nextSlotEndTime = getNextSlotEndTime(lastSlotEndTime, clock);
     OpenDate openDate = OpenDate.of(nextSlotEndTime.minusMinutes(slotDurationInMinutes), nextSlotEndTime);
-    return new NextSlotConfig(openDate, getSlotInitialState());
+    return new NextSlotConfig(buildingId, clubId, openDate, getSlotInitialState());
   }
 
   private SlotState getSlotInitialState() {

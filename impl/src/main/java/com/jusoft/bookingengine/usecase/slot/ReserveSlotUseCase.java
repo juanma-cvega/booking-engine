@@ -1,30 +1,25 @@
 package com.jusoft.bookingengine.usecase.slot;
 
-import com.jusoft.bookingengine.component.building.api.BuildingManagerComponent;
-import com.jusoft.bookingengine.component.building.api.BuildingView;
-import com.jusoft.bookingengine.component.member.api.MemberManagerComponent;
-import com.jusoft.bookingengine.component.member.api.UserNotMemberException;
-import com.jusoft.bookingengine.component.room.api.RoomManagerComponent;
-import com.jusoft.bookingengine.component.room.api.RoomView;
 import com.jusoft.bookingengine.component.slot.api.SlotManagerComponent;
 import com.jusoft.bookingengine.component.slot.api.SlotView;
+import com.jusoft.bookingengine.usecase.authorization.AuthoriseUserUseCase;
+import com.jusoft.bookingengine.usecase.authorization.AuthoriseUserUseCaseCommand;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class ReserveSlotUseCase {
 
+  private final AuthoriseUserUseCase authoriseUserUseCase;
   private final SlotManagerComponent slotManagerComponent;
-  private final RoomManagerComponent roomManagerComponent;
-  private final BuildingManagerComponent buildingManagerComponent;
-  private final MemberManagerComponent memberManagerComponent;
 
   public void reserveSlot(long slotId, long userId) {
-    SlotView slotView = slotManagerComponent.find(slotId);
-    RoomView roomView = roomManagerComponent.find(slotView.getRoomId());
-    BuildingView buildingView = buildingManagerComponent.find(roomView.getBuildingId());
-    if (!memberManagerComponent.isMemberOf(buildingView.getClubId(), userId)) {
-      throw new UserNotMemberException(userId, buildingView.getClubId());
-    }
+    SlotView slot = slotManagerComponent.find(slotId);
+    authoriseUserUseCase.isAuthorised(AuthoriseUserUseCaseCommand.of(
+      slot.getBuildingId(),
+      slot.getRoomId(),
+      slot.getCreationTime(),
+      slot.getClubId(),
+      userId));
     slotManagerComponent.reserveSlot(slotId, userId);
   }
 }

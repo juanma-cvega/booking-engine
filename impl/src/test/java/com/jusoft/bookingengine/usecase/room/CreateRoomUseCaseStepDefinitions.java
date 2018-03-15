@@ -1,10 +1,10 @@
 package com.jusoft.bookingengine.usecase.room;
 
 import com.google.common.collect.Iterables;
+import com.jusoft.bookingengine.component.building.api.BuildingNotFoundException;
 import com.jusoft.bookingengine.component.room.api.RoomCreatedEvent;
 import com.jusoft.bookingengine.component.room.api.RoomManagerComponent;
 import com.jusoft.bookingengine.component.room.api.RoomView;
-import com.jusoft.bookingengine.component.room.api.RoomWithoutBuildingException;
 import com.jusoft.bookingengine.component.slot.api.SlotManagerComponent;
 import com.jusoft.bookingengine.component.slot.api.SlotView;
 import com.jusoft.bookingengine.component.timer.OpenTime;
@@ -98,8 +98,8 @@ public class CreateRoomUseCaseStepDefinitions extends AbstractUseCaseStepDefinit
     When("^a room is created for a non existing building$", () ->
       storeException(() -> createRoomUseCase.createRoom(CREATE_ROOM_COMMAND.apply(NON_EXISTING_BUILDING_ID))));
     Then("^the user should be notified the building does not exist$", () -> {
-      assertThat(exceptionThrown).isInstanceOf(RoomWithoutBuildingException.class);
-      RoomWithoutBuildingException exception = (RoomWithoutBuildingException) exceptionThrown;
+      assertThat(exceptionThrown).isInstanceOf(BuildingNotFoundException.class);
+      BuildingNotFoundException exception = (BuildingNotFoundException) exceptionThrown;
       assertThat(exception.getBuildingId()).isEqualTo(NON_EXISTING_BUILDING_ID);
     });
   }

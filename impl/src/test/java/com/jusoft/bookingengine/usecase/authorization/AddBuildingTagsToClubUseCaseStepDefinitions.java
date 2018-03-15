@@ -2,7 +2,7 @@ package com.jusoft.bookingengine.usecase.authorization;
 
 import com.jusoft.bookingengine.component.authorization.api.AddBuildingTagsToClubCommand;
 import com.jusoft.bookingengine.component.authorization.api.AuthorizationManagerComponent;
-import com.jusoft.bookingengine.component.authorization.api.BuildingView;
+import com.jusoft.bookingengine.component.authorization.api.ClubBuildingView;
 import com.jusoft.bookingengine.component.authorization.api.ClubNotFoundException;
 import com.jusoft.bookingengine.component.authorization.api.ClubView;
 import com.jusoft.bookingengine.component.authorization.api.Tag;
@@ -34,7 +34,7 @@ public class AddBuildingTagsToClubUseCaseStepDefinitions extends AbstractUseCase
       Optional<ClubView> club = authorizationManagerComponent.findClubBy(clubId);
       assertThat(club).isPresent();
       assertThat(club.get().getBuildings()).isNotEmpty();
-      assertThat(club.get().getBuildings().get(buildingId)).isEqualTo(BuildingView.of(buildingId));
+      assertThat(club.get().getBuildings().get(buildingId)).isEqualTo(ClubBuildingView.of(buildingId));
     });
     Then("^building (\\d+) of club (\\d+) should have tags? in its list of tags$", (Long clubId, Long buildingId, DataTable tagsDataTable) -> {
       List<Tag> tags = tagsDataTable.asList(String.class).stream().map(Tag::of).collect(Collectors.toList());

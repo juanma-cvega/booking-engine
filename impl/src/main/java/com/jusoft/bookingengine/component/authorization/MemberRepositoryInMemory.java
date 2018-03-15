@@ -23,7 +23,7 @@ public class MemberRepositoryInMemory implements MemberRepository {
   }
 
   private Member copyOf(Member member) {
-    return Member.of(member.getId(), member.getBuildings());
+    return Member.of(member.getId(), member.getUserId(), member.getClubId(), member.getBuildings());
   }
 
   @Override
@@ -37,5 +37,13 @@ public class MemberRepositoryInMemory implements MemberRepository {
       Member member = find(memberId).orElseThrow(notFoundExceptionSupplier);
       store.put(memberId, function.apply(member));
     });
+  }
+
+  @Override
+  public Optional<Member> findByUserIdAndClubId(long userId, long clubId) {
+    return store.values().stream()
+      .filter(member -> member.getUserId() == userId)
+      .filter(member -> member.getClubId() == clubId)
+      .findFirst();
   }
 }

@@ -11,15 +11,15 @@ import java.util.Map;
 
 @Data(staticConstructor = "of")
 @EqualsAndHashCode(of = "id")
-public class BuildingView {
+public class ClubBuildingView {
 
   private final long id;
   @NonNull
-  private final Map<Long, RoomView> rooms;
+  private final Map<Long, ClubRoomView> rooms;
   @NonNull
   private final List<Tag> tags;
 
-  public static BuildingView of(long buildingId) {
-    return BuildingView.of(buildingId, new HashMap<>(), new ArrayList<>());
+  public static ClubBuildingView of(long buildingId) {
+    return ClubBuildingView.of(buildingId, new HashMap<>(), new ArrayList<>());
   }
 }

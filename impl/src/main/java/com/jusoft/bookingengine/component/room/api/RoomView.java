@@ -14,6 +14,7 @@ import java.util.List;
 public class RoomView {
 
   private final long id;
+  private final long clubId;
   private final long buildingId;
   @NonNull
   private final SlotCreationConfigInfo slotCreationConfigInfo;
@@ -27,6 +28,7 @@ public class RoomView {
   private final AuctionConfigInfo auctionConfigInfo;
 
   private RoomView(long id,
+                   long clubId,
                    long buildingId,
                    SlotCreationConfigInfo slotCreationConfigInfo,
                    int slotDurationInMinutes,
@@ -35,6 +37,7 @@ public class RoomView {
                    boolean active,
                    AuctionConfigInfo auctionConfigInfo) {
     this.id = id;
+    this.clubId = clubId;
     this.buildingId = buildingId;
     this.slotCreationConfigInfo = slotCreationConfigInfo;
     this.slotDurationInMinutes = slotDurationInMinutes;
@@ -45,6 +48,7 @@ public class RoomView {
   }
 
   public static RoomView of(long id,
+                            long clubId,
                             long buildingId,
                             SlotCreationConfigInfo slotCreationConfigInfo,
                             int slotDurationInMinutes,
@@ -52,7 +56,7 @@ public class RoomView {
                             List<DayOfWeek> availableDays,
                             boolean active,
                             AuctionConfigInfo auctionConfigInfo) {
-    return new RoomView(id, buildingId, slotCreationConfigInfo, slotDurationInMinutes, openTimesPerDay, availableDays, active, auctionConfigInfo);
+    return new RoomView(id, clubId, buildingId, slotCreationConfigInfo, slotDurationInMinutes, openTimesPerDay, availableDays, active, auctionConfigInfo);
   }
 
   public List<OpenTime> getOpenTimesPerDay() {

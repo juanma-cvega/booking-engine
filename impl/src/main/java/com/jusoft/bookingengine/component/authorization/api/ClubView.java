@@ -12,5 +12,5 @@ public class ClubView {
 
   private final long id;
   @NonNull
-  private final Map<Long, BuildingView> buildings;
+  private final Map<Long, ClubBuildingView> buildings;
 }

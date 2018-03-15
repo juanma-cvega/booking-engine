@@ -12,7 +12,7 @@ import static com.jusoft.bookingengine.fixture.RoomFixtures.OPEN_TIMES;
 import static com.jusoft.bookingengine.fixture.RoomFixtures.SLOT_DURATION_IN_MINUTES;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class CreateRoomCommandTest {
+public class CreateClubRoomCommandTest {
 
   @Test
   public void null_slots_creation_strategy_config_info_should_fail_constructor() {

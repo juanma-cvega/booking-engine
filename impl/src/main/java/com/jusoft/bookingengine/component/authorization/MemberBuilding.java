@@ -1,6 +1,5 @@
 package com.jusoft.bookingengine.component.authorization;
 
-import com.jusoft.bookingengine.component.authorization.api.Coordinates;
 import com.jusoft.bookingengine.component.authorization.api.SlotStatus;
 import com.jusoft.bookingengine.component.authorization.api.Tag;
 import lombok.AccessLevel;
@@ -17,33 +16,24 @@ import java.util.Map;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 @Data
 @EqualsAndHashCode(of = "id")
-class Building {
+class MemberBuilding {
 
   private final long id;
   @NonNull
-  private final Map<Long, Room> rooms;
+  private final Map<Long, MemberRoom> rooms;
   @NonNull
   private final List<Tag> tags;
 
-  static Building of(long buildingId) {
-    return new Building(buildingId, new HashMap<>(), new ArrayList<>());
+  static MemberBuilding of(long buildingId) {
+    return new MemberBuilding(buildingId, new HashMap<>(), new ArrayList<>());
   }
 
-  public Map<Long, Room> getRooms() {
+  public Map<Long, MemberRoom> getRooms() {
     return new HashMap<>(rooms);
   }
 
   public List<Tag> getTags() {
     return new ArrayList<>(tags);
-  }
-
-  boolean isAuthorisedFor(Coordinates coordinates, List<Tag> memberTags) {
-    boolean result = false;
-    Room roomFound = findOrCreateRoom(coordinates.getRoomId());
-    if (tagsContainAny(memberTags)) {
-      result = roomFound.isAuthorised(coordinates.getSlotStatus(), memberTags);
-    }
-    return result;
   }
 
   void addTags(List<Tag> tags) {
@@ -54,13 +44,7 @@ class Building {
     findOrCreateRoom(roomId).addTags(slotStatus, tags);
   }
 
-  private Room findOrCreateRoom(long roomId) {
-    return rooms.computeIfAbsent(roomId, Room::of);
-  }
-
-  private boolean tagsContainAny(List<Tag> memberTags) {
-    List<Tag> buildingsTags = new ArrayList<>(tags);
-    buildingsTags.removeAll(memberTags);
-    return tags.isEmpty() || tags.size() != buildingsTags.size();
+  private MemberRoom findOrCreateRoom(long roomId) {
+    return rooms.computeIfAbsent(roomId, MemberRoom::of);
   }
 }

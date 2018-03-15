@@ -23,8 +23,8 @@ class RoomManagerComponentImpl implements RoomManagerComponent {
   private final Clock clock;
 
   @Override
-  public RoomView create(CreateRoomCommand createRoomCommand) {
-    Room room = roomFactory.createFrom(createRoomCommand);
+  public RoomView create(CreateRoomCommand createRoomCommand, long clubId) {
+    Room room = roomFactory.createFrom(createRoomCommand, clubId);
     roomRepository.save(room);
     messagePublisher.publish(roomMessageFactory.roomCreatedEvent(room));
     return roomFactory.createFrom(room);

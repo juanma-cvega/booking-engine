@@ -46,6 +46,10 @@ public class AbstractUseCaseStepDefinitions implements En {
     return ZonedDateTime.of(date, LocalTime.parse(time), clock.getZone());
   }
 
+  protected ZonedDateTime getDateFrom(String time, String date) {
+    return ZonedDateTime.of(LocalDate.parse(date), LocalTime.parse(time), clock.getZone());
+  }
+
   protected void storeException(Runnable runnable) {
     try {
       runnable.run();

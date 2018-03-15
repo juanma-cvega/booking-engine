@@ -12,8 +12,14 @@ import com.jusoft.bookingengine.component.slot.SlotManagerComponentConfig;
 import com.jusoft.bookingengine.component.timer.TimerConfig;
 import com.jusoft.bookingengine.strategy.auctionwinner.AuctionWinnerStrategyConfig;
 import com.jusoft.bookingengine.strategy.slotcreation.SlotCreationConfig;
-import com.jusoft.bookingengine.usecase.UseCaseConfig;
+import com.jusoft.bookingengine.usecase.auction.AuctionUseCaseConfig;
 import com.jusoft.bookingengine.usecase.authorization.AuthorizationUseCaseConfig;
+import com.jusoft.bookingengine.usecase.booking.BookingUseCaseConfig;
+import com.jusoft.bookingengine.usecase.building.BuildingUseCaseConfig;
+import com.jusoft.bookingengine.usecase.club.ClubUseCaseConfig;
+import com.jusoft.bookingengine.usecase.member.MemberUseCaseConfig;
+import com.jusoft.bookingengine.usecase.room.RoomUseCaseConfig;
+import com.jusoft.bookingengine.usecase.slot.SlotUseCaseConfig;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -31,7 +37,13 @@ import org.springframework.context.annotation.Import;
   AuctionWinnerStrategyConfig.class,
   SlotCreationConfig.class,
   AuthorizationManagerComponentConfig.class,
-  UseCaseConfig.class,
+  RoomUseCaseConfig.class,
+  SlotUseCaseConfig.class,
+  ClubUseCaseConfig.class,
+  BuildingUseCaseConfig.class,
+  MemberUseCaseConfig.class,
+  BookingUseCaseConfig.class,
+  AuctionUseCaseConfig.class,
   AuthorizationUseCaseConfig.class})
 public class MainConfig {
 }

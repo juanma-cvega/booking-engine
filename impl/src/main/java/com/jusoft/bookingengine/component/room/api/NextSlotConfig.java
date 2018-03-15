@@ -7,6 +7,8 @@ import lombok.Data;
 @Data
 public class NextSlotConfig {
 
+  private final long buildingId;
+  private final long clubId;
   private final OpenDate openDate;
   private final SlotState state;
 }

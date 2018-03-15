@@ -12,6 +12,7 @@ Feature: As a user, I want to cancel reservation for a slot. As an admin, I want
     Given a room is to be created
     And the room has a no auctions configuration
     And the room is created with that configuration
+    And the member is authorised to reserve slots for the room
     And a slot is created
     And the slot is reserved by user 1
     And that sets the background

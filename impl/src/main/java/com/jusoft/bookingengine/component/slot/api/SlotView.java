@@ -11,6 +11,8 @@ public class SlotView {
 
   private final long id;
   private final long roomId;
+  private final long buildingId;
+  private final long clubId;
   @NonNull
   private final SlotState state;
   @NonNull

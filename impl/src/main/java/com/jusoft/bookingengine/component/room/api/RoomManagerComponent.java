@@ -4,7 +4,7 @@ import java.time.ZonedDateTime;
 
 public interface RoomManagerComponent {
 
-  RoomView create(CreateRoomCommand createRoomCommand);
+  RoomView create(CreateRoomCommand createRoomCommand, long clubId);
 
   RoomView find(long roomId);
 
