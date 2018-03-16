@@ -5,7 +5,7 @@ import com.jusoft.bookingengine.component.authorization.api.AddBuildingTagsToMem
 import com.jusoft.bookingengine.component.authorization.api.AddRoomTagsToClubCommand;
 import com.jusoft.bookingengine.component.authorization.api.AddRoomTagsToMemberCommand;
 import com.jusoft.bookingengine.component.authorization.api.AuthorizationManagerComponent;
-import com.jusoft.bookingengine.component.authorization.api.CheckAuthorizationCommand;
+import com.jusoft.bookingengine.component.authorization.api.AuthorizeCommand;
 import com.jusoft.bookingengine.component.authorization.api.ClubNotFoundException;
 import com.jusoft.bookingengine.component.authorization.api.ClubView;
 import com.jusoft.bookingengine.component.authorization.api.MemberNotFoundException;
@@ -13,6 +13,7 @@ import com.jusoft.bookingengine.component.authorization.api.MemberView;
 import com.jusoft.bookingengine.component.authorization.api.ReplaceSlotAuthenticationConfigForRoomCommand;
 import com.jusoft.bookingengine.component.authorization.api.SlotStatus;
 import com.jusoft.bookingengine.component.authorization.api.Tag;
+import com.jusoft.bookingengine.component.authorization.api.UnauthorisedException;
 import com.jusoft.bookingengine.component.member.api.UserNotMemberException;
 import lombok.AllArgsConstructor;
 
@@ -30,15 +31,14 @@ public class AuthorizationManagerComponentImpl implements AuthorizationManagerCo
   private final Clock clock;
 
   @Override
-  public boolean isAuthorised(CheckAuthorizationCommand command) {
+  public void authorise(AuthorizeCommand command) {
     Club clubFound = findClubOrFail(command.getClubId());
-    SlotStatus slotStatus = clubFound.getSlotTypeFor(command.getCoordinates(), clock);
+    SlotStatus slotStatus = clubFound.getSlotTypeFor(command.getBuildingId(), command.getRoomId(), command.getSlotCreationTime(), clock);
     Member memberFound = findMemberOrFail(command.getUserId(), command.getClubId());
-    List<Tag> memberTags = memberFound.getTagsFor(
-      command.getCoordinates().getBuildingId(),
-      command.getCoordinates().getRoomId(),
-      slotStatus);
-    return clubFound.isAuthorisedFor(command.getCoordinates(), memberTags, slotStatus);
+    List<Tag> memberTags = memberFound.getTagsFor(command.getBuildingId(), command.getRoomId(), slotStatus);
+    if (!clubFound.isAuthorisedFor(command.getBuildingId(), command.getRoomId(), memberTags, slotStatus)) {
+      throw new UnauthorisedException(command.getUserId(), command.getClubId(), command.getBuildingId(), command.getRoomId());
+    }
   }
 
   @Override

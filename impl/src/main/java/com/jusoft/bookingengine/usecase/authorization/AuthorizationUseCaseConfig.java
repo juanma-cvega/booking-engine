@@ -36,11 +36,6 @@ public class AuthorizationUseCaseConfig {
   }
 
   @Bean
-  public AuthoriseUserUseCase authoriseMemberUseCase() {
-    return new AuthoriseUserUseCase(authorizationManagerComponent);
-  }
-
-  @Bean
   public NewClubCreatedUseCase newClubCreatedUseCase() {
     return new NewClubCreatedUseCase(authorizationManagerComponent);
   }

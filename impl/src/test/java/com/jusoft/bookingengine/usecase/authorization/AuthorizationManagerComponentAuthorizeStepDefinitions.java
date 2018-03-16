@@ -3,6 +3,7 @@ package com.jusoft.bookingengine.usecase.authorization;
 import com.google.common.collect.ImmutableList;
 import com.jusoft.bookingengine.component.authorization.api.AddRoomTagsToClubCommand;
 import com.jusoft.bookingengine.component.authorization.api.AuthorizationManagerComponent;
+import com.jusoft.bookingengine.component.authorization.api.AuthorizeCommand;
 import com.jusoft.bookingengine.component.authorization.api.SlotStatus;
 import com.jusoft.bookingengine.component.authorization.api.Tag;
 import com.jusoft.bookingengine.component.authorization.api.UnauthorisedException;
@@ -20,21 +21,20 @@ import static com.jusoft.bookingengine.holder.DataHolder.memberCreated;
 import static com.jusoft.bookingengine.holder.DataHolder.roomCreated;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AuthoriseUserUseCaseStepDefinitions extends AbstractUseCaseStepDefinitions {
+public class AuthorizationManagerComponentAuthorizeStepDefinitions extends AbstractUseCaseStepDefinitions {
 
-  public static final String TAG_ONLY_IN_CLUB = "TAG_ONLY_IN_CLUB";
+  private static final String TAG_ONLY_IN_CLUB = "TAG_ONLY_IN_CLUB";
+
   @Autowired
   private Clock clock;
   @Autowired
   private AuthorizationManagerComponent authorizationManagerComponent;
-  @Autowired
-  private AuthoriseUserUseCase authoriseUserUseCase;
 
-  public AuthoriseUserUseCaseStepDefinitions() {
+  public AuthorizationManagerComponentAuthorizeStepDefinitions() {
     When("^admin verifies credentials of user (.*) to access slot created the (.*) at (.*) in room (.*) in building (.*) in club (.*)$", (Long userId, String slotCreationDate, String slotCreationTime, Long roomId, Long buildingId, Long clubId) -> {
       ZonedDateTime slotCreationDateTime = getDateFrom(slotCreationTime, slotCreationDate);
-      storeException(() -> authoriseUserUseCase.isAuthorised(
-        AuthoriseUserUseCaseCommand.of(buildingId, roomId, slotCreationDateTime, clubId, userId)));
+      storeException(() -> authorizationManagerComponent.authorise(
+        AuthorizeCommand.of(userId, roomId, buildingId, clubId, slotCreationDateTime)));
     });
     Then("^the member should be authorised$", () ->
       assertThat(exceptionThrown).isNull());

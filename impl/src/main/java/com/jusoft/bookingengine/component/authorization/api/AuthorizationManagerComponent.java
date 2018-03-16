@@ -4,7 +4,7 @@ import java.util.Optional;
 
 public interface AuthorizationManagerComponent {
 
-  boolean isAuthorised(CheckAuthorizationCommand checkAuthorizationCommand);
+  void authorise(AuthorizeCommand authorizeCommand);
 
   void createClub(long clubId);
 

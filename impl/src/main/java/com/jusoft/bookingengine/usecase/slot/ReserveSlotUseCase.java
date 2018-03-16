@@ -1,25 +1,26 @@
 package com.jusoft.bookingengine.usecase.slot;
 
+import com.jusoft.bookingengine.component.authorization.api.AuthorizationManagerComponent;
+import com.jusoft.bookingengine.component.authorization.api.AuthorizeCommand;
 import com.jusoft.bookingengine.component.slot.api.SlotManagerComponent;
 import com.jusoft.bookingengine.component.slot.api.SlotView;
-import com.jusoft.bookingengine.usecase.authorization.AuthoriseUserUseCase;
-import com.jusoft.bookingengine.usecase.authorization.AuthoriseUserUseCaseCommand;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class ReserveSlotUseCase {
 
-  private final AuthoriseUserUseCase authoriseUserUseCase;
+  private final AuthorizationManagerComponent authorizationManagerComponent;
   private final SlotManagerComponent slotManagerComponent;
 
   public void reserveSlot(long slotId, long userId) {
     SlotView slot = slotManagerComponent.find(slotId);
-    authoriseUserUseCase.isAuthorised(AuthoriseUserUseCaseCommand.of(
-      slot.getBuildingId(),
+    authorizationManagerComponent.authorise(AuthorizeCommand.of(
+      userId,
       slot.getRoomId(),
-      slot.getCreationTime(),
+      slot.getBuildingId(),
       slot.getClubId(),
-      userId));
+      slot.getCreationTime()
+    ));
     slotManagerComponent.reserveSlot(slotId, userId);
   }
 }
