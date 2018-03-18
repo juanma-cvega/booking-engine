@@ -3,7 +3,6 @@ package com.jusoft.bookingengine.component.member;
 import com.jusoft.bookingengine.component.member.api.CreateMemberCommand;
 import com.jusoft.bookingengine.component.member.api.MemberCreatedEvent;
 import com.jusoft.bookingengine.component.member.api.MemberManagerComponent;
-import com.jusoft.bookingengine.component.member.api.MemberNotFoundException;
 import com.jusoft.bookingengine.component.member.api.MemberView;
 import com.jusoft.bookingengine.publisher.MessagePublisher;
 import lombok.AccessLevel;
@@ -29,9 +28,4 @@ class MemberManagerComponentImpl implements MemberManagerComponent {
     return repository.isMemberOf(clubId, userId);
   }
 
-  @Override
-  public MemberView findByUserAndClub(long userId, long clubId) {
-    return memberFactory.createFrom(repository.findByUserAndClub(userId, clubId)
-      .orElseThrow(() -> new MemberNotFoundException(userId, clubId)));
-  }
 }
