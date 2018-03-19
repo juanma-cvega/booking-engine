@@ -24,38 +24,38 @@ import static java.time.ZonedDateTime.now;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 @Data
 @EqualsAndHashCode(of = "id")
-class ClubRoom {
+class ClubRoomAccessConfig {
 
   private final long id;
   private final SlotAuthorizationConfig slotAuthorizationConfig;
   @NonNull
   private final EnumMap<SlotStatus, List<Tag>> tagsBySlotStatus;
 
-  static ClubRoom of(long roomId) {
+  static ClubRoomAccessConfig of(long roomId) {
     return of(roomId, SlotAuthorizationConfig.of(0, ChronoUnit.MILLIS));
   }
 
-  static ClubRoom of(long roomId, SlotAuthorizationConfig slotAuthorizationConfig) {
+  static ClubRoomAccessConfig of(long roomId, SlotAuthorizationConfig slotAuthorizationConfig) {
     return of(roomId, slotAuthorizationConfig, new EnumMap<>(SlotStatus.class));
   }
 
-  static ClubRoom of(long roomId, SlotAuthorizationConfig slotAuthorizationConfig, EnumMap<SlotStatus, List<Tag>> tagsBySlotStatus) {
-    return new ClubRoom(roomId, slotAuthorizationConfig, tagsBySlotStatus);
+  static ClubRoomAccessConfig of(long roomId, SlotAuthorizationConfig slotAuthorizationConfig, EnumMap<SlotStatus, List<Tag>> tagsBySlotStatus) {
+    return new ClubRoomAccessConfig(roomId, slotAuthorizationConfig, tagsBySlotStatus);
   }
 
   public Map<SlotStatus, List<Tag>> getTagsBySlotStatus() {
     return new EnumMap<>(tagsBySlotStatus);
   }
 
-  boolean isAuthorised(List<Tag> memberTags, SlotStatus status) {
-    boolean isAuthorised = true;
+  boolean isAuthorized(List<Tag> memberTags, SlotStatus status) {
+    boolean isAuthorized = true;
     List<Tag> tagsRequired = tagsBySlotStatus.getOrDefault(status, new ArrayList<>());
     if (!tagsRequired.isEmpty()) {
       List<Tag> tagsNotInMemberList = new ArrayList<>(tagsRequired);
       tagsNotInMemberList.removeAll(memberTags);
-      isAuthorised = tagsRequired.size() != tagsNotInMemberList.size();
+      isAuthorized = tagsRequired.size() != tagsNotInMemberList.size();
     }
-    return isAuthorised;
+    return isAuthorized;
   }
 
   public void addTags(SlotStatus status, List<Tag> tags) {
@@ -68,7 +68,7 @@ class ClubRoom {
       : NORMAL;
   }
 
-  public ClubRoom replaceSlotAuthenticationConfig(SlotAuthorizationConfig config) {
-    return ClubRoom.of(id, config, tagsBySlotStatus);
+  public ClubRoomAccessConfig replaceSlotAuthenticationConfig(SlotAuthorizationConfig config) {
+    return ClubRoomAccessConfig.of(id, config, tagsBySlotStatus);
   }
 }

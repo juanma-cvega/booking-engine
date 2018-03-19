@@ -22,7 +22,7 @@ class MemberFactory {
     );
   }
 
-  private MemberBuildingView createBuildingHolderFrom(MemberBuilding building) {
+  private MemberBuildingView createBuildingHolderFrom(MemberBuildingAccessConfig building) {
     return MemberBuildingView.of(
       building.getId(),
       building.getRooms().values().stream()
@@ -32,7 +32,7 @@ class MemberFactory {
     );
   }
 
-  private MemberRoomView createRoomHolderFrom(MemberRoom room) {
+  private MemberRoomView createRoomHolderFrom(MemberRoomAccessConfig room) {
     return MemberRoomView.of(
       room.getId(),
       room.getTagsBySlotStatus());

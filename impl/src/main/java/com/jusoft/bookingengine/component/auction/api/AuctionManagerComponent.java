@@ -6,7 +6,7 @@ public interface AuctionManagerComponent {
 
   AuctionView startAuction(StartAuctionCommand startAuctionCommand);
 
-  void addBidderTo(long slotId, long userId);
+  void addBidderToAuctionFor(long userId, long slotId);
 
   void finishAuction(long auctionId, AuctionWinnerStrategy strategy);
 

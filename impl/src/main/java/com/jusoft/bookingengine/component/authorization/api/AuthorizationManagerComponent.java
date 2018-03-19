@@ -4,7 +4,9 @@ import java.util.Optional;
 
 public interface AuthorizationManagerComponent {
 
-  void authorise(AuthorizeCommand authorizeCommand);
+  void authorizeReserveSlot(AuthorizeCommand authorizeCommand);
+
+  void authorizeBidInAuction(AuthorizeCommand command);
 
   void createClub(long clubId);
 
@@ -15,6 +17,10 @@ public interface AuthorizationManagerComponent {
   void addBuildingTagsToMember(AddBuildingTagsToMemberCommand addBuildingTagsToMemberCommand);
 
   void addRoomTagsToClub(AddRoomTagsToClubCommand addRoomTagsToClubCommand);
+
+  void addAccessToAuctions(ChangeAccessToAuctionsCommand command);
+
+  void removeAccessToAuctions(ChangeAccessToAuctionsCommand command);
 
   void replaceSlotAuthenticationManagerForRoom(ReplaceSlotAuthenticationConfigForRoomCommand command);
 

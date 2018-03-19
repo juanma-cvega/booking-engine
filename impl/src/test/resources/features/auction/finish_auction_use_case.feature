@@ -3,9 +3,6 @@ Feature: As a user, I want to know the result of an auction I bid for
   Background:
     Given a club is created by user 4
     And a building is created
-    And user 1 issues a join request
-    And admin 4 accepts the join request created by user 1
-    And the accepted join request for user 1 is processed
     And current time is 08:05
 
   Scenario: As a user, I shouldn't win an auction if there is someone with a better criteria when the auction is configured
@@ -20,11 +17,13 @@ Feature: As a user, I want to know the result of an auction I bid for
     And a slot is created
     And an auction is created for the slot
     And current time is 08:05
+    And user 1 with member id 2 for the club created can bid in auctions
+    And user 47 with member id 32 for the club created can bid in auctions
     And user 1 bids on the auction
-    And user 2 bids on the auction
+    And user 47 bids on the auction
     And that sets the background
     When the auction time is finished
-    Then a notification containing user 2 as the winner should be published
+    Then a notification containing user 47 as the winner should be published
 
   Scenario: As a user, I should win an auction to another user when we have the same criteria but I bid first
     Given a room is to be created
@@ -35,12 +34,14 @@ Feature: As a user, I want to know the result of an auction I bid for
     And current time is 08:05
     And a slot is created
     And an auction is created for the slot
-    And user 1 bids on the auction
+    And user 62 with member id 4 for the club created can bid in auctions
+    And user 11 with member id 5 for the club created can bid in auctions
+    And user 62 bids on the auction
     And current time is 08:06
-    And user 2 bids on the auction
+    And user 11 bids on the auction
     And that sets the background
     When the auction time is finished
-    Then a notification containing user 1 as the winner should be published
+    Then a notification containing user 62 as the winner should be published
 
   Scenario: As a user, I should see no one winning an auction when nobody bids on it
     Given a room is to be created

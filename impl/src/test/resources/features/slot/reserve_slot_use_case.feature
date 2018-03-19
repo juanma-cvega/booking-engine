@@ -9,7 +9,7 @@ Feature: As a user, I want to reserve a slot
 
   Scenario: As a user, I want to reserve an available slot
     Given a room is created
-    And the member is authorised to reserve slots for the room
+    And the member is authorized to reserve slots for the room
     And a slot is created
     And that sets the background
     When the slot is reserved by user 1
@@ -21,7 +21,7 @@ Feature: As a user, I want to reserve a slot
     And the room has a 10 minutes auction time and a 5 days bookings created window
     And current time is 06:00
     And the room is created with that configuration
-    And the member is authorised to reserve slots for the room
+    And the member is authorized to reserve slots for the room
     And a slot is created
     And the slot is made available
     And that sets the background
@@ -31,11 +31,11 @@ Feature: As a user, I want to reserve a slot
 
   Scenario: As a user, I cannot reserve a slot already reserved
     Given a room is created
-    And the member is authorised to reserve slots for the room
+    And the member is authorized to reserve slots for the room
     And user 2 issues a join request
     And admin 4 accepts the join request created by user 2
     And the accepted join request for user 2 is processed
-    And the member is authorised to reserve slots for the room
+    And the member is authorized to reserve slots for the room
     And a slot is created
     And the slot is reserved by user 1
     When the user 2 tries to reserve the slot
@@ -49,7 +49,7 @@ Feature: As a user, I want to reserve a slot
     And the slots time is of 30 minute
     And current time is 06:00
     And the room is created with that configuration
-    And the member is authorised to reserve slots for the room
+    And the member is authorized to reserve slots for the room
     And a slot is created
     And current time is 08:20
     And that sets the background
@@ -64,21 +64,21 @@ Feature: As a user, I want to reserve a slot
     And the slots time is of 30 minute
     And current time is 06:00
     And the room is created with that configuration
-    And the member is authorised to reserve slots for the room
+    And the member is authorized to reserve slots for the room
     And a slot is created
     When the user 1 tries to reserve the slot
     Then the user should be notified the slot is still in auction
 
   Scenario: As a user, I cannot reserve a slot if I'm not a member of the club
     Given a room is created
-    And the user is not an authorised member of the club
+    And the user is not an authorized member of the club
     And a slot is created
     When the user 1 tries to reserve the slot
     Then the user 1 should get a notification that he is not a member of the club
 
-  Scenario: As a user, I cannot reserve a slot if I'm not authorised
+  Scenario: As a user, I cannot reserve a slot if I'm not authorized
     Given a room is created
-    And the member is not authorised to reserve slots for the room
+    And the member is not authorized to reserve slots for the room
     And a slot is created
     When the user 1 tries to reserve the slot
-    Then the user 1 should receive a notification he is not authorised to use the room created
+    Then the user 1 should receive a notification he is not authorized to use the room created

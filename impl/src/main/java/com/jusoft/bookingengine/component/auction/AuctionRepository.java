@@ -13,4 +13,6 @@ interface AuctionRepository extends Repository {
   Optional<Auction> find(long auctionId);
 
   void execute(long auctionId, UnaryOperator<Auction> function, Supplier<RuntimeException> notFoundException);
+
+  Optional<Auction> findByReference(long referenceId);
 }

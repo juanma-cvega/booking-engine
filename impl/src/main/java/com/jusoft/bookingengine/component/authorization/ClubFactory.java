@@ -20,20 +20,20 @@ class ClubFactory {
     );
   }
 
-  private ClubBuildingView createBuildingFrom(ClubBuilding clubBuilding) {
+  private ClubBuildingView createBuildingFrom(ClubBuildingAccessConfig clubBuildingAccessConfig) {
     return ClubBuildingView.of(
-      clubBuilding.getId(),
-      clubBuilding.getRooms().values().stream()
+      clubBuildingAccessConfig.getId(),
+      clubBuildingAccessConfig.getRooms().values().stream()
         .map(this::createRoomFrom)
         .collect(toMap(ClubRoomView::getId, room -> room)),
-      clubBuilding.getTags()
+      clubBuildingAccessConfig.getTags()
     );
   }
 
-  private ClubRoomView createRoomFrom(ClubRoom clubRoom) {
+  private ClubRoomView createRoomFrom(ClubRoomAccessConfig clubRoomAccessConfig) {
     return ClubRoomView.of(
-      clubRoom.getId(),
-      clubRoom.getTagsBySlotStatus(),
-      clubRoom.getSlotAuthorizationConfig());
+      clubRoomAccessConfig.getId(),
+      clubRoomAccessConfig.getTagsBySlotStatus(),
+      clubRoomAccessConfig.getSlotAuthorizationConfig());
   }
 }

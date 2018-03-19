@@ -98,7 +98,7 @@
 //    When("^user (.*) cancels the booking$", (Long userId) ->
 //      storeException(() -> cancelBookingUseCase.cancel(new CancelBookingCommand(userId, extractBookingId(userId)))));
 //    When("^the user (.*) enters the auction$", (Integer userId) ->
-//      addBidderToAuctionUseCase.addBidderTo(slotHolder.slotSelected, userId));
+//      addBidderToAuctionUseCase.addBidderToAuctionFor(slotHolder.slotSelected, userId));
 //    When("^the auction time is finished at (.*)$", (String currentTime) -> {
 //      ZonedDateTime previous = ZonedDateTime.now(clock);
 //      clock.setClock(getFixedClockAt(currentTime));

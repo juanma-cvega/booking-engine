@@ -38,7 +38,7 @@ public class StartAuctionUseCaseStepDefinitions extends AbstractUseCaseStepDefin
     });
     Then("^the auction shouldn't exist$", () -> {
       assertThat(auctionCreated).isNull();
-      assertThatThrownBy(() -> auctionManagerComponent.addBidderTo(slotCreated.getId(), 0))
+      assertThatThrownBy(() -> auctionManagerComponent.addBidderToAuctionFor(slotCreated.getId(), 0))
         .isInstanceOf(AuctionNotFoundException.class);
     });
     Then("^an auction finished event shouldn't be scheduled to be published$", () ->

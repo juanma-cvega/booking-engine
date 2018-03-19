@@ -47,4 +47,12 @@ class AuctionRepositoryInMemory implements AuctionRepository {
       store.put(auctionId, auctionModified);
     });
   }
+
+  @Override
+  public Optional<Auction> findByReference(long referenceId) {
+    return store.values().stream()
+      .filter(auction -> auction.getReferenceId() == referenceId)
+      .findFirst()
+      .map(this::copyAuction);
+  }
 }

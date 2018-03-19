@@ -1,7 +1,9 @@
 package com.jusoft.bookingengine.usecase.auction;
 
 import com.jusoft.bookingengine.component.auction.api.AuctionManagerComponent;
+import com.jusoft.bookingengine.component.authorization.api.AuthorizationManagerComponent;
 import com.jusoft.bookingengine.component.scheduler.api.SchedulerComponent;
+import com.jusoft.bookingengine.component.slot.api.SlotManagerComponent;
 import com.jusoft.bookingengine.strategy.auctionwinner.api.AuctionStrategyRegistrar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -17,11 +19,17 @@ public class AuctionUseCaseConfig {
   private AuctionStrategyRegistrar auctionStrategyRegistrar;
 
   @Autowired
+  private SlotManagerComponent slotManagerComponent;
+
+  @Autowired
+  private AuthorizationManagerComponent authorizationManagerComponent;
+
+  @Autowired
   private SchedulerComponent schedulerComponent;
 
   @Bean
   public AddBidderToAuctionUseCase addBidderToAuctionUseCase() {
-    return new AddBidderToAuctionUseCase(auctionManagerComponent);
+    return new AddBidderToAuctionUseCase(auctionManagerComponent, slotManagerComponent, authorizationManagerComponent);
   }
 
   @Bean

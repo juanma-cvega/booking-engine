@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NonNull;
 
 import java.util.ArrayList;
@@ -16,18 +17,20 @@ import java.util.Map;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 @Data
 @EqualsAndHashCode(of = "id")
-class MemberRoom {
+class MemberRoomAccessConfig {
 
   private final long id;
   @NonNull
   private final EnumMap<SlotStatus, List<Tag>> tagsBySlotStatus;
+  @Getter(AccessLevel.PRIVATE)
+  private final boolean auctionAccess;
 
-  static MemberRoom of(long roomId) {
+  static MemberRoomAccessConfig of(long roomId) {
     return of(roomId, new EnumMap<>(SlotStatus.class));
   }
 
-  static MemberRoom of(long roomId, EnumMap<SlotStatus, List<Tag>> tagsBySlotStatus) {
-    return new MemberRoom(roomId, tagsBySlotStatus);
+  static MemberRoomAccessConfig of(long roomId, EnumMap<SlotStatus, List<Tag>> tagsBySlotStatus) {
+    return new MemberRoomAccessConfig(roomId, tagsBySlotStatus, true);
   }
 
   public Map<SlotStatus, List<Tag>> getTagsBySlotStatus() {
@@ -38,4 +41,16 @@ class MemberRoom {
     tagsBySlotStatus.computeIfAbsent(status, slotStatus -> new ArrayList<>()).addAll(tags);
   }
 
+
+  public boolean canBid() {
+    return auctionAccess;
+  }
+
+  public MemberRoomAccessConfig addAccessToAuctions() {
+    return new MemberRoomAccessConfig(id, tagsBySlotStatus, true);
+  }
+
+  public MemberRoomAccessConfig removeAccessToAuctions() {
+    return new MemberRoomAccessConfig(id, tagsBySlotStatus, false);
+  }
 }

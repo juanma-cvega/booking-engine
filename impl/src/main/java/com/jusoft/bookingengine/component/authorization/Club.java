@@ -23,9 +23,9 @@ class Club {
 
   private final long id;
   @NonNull
-  private final Map<Long, ClubBuilding> buildings;
+  private final Map<Long, ClubBuildingAccessConfig> buildings;
 
-  static Club of(long clubId, Map<Long, ClubBuilding> buildings) {
+  static Club of(long clubId, Map<Long, ClubBuildingAccessConfig> buildings) {
     return new Club(clubId, buildings);
   }
 
@@ -33,29 +33,32 @@ class Club {
     return new Club(clubId, new HashMap<>());
   }
 
-  public Map<Long, ClubBuilding> getBuildings() {
+  public Map<Long, ClubBuildingAccessConfig> getBuildings() {
     return new HashMap<>(buildings);
   }
 
-  public boolean isAuthorisedFor(long buildingId, long roomId, List<Tag> memberTags, SlotStatus status) {
-    ClubBuilding clubBuildingFound = findOrCreateBuilding(buildingId);
-    return clubBuildingFound.isAuthorisedFor(roomId, memberTags, status);
+  public boolean isAuthorizedFor(long buildingId, long roomId, List<Tag> memberTags, SlotStatus status) {
+    ClubBuildingAccessConfig clubBuildingAccessConfigFound = findOrCreateBuilding(buildingId);
+    return clubBuildingAccessConfigFound.isAuthorizedFor(roomId, memberTags, status);
   }
 
-  public void addTagsToBuilding(long buildingId, List<Tag> tags) {
+  public Club addTagsToBuilding(long buildingId, List<Tag> tags) {
     findOrCreateBuilding(buildingId).addTags(tags);
+    return new Club(id, buildings);
   }
 
-  public void addTagsToRoom(AddRoomTagsToClubCommand command) {
+  public Club addTagsToRoom(AddRoomTagsToClubCommand command) {
     findOrCreateBuilding(command.getBuildingId()).addTagsToRoom(command.getRoomId(), command.getStatus(), command.getTags());
+    return new Club(id, buildings);
   }
 
-  private ClubBuilding findOrCreateBuilding(long buildingId) {
-    return buildings.computeIfAbsent(buildingId, ClubBuilding::of);
+  private ClubBuildingAccessConfig findOrCreateBuilding(long buildingId) {
+    return buildings.computeIfAbsent(buildingId, ClubBuildingAccessConfig::of);
   }
 
-  public void replaceSlotAuthorizationConfigForRoom(ReplaceSlotAuthenticationConfigForRoomCommand command) {
+  public Club replaceSlotAuthorizationConfigForRoom(ReplaceSlotAuthenticationConfigForRoomCommand command) {
     findOrCreateBuilding(command.getBuildingId()).replaceSlotAuthorizationConfigToRoom(command.getRoomId(), command.getSlotAuthenticationConfig());
+    return new Club(id, buildings);
   }
 
   public SlotStatus getSlotTypeFor(long buildingId, long roomId, ZonedDateTime slotCreationTime, Clock clock) {

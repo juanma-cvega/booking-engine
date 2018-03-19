@@ -34,11 +34,13 @@ class AuctionManagerComponentImpl implements AuctionManagerComponent {
   }
 
   @Override
-  public void addBidderTo(long auctionId, long userId) {
-    auctionRepository.execute(auctionId, auction -> {
+  public void addBidderToAuctionFor(long userId, long referenceId) {
+    Auction auctionFound = auctionRepository.findByReference(referenceId)
+      .orElseThrow(() -> new AuctionNotFoundException(referenceId));
+    auctionRepository.execute(auctionFound.getId(), auction -> {
       auction.addBidder(userId, clock);
       return auction;
-    }, () -> new AuctionNotFoundException(auctionId));
+    }, () -> new AuctionNotFoundException(referenceId));
   }
 
   @Override

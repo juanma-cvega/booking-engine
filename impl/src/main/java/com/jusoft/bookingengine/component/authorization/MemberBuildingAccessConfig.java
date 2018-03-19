@@ -16,19 +16,19 @@ import java.util.Map;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 @Data
 @EqualsAndHashCode(of = "id")
-class MemberBuilding {
+class MemberBuildingAccessConfig {
 
   private final long id;
   @NonNull
-  private final Map<Long, MemberRoom> rooms;
+  private final Map<Long, MemberRoomAccessConfig> rooms;
   @NonNull
   private final List<Tag> tags;
 
-  static MemberBuilding of(long buildingId) {
-    return new MemberBuilding(buildingId, new HashMap<>(), new ArrayList<>());
+  static MemberBuildingAccessConfig of(long buildingId) {
+    return new MemberBuildingAccessConfig(buildingId, new HashMap<>(), new ArrayList<>());
   }
 
-  public Map<Long, MemberRoom> getRooms() {
+  public Map<Long, MemberRoomAccessConfig> getRooms() {
     return new HashMap<>(rooms);
   }
 
@@ -44,7 +44,21 @@ class MemberBuilding {
     findOrCreateRoom(roomId).addTags(slotStatus, tags);
   }
 
-  private MemberRoom findOrCreateRoom(long roomId) {
-    return rooms.computeIfAbsent(roomId, MemberRoom::of);
+  boolean canBidIn(long roomId) {
+    return findOrCreateRoom(roomId).canBid();
+  }
+
+  public void addAccessToAuctionsFor(long roomId) {
+    MemberRoomAccessConfig config = findOrCreateRoom(roomId).addAccessToAuctions();
+    rooms.put(roomId, config);
+  }
+
+  public void removeAccessToAuctionsFor(long roomId) {
+    MemberRoomAccessConfig config = findOrCreateRoom(roomId).removeAccessToAuctions();
+    rooms.put(roomId, config);
+  }
+
+  private MemberRoomAccessConfig findOrCreateRoom(long roomId) {
+    return rooms.computeIfAbsent(roomId, MemberRoomAccessConfig::of);
   }
 }

@@ -19,19 +19,19 @@ import java.util.Map;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 @Data
 @EqualsAndHashCode(of = "id")
-class ClubBuilding {
+class ClubBuildingAccessConfig {
 
   private final long id;
   @NonNull
-  private final Map<Long, ClubRoom> rooms;
+  private final Map<Long, ClubRoomAccessConfig> rooms;
   @NonNull
   private final List<Tag> tags;
 
-  static ClubBuilding of(long buildingId) {
-    return new ClubBuilding(buildingId, new HashMap<>(), new ArrayList<>());
+  static ClubBuildingAccessConfig of(long buildingId) {
+    return new ClubBuildingAccessConfig(buildingId, new HashMap<>(), new ArrayList<>());
   }
 
-  public Map<Long, ClubRoom> getRooms() {
+  public Map<Long, ClubRoomAccessConfig> getRooms() {
     return new HashMap<>(rooms);
   }
 
@@ -39,11 +39,11 @@ class ClubBuilding {
     return new ArrayList<>(tags);
   }
 
-  boolean isAuthorisedFor(long roomId, List<Tag> memberTags, SlotStatus slotStatus) {
+  boolean isAuthorizedFor(long roomId, List<Tag> memberTags, SlotStatus slotStatus) {
     boolean result = false;
-    ClubRoom clubRoomFound = findOrCreateRoom(roomId);
+    ClubRoomAccessConfig clubRoomAccessConfigFound = findOrCreateRoom(roomId);
     if (tagsContainAnyOf(memberTags)) {
-      result = clubRoomFound.isAuthorised(memberTags, slotStatus);
+      result = clubRoomAccessConfigFound.isAuthorized(memberTags, slotStatus);
     }
     return result;
   }
@@ -56,8 +56,8 @@ class ClubBuilding {
     findOrCreateRoom(roomId).addTags(slotStatus, tags);
   }
 
-  private ClubRoom findOrCreateRoom(long roomId) {
-    return rooms.computeIfAbsent(roomId, ClubRoom::of);
+  private ClubRoomAccessConfig findOrCreateRoom(long roomId) {
+    return rooms.computeIfAbsent(roomId, ClubRoomAccessConfig::of);
   }
 
   private boolean tagsContainAnyOf(List<Tag> memberTags) {
@@ -67,8 +67,8 @@ class ClubBuilding {
   }
 
   void replaceSlotAuthorizationConfigToRoom(long roomId, SlotAuthorizationConfig slotAuthenticationConfig) {
-    ClubRoom clubRoom = findOrCreateRoom(roomId).replaceSlotAuthenticationConfig(slotAuthenticationConfig);
-    rooms.put(roomId, clubRoom);
+    ClubRoomAccessConfig clubRoomAccessConfig = findOrCreateRoom(roomId).replaceSlotAuthenticationConfig(slotAuthenticationConfig);
+    rooms.put(roomId, clubRoomAccessConfig);
   }
 
   public SlotStatus getSlotTypeFor(long roomId, ZonedDateTime slotCreationTime, Clock clock) {

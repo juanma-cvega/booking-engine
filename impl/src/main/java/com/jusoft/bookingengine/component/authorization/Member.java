@@ -23,9 +23,9 @@ class Member {
   private final long userId;
   private final long clubId;
   @NonNull
-  private final Map<Long, MemberBuilding> buildings;
+  private final Map<Long, MemberBuildingAccessConfig> buildings;
 
-  static Member of(long memberId, long userId, long clubId, Map<Long, MemberBuilding> buildings) {
+  static Member of(long memberId, long userId, long clubId, Map<Long, MemberBuildingAccessConfig> buildings) {
     return new Member(memberId, userId, clubId, buildings);
   }
 
@@ -33,31 +33,47 @@ class Member {
     return new Member(memberId, userId, clubId, new HashMap<>());
   }
 
-  public Map<Long, MemberBuilding> getBuildings() {
+  public Map<Long, MemberBuildingAccessConfig> getBuildings() {
     return new HashMap<>(buildings);
   }
 
-  public void addTagsToBuilding(long buildingId, List<Tag> tags) {
+  public Member addTagsToBuilding(long buildingId, List<Tag> tags) {
     findOrCreateBuilding(buildingId).addTags(tags);
+    return new Member(id, userId, clubId, buildings);
   }
 
-  public void addTagsToRoom(AddRoomTagsToMemberCommand command) {
+  public Member addTagsToRoom(AddRoomTagsToMemberCommand command) {
     findOrCreateBuilding(command.getBuildingId()).addTagsToRoom(command.getRoomId(), command.getStatus(), command.getTags());
+    return new Member(id, userId, clubId, buildings);
   }
 
   public List<Tag> getTagsFor(long buildingId, long roomId, SlotStatus status) {
-    MemberBuilding buildingFound = findOrCreateBuilding(buildingId);
+    MemberBuildingAccessConfig buildingFound = findOrCreateBuilding(buildingId);
     List<Tag> tagsFound = new ArrayList<>(buildingFound.getTags());
-    MemberRoom roomFound = findOrCreateRoom(roomId, buildingFound);
+    MemberRoomAccessConfig roomFound = findOrCreateRoom(roomId, buildingFound);
     tagsFound.addAll(roomFound.getTagsBySlotStatus().getOrDefault(status, new ArrayList<>()));
     return tagsFound;
   }
 
-  private MemberRoom findOrCreateRoom(long roomId, MemberBuilding buildingFound) {
-    return buildingFound.getRooms().computeIfAbsent(roomId, MemberRoom::of);
+  private MemberRoomAccessConfig findOrCreateRoom(long roomId, MemberBuildingAccessConfig buildingFound) {
+    return buildingFound.getRooms().computeIfAbsent(roomId, MemberRoomAccessConfig::of);
   }
 
-  private MemberBuilding findOrCreateBuilding(long buildingId) {
-    return buildings.computeIfAbsent(buildingId, MemberBuilding::of);
+  private MemberBuildingAccessConfig findOrCreateBuilding(long buildingId) {
+    return buildings.computeIfAbsent(buildingId, MemberBuildingAccessConfig::of);
+  }
+
+  public boolean canBidIn(long buildingId, long roomId) {
+    return findOrCreateBuilding(buildingId).canBidIn(roomId);
+  }
+
+  public Member addAccessToAuctionsFor(long buildingId, long roomId) {
+    findOrCreateBuilding(buildingId).addAccessToAuctionsFor(roomId);
+    return new Member(id, userId, clubId, buildings);
+  }
+
+  public Member removeAccessToAuctionsFor(long buildingId, long roomId) {
+    findOrCreateBuilding(buildingId).removeAccessToAuctionsFor(roomId);
+    return new Member(id, userId, clubId, buildings);
   }
 }
