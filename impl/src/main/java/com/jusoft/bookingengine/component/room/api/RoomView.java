@@ -23,7 +23,6 @@ public class RoomView {
   private final List<OpenTime> openTimesPerDay;
   @NonNull
   private final List<DayOfWeek> availableDays;
-  private final boolean active;
   @NonNull
   private final AuctionConfigInfo auctionConfigInfo;
 
@@ -34,7 +33,6 @@ public class RoomView {
                    int slotDurationInMinutes,
                    List<OpenTime> openTimesPerDay,
                    List<DayOfWeek> availableDays,
-                   boolean active,
                    AuctionConfigInfo auctionConfigInfo) {
     this.id = id;
     this.clubId = clubId;
@@ -43,7 +41,6 @@ public class RoomView {
     this.slotDurationInMinutes = slotDurationInMinutes;
     this.openTimesPerDay = new ArrayList<>(openTimesPerDay);
     this.availableDays = new ArrayList<>(availableDays);
-    this.active = active;
     this.auctionConfigInfo = auctionConfigInfo;
   }
 
@@ -54,9 +51,8 @@ public class RoomView {
                             int slotDurationInMinutes,
                             List<OpenTime> openTimesPerDay,
                             List<DayOfWeek> availableDays,
-                            boolean active,
                             AuctionConfigInfo auctionConfigInfo) {
-    return new RoomView(id, clubId, buildingId, slotCreationConfigInfo, slotDurationInMinutes, openTimesPerDay, availableDays, active, auctionConfigInfo);
+    return new RoomView(id, clubId, buildingId, slotCreationConfigInfo, slotDurationInMinutes, openTimesPerDay, availableDays, auctionConfigInfo);
   }
 
   public List<OpenTime> getOpenTimesPerDay() {

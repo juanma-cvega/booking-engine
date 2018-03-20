@@ -32,7 +32,6 @@ public class RoomFixtures {
   public static final List<OpenTime> OPEN_TIMES = Arrays.asList(OPEN_TIME_MORNING, OPEN_TIME_AFTERNOON, OPEN_TIME_NIGHT);
   public static final List<DayOfWeek> AVAILABLE_DAYS = Arrays.asList(DayOfWeek.MONDAY, DayOfWeek.TUESDAY);
   public static final int MAX_SLOTS = 2;
-  public static final boolean IS_ACTIVE = true;
   public static final SlotState STATE = SlotState.IN_AUCTION;
 
   public static final int AUCTION_DURATION = 0;
@@ -43,6 +42,6 @@ public class RoomFixtures {
 
   public static final Function<Long, CreateRoomCommand> CREATE_ROOM_COMMAND = (buildingId) ->
     CreateRoomCommand.of(buildingId, MAX_NUMBER_OF_SLOTS_STRATEGY_CONFIG_INFO,
-      SLOT_DURATION_IN_MINUTES, OPEN_TIMES, AVAILABLE_DAYS, IS_ACTIVE, NO_AUCTION_CONFIG);
+      SLOT_DURATION_IN_MINUTES, OPEN_TIMES, AVAILABLE_DAYS, NO_AUCTION_CONFIG);
 
 }

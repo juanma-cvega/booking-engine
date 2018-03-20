@@ -17,5 +17,4 @@ public class RoomCreatedMessage implements InfrastructureMessage {
   private final List<OpenTime> openTimesPerDay;
   @NonNull
   private final List<DayOfWeek> availableDays;
-  private final boolean active;
 }

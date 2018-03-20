@@ -18,7 +18,6 @@ public class RoomCreatedEvent implements Event {
   private final List<OpenTime> openTimesPerDay;
   @NonNull
   private final List<DayOfWeek> availableDays;
-  private final boolean active;
   @NonNull
   private final AuctionConfigInfo auctionConfigInfo;
 }

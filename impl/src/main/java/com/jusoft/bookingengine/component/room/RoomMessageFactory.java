@@ -13,7 +13,6 @@ class RoomMessageFactory {
       room.getSlotDurationInMinutes(),
       room.getOpenTimesPerDay(),
       room.getAvailableDays(),
-      room.isActive(),
       room.getAuctionConfigInfo());
   }
 }

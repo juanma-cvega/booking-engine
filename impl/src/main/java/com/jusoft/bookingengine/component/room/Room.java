@@ -34,11 +34,9 @@ class Room {
   private final int slotDurationInMinutes;
   private final List<OpenTime> openTimesPerDay;
   private final List<DayOfWeek> availableDays;
-  private final boolean active;
   private final AuctionConfigInfo auctionConfigInfo;
 
-  Room(long id, long clubId, long buildingId, SlotCreationConfigInfo slotCreationConfigInfo, int slotDurationInMinutes, List<OpenTime> openTimesPerDay, List<DayOfWeek> availableDays,
-       boolean active, AuctionConfigInfo auctionConfigInfo) {
+  Room(long id, long clubId, long buildingId, SlotCreationConfigInfo slotCreationConfigInfo, int slotDurationInMinutes, List<OpenTime> openTimesPerDay, List<DayOfWeek> availableDays, AuctionConfigInfo auctionConfigInfo) {
     Validate.notNull(auctionConfigInfo);
     Validate.notNull(slotCreationConfigInfo);
     Validate.notEmpty(openTimesPerDay);
@@ -51,7 +49,6 @@ class Room {
     this.slotDurationInMinutes = slotDurationInMinutes;
     this.openTimesPerDay = new ArrayList<>(openTimesPerDay);
     this.availableDays = new ArrayList<>(availableDays);
-    this.active = active;
     this.auctionConfigInfo = auctionConfigInfo;
     validateOpenTimesDurationAreMultiplesOfSlotDuration(openTimesPerDay, slotDurationInMinutes);
   }

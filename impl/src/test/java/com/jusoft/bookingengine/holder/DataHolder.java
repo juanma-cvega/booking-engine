@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Set;
 
 import static com.jusoft.bookingengine.fixture.RoomFixtures.AVAILABLE_DAYS;
-import static com.jusoft.bookingengine.fixture.RoomFixtures.IS_ACTIVE;
 import static com.jusoft.bookingengine.fixture.RoomFixtures.LESS_BOOKINGS_WITHIN_PERIOD_CONFIG;
 import static com.jusoft.bookingengine.fixture.RoomFixtures.MAX_NUMBER_OF_SLOTS_STRATEGY_CONFIG_INFO;
 import static com.jusoft.bookingengine.fixture.RoomFixtures.OPEN_TIMES;
@@ -74,7 +73,6 @@ public class DataHolder {
     public Integer slotDurationInMinutes;
     public List<OpenTime> openTimes = new ArrayList<>();
     public List<DayOfWeek> availableDays = new ArrayList<>();
-    public Boolean active;
     public AuctionConfigInfo auctionConfigInfo;
 
     public CreateRoomCommand build(long buildingId) {
@@ -84,7 +82,6 @@ public class DataHolder {
         slotDurationInMinutes == null ? SLOT_DURATION_IN_MINUTES : slotDurationInMinutes,
         openTimes.isEmpty() ? OPEN_TIMES : openTimes,
         availableDays.isEmpty() ? AVAILABLE_DAYS : availableDays,
-        active == null ? IS_ACTIVE : active,
         auctionConfigInfo == null ? LESS_BOOKINGS_WITHIN_PERIOD_CONFIG : auctionConfigInfo);
     }
 

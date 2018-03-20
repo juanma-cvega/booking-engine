@@ -13,7 +13,6 @@ class RoomCreatedMessageFactory implements MessageFactory<RoomCreatedEvent, Room
       message.getRoomId(),
       message.getSlotDurationInMinutes(),
       message.getOpenTimesPerDay(),
-      message.getAvailableDays(),
-      message.isActive());
+      message.getAvailableDays());
   }
 }

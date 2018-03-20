@@ -21,7 +21,6 @@ public class CreateRoomCommand implements Command {
   private final List<OpenTime> openTimePerDay;
   @NonNull
   private final List<DayOfWeek> availableDays;
-  private final boolean active;
   @NonNull
   private final AuctionConfigInfo auctionConfigInfo;
 

@@ -12,7 +12,6 @@ import java.util.List;
 import static com.jusoft.bookingengine.fixture.BuildingFixtures.BUILDING_ID;
 import static com.jusoft.bookingengine.fixture.ClubFixtures.CLUB_ID;
 import static com.jusoft.bookingengine.fixture.RoomFixtures.AVAILABLE_DAYS;
-import static com.jusoft.bookingengine.fixture.RoomFixtures.IS_ACTIVE;
 import static com.jusoft.bookingengine.fixture.RoomFixtures.MAX_NUMBER_OF_SLOTS_STRATEGY_CONFIG_INFO;
 import static com.jusoft.bookingengine.fixture.RoomFixtures.NO_AUCTION_CONFIG;
 import static com.jusoft.bookingengine.fixture.RoomFixtures.OPEN_TIMES;
@@ -38,49 +37,49 @@ public class ClubRoomTest {
 
   @Test
   public void room_with_empty_open_times_should_fail_creation() {
-    assertThatThrownBy(() -> new Room(ROOM_ID, CLUB_ID, BUILDING_ID, MAX_NUMBER_OF_SLOTS_STRATEGY_CONFIG_INFO, SLOT_DURATION_IN_MINUTES, new ArrayList<>(), AVAILABLE_DAYS, IS_ACTIVE, NO_AUCTION_CONFIG))
+    assertThatThrownBy(() -> new Room(ROOM_ID, CLUB_ID, BUILDING_ID, MAX_NUMBER_OF_SLOTS_STRATEGY_CONFIG_INFO, SLOT_DURATION_IN_MINUTES, new ArrayList<>(), AVAILABLE_DAYS, NO_AUCTION_CONFIG))
       .isInstanceOf(IllegalArgumentException.class);
   }
 
   @Test
   public void room_with_null_open_times_should_fail_creation() {
-    assertThatThrownBy(() -> new Room(ROOM_ID, CLUB_ID, BUILDING_ID, MAX_NUMBER_OF_SLOTS_STRATEGY_CONFIG_INFO, SLOT_DURATION_IN_MINUTES, null, AVAILABLE_DAYS, IS_ACTIVE, NO_AUCTION_CONFIG))
+    assertThatThrownBy(() -> new Room(ROOM_ID, CLUB_ID, BUILDING_ID, MAX_NUMBER_OF_SLOTS_STRATEGY_CONFIG_INFO, SLOT_DURATION_IN_MINUTES, null, AVAILABLE_DAYS, NO_AUCTION_CONFIG))
       .isInstanceOf(NullPointerException.class);
   }
 
   @Test
   public void room_with_empty_available_days_should_fail_creation() {
-    assertThatThrownBy(() -> new Room(ROOM_ID, CLUB_ID, BUILDING_ID, MAX_NUMBER_OF_SLOTS_STRATEGY_CONFIG_INFO, SLOT_DURATION_IN_MINUTES, OPEN_TIMES, new ArrayList<>(), IS_ACTIVE, NO_AUCTION_CONFIG))
+    assertThatThrownBy(() -> new Room(ROOM_ID, CLUB_ID, BUILDING_ID, MAX_NUMBER_OF_SLOTS_STRATEGY_CONFIG_INFO, SLOT_DURATION_IN_MINUTES, OPEN_TIMES, new ArrayList<>(), NO_AUCTION_CONFIG))
       .isInstanceOf(IllegalArgumentException.class);
   }
 
   @Test
   public void room_with_null_available_days_should_fail_creation() {
-    assertThatThrownBy(() -> new Room(ROOM_ID, CLUB_ID, BUILDING_ID, MAX_NUMBER_OF_SLOTS_STRATEGY_CONFIG_INFO, SLOT_DURATION_IN_MINUTES, OPEN_TIMES, null, IS_ACTIVE, NO_AUCTION_CONFIG))
+    assertThatThrownBy(() -> new Room(ROOM_ID, CLUB_ID, BUILDING_ID, MAX_NUMBER_OF_SLOTS_STRATEGY_CONFIG_INFO, SLOT_DURATION_IN_MINUTES, OPEN_TIMES, null, NO_AUCTION_CONFIG))
       .isInstanceOf(NullPointerException.class);
   }
 
   @Test
   public void room_with_open_times_not_multiple_of_slot_duration_should_fail_creation() {
-    assertThatThrownBy(() -> new Room(ROOM_ID, CLUB_ID, BUILDING_ID, MAX_NUMBER_OF_SLOTS_STRATEGY_CONFIG_INFO, SLOT_DURATION_IN_MINUTES, OPEN_TIMES_INVALID, AVAILABLE_DAYS, IS_ACTIVE, NO_AUCTION_CONFIG))
+    assertThatThrownBy(() -> new Room(ROOM_ID, CLUB_ID, BUILDING_ID, MAX_NUMBER_OF_SLOTS_STRATEGY_CONFIG_INFO, SLOT_DURATION_IN_MINUTES, OPEN_TIMES_INVALID, AVAILABLE_DAYS, NO_AUCTION_CONFIG))
       .isInstanceOf(IllegalArgumentException.class);
   }
 
   @Test
   public void room_with_null_slot_creation_strategy_config_info_should_fail_creation() {
-    assertThatThrownBy(() -> new Room(ROOM_ID, CLUB_ID, BUILDING_ID, null, SLOT_DURATION_IN_MINUTES, OPEN_TIMES, AVAILABLE_DAYS, IS_ACTIVE, NO_AUCTION_CONFIG))
+    assertThatThrownBy(() -> new Room(ROOM_ID, CLUB_ID, BUILDING_ID, null, SLOT_DURATION_IN_MINUTES, OPEN_TIMES, AVAILABLE_DAYS, NO_AUCTION_CONFIG))
       .isInstanceOf(NullPointerException.class);
   }
 
   @Test
   public void room_with_null_auction_config_info_should_fail_creation() {
-    assertThatThrownBy(() -> new Room(ROOM_ID, CLUB_ID, BUILDING_ID, MAX_NUMBER_OF_SLOTS_STRATEGY_CONFIG_INFO, SLOT_DURATION_IN_MINUTES, OPEN_TIMES, AVAILABLE_DAYS, IS_ACTIVE, null))
+    assertThatThrownBy(() -> new Room(ROOM_ID, CLUB_ID, BUILDING_ID, MAX_NUMBER_OF_SLOTS_STRATEGY_CONFIG_INFO, SLOT_DURATION_IN_MINUTES, OPEN_TIMES, AVAILABLE_DAYS, null))
       .isInstanceOf(NullPointerException.class);
   }
 
   @Test
   public void room_open_times_are_sorted() {
-    Room room = new Room(ROOM_ID, CLUB_ID, BUILDING_ID, MAX_NUMBER_OF_SLOTS_STRATEGY_CONFIG_INFO, SLOT_DURATION_IN_MINUTES, OPEN_TIMES_UNORDERED, AVAILABLE_DAYS, IS_ACTIVE, NO_AUCTION_CONFIG);
+    Room room = new Room(ROOM_ID, CLUB_ID, BUILDING_ID, MAX_NUMBER_OF_SLOTS_STRATEGY_CONFIG_INFO, SLOT_DURATION_IN_MINUTES, OPEN_TIMES_UNORDERED, AVAILABLE_DAYS, NO_AUCTION_CONFIG);
     assertThat(room.getOpenTimesPerDay()).hasSize(3);
     assertThat(room.getOpenTimesPerDay()).containsExactly(FIRST_OPEN, SECOND_OPEN_TIME, THIRD_OPEN_TIME);
   }
