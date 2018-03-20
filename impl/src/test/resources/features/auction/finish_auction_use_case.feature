@@ -2,6 +2,7 @@ Feature: As a user, I want to know the result of an auction I bid for
 
   Background:
     Given a club is created by user 4
+    And the club created is managed by the authorization manager
     And a building is created
     And current time is 08:05
 
@@ -17,8 +18,10 @@ Feature: As a user, I want to know the result of an auction I bid for
     And a slot is created
     And an auction is created for the slot
     And current time is 08:05
-    And user 1 with member id 2 for the club created can bid in auctions
-    And user 47 with member id 32 for the club created can bid in auctions
+    And user 1 is the member 5 of the club created
+    And member 5 can bid in auctions
+    And user 47 is the member 23 of the club created
+    And member 23 can bid in auctions
     And user 1 bids on the auction
     And user 47 bids on the auction
     And that sets the background
@@ -34,8 +37,10 @@ Feature: As a user, I want to know the result of an auction I bid for
     And current time is 08:05
     And a slot is created
     And an auction is created for the slot
-    And user 62 with member id 4 for the club created can bid in auctions
-    And user 11 with member id 5 for the club created can bid in auctions
+    And user 62 is the member 4 of the club created
+    And member 4 can bid in auctions
+    And user 11 is the member 5 of the club created
+    And member 5 can bid in auctions
     And user 62 bids on the auction
     And current time is 08:06
     And user 11 bids on the auction

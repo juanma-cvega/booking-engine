@@ -3,16 +3,14 @@ Feature: As a user, I want to cancel reservation for a slot. As an admin, I want
 
   Background:
     Given a club is created by user 4
+    And the club created is managed by the authorization manager
     And a building is created
-    And user 1 issues a join request
-    And admin 4 accepts the join request created by user 1
-    And the accepted join request for user 1 is processed
 
   Scenario: As a user, I want to cancel my reservation for a slot
     Given a room is to be created
     And the room has a no auctions configuration
     And the room is created with that configuration
-    And the member is authorized to reserve slots for the room
+    And user 1 is the member 6 of the club created
     And a slot is created
     And the slot is reserved by user 1
     And that sets the background

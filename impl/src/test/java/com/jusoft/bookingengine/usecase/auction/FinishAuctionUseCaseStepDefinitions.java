@@ -16,7 +16,6 @@ public class FinishAuctionUseCaseStepDefinitions extends AbstractUseCaseStepDefi
   private FinishAuctionUseCase finishAuctionUseCase;
 
   public FinishAuctionUseCaseStepDefinitions() {
-
     When("^the auction time is finished$", () ->
       finishAuctionUseCase.finishAuction(auctionCreated.getId()));
     Then("^a notification containing user (\\d+) as the winner should be published$", (Long userId) -> {

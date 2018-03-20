@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import static com.jusoft.bookingengine.holder.DataHolder.auctionCreated;
 import static com.jusoft.bookingengine.holder.DataHolder.buildingCreated;
-import static com.jusoft.bookingengine.holder.DataHolder.clubCreated;
 import static com.jusoft.bookingengine.holder.DataHolder.exceptionThrown;
 import static com.jusoft.bookingengine.holder.DataHolder.roomCreated;
 import static com.jusoft.bookingengine.holder.DataHolder.slotCreated;
@@ -42,12 +41,9 @@ public class AddBidderToAuctionUseCaseStepDefinitions extends AbstractUseCaseSte
       assertThat(exception.getAuctionId()).isEqualTo(auctionCreated.getId());
       assertThat(exception.getSlotId()).isEqualTo(auctionCreated.getReferenceId());
     });
-    Given("^user (\\d+) with member id (\\d+) for the club created can bid in auctions$", (Long userId, Long memberId) -> {
-      authorizationManagerComponent.createClub(clubCreated.getId());
-      authorizationManagerComponent.createMember(memberId, userId, clubCreated.getId());
+    Given("^member (\\d+) can bid in auctions$", (Long memberId) ->
       authorizationManagerComponent.addAccessToAuctions(
-        ChangeAccessToAuctionsCommand.of(memberId, clubCreated.getId(), buildingCreated.getId(), roomCreated.getId()));
-    });
+        ChangeAccessToAuctionsCommand.of(memberId, buildingCreated.getId(), roomCreated.getId())));
     Then("^the user (.*) should be notified he is not authorized to bid in auctions in the room created$", (Long userId) -> {
       assertThat(exceptionThrown).isInstanceOf(UnauthorizedBidException.class);
       UnauthorizedBidException exception = (UnauthorizedBidException) exceptionThrown;
@@ -56,11 +52,8 @@ public class AddBidderToAuctionUseCaseStepDefinitions extends AbstractUseCaseSte
       assertThat(exception.getRoomId()).isEqualTo(roomCreated.getId());
       assertThat(exception.getUserId()).isEqualTo(userId);
     });
-    Given("^user (.*) with member id (.*) is not authorized to bid in auctions for the room$", (Long userId, Long memberId) -> {
-      authorizationManagerComponent.createClub(clubCreated.getId());
-      authorizationManagerComponent.createMember(memberId, userId, clubCreated.getId());
+    Given("^member (.*) is not authorized to bid in auctions for the room$", (Long memberId) ->
       authorizationManagerComponent.removeAccessToAuctions(
-        ChangeAccessToAuctionsCommand.of(memberId, clubCreated.getId(), buildingCreated.getId(), roomCreated.getId()));
-    });
+        ChangeAccessToAuctionsCommand.of(memberId, roomCreated.getBuildingId(), roomCreated.getId())));
   }
 }

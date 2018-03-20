@@ -1,5 +1,11 @@
 package com.jusoft.bookingengine.usecase.slot;
 
+import com.google.common.collect.ImmutableList;
+import com.jusoft.bookingengine.component.authorization.api.AddRoomTagsToClubCommand;
+import com.jusoft.bookingengine.component.authorization.api.AuthorizationManagerComponent;
+import com.jusoft.bookingengine.component.authorization.api.SlotStatus;
+import com.jusoft.bookingengine.component.authorization.api.Tag;
+import com.jusoft.bookingengine.component.authorization.api.UnauthorizedReservationException;
 import com.jusoft.bookingengine.component.booking.api.SlotAlreadyReservedException;
 import com.jusoft.bookingengine.component.booking.api.SlotNotAvailableException;
 import com.jusoft.bookingengine.component.booking.api.SlotPendingAuctionException;
@@ -11,13 +17,19 @@ import com.jusoft.bookingengine.component.slot.api.SlotView;
 import com.jusoft.bookingengine.config.AbstractUseCaseStepDefinitions;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import static com.jusoft.bookingengine.holder.DataHolder.buildingCreated;
 import static com.jusoft.bookingengine.holder.DataHolder.clubCreated;
 import static com.jusoft.bookingengine.holder.DataHolder.exceptionThrown;
+import static com.jusoft.bookingengine.holder.DataHolder.roomCreated;
 import static com.jusoft.bookingengine.holder.DataHolder.slotCreated;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ReserveSlotUseCaseStepDefinitions extends AbstractUseCaseStepDefinitions {
 
+  private static final String TAG_ONLY_IN_CLUB = "TAG_ONLY_IN_CLUB";
+
+  @Autowired
+  private AuthorizationManagerComponent authorizationManagerComponent;
   @Autowired
   private SlotManagerComponent slotManagerComponent;
 
@@ -25,6 +37,16 @@ public class ReserveSlotUseCaseStepDefinitions extends AbstractUseCaseStepDefini
   private ReserveSlotUseCase reserveSlotUseCase;
 
   public ReserveSlotUseCaseStepDefinitions() {
+    Given("^user (\\d+) is the member (.*) of the club created$", (Long userId, Long memberId) ->
+      authorizationManagerComponent.createMember(memberId, userId, roomCreated.getClubId()));
+    Given("^the room created requires authorization to use it$", () ->
+      authorizationManagerComponent.addRoomTagsToClub(AddRoomTagsToClubCommand.of(
+        clubCreated.getId(),
+        buildingCreated.getId(),
+        roomCreated.getId(),
+        SlotStatus.NORMAL,
+        ImmutableList.of(Tag.of(TAG_ONLY_IN_CLUB))
+      )));
     Then("^the user (.*) should get a notification that he is not a member of the club$", (Long userId) -> {
       assertThat(exceptionThrown).isInstanceOf(UserNotMemberException.class);
       UserNotMemberException exception = (UserNotMemberException) exceptionThrown;
@@ -58,6 +80,15 @@ public class ReserveSlotUseCaseStepDefinitions extends AbstractUseCaseStepDefini
       assertThat(exceptionThrown).isInstanceOf(SlotNotAvailableException.class);
       SlotNotAvailableException exception = (SlotNotAvailableException) exceptionThrown;
       assertThat(exception.getSlotId()).isEqualTo(slotCreated.getId());
+    });
+    Then("^the user (\\d+) should receive a notification he is not authorized to use the room created$", (Long userId) -> {
+      assertThat(exceptionThrown).isNotNull();
+      assertThat(exceptionThrown).isInstanceOf(UnauthorizedReservationException.class);
+      UnauthorizedReservationException exception = (UnauthorizedReservationException) exceptionThrown;
+      assertThat(exception.getBuildingId()).isEqualTo(roomCreated.getBuildingId());
+      assertThat(exception.getClubId()).isEqualTo(roomCreated.getClubId());
+      assertThat(exception.getRoomId()).isEqualTo(roomCreated.getId());
+      assertThat(exception.getUserId()).isEqualTo(userId);
     });
   }
 }
