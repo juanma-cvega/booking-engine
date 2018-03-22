@@ -27,7 +27,7 @@ public class SlotManagerComponentConfig {
   }
 
   private SlotEventFactory slotEventFactory() {
-    return new SlotEventFactory();
+    return new SlotEventFactory(slotStateFactory());
   }
 
   private SlotRepository slotRepository() {
@@ -35,11 +35,15 @@ public class SlotManagerComponentConfig {
   }
 
   private SlotFactory slotFactory() {
-    return new SlotFactory(idGenerator(), clock);
+    return new SlotFactory(idGenerator(), clock, slotStateFactory());
   }
 
   private Supplier<Long> idGenerator() {
     AtomicLong generator = new AtomicLong(1);
     return generator::getAndIncrement;
+  }
+
+  private SlotStateFactory slotStateFactory() {
+    return new SlotStateFactory();
   }
 }

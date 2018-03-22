@@ -16,6 +16,7 @@ class SlotFactory {
 
   private final Supplier<Long> idGenerator;
   private final Clock clock;
+  private final SlotStateFactory slotStateFactory;
 
   Slot createFrom(CreateSlotCommand request) {
     return new Slot(idGenerator.get(),
@@ -31,7 +32,7 @@ class SlotFactory {
       slot.getRoomId(),
       slot.getBuildingId(),
       slot.getClubId(),
-      SlotStateFactory.getSlotStateFor(slot.getState()),
+      slotStateFactory.getSlotStateFor(slot.getState()),
       slot.getCreationTime(),
       slot.getOpenDate());
   }
