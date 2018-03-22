@@ -4,27 +4,13 @@ import java.time.Clock;
 
 interface SlotState {
 
-  enum State {
-    AVAILABLE(AvailableSlotState.getInstance()),
-    IN_AUCTION(InAuctionState.getInstance()),
-    RESERVED(ReservedState.getInstance());
+  SlotState makeAvailable(Slot slot);
 
-    private final SlotState slotState;
+  SlotState waitForAuction(Slot slot);
 
-    State(SlotState instance) {
-      this.slotState = instance;
-    }
+  SlotState reserveForAuctionWinner(Slot slot);
 
-    public SlotState getSlotState() {
-      return this.slotState;
-    }
-  }
-
-  State makeAvailable(Slot slot);
-
-  State reserveForAuctionWinner(Slot slot);
-
-  State reserve(Slot slot, Clock clock);
+  SlotState reserve(Slot slot, Clock clock);
 
   default boolean isAvailable(Slot slot, Clock clock) {
     return false;

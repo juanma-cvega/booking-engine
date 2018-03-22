@@ -1,6 +1,5 @@
 package com.jusoft.bookingengine.component.room.api;
 
-import com.jusoft.bookingengine.component.slot.api.SlotState;
 import com.jusoft.bookingengine.component.timer.OpenDate;
 import lombok.Data;
 
@@ -10,5 +9,4 @@ public class NextSlotConfig {
   private final long buildingId;
   private final long clubId;
   private final OpenDate openDate;
-  private final SlotState state;
 }

@@ -24,4 +24,6 @@ public interface SlotManagerComponent {
   void makeAvailable(long slotId);
 
   void reserveSlotForAuctionWinner(long slotId, long userId);
+
+  void makeWaitForAuction(long slotId);
 }

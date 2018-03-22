@@ -13,6 +13,4 @@ public class CreateSlotCommand implements Command {
   private final long clubId;
   @NonNull
   private final OpenDate openDate;
-  @NonNull
-  private final SlotState state;
 }

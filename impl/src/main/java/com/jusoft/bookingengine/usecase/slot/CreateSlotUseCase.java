@@ -21,7 +21,6 @@ public class CreateSlotUseCase {
     return slotManagerComponent.create(CreateSlotCommand.of(roomId,
       nextSlotOpenDate.getBuildingId(),
       nextSlotOpenDate.getClubId(),
-      nextSlotOpenDate.getOpenDate(),
-      nextSlotOpenDate.getState()));
+      nextSlotOpenDate.getOpenDate()));
   }
 }

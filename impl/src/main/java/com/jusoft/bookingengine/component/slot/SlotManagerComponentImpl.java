@@ -6,6 +6,7 @@ import com.jusoft.bookingengine.component.slot.api.SlotManagerComponent;
 import com.jusoft.bookingengine.component.slot.api.SlotNotFoundException;
 import com.jusoft.bookingengine.component.slot.api.SlotReservedEvent;
 import com.jusoft.bookingengine.component.slot.api.SlotView;
+import com.jusoft.bookingengine.component.slot.api.SlotWaitingForAuctionEvent;
 import com.jusoft.bookingengine.publisher.MessagePublisher;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -68,6 +69,12 @@ class SlotManagerComponentImpl implements SlotManagerComponent {
   public void reserveSlotForAuctionWinner(long slotId, long userId) {
     Slot slot = slotRepository.execute(slotId, Slot::reserveForAuctionWinner);
     messagePublisher.publish(SlotReservedEvent.of(slot.getId(), userId));
+  }
+
+  @Override
+  public void makeWaitForAuction(long slotId) {
+    Slot slot = slotRepository.execute(slotId, Slot::makeWaitForAuction);
+    messagePublisher.publish(SlotWaitingForAuctionEvent.of(slot.getId()));
   }
 
   @Override

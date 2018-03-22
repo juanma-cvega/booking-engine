@@ -1,4 +1,4 @@
-Feature: As an admin, I want the system to decide whether a slot needs an auction created
+Feature: As an admin, I want the system to decide whether a slot needs an auction created or it could be made available
 
   Background:
     Given a club is created by user 4
@@ -17,12 +17,11 @@ Feature: As an admin, I want the system to decide whether a slot needs an auctio
     When the room is asked whether the slot needs an auction
     Then an event of an auction required should be published
 
-  Scenario: As an admin, I want the system not to publish a notification of an auction needed when the room is not configured
-  to use auctions
+  Scenario: As an admin, I want the system to make the slot available when the room is not configured to use auctions
     Given a room is to be created
     And the room has a no auctions configuration
     And the room is created with that configuration
     And a slot is created
     And that sets the background
     When the room is asked whether the slot needs an auction
-    Then an event of an auction required should not be published
+    Then an event of the slot being ready should be published

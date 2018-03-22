@@ -12,6 +12,7 @@ Feature: As a user, I want to cancel reservation for a slot. As an admin, I want
     And the room is created with that configuration
     And user 1 is the member 6 of the club created
     And a slot is created
+    And the slot is made available
     And the slot is reserved by user 1
     And that sets the background
     When the slot is made available

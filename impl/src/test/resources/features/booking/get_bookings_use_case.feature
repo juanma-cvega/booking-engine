@@ -8,6 +8,7 @@ Feature: As a user, I want to be able to see my bookings
     And the accepted join request for user 1 is processed
     And a room is created
     And a slot is created
+    And the slot is made available
     And there is a booking created by user 1
 
   Scenario: As a user, I want to see the booking I just created

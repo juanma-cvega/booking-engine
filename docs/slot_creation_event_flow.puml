@@ -2,33 +2,37 @@
 :roomCreatedEvent;
 repeat
 :CreateSlotUseCase|
-:slotCreatedEvent;
+->slotCreatedEvent;
 fork
   :VerifyAuctionRequirementForSlotUseCase|
   if (auctionRequired?) then (yes)
-    :auctionRequiredEvent;
+    ->auctionRequiredEvent;
     :StartAuctionUseCase|
-    :auctionStartedEvent;
+    ->auctionStartedEvent;
     :ScheduleFinishActionUseCase|
-    :auctionFinishedEvent;
+    -[dashed]->auctionFinishedEvent;
     (A)
     detach
     (A)
+    -[dashed]->auctionFinishedEvent;
     :FinishAuctionUseCase|
     if (auctionWinnerFound?) then (yes)
-      :auctionWinnerFoundEvent;
+      ->auctionWinnerFoundEvent;
       :ReserveSlotForAuctionWinnerUseCase|
-      :slotReservedEvent;
+      ->slotReservedEvent;
     else (no)
-      :auctionUnsuccessfulEvent;
+      ->auctionUnsuccessfulEvent;
       :MakeSlotAvailableUseCase|
-      :slotMadeAvailableEvent;
+      ->slotMadeAvailableEvent;
     endif
+  else (no)
+    ->slotReadyEvent;
+    :MakeSlotAvailableUseCase|
   endif
   stop
 fork again
   :ScheduleNextSlotUseCase|
-  :OpenNextSlotCommand;
+  -[dashed]->slotRequiredEvent;
   (B)
   detach
   (B)

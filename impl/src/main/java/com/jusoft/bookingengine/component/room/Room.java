@@ -1,7 +1,6 @@
 package com.jusoft.bookingengine.component.room;
 
 import com.jusoft.bookingengine.component.room.api.NextSlotConfig;
-import com.jusoft.bookingengine.component.slot.api.SlotState;
 import com.jusoft.bookingengine.component.timer.OpenDate;
 import com.jusoft.bookingengine.component.timer.OpenTime;
 import com.jusoft.bookingengine.strategy.auctionwinner.api.AuctionConfigInfo;
@@ -20,9 +19,6 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Predicate;
-
-import static com.jusoft.bookingengine.component.slot.api.SlotState.AVAILABLE;
-import static com.jusoft.bookingengine.component.slot.api.SlotState.IN_AUCTION;
 
 @Data
 class Room {
@@ -82,11 +78,7 @@ class Room {
   NextSlotConfig findNextSlotDate(ZonedDateTime lastSlotEndTime, Clock clock) {
     ZonedDateTime nextSlotEndTime = getNextSlotEndTime(lastSlotEndTime, clock);
     OpenDate openDate = OpenDate.of(nextSlotEndTime.minusMinutes(slotDurationInMinutes), nextSlotEndTime);
-    return new NextSlotConfig(buildingId, clubId, openDate, getSlotInitialState());
-  }
-
-  private SlotState getSlotInitialState() {
-    return isAuctionRequired() ? IN_AUCTION : AVAILABLE;
+    return new NextSlotConfig(buildingId, clubId, openDate);
   }
 
   private OpenTime findOpenTimeFor(LocalTime localTime) {

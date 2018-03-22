@@ -5,6 +5,7 @@ Feature: As a user, I want to be able to cancel bookings
     And a building is created
     And a room is created
     And a slot is created
+    And the slot is made available
     And user 1 issues a join request
     And admin 4 accepts the join request created by user 1
     And the accepted join request for user 1 is processed

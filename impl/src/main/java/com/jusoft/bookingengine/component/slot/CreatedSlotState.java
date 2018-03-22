@@ -1,16 +1,16 @@
 package com.jusoft.bookingengine.component.slot;
 
-import com.jusoft.bookingengine.component.booking.api.SlotAlreadyReservedException;
+import com.jusoft.bookingengine.component.booking.api.SlotNotAvailableException;
 import com.jusoft.bookingengine.component.slot.api.SlotNotInAuctionException;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 
 import java.time.Clock;
 
-class ReservedState implements SlotState {
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+public class CreatedSlotState implements SlotState {
 
-  private static final ReservedState INSTANCE = new ReservedState();
-
-  private ReservedState() {
-  }
+  private static final CreatedSlotState INSTANCE = new CreatedSlotState();
 
   @Override
   public SlotState makeAvailable(Slot slot) {
@@ -19,7 +19,7 @@ class ReservedState implements SlotState {
 
   @Override
   public SlotState waitForAuction(Slot slot) {
-    throw new SlotAlreadyReservedException(slot.getId());
+    return InAuctionState.getInstance();
   }
 
   @Override
@@ -29,7 +29,7 @@ class ReservedState implements SlotState {
 
   @Override
   public SlotState reserve(Slot slot, Clock clock) {
-    throw new SlotAlreadyReservedException(slot.getId());
+    throw new SlotNotAvailableException(slot.getId());
   }
 
   public static SlotState getInstance() {

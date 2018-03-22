@@ -4,9 +4,6 @@ import com.jusoft.bookingengine.component.booking.api.SlotPendingAuctionExceptio
 
 import java.time.Clock;
 
-import static com.jusoft.bookingengine.component.slot.SlotState.State.AVAILABLE;
-import static com.jusoft.bookingengine.component.slot.SlotState.State.RESERVED;
-
 class InAuctionState implements SlotState {
 
   private static final InAuctionState INSTANCE = new InAuctionState();
@@ -15,17 +12,22 @@ class InAuctionState implements SlotState {
   }
 
   @Override
-  public State makeAvailable(Slot slot) {
-    return AVAILABLE;
+  public SlotState makeAvailable(Slot slot) {
+    return AvailableSlotState.getInstance();
   }
 
   @Override
-  public State reserveForAuctionWinner(Slot slot) {
-    return RESERVED;
+  public SlotState waitForAuction(Slot slot) {
+    return InAuctionState.getInstance();
   }
 
   @Override
-  public State reserve(Slot slot, Clock clock) {
+  public SlotState reserveForAuctionWinner(Slot slot) {
+    return ReservedState.getInstance();
+  }
+
+  @Override
+  public SlotState reserve(Slot slot, Clock clock) {
     throw new SlotPendingAuctionException(slot.getId());
   }
 

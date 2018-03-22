@@ -47,4 +47,9 @@ public class SlotUseCaseConfig {
   public ReserveSlotUseCase reserveSlotUseCase() {
     return new ReserveSlotUseCase(authorizationManagerComponent, slotManagerComponent);
   }
+
+  @Bean
+  public MakeSlotWaitForAuctionUseCase makeSlotWaitForAuctionUseCase() {
+    return new MakeSlotWaitForAuctionUseCase(slotManagerComponent);
+  }
 }

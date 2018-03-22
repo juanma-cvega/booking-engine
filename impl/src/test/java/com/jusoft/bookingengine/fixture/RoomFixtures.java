@@ -1,7 +1,6 @@
 package com.jusoft.bookingengine.fixture;
 
 import com.jusoft.bookingengine.component.room.api.CreateRoomCommand;
-import com.jusoft.bookingengine.component.slot.api.SlotState;
 import com.jusoft.bookingengine.component.timer.OpenTime;
 import com.jusoft.bookingengine.strategy.auctionwinner.api.AuctionConfigInfo;
 import com.jusoft.bookingengine.strategy.auctionwinner.api.LessBookingsWithinPeriodConfigInfo;
@@ -32,7 +31,6 @@ public class RoomFixtures {
   public static final List<OpenTime> OPEN_TIMES = Arrays.asList(OPEN_TIME_MORNING, OPEN_TIME_AFTERNOON, OPEN_TIME_NIGHT);
   public static final List<DayOfWeek> AVAILABLE_DAYS = Arrays.asList(DayOfWeek.MONDAY, DayOfWeek.TUESDAY);
   public static final int MAX_SLOTS = 2;
-  public static final SlotState STATE = SlotState.IN_AUCTION;
 
   public static final int AUCTION_DURATION = 0;
   public static final int END_RANGE_TIME_IN_DAYS = 5;

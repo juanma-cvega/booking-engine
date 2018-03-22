@@ -1,6 +1,5 @@
 package com.jusoft.bookingengine.component.slot;
 
-import com.jusoft.bookingengine.component.slot.SlotState.State;
 import com.jusoft.bookingengine.component.slot.api.CreateSlotCommand;
 import com.jusoft.bookingengine.component.slot.api.SlotView;
 import lombok.AccessLevel;
@@ -24,8 +23,7 @@ class SlotFactory {
       request.getBuildingId(),
       request.getClubId(),
       ZonedDateTime.now(clock),
-      request.getOpenDate(),
-      State.valueOf(request.getState().name()));
+      request.getOpenDate());
   }
 
   SlotView createFrom(Slot slot) {
@@ -33,7 +31,7 @@ class SlotFactory {
       slot.getRoomId(),
       slot.getBuildingId(),
       slot.getClubId(),
-      com.jusoft.bookingengine.component.slot.api.SlotState.valueOf(slot.getState().name()),
+      SlotStateFactory.getSlotStateFor(slot.getState()),
       slot.getCreationTime(),
       slot.getOpenDate());
   }
@@ -41,5 +39,6 @@ class SlotFactory {
   public List<SlotView> createFrom(List<Slot> slots) {
     return slots.stream().map(this::createFrom).collect(Collectors.toList());
   }
+
 
 }

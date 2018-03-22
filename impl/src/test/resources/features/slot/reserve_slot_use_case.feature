@@ -9,6 +9,7 @@ Feature: As a user, I want to reserve a slot
     Given a room is created
     And user 1 is the member 4 of the club created
     And a slot is created
+    And the slot is made available
     And that sets the background
     When the slot is reserved by user 1
     Then the slot should be reserved
@@ -32,6 +33,7 @@ Feature: As a user, I want to reserve a slot
     And user 1 is the member 4 of the club created
     And user 7 is the member 8 of the club created
     And a slot is created
+    And the slot is made available
     And the slot is reserved by user 1
     When the user 7 tries to reserve the slot
     Then the user should get a notification that the slot is already reserved
@@ -46,6 +48,7 @@ Feature: As a user, I want to reserve a slot
     And the room is created with that configuration
     And user 1 is the member 4 of the club created
     And a slot is created
+    And the slot is made available
     And current time is 08:20
     And that sets the background
     When the user 1 tries to reserve the slot
@@ -61,6 +64,7 @@ Feature: As a user, I want to reserve a slot
     And the room is created with that configuration
     And user 1 is the member 4 of the club created
     And a slot is created
+    And the slot is made wait for the result of an auction
     When the user 1 tries to reserve the slot
     Then the user should be notified the slot is still in auction
 
@@ -68,6 +72,7 @@ Feature: As a user, I want to reserve a slot
     Given a room is created
     And the club created is managed by the authorization manager
     And a slot is created
+    And the slot is made available
     When the user 1 tries to reserve the slot
     Then the user 1 should get a notification that he is not a member of the club
 
@@ -76,5 +81,6 @@ Feature: As a user, I want to reserve a slot
     And user 1 is the member 4 of the club created
     And the room created requires authorization to use it
     And a slot is created
+    And the slot is made available
     When the user 1 tries to reserve the slot
     Then the user 1 should receive a notification he is not authorized to use the room created

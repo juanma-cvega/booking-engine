@@ -1,9 +1,8 @@
 package com.jusoft.bookingengine.component.slot;
 
-import com.jusoft.bookingengine.component.slot.SlotState.State;
 import com.jusoft.bookingengine.component.timer.OpenDate;
 import lombok.Data;
-import lombok.NonNull;
+import org.apache.commons.lang3.Validate;
 
 import java.time.Clock;
 import java.time.ZonedDateTime;
@@ -15,30 +14,48 @@ class Slot {
   private final long roomId;
   private final long buildingId;
   private final long clubId;
-  @NonNull
   private final ZonedDateTime creationTime;
-  @NonNull
   private final OpenDate openDate;
-  @NonNull
-  private final State state;
+  private final SlotState state;
+
+  public Slot(long id, long roomId, long buildingId, long clubId, ZonedDateTime creationTime, OpenDate openDate) {
+    this(id, roomId, buildingId, clubId, creationTime, openDate, CreatedSlotState.getInstance());
+  }
+
+  public Slot(long id, long roomId, long buildingId, long clubId, ZonedDateTime creationTime, OpenDate openDate, SlotState state) {
+    Validate.notNull(creationTime);
+    Validate.notNull(openDate);
+    Validate.notNull(state);
+    this.id = id;
+    this.roomId = roomId;
+    this.buildingId = buildingId;
+    this.clubId = clubId;
+    this.creationTime = creationTime;
+    this.openDate = openDate;
+    this.state = state;
+  }
 
   public Slot reserve(Clock clock) {
-    return from(state.getSlotState().reserve(this, clock));
+    return from(state.reserve(this, clock));
   }
 
   public boolean isAvailable(Clock clock) {
-    return state.getSlotState().isAvailable(this, clock);
+    return state.isAvailable(this, clock);
   }
 
   public Slot makeAvailable() {
-    return from(state.getSlotState().makeAvailable(this));
+    return from(state.makeAvailable(this));
   }
 
   public Slot reserveForAuctionWinner() {
-    return from(state.getSlotState().reserveForAuctionWinner(this));
+    return from(state.reserveForAuctionWinner(this));
   }
 
-  private Slot from(State state) {
+  public Slot makeWaitForAuction() {
+    return from(state.waitForAuction(this));
+  }
+
+  private Slot from(SlotState state) {
     return new Slot(id, roomId, buildingId, clubId, creationTime, openDate, state);
   }
 }
