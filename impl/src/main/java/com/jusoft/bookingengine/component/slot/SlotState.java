@@ -10,6 +10,8 @@ interface SlotState {
 
   SlotState reserveForAuctionWinner(Slot slot);
 
+  SlotState reserveForClass(Slot slot);
+
   SlotState reserve(Slot slot, Clock clock);
 
   default boolean isAvailable(Slot slot, Clock clock) {

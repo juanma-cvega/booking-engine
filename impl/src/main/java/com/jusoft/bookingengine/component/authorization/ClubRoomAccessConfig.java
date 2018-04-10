@@ -63,7 +63,7 @@ class ClubRoomAccessConfig {
   }
 
   public SlotStatus getStatusFor(ZonedDateTime slotCreationTime, Clock clock) {
-    return slotCreationTime.plus(slotAuthorizationConfig.getAmount(), slotAuthorizationConfig.getTemporalUnit()).compareTo(now(clock)) > 0
+    return slotCreationTime.plus(slotAuthorizationConfig.getAmount(), slotAuthorizationConfig.getTemporalUnit()).isAfter(now(clock))
       ? EARLY_BIRD
       : NORMAL;
   }

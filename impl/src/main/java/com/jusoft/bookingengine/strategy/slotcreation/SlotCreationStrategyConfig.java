@@ -14,7 +14,7 @@ import java.time.Clock;
 import java.util.Map;
 
 @Configuration
-public class SlotCreationConfig {
+public class SlotCreationStrategyConfig {
 
   @Autowired
   private SlotManagerComponent slotManagerComponent;

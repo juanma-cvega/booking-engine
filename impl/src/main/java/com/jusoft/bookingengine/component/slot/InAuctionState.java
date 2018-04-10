@@ -27,6 +27,11 @@ class InAuctionState implements SlotState {
   }
 
   @Override
+  public SlotState reserveForClass(Slot slot) {
+    throw new SlotPendingAuctionException(slot.getId());
+  }
+
+  @Override
   public SlotState reserve(Slot slot, Clock clock) {
     throw new SlotPendingAuctionException(slot.getId());
   }

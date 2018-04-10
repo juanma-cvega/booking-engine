@@ -9,11 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 import static com.jusoft.bookingengine.holder.DataHolder.exceptionThrown;
+import static java.time.LocalTime.parse;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 
@@ -38,16 +40,26 @@ public class AbstractUseCaseStepDefinitions implements En {
     return (T) messageCaptor.getValue();
   }
 
+  @SuppressWarnings("unchecked")
+  protected <T extends RuntimeException> T verifyAndGetExceptionThrown(Class<T> type) {
+    assertThat(exceptionThrown).isInstanceOf(type);
+    return (T) exceptionThrown;
+  }
+
   protected ZonedDateTime getDateFrom(String time) {
     return getDateFrom(time, LocalDate.now(clock));
   }
 
   protected ZonedDateTime getDateFrom(String time, LocalDate date) {
-    return ZonedDateTime.of(date, LocalTime.parse(time), clock.getZone());
+    return ZonedDateTime.of(date, parse(time), clock.getZone());
   }
 
   protected ZonedDateTime getDateFrom(String time, String date) {
-    return ZonedDateTime.of(LocalDate.parse(date), LocalTime.parse(time), clock.getZone());
+    return ZonedDateTime.of(LocalDate.parse(date), parse(time), clock.getZone());
+  }
+
+  protected ZonedDateTime getNextDateFrom(String time, DayOfWeek dayOfWeek, String zoneId) {
+    return ZonedDateTime.of(LocalDate.now(clock).plusWeeks(1).with(dayOfWeek), parse(time), ZoneId.of(zoneId));
   }
 
   protected void storeException(Runnable runnable) {

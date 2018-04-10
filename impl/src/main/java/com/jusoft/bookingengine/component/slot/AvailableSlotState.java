@@ -30,6 +30,11 @@ class AvailableSlotState implements SlotState {
   }
 
   @Override
+  public SlotState reserveForClass(Slot slot) {
+    return ReservedState.getInstance();
+  }
+
+  @Override
   public SlotState reserve(Slot slot, Clock clock) {
     if (!isAvailable(slot, clock)) {
       throw new SlotNotAvailableException(slot.getId());
@@ -47,7 +52,7 @@ class AvailableSlotState implements SlotState {
   @Override
   public boolean isAvailable(Slot slot, Clock clock) {
     ZonedDateTime now = ZonedDateTime.now(clock);
-    return slot.getOpenDate().getStartTime().compareTo(now) > 0;
+    return slot.getOpenDate().getStartTime().isAfter(now);
   }
 
   public static SlotState getInstance() {

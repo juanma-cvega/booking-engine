@@ -26,10 +26,10 @@ public class ClubRoomTest {
   private static final Clock clock = Clock.systemUTC();
   private static final long NOT_MULTIPLE_SLOT_DURATION = SLOT_DURATION_IN_MINUTES - 1;
   private static final LocalTime NOW = LocalTime.of(5, 0);
-  private static final List<OpenTime> OPEN_TIMES_INVALID = singletonList(new OpenTime(NOW, NOW.plusMinutes(NOT_MULTIPLE_SLOT_DURATION)));
-  private static final OpenTime FIRST_OPEN = new OpenTime(NOW.minusMinutes(SLOT_DURATION_IN_MINUTES), NOW);
-  private static final OpenTime SECOND_OPEN_TIME = new OpenTime(NOW, NOW.plusMinutes(SLOT_DURATION_IN_MINUTES));
-  private static final OpenTime THIRD_OPEN_TIME = new OpenTime(NOW.plusMinutes(SLOT_DURATION_IN_MINUTES), NOW.plusMinutes(SLOT_DURATION_IN_MINUTES * 2));
+  private static final List<OpenTime> OPEN_TIMES_INVALID = singletonList(OpenTime.of(NOW, NOW.plusMinutes(NOT_MULTIPLE_SLOT_DURATION)));
+  private static final OpenTime FIRST_OPEN = OpenTime.of(NOW.minusMinutes(SLOT_DURATION_IN_MINUTES), NOW);
+  private static final OpenTime SECOND_OPEN_TIME = OpenTime.of(NOW, NOW.plusMinutes(SLOT_DURATION_IN_MINUTES));
+  private static final OpenTime THIRD_OPEN_TIME = OpenTime.of(NOW.plusMinutes(SLOT_DURATION_IN_MINUTES), NOW.plusMinutes(SLOT_DURATION_IN_MINUTES * 2));
   private static final List<OpenTime> OPEN_TIMES_UNORDERED = Arrays.asList(
     SECOND_OPEN_TIME,
     THIRD_OPEN_TIME,

@@ -28,6 +28,11 @@ public class CreatedSlotState implements SlotState {
   }
 
   @Override
+  public SlotState reserveForClass(Slot slot) {
+    return ReservedState.getInstance();
+  }
+
+  @Override
   public SlotState reserve(Slot slot, Clock clock) {
     throw new SlotNotAvailableException(slot.getId());
   }

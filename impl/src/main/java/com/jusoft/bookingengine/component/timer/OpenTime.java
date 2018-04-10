@@ -5,7 +5,9 @@ import lombok.NonNull;
 
 import java.time.LocalTime;
 
-@Data
+import static java.time.LocalTime.parse;
+
+@Data(staticConstructor = "of")
 public class OpenTime {
 
   @NonNull
@@ -13,4 +15,7 @@ public class OpenTime {
   @NonNull
   private final LocalTime endTime;
 
+  public static OpenTime of(String startTime, String endTime) {
+    return new OpenTime(parse(startTime), parse(endTime));
+  }
 }

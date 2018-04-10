@@ -28,7 +28,8 @@ import static org.mockito.Mockito.verify;
 
 public class CreateRoomUseCaseStepDefinitions extends AbstractUseCaseStepDefinitions {
 
-  public static final long NON_EXISTING_BUILDING_ID = 5667L;
+  private static final long NON_EXISTING_BUILDING_ID = 5667L;
+
   @Autowired
   private RoomManagerComponent roomManagerComponent;
   @Autowired
@@ -62,13 +63,13 @@ public class CreateRoomUseCaseStepDefinitions extends AbstractUseCaseStepDefinit
     });
     Given("^a room is to be created$", DataHolder::createRoomBuilder);
     Given("^the room is open between (.*) and (.*)$", (String startTime, String endTime) ->
-      roomBuilder.openTimes.add(new OpenTime(LocalTime.parse(startTime), LocalTime.parse(endTime))));
+      roomBuilder.openTimes.add(OpenTime.of(LocalTime.parse(startTime), LocalTime.parse(endTime))));
     Given("^the room can open up to (.*) slots at the same time$", (Integer slots) ->
       roomBuilder.slotCreationConfigInfo = new MaxNumberOfSlotsStrategyConfigInfo(slots));
     Given("^the slots time is of (.*) minute$", (Integer slotDurationInMinutes) ->
       roomBuilder.slotDurationInMinutes = slotDurationInMinutes);
     Given("^the room has a (.*) minutes auction time and a (.*) days bookings created window$", (Integer auctionDuration, Integer daysRange) ->
-      roomBuilder.auctionConfigInfo = new LessBookingsWithinPeriodConfigInfo(auctionDuration, daysRange));
+      roomBuilder.auctionConfigInfo = LessBookingsWithinPeriodConfigInfo.of(auctionDuration, daysRange));
     Given("^the room has a no auctions configuration$", () ->
       roomBuilder.auctionConfigInfo = new NoAuctionConfigInfo());
     When("^the room is created with that configuration$", () ->

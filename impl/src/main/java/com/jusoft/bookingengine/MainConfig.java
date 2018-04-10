@@ -9,9 +9,10 @@ import com.jusoft.bookingengine.component.member.MemberManagerComponentConfig;
 import com.jusoft.bookingengine.component.room.RoomManagerComponentConfig;
 import com.jusoft.bookingengine.component.scheduler.SchedulerComponentConfig;
 import com.jusoft.bookingengine.component.slot.SlotManagerComponentConfig;
+import com.jusoft.bookingengine.component.slotlifecycle.SlotLifeCycleManagerComponentConfig;
 import com.jusoft.bookingengine.component.timer.TimerConfig;
 import com.jusoft.bookingengine.strategy.auctionwinner.AuctionWinnerStrategyConfig;
-import com.jusoft.bookingengine.strategy.slotcreation.SlotCreationConfig;
+import com.jusoft.bookingengine.strategy.slotcreation.SlotCreationStrategyConfig;
 import com.jusoft.bookingengine.usecase.auction.AuctionUseCaseConfig;
 import com.jusoft.bookingengine.usecase.authorization.AuthorizationUseCaseConfig;
 import com.jusoft.bookingengine.usecase.booking.BookingUseCaseConfig;
@@ -20,6 +21,7 @@ import com.jusoft.bookingengine.usecase.club.ClubUseCaseConfig;
 import com.jusoft.bookingengine.usecase.member.MemberUseCaseConfig;
 import com.jusoft.bookingengine.usecase.room.RoomUseCaseConfig;
 import com.jusoft.bookingengine.usecase.slot.SlotUseCaseConfig;
+import com.jusoft.bookingengine.usecase.slotlifecycle.SlotLifeCycleManagerUseCaseConfig;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -34,8 +36,9 @@ import org.springframework.context.annotation.Import;
   BuildingManagerComponentConfig.class,
   ClubManagerComponentConfig.class,
   MemberManagerComponentConfig.class,
+  SlotLifeCycleManagerComponentConfig.class,
   AuctionWinnerStrategyConfig.class,
-  SlotCreationConfig.class,
+  SlotCreationStrategyConfig.class,
   AuthorizationManagerComponentConfig.class,
   RoomUseCaseConfig.class,
   SlotUseCaseConfig.class,
@@ -44,6 +47,7 @@ import org.springframework.context.annotation.Import;
   MemberUseCaseConfig.class,
   BookingUseCaseConfig.class,
   AuctionUseCaseConfig.class,
-  AuthorizationUseCaseConfig.class})
+  AuthorizationUseCaseConfig.class,
+  SlotLifeCycleManagerUseCaseConfig.class})
 public class MainConfig {
 }

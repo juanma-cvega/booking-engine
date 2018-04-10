@@ -172,5 +172,4 @@ class Room {
   public boolean isAuctionRequired() {
     return auctionConfigInfo.getAuctionDuration() > 0;
   }
-
 }

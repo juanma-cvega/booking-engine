@@ -6,5 +6,4 @@ public interface BuildingManagerComponent {
 
   BuildingView find(long id);
 
-  boolean isAvailable(long id);
 }

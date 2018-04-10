@@ -40,7 +40,7 @@
     <commons-collections4.version>4.1</commons-collections4.version>
     <guava.version>23.0</guava.version>
     <jackson.version>2.9.2</jackson.version>
-    <cucumber.version>2.3.1</cucumber.version>
+    <cucumber.version>2.4.0</cucumber.version>
     <awaitility.version>3.0.0</awaitility.version>
     <maven-resources-plugin.version>3.0.2</maven-resources-plugin.version>
     <jacoco-maven-plugin.version>0.8.0</jacoco-maven-plugin.version>
