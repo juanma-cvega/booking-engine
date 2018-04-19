@@ -26,7 +26,7 @@ public class AddPreReservationUseCaseStepDefinitions extends AbstractUseCaseStep
   public AddPreReservationUseCaseStepDefinitions(AddPreReservationUseCase addPreReservationUseCase) {
     When("^a pre reservation for next (.*) at (.*) from zone (.*) for user (.*) is created for room (.*)$", (DayOfWeek weekDay, String slotTime, String zoneId, Long userId, Long roomId) ->
       addPreReservationUseCase.addPreReservationTo(roomId, PreReservation.of(userId, getNextDateFrom(slotTime, weekDay, zoneId))));
-    Then("^a slot lifecycle manager (\\d+) should contain a pre reservation for user (\\d+) next (.*) at (.*) from zone (.*)$", (Long roomId, Long userId, DayOfWeek dayOfWeek, String slotTime, String zoneId) -> {
+    Then("^a slot lifecycle manager for room (\\d+) should contain a pre reservation for user (\\d+) next (.*) at (.*) from zone (.*)$", (Long roomId, Long userId, DayOfWeek dayOfWeek, String slotTime, String zoneId) -> {
       SlotLifeCycleManagerView managerView = slotLifeCycleManagerComponent.find(roomId);
       assertThat(managerView.getPreReservations()).hasSize(1);
       PreReservation preReservation = managerView.getPreReservations().get(0);

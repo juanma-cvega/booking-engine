@@ -1,8 +1,12 @@
 package com.jusoft.bookingengine.component.slotlifecycle.api;
 
 import com.jusoft.bookingengine.component.timer.OpenTime;
+import com.jusoft.bookingengine.component.timer.SystemLocalTime;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NonNull;
+import org.apache.commons.lang3.Validate;
 
 import java.time.Clock;
 import java.time.DayOfWeek;
@@ -13,8 +17,11 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data(staticConstructor = "of")
-public class SlotValidationInfo {
+import static com.jusoft.bookingengine.component.timer.SystemLocalTime.ofToday;
+
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Data
+public class SlotsTimetable {
 
   private final int slotDurationInMinutes;
   @NonNull
@@ -22,8 +29,18 @@ public class SlotValidationInfo {
   @NonNull
   private final List<DayOfWeek> availableDays;
 
+  public static SlotsTimetable of(int slotDurationInMinutes, List<OpenTime> openTimesPerDay, List<DayOfWeek> availableDays) {
+    Validate.notEmpty(openTimesPerDay);
+    Validate.notEmpty(availableDays);
+    return new SlotsTimetable(
+      slotDurationInMinutes,
+      new ArrayList<>(openTimesPerDay),
+      new ArrayList<>(availableDays)
+    );
+  }
+
   public boolean isCovered(ReservedSlotsOfDay reservedSlotsOfDays) {
-    return areCovered(reservedSlotsOfDays.getDayOfWeek(), reservedSlotsOfDays.getSlotsStartTime());
+    return availableDays.contains(reservedSlotsOfDays.getDayOfWeek()) && reservedSlotsOfDays.getSlotsStartTime().stream().allMatch(this::isTimeValid);
   }
 
   /**
@@ -32,8 +49,8 @@ public class SlotValidationInfo {
    * @param date The date to verify. IMPORTANT: it's transformed to use {@link ZoneId} UTC before start validation.
    * @return whether the given parameters are covered
    */
-  public boolean isCovered(ZonedDateTime date) {
-    return isCovered(date.getDayOfWeek(), date.withZoneSameInstant(Clock.systemUTC().getZone()).toLocalTime());
+  public boolean isCovered(ZonedDateTime date, Clock clock) {
+    return isCovered(date.getDayOfWeek(), ofToday(date.toLocalTime(), date.getZone(), clock));
   }
 
   /**
@@ -43,35 +60,24 @@ public class SlotValidationInfo {
    * @param localTime {@link LocalTime} to verify. IMPORTANT: it's considered to be a {@link LocalTime} related to UTC
    * @return whether the given parameters are covered
    */
-  public boolean isCovered(DayOfWeek dayOfWeek, LocalTime localTime) {
+  private boolean isCovered(DayOfWeek dayOfWeek, SystemLocalTime localTime) {
     return availableDays.contains(dayOfWeek) && isTimeValid(localTime);
   }
 
-  /**
-   * Returns whether a given {@link DayOfWeek} and list of {@link LocalTime} are covered
-   *
-   * @param dayOfWeek  {@link DayOfWeek} to verify
-   * @param localTimes {@link LocalTime}s to verify. IMPORTANT: it's considered to be a {@link LocalTime} related to UTC
-   * @return whether the given parameters are covered
-   */
-  public boolean areCovered(DayOfWeek dayOfWeek, List<LocalTime> localTimes) {
-    return availableDays.contains(dayOfWeek) && localTimes.stream().allMatch(this::isTimeValid);
-  }
-
-  private boolean isTimeValid(LocalTime localTime) {
+  private boolean isTimeValid(SystemLocalTime localTime) {
     return openTimesPerDay.stream()
       .anyMatch(openTime -> isStartTimeValidFor(localTime, openTime));
   }
 
-  private boolean isStartTimeValidFor(LocalTime startTime, OpenTime openTime) {
+  private boolean isStartTimeValidFor(SystemLocalTime startTime, OpenTime openTime) {
     return isStartTimeWithinOpenTime(startTime, openTime) && isStartTimeAtStartOfSlot(startTime, openTime);
   }
 
-  private boolean isStartTimeWithinOpenTime(LocalTime startTime, OpenTime openTime) {
+  private boolean isStartTimeWithinOpenTime(SystemLocalTime startTime, OpenTime openTime) {
     return startTime.compareTo(openTime.getStartTime()) >= 0 && startTime.compareTo(openTime.getEndTime()) <= 0;
   }
 
-  private boolean isStartTimeAtStartOfSlot(LocalTime reservationTime, OpenTime openTime) {
+  private boolean isStartTimeAtStartOfSlot(SystemLocalTime reservationTime, OpenTime openTime) {
     long timeUntilEndOpenTime = reservationTime.until(openTime.getEndTime(), ChronoUnit.MINUTES);
     return timeUntilEndOpenTime > 0 && timeUntilEndOpenTime % slotDurationInMinutes == 0;
   }

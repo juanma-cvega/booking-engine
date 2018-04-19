@@ -1,5 +1,6 @@
 package com.jusoft.bookingengine.component.slotlifecycle.api;
 
+import com.jusoft.bookingengine.component.timer.SystemLocalTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,63 +8,50 @@ import org.apache.commons.lang3.Validate;
 
 import java.time.Clock;
 import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static java.util.stream.Collectors.toList;
+import static com.jusoft.bookingengine.component.timer.SystemLocalTime.ofToday;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Data
 public class ReservedSlotsOfDay {
 
   private final DayOfWeek dayOfWeek;
-  private final List<LocalTime> slotsStartTime;
-  private final ZoneId zoneId;
+  private final List<SystemLocalTime> slotsStartTime;
 
-  public static ReservedSlotsOfDay of(DayOfWeek dayOfWeek, List<LocalTime> slotsStartTime, LocalDate creationDate, ZoneId sourceZoneId, Clock clock) {
+  public static ReservedSlotsOfDay of(DayOfWeek dayOfWeek, List<SystemLocalTime> slotsStartTime) {
     Objects.requireNonNull(dayOfWeek);
     Validate.notEmpty(slotsStartTime);
-    Objects.requireNonNull(sourceZoneId);
-    Objects.requireNonNull(creationDate);
-    Objects.requireNonNull(clock);
-    List<LocalTime> slotsStartTimeToSystemZone = toSystemZone(slotsStartTime, creationDate, sourceZoneId, clock);
-    return new ReservedSlotsOfDay(dayOfWeek, slotsStartTimeToSystemZone, clock.getZone());
+    return new ReservedSlotsOfDay(dayOfWeek, slotsStartTime);
   }
 
-  private static List<LocalTime> toSystemZone(List<LocalTime> slotsStartTime, LocalDate sourceDate, ZoneId sourceZoneId, Clock clock) {
-    return sourceZoneId.equals(clock.getZone()) ? slotsStartTime
-      : slotsStartTime.stream()
-      .map(slotStartTime -> ZonedDateTime.of(sourceDate, slotStartTime, sourceZoneId).withZoneSameInstant(clock.getZone()))
-      .map(ZonedDateTime::toLocalTime)
-      .collect(toList());
+  public boolean contains(ZonedDateTime startDateTime, Clock clock) {
+    return isSameDayOfWeek(startDateTime) && isTimeContainedInReservedStartTimes(startDateTime, clock);
   }
 
-  public boolean contains(ZonedDateTime startDateTime) {
-    boolean containsStartTime = false;
-    if (dayOfWeek == startDateTime.getDayOfWeek()) {
-      LocalTime startTime = startDateTime.withZoneSameInstant(zoneId).toLocalTime();
-      containsStartTime = slotsStartTime.stream()
-        .anyMatch(currentDate -> currentDate.equals(startTime));
-    }
-    return containsStartTime;
+  private boolean isTimeContainedInReservedStartTimes(ZonedDateTime dateTime, Clock clock) {
+    return slotsStartTime.stream()
+      .anyMatch(reservedStartTime -> reservedStartTime.equals(ofToday(dateTime.toLocalTime(), dateTime.getZone(), clock)));
+  }
+
+  private boolean isSameDayOfWeek(ZonedDateTime startDateTime) {
+    return dayOfWeek == startDateTime.getDayOfWeek();
   }
 
   public boolean intersectsWith(ReservedSlotsOfDay reservedSlotsOfDay) {
-    return reservedSlotsOfDay.dayOfWeek == this.dayOfWeek && isDayReservedSlotsContainedIn(reservedSlotsOfDay);
+    return reservedSlotsOfDay.dayOfWeek == this.dayOfWeek && isReservedSlotsOfDayContainedIn(reservedSlotsOfDay);
   }
 
-  private boolean isDayReservedSlotsContainedIn(ReservedSlotsOfDay reservedSlotsOfDay) {
-    List<LocalTime> slots = new ArrayList<>(reservedSlotsOfDay.slotsStartTime);
+  private boolean isReservedSlotsOfDayContainedIn(ReservedSlotsOfDay reservedSlotsOfDay) {
+    List<SystemLocalTime> slots = new ArrayList<>(reservedSlotsOfDay.slotsStartTime);
     slots.removeAll(slotsStartTime);
-    return slots.size() != slotsStartTime.size();
+    return slots.size() != reservedSlotsOfDay.getSlotsStartTime().size();
   }
 
-  public List<LocalTime> getSlotsStartTime() {
+  public List<SystemLocalTime> getSlotsStartTime() {
     return new ArrayList<>(slotsStartTime);
   }
 }

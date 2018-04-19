@@ -7,6 +7,8 @@ import java.time.ZonedDateTime;
 @Getter
 public class PreReservationNotFoundException extends RuntimeException {
 
+  private static final long serialVersionUID = -3721681472894667799L;
+
   private static final String MESSAGE = "Pre reservation at %s not found in room %s";
   private final long roomId;
   private final ZonedDateTime slotStartTime;

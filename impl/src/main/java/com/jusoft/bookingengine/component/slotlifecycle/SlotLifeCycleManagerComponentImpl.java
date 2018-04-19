@@ -1,11 +1,11 @@
 package com.jusoft.bookingengine.component.slotlifecycle;
 
-import com.jusoft.bookingengine.component.slotlifecycle.api.ClassConfig;
+import com.jusoft.bookingengine.component.slotlifecycle.api.ClassTimetable;
 import com.jusoft.bookingengine.component.slotlifecycle.api.PreReservation;
 import com.jusoft.bookingengine.component.slotlifecycle.api.SlotLifeCycleManagerComponent;
 import com.jusoft.bookingengine.component.slotlifecycle.api.SlotLifeCycleManagerNotFoundException;
 import com.jusoft.bookingengine.component.slotlifecycle.api.SlotLifeCycleManagerView;
-import com.jusoft.bookingengine.component.slotlifecycle.api.SlotValidationInfo;
+import com.jusoft.bookingengine.component.slotlifecycle.api.SlotsTimetable;
 import com.jusoft.bookingengine.publisher.MessagePublisher;
 import com.jusoft.bookingengine.strategy.auctionwinner.api.AuctionConfigInfo;
 import lombok.AllArgsConstructor;
@@ -19,12 +19,12 @@ class SlotLifeCycleManagerComponentImpl implements SlotLifeCycleManagerComponent
 
   private final SlotLifeCycleManagerRepository repository;
   private final MessagePublisher messagePublisher;
-  private final SlotLifeCycleEventFactory factory;
+  private final SlotLifeCycleEventFactory eventFactory;
   private final Clock clock;
 
   @Override
-  public SlotLifeCycleManagerView createFrom(long roomId, SlotValidationInfo slotValidationInfo) {
-    SlotLifeCycleManager slotLifeCycleManager = new SlotLifeCycleManager(roomId, slotValidationInfo);
+  public SlotLifeCycleManagerView createFrom(long roomId, SlotsTimetable slotsTimetable) {
+    SlotLifeCycleManager slotLifeCycleManager = new SlotLifeCycleManager(roomId, slotsTimetable);
     repository.save(slotLifeCycleManager);
     return createFrom(slotLifeCycleManager);
   }
@@ -38,16 +38,16 @@ class SlotLifeCycleManagerComponentImpl implements SlotLifeCycleManagerComponent
   private SlotLifeCycleManagerView createFrom(SlotLifeCycleManager slotLifeCycleManager) {
     return SlotLifeCycleManagerView.of(
       slotLifeCycleManager.getRoomId(),
-      slotLifeCycleManager.getSlotValidationInfo(),
+      slotLifeCycleManager.getSlotsTimetable(),
       slotLifeCycleManager.getAuctionConfigInfo(),
       slotLifeCycleManager.getPreReservations(),
       slotLifeCycleManager.getClassesConfig());
   }
 
   @Override
-  public void replaceSlotValidationWith(long roomId, SlotValidationInfo slotValidationInfo) {
+  public void replaceSlotsTimetableWith(long roomId, SlotsTimetable slotsTimetable) {
     repository.execute(roomId,
-      slotLifeCycleManager -> slotLifeCycleManager.replaceSlotValidationWith(slotValidationInfo),
+      slotLifeCycleManager -> slotLifeCycleManager.replaceSlotsTimetableWith(slotsTimetable, clock),
       () -> new SlotLifeCycleManagerNotFoundException(roomId));
   }
 
@@ -63,14 +63,14 @@ class SlotLifeCycleManagerComponentImpl implements SlotLifeCycleManagerComponent
   }
 
   @Override
-  public void addClassConfigTo(long roomId, ClassConfig classConfig) {
+  public void addClassTimetableTo(long roomId, ClassTimetable classTimetable) {
     repository.execute(roomId,
-      slotLifeCycleManager -> slotLifeCycleManager.addClass(classConfig),
+      slotLifeCycleManager -> slotLifeCycleManager.addClass(classTimetable, clock),
       supplySlotLifeCycleManagerNotFoundException(roomId));
   }
 
   @Override
-  public void removeClassConfigFrom(long roomId, long classId) {
+  public void removeClassTimetableFrom(long roomId, long classId) {
     repository.execute(roomId,
       slotLifeCycleManager -> slotLifeCycleManager.removeClass(classId),
       supplySlotLifeCycleManagerNotFoundException(roomId));
@@ -93,8 +93,8 @@ class SlotLifeCycleManagerComponentImpl implements SlotLifeCycleManagerComponent
   @Override
   public void findNextSlotStateFor(long slotId, long roomId, ZonedDateTime slotStartTime) {
     SlotLifeCycleManager slotLifeCycleManager = repository.find(roomId).orElseThrow(supplySlotLifeCycleManagerNotFoundException(roomId));
-    NextSlotState nextSlotState = slotLifeCycleManager.nextStateFor(slotId, slotStartTime);
-    messagePublisher.publish(factory.getEventFrom(nextSlotState));
+    NextSlotState nextSlotState = slotLifeCycleManager.nextStateFor(slotId, slotStartTime, clock);
+    messagePublisher.publish(eventFactory.getEventFrom(nextSlotState));
   }
 
   private SlotLifeCycleManager findOrFail(long roomId) {

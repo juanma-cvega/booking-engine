@@ -6,7 +6,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.function.Supplier;
 
 @UtilityClass
-public class LockingTemplate {
+public final class LockingTemplate {
 
   public static void withLock(Lock lock, Runnable runnable) {
     lock.lock();

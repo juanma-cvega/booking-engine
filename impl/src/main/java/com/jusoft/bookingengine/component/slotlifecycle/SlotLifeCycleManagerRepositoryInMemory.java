@@ -1,6 +1,6 @@
 package com.jusoft.bookingengine.component.slotlifecycle;
 
-import com.jusoft.bookingengine.component.slotlifecycle.api.ClassConfig;
+import com.jusoft.bookingengine.component.slotlifecycle.api.ClassTimetable;
 import com.jusoft.bookingengine.component.slotlifecycle.api.PreReservation;
 import lombok.AllArgsConstructor;
 
@@ -33,11 +33,11 @@ public class SlotLifeCycleManagerRepositoryInMemory implements SlotLifeCycleMana
   private SlotLifeCycleManager copyOf(SlotLifeCycleManager slotLifeCycleManager) {
     return new SlotLifeCycleManager(
       slotLifeCycleManager.getRoomId(),
-      slotLifeCycleManager.getSlotValidationInfo(),
+      slotLifeCycleManager.getSlotsTimetable(),
       slotLifeCycleManager.getAuctionConfigInfo(),
       slotLifeCycleManager.getClassesConfig().entrySet().stream()
-        .map(entry -> ClassConfig.of(entry.getKey(), entry.getValue().getReservedSlotsOfDays()))
-        .collect(toMap(ClassConfig::getClassId, classConfig -> classConfig)),
+        .map(entry -> ClassTimetable.of(entry.getKey(), entry.getValue().getReservedSlotsOfDays()))
+        .collect(toMap(ClassTimetable::getClassId, classTimetable -> classTimetable)),
       slotLifeCycleManager.getPreReservations().stream()
         .map(preReservation -> PreReservation.of(preReservation.getUserId(), preReservation.getReservationDate()))
         .collect(toList()));

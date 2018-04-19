@@ -1,21 +1,33 @@
 package com.jusoft.bookingengine.component.timer;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NonNull;
 
+import java.time.Clock;
 import java.time.LocalTime;
+import java.time.ZoneId;
 
-import static java.time.LocalTime.parse;
-
-@Data(staticConstructor = "of")
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Data
 public class OpenTime {
 
   @NonNull
-  private final LocalTime startTime;
+  private final SystemLocalTime startTime;
   @NonNull
-  private final LocalTime endTime;
+  private final SystemLocalTime endTime;
 
-  public static OpenTime of(String startTime, String endTime) {
-    return new OpenTime(parse(startTime), parse(endTime));
+  public static OpenTime of(String startTime, String endTime, ZoneId sourceZone, Clock systemClock) {
+    return new OpenTime(SystemLocalTime.ofToday(startTime, sourceZone, systemClock), SystemLocalTime.ofToday(endTime, sourceZone, systemClock));
   }
+
+  public static OpenTime of(LocalTime startTime, LocalTime endTime, ZoneId sourceZone, Clock systemClock) {
+    return new OpenTime(SystemLocalTime.ofToday(startTime, sourceZone, systemClock), SystemLocalTime.ofToday(endTime, sourceZone, systemClock));
+  }
+
+  public static OpenTime of(SystemLocalTime startTime, SystemLocalTime endTime) {
+    return new OpenTime(startTime, endTime);
+  }
+
 }

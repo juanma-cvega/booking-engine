@@ -17,10 +17,10 @@ public class ModifyAuctionConfigUseCaseStepDefinitions extends AbstractUseCaseSt
   private ModifyAuctionConfigUseCase modifyAuctionConfigUseCase;
 
   public ModifyAuctionConfigUseCaseStepDefinitions() {
-    When("^an auction configuration of (\\d+) minutes duration and bookings period of (\\d+) days is added to slot lifecycle manager (\\d+)$",
+    When("^an auction configuration of (\\d+) minutes duration and bookings period of (\\d+) days is added to slot lifecycle manager for room (\\d+)$",
       (Integer auctionDuration, Integer periodValue, Long roomId) ->
         modifyAuctionConfigUseCase.modifyAuctionConfigFor(roomId, LessBookingsWithinPeriodConfigInfo.of(auctionDuration, periodValue)));
-    Then("^the slot lifecycle manager (\\d+) should contain the auction configuration of (\\d+) minutes duration and bookings period of (\\d+) days$", (
+    Then("^the slot lifecycle manager for room (\\d+) should contain the auction configuration of (\\d+) minutes duration and bookings period of (\\d+) days$", (
       Long roomId, Integer auctionDuration, Integer periodValue) -> {
       SlotLifeCycleManagerView slotLifeCycleManager = slotLifeCycleManagerComponent.find(roomId);
       assertThat(slotLifeCycleManager.getAuctionConfigInfo()).isInstanceOf(LessBookingsWithinPeriodConfigInfo.class);

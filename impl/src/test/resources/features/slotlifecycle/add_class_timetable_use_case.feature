@@ -1,7 +1,7 @@
-Feature: As an admin, I want to add classes to a slot lifecycle manager
+Feature: As an admin, I want to add classes to a slot lifecycle manager of a room
 
   Background:
-    Given a slot lifecycle manager 1 is to be created
+    Given a slot lifecycle manager for room 1 is to be created
     And the slot duration is 60 minutes
     And the slots are open
       | MONDAY | TUESDAY | WEDNESDAY |
@@ -10,29 +10,29 @@ Feature: As an admin, I want to add classes to a slot lifecycle manager
     And the slot lifecycle is created with that configuration
 
   Scenario: As an admin, I want to configure a class to use a set of slots periodically
-    When class 5 is configured in room 1 to use
+    When class 5 is configured in slot lifecycle manager for room 1 to use
       | dayOfWeek      | MONDAY      | WEDNESDAY   |
       | slotsStartTime | 10:00,11:00 | 16:00,17:00 |
       | zoneId         | UTC         | UTC         |
-    Then slot lifecycle manager 1 should contain class 5 to use the room
+    Then slot lifecycle manager for room 1 should contain class 5 to use the room
       | dayOfWeek      | MONDAY      | WEDNESDAY   |
       | slotsStartTime | 10:00,11:00 | 16:00,17:00 |
       | zoneId         | UTC         | UTC         |
 
   Scenario: As an admin, I want to add a configure more than one class to a room
-    When class 5 is configured in room 1 to use
+    When class 5 is configured in slot lifecycle manager for room 1 to use
       | dayOfWeek      | MONDAY      | WEDNESDAY   |
       | slotsStartTime | 10:00,11:00 | 16:00,17:00 |
       | zoneId         | UTC         | UTC         |
-    And class 6 is configured in room 1 to use
+    And class 6 is configured in slot lifecycle manager for room 1 to use
       | dayOfWeek      | MONDAY      | WEDNESDAY   |
       | slotsStartTime | 16:00,17:00 | 10:00,11:00 |
       | zoneId         | UTC         | UTC         |
-    Then slot lifecycle manager 1 should contain class 5 to use the room
+    Then slot lifecycle manager for room 1 should contain class 5 to use the room
       | dayOfWeek      | MONDAY      | WEDNESDAY   |
       | slotsStartTime | 10:00,11:00 | 16:00,17:00 |
       | zoneId         | UTC         | UTC         |
-    And slot lifecycle manager 1 should contain class 6 to use the room
+    And slot lifecycle manager for room 1 should contain class 6 to use the room
       | dayOfWeek      | MONDAY      | WEDNESDAY   |
       | slotsStartTime | 16:00,17:00 | 10:00,11:00 |
       | zoneId         | UTC         | UTC         |
@@ -89,7 +89,7 @@ Feature: As an admin, I want to add classes to a slot lifecycle manager
       | zoneId         | UTC         | UTC       |
 
   Scenario: As an admin, I shouldn't be able to configure a class when it overlaps with a class already configured
-    And class 3 is configured in room 1 to use
+    And class 3 is configured in slot lifecycle manager for room 1 to use
       | dayOfWeek      | MONDAY      | WEDNESDAY |
       | slotsStartTime | 10:00,11:00 | 16:00     |
       | zoneId         | UTC         | UTC       |
@@ -103,7 +103,7 @@ Feature: As an admin, I want to add classes to a slot lifecycle manager
       | zoneId         | UTC    |
 
   Scenario: As an admin, I shouldn't be able to configure a class when it overlaps with a class already configured with a different time zone
-    And class 3 is configured in room 1 to use
+    And class 3 is configured in slot lifecycle manager for room 1 to use
       | dayOfWeek      | MONDAY      | WEDNESDAY |
       | slotsStartTime | 10:00,11:00 | 16:00     |
       | zoneId         | UTC         | UTC       |

@@ -9,7 +9,7 @@ import lombok.AllArgsConstructor;
 import java.time.Clock;
 
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-public class LessBookingsWithinPeriodStrategyFactory implements AuctionWinnerStrategyFactory<LessBookingsWithinPeriodConfigInfo> {
+class LessBookingsWithinPeriodStrategyFactory implements AuctionWinnerStrategyFactory<LessBookingsWithinPeriodConfigInfo> {
 
   private final BookingManagerComponent bookingManagerComponent;
   private final Clock clock;

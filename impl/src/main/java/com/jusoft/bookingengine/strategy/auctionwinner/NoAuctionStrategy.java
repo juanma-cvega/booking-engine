@@ -6,7 +6,7 @@ import com.jusoft.bookingengine.strategy.auctionwinner.api.AuctionWinnerStrategy
 import java.util.Optional;
 import java.util.Set;
 
-public class NoAuctionStrategy implements AuctionWinnerStrategy {
+class NoAuctionStrategy implements AuctionWinnerStrategy {
   @Override
   public Optional<Long> findWinner(Set<Bid> bidders) {
     return Optional.empty();

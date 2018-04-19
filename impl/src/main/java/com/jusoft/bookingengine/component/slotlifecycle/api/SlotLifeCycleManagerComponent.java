@@ -6,17 +6,17 @@ import java.time.ZonedDateTime;
 
 public interface SlotLifeCycleManagerComponent {
 
-  SlotLifeCycleManagerView createFrom(long roomId, SlotValidationInfo slotValidationInfo);
+  SlotLifeCycleManagerView createFrom(long roomId, SlotsTimetable slotsTimetable);
 
   SlotLifeCycleManagerView find(long roomId);
 
-  void replaceSlotValidationWith(long roomId, SlotValidationInfo slotValidationInfo);
+  void replaceSlotsTimetableWith(long roomId, SlotsTimetable slotsTimetable);
 
   void modifyAuctionConfigFor(long roomId, AuctionConfigInfo auctionConfigInfo);
 
-  void addClassConfigTo(long roomId, ClassConfig classConfig);
+  void addClassTimetableTo(long roomId, ClassTimetable classTimetable);
 
-  void removeClassConfigFrom(long roomId, long classId);
+  void removeClassTimetableFrom(long roomId, long classId);
 
   void addPreReservation(long roomId, PreReservation preReservation);
 

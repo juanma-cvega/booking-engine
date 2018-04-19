@@ -4,11 +4,11 @@ import com.jusoft.bookingengine.component.slotlifecycle.api.SlotLifeCycleManager
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class RemoveClassConfigUseCase {
+public class RemoveClassTimetableUseCase {
 
   private final SlotLifeCycleManagerComponent slotLifeCycleManagerComponent;
 
-  public void removeClassConfigFrom(long roomId, long classId) {
-    slotLifeCycleManagerComponent.removeClassConfigFrom(roomId, classId);
+  public void removeClassTimetableFrom(long roomId, long classId) {
+    slotLifeCycleManagerComponent.removeClassTimetableFrom(roomId, classId);
   }
 }

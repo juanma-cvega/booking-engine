@@ -7,6 +7,8 @@ import java.time.ZonedDateTime;
 @Getter
 public class ReservationDateNotValidException extends RuntimeException {
 
+  private static final long serialVersionUID = 8036825786722830779L;
+
   private static final String MESSAGE = "Reservation date %s not valid for room %s";
 
   private final ZonedDateTime reservationDate;

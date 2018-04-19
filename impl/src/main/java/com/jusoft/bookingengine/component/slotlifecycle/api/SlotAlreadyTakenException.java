@@ -7,6 +7,8 @@ import java.time.ZonedDateTime;
 @Getter
 public class SlotAlreadyTakenException extends RuntimeException {
 
+  private static final long serialVersionUID = -1613257482026822576L;
+
   private static final String MESSAGE = "Slot starting at %s already taken";
   private final ZonedDateTime reservationDate;
 

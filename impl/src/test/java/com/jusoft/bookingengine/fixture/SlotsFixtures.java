@@ -15,5 +15,5 @@ public class SlotsFixtures {
   public static final ZonedDateTime START_TIME = ZonedDateTime.now().plus(1, ChronoUnit.DAYS);
   public static final OpenDate OPEN_DATE = OpenDate.of(START_TIME, END_TIME);
   public static final long SLOT_ID_1 = 2;
-  public static final AuctionConfigInfo NO_AUCTION_CONFIG_INFO = new NoAuctionConfigInfo();
+  public static final AuctionConfigInfo NO_AUCTION_CONFIG_INFO = NoAuctionConfigInfo.getInstance();
 }

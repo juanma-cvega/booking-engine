@@ -17,13 +17,13 @@ public class SlotLifeCycleManagerUseCaseConfig {
   }
 
   @Bean
-  public AddClassConfigUseCase addClassConfigUseCase() {
-    return new AddClassConfigUseCase(slotLifeCycleManagerComponent);
+  public AddClassTimetableUseCase addClassTimetableUseCase() {
+    return new AddClassTimetableUseCase(slotLifeCycleManagerComponent);
   }
 
   @Bean
-  public RemoveClassConfigUseCase removeClassConfigUseCase() {
-    return new RemoveClassConfigUseCase(slotLifeCycleManagerComponent);
+  public RemoveClassTimetableUseCase removeClassTimetableUseCase() {
+    return new RemoveClassTimetableUseCase(slotLifeCycleManagerComponent);
   }
 
   @Bean
@@ -42,8 +42,8 @@ public class SlotLifeCycleManagerUseCaseConfig {
   }
 
   @Bean
-  public ReplaceSlotValidationUseCase replaceSlotValidationUseCase() {
-    return new ReplaceSlotValidationUseCase(slotLifeCycleManagerComponent);
+  public ReplaceSlotsTimetableUseCase replaceSlotsTimetableUseCase() {
+    return new ReplaceSlotsTimetableUseCase(slotLifeCycleManagerComponent);
   }
 
   @Bean

@@ -63,7 +63,7 @@ public class CreateRoomUseCaseStepDefinitions extends AbstractUseCaseStepDefinit
     });
     Given("^a room is to be created$", DataHolder::createRoomBuilder);
     Given("^the room is open between (.*) and (.*)$", (String startTime, String endTime) ->
-      roomBuilder.openTimes.add(OpenTime.of(LocalTime.parse(startTime), LocalTime.parse(endTime))));
+      roomBuilder.openTimes.add(OpenTime.of(startTime, endTime, clock.getZone(), clock)));
     Given("^the room can open up to (.*) slots at the same time$", (Integer slots) ->
       roomBuilder.slotCreationConfigInfo = new MaxNumberOfSlotsStrategyConfigInfo(slots));
     Given("^the slots time is of (.*) minute$", (Integer slotDurationInMinutes) ->
@@ -71,7 +71,7 @@ public class CreateRoomUseCaseStepDefinitions extends AbstractUseCaseStepDefinit
     Given("^the room has a (.*) minutes auction time and a (.*) days bookings created window$", (Integer auctionDuration, Integer daysRange) ->
       roomBuilder.auctionConfigInfo = LessBookingsWithinPeriodConfigInfo.of(auctionDuration, daysRange));
     Given("^the room has a no auctions configuration$", () ->
-      roomBuilder.auctionConfigInfo = new NoAuctionConfigInfo());
+      roomBuilder.auctionConfigInfo = NoAuctionConfigInfo.getInstance());
     When("^the room is created with that configuration$", () ->
       roomCreated = createRoomUseCase.createRoom(roomBuilder.build(buildingCreated.getId())));
     Then("^(.*) slots should have been created$", (Integer slotsToBeCreated) ->

@@ -22,19 +22,19 @@ public class CreateSlotLifeCycleManagerUseCaseStepDefinitions extends AbstractUs
   private CreateSlotLifeCycleManagerUseCase createSlotLifeCycleManagerUseCase;
 
   public CreateSlotLifeCycleManagerUseCaseStepDefinitions() {
-    Given("^a slot lifecycle manager (\\d+) is to be created$",
+    Given("^a slot lifecycle manager for room (\\d+) is to be created$",
       DataHolder::createSlotLifeCycleManagerBuilder);
     Given("^the slot duration is (\\d+) minutes$", (Integer slotDuration) ->
-      createSlotLifeCycleManagerBuilder.slotValidationInfoBuilder.slotDurationInMinutes = slotDuration);
+      createSlotLifeCycleManagerBuilder.slotsTimetableBuilder.slotDurationInMinutes = slotDuration);
     Given("^the slots are open$", (DataTable openDays) ->
-      createSlotLifeCycleManagerBuilder.slotValidationInfoBuilder.availableDays = openDays.asList(DayOfWeek.class));
+      createSlotLifeCycleManagerBuilder.slotsTimetableBuilder.availableDays = openDays.asList(DayOfWeek.class));
     Given("^the slots are open from (.*) to (.*)$", (String startOpenTime, String endOpenTime) ->
-      createSlotLifeCycleManagerBuilder.slotValidationInfoBuilder.openTimes.add(OpenTime.of(startOpenTime, endOpenTime)));
+      createSlotLifeCycleManagerBuilder.slotsTimetableBuilder.openTimes.add(OpenTime.of(startOpenTime, endOpenTime, clock.getZone(), clock)));
     Given("^the slot lifecycle is created with that configuration$", () ->
       createSlotLifeCycleManagerUseCase.createSlotLifeCycleManager(createSlotLifeCycleManagerBuilder.build()));
-    When("^a slot lifecycle manager (\\d+) is created$", (Long roomId) ->
+    When("^a slot lifecycle manager for room (\\d+) is created$", (Long roomId) ->
       createSlotLifeCycleManagerUseCase.createSlotLifeCycleManager(CreateSlotLifeCycleManagerCommand.of(roomId, SLOT_VALIDATION_INFO)));
-    Then("^a slot lifecycle manager (.*) should be created$", (Long roomId) ->
+    Then("^a slot lifecycle manager for room (.*) should be created$", (Long roomId) ->
       assertThat(slotLifeCycleManagerComponent.find(roomId)).isNotNull());
   }
 }

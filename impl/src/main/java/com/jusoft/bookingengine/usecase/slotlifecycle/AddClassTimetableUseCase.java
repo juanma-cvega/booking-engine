@@ -1,15 +1,15 @@
 package com.jusoft.bookingengine.usecase.slotlifecycle;
 
-import com.jusoft.bookingengine.component.slotlifecycle.api.ClassConfig;
+import com.jusoft.bookingengine.component.slotlifecycle.api.ClassTimetable;
 import com.jusoft.bookingengine.component.slotlifecycle.api.SlotLifeCycleManagerComponent;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class AddClassConfigUseCase {
+public class AddClassTimetableUseCase {
 
   private final SlotLifeCycleManagerComponent slotLifeCycleManagerComponent;
 
-  public void addClassConfigTo(long roomId, ClassConfig classConfig) {
-    slotLifeCycleManagerComponent.addClassConfigTo(roomId, classConfig);
+  public void addClassTimetableTo(long roomId, ClassTimetable classTimetable) {
+    slotLifeCycleManagerComponent.addClassTimetableTo(roomId, classTimetable);
   }
 }
