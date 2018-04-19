@@ -1,7 +1,6 @@
 package com.jusoft.bookingengine.util;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 
 import java.time.Clock;
 import java.time.LocalDate;
@@ -11,7 +10,7 @@ import java.time.ZonedDateTime;
 
 import static java.time.LocalTime.parse;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@UtilityClass
 public final class DateUtils {
 
   public static ZonedDateTime convertToSystemZone(String sourceTime, ZoneId sourceZone, Clock clock) {

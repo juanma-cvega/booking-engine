@@ -10,7 +10,7 @@ public class ClassTimetableOverlappingException extends RuntimeException {
   private static final String MESSAGE = "Slot lifecycle manager for room %s already contains slots reserved overlapping with the configuration %s";
 
   private final long roomId;
-  private final ClassTimetable classTimetable;
+  private final transient ClassTimetable classTimetable;
 
   public ClassTimetableOverlappingException(long roomId, ClassTimetable classTimetable) {
     super(String.format(MESSAGE, roomId, classTimetable));

@@ -10,7 +10,7 @@ public class SlotsTimetableInvalidException extends RuntimeException {
   private static final String MESSAGE = "Slots timetable %s does not cover current reservations";
 
   private final long roomId;
-  private final SlotsTimetable slotsTimetable;
+  private final transient SlotsTimetable slotsTimetable;
 
   public SlotsTimetableInvalidException(long roomId, SlotsTimetable slotsTimetable) {
     this.roomId = roomId;

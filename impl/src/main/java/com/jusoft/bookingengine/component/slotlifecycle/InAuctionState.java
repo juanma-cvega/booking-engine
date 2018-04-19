@@ -6,7 +6,7 @@ import lombok.EqualsAndHashCode;
 
 @Data(staticConstructor = "of")
 @EqualsAndHashCode(callSuper = false)
-class InAuctionState extends NextSlotState {
+class InAuctionState implements NextSlotState {
 
   private final long slotId;
   private final AuctionConfigInfo auctionConfigInfo;

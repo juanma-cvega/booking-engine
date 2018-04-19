@@ -10,7 +10,7 @@ public class ClassTimetableNotValidException extends RuntimeException {
   private static final String MESSAGE = "The class timetable %s is not valid for room %s";
 
   private final long roomId;
-  private final ClassTimetable classTimetable;
+  private final transient ClassTimetable classTimetable;
 
   public ClassTimetableNotValidException(long roomId, ClassTimetable classTimetable) {
     super(String.format(MESSAGE, classTimetable, roomId));

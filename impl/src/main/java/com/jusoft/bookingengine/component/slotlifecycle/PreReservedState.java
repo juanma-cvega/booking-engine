@@ -5,7 +5,7 @@ import lombok.EqualsAndHashCode;
 
 @Data(staticConstructor = "of")
 @EqualsAndHashCode(callSuper = false)
-class PreReservedState extends NextSlotState {
+class PreReservedState implements NextSlotState {
 
   private final long slotId;
   private final long userId;
