@@ -10,9 +10,9 @@ import com.jusoft.bookingengine.component.room.api.CreateRoomCommand;
 import com.jusoft.bookingengine.component.room.api.RoomView;
 import com.jusoft.bookingengine.component.slot.api.SlotView;
 import com.jusoft.bookingengine.component.slotlifecycle.api.ReservedSlotsOfDay;
+import com.jusoft.bookingengine.component.slotlifecycle.api.SlotLifeCycleManagerView;
 import com.jusoft.bookingengine.component.slotlifecycle.api.SlotsTimetable;
 import com.jusoft.bookingengine.component.timer.OpenTime;
-import com.jusoft.bookingengine.strategy.auctionwinner.api.AuctionConfigInfo;
 import com.jusoft.bookingengine.strategy.slotcreation.api.SlotCreationConfigInfo;
 import com.jusoft.bookingengine.usecase.slotlifecycle.CreateSlotLifeCycleManagerCommand;
 import lombok.AllArgsConstructor;
@@ -30,7 +30,6 @@ import java.util.stream.Stream;
 
 import static com.jusoft.bookingengine.component.timer.SystemLocalTime.ofToday;
 import static com.jusoft.bookingengine.fixture.RoomFixtures.AVAILABLE_DAYS;
-import static com.jusoft.bookingengine.fixture.RoomFixtures.LESS_BOOKINGS_WITHIN_PERIOD_CONFIG;
 import static com.jusoft.bookingengine.fixture.RoomFixtures.MAX_NUMBER_OF_SLOTS_STRATEGY_CONFIG_INFO;
 import static com.jusoft.bookingengine.fixture.RoomFixtures.OPEN_TIMES;
 import static com.jusoft.bookingengine.fixture.RoomFixtures.SLOT_DURATION_IN_MINUTES;
@@ -51,8 +50,10 @@ public class DataHolder {
   public static Long clubAdmin;
   public static Set<JoinRequest> joinRequestsCreated = new HashSet<>();
   public static MemberView memberCreated;
+  public static SlotLifeCycleManagerView slotLifeCycleManager;
 
   public static RuntimeException exceptionThrown;
+
   public static CreateRoomCommandBuilder roomBuilder;
   public static CreateSlotLifeCycleManagerBuilder createSlotLifeCycleManagerBuilder;
   public static SlotsTimetableBuilder slotsTimetableBuilder;
@@ -83,6 +84,7 @@ public class DataHolder {
     clubAdmin = null;
     joinRequestsCreated = new HashSet<>();
     memberCreated = null;
+    slotLifeCycleManager = null;
 
     roomBuilder = null;
     createSlotLifeCycleManagerBuilder = null;
@@ -97,7 +99,6 @@ public class DataHolder {
     public Integer slotDurationInMinutes;
     public List<OpenTime> openTimes = new ArrayList<>();
     public List<DayOfWeek> availableDays = new ArrayList<>();
-    public AuctionConfigInfo auctionConfigInfo;
 
     public CreateRoomCommand build(long buildingId) {
       return CreateRoomCommand.of(
@@ -105,8 +106,7 @@ public class DataHolder {
         slotCreationConfigInfo == null ? MAX_NUMBER_OF_SLOTS_STRATEGY_CONFIG_INFO : slotCreationConfigInfo,
         slotDurationInMinutes == null ? SLOT_DURATION_IN_MINUTES : slotDurationInMinutes,
         openTimes.isEmpty() ? OPEN_TIMES : openTimes,
-        availableDays.isEmpty() ? AVAILABLE_DAYS : availableDays,
-        auctionConfigInfo == null ? LESS_BOOKINGS_WITHIN_PERIOD_CONFIG : auctionConfigInfo
+        availableDays.isEmpty() ? AVAILABLE_DAYS : availableDays
       );
     }
   }

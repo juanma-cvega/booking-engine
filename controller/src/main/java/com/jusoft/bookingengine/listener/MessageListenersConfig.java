@@ -1,15 +1,15 @@
 package com.jusoft.bookingengine.listener;
 
 import com.jusoft.bookingengine.usecase.auction.AddBidderToAuctionUseCase;
+import com.jusoft.bookingengine.usecase.auction.FinishAuctionUseCase;
+import com.jusoft.bookingengine.usecase.auction.StartAuctionUseCase;
 import com.jusoft.bookingengine.usecase.booking.CancelBookingUseCase;
 import com.jusoft.bookingengine.usecase.booking.CreateBookingUseCase;
 import com.jusoft.bookingengine.usecase.room.CreateRoomUseCase;
 import com.jusoft.bookingengine.usecase.slot.CreateSlotUseCase;
-import com.jusoft.bookingengine.usecase.auction.FinishAuctionUseCase;
 import com.jusoft.bookingengine.usecase.slot.ReserveSlotForAuctionWinnerUseCase;
 import com.jusoft.bookingengine.usecase.slot.ScheduleNextSlotUseCase;
-import com.jusoft.bookingengine.usecase.auction.StartAuctionUseCase;
-import com.jusoft.bookingengine.usecase.room.VerifyAuctionRequirementForSlotUseCase;
+import com.jusoft.bookingengine.usecase.slotlifecycle.FindNextSlotStateUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,7 +36,7 @@ public class MessageListenersConfig {
   @Autowired
   private ReserveSlotForAuctionWinnerUseCase reserveSlotForAuctionWinnerUseCase;
   @Autowired
-  private VerifyAuctionRequirementForSlotUseCase verifyAuctionRequirementForSlotUseCase;
+  private FindNextSlotStateUseCase findNextSlotStateUseCase;
 
   @Bean
   public SlotRequiredEventListener createSlotCommandListener() {
@@ -45,7 +45,7 @@ public class MessageListenersConfig {
 
   @Bean
   public SlotCreatedEventListener slotCreatedEventListener() {
-    return new SlotCreatedEventListener(scheduleNextSlotUseCase, verifyAuctionRequirementForSlotUseCase);
+    return new SlotCreatedEventListener(scheduleNextSlotUseCase, findNextSlotStateUseCase);
   }
 
   @Bean

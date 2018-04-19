@@ -1,6 +1,6 @@
 package com.jusoft.bookingengine.component.slot;
 
-import com.jusoft.bookingengine.component.booking.api.SlotPendingAuctionException;
+import com.jusoft.bookingengine.component.slot.api.SlotPendingAuctionException;
 
 import java.time.Clock;
 

@@ -1,7 +1,6 @@
 package com.jusoft.bookingengine.component.room.api;
 
 import com.jusoft.bookingengine.component.timer.OpenTime;
-import com.jusoft.bookingengine.strategy.auctionwinner.api.AuctionConfigInfo;
 import com.jusoft.bookingengine.strategy.slotcreation.api.SlotCreationConfigInfo;
 import lombok.Data;
 import lombok.NonNull;
@@ -23,8 +22,6 @@ public class RoomView {
   private final List<OpenTime> openTimesPerDay;
   @NonNull
   private final List<DayOfWeek> availableDays;
-  @NonNull
-  private final AuctionConfigInfo auctionConfigInfo;
 
   private RoomView(long id,
                    long clubId,
@@ -32,8 +29,7 @@ public class RoomView {
                    SlotCreationConfigInfo slotCreationConfigInfo,
                    int slotDurationInMinutes,
                    List<OpenTime> openTimesPerDay,
-                   List<DayOfWeek> availableDays,
-                   AuctionConfigInfo auctionConfigInfo) {
+                   List<DayOfWeek> availableDays) {
     this.id = id;
     this.clubId = clubId;
     this.buildingId = buildingId;
@@ -41,7 +37,6 @@ public class RoomView {
     this.slotDurationInMinutes = slotDurationInMinutes;
     this.openTimesPerDay = new ArrayList<>(openTimesPerDay);
     this.availableDays = new ArrayList<>(availableDays);
-    this.auctionConfigInfo = auctionConfigInfo;
   }
 
   public static RoomView of(long id,
@@ -50,9 +45,8 @@ public class RoomView {
                             SlotCreationConfigInfo slotCreationConfigInfo,
                             int slotDurationInMinutes,
                             List<OpenTime> openTimesPerDay,
-                            List<DayOfWeek> availableDays,
-                            AuctionConfigInfo auctionConfigInfo) {
-    return new RoomView(id, clubId, buildingId, slotCreationConfigInfo, slotDurationInMinutes, openTimesPerDay, availableDays, auctionConfigInfo);
+                            List<DayOfWeek> availableDays) {
+    return new RoomView(id, clubId, buildingId, slotCreationConfigInfo, slotDurationInMinutes, openTimesPerDay, availableDays);
   }
 
   public List<OpenTime> getOpenTimesPerDay() {

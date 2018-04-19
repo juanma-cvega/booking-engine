@@ -1,6 +1,6 @@
 package com.jusoft.bookingengine.component.slot;
 
-import com.jusoft.bookingengine.component.booking.api.SlotAlreadyReservedException;
+import com.jusoft.bookingengine.component.slot.api.SlotAlreadyReservedException;
 import com.jusoft.bookingengine.component.slot.api.SlotNotInAuctionException;
 
 import java.time.Clock;

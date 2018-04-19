@@ -1,6 +1,6 @@
 package com.jusoft.bookingengine.component.slot;
 
-import com.jusoft.bookingengine.component.booking.api.SlotNotAvailableException;
+import com.jusoft.bookingengine.component.slot.api.SlotNotAvailableException;
 import com.jusoft.bookingengine.component.slot.api.SlotNotInAuctionException;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

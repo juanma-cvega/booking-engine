@@ -4,8 +4,14 @@ repeat
 :CreateSlotUseCase|
 ->slotCreatedEvent;
 fork
-  :VerifyAuctionRequirementForSlotUseCase|
-  if (auctionRequired?) then (yes)
+  :FindNextSlotStateUseCase|
+  if (pre reservation needs slot?) then (yes)
+    ->slotPreReservedEvent;
+    :ReserveSlotUseCase|
+  elseif (class needs slot?) then (yes)
+    ->slotNeededForClassEvent;
+    :ReserveSlotUseCase|
+  elseif (auctionRequired?) then (yes)
     ->auctionRequiredEvent;
     :StartAuctionUseCase|
     ->auctionStartedEvent;

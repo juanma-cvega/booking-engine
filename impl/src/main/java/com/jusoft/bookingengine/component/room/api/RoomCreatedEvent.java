@@ -2,7 +2,6 @@ package com.jusoft.bookingengine.component.room.api;
 
 import com.jusoft.bookingengine.component.timer.OpenTime;
 import com.jusoft.bookingengine.publisher.Event;
-import com.jusoft.bookingengine.strategy.auctionwinner.api.AuctionConfigInfo;
 import lombok.Data;
 import lombok.NonNull;
 
@@ -18,6 +17,4 @@ public class RoomCreatedEvent implements Event {
   private final List<OpenTime> openTimesPerDay;
   @NonNull
   private final List<DayOfWeek> availableDays;
-  @NonNull
-  private final AuctionConfigInfo auctionConfigInfo;
 }

@@ -1,9 +1,9 @@
 package com.jusoft.bookingengine.component.slot;
 
-import com.jusoft.bookingengine.component.booking.api.SlotAlreadyReservedException;
-import com.jusoft.bookingengine.component.booking.api.SlotNotAvailableException;
-import com.jusoft.bookingengine.component.booking.api.SlotPendingAuctionException;
+import com.jusoft.bookingengine.component.slot.api.SlotAlreadyReservedException;
+import com.jusoft.bookingengine.component.slot.api.SlotNotAvailableException;
 import com.jusoft.bookingengine.component.slot.api.SlotNotInAuctionException;
+import com.jusoft.bookingengine.component.slot.api.SlotPendingAuctionException;
 import org.junit.Test;
 
 import java.time.Clock;

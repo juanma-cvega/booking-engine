@@ -2,9 +2,6 @@ package com.jusoft.bookingengine.fixture;
 
 import com.jusoft.bookingengine.component.room.api.CreateRoomCommand;
 import com.jusoft.bookingengine.component.timer.OpenTime;
-import com.jusoft.bookingengine.strategy.auctionwinner.api.AuctionConfigInfo;
-import com.jusoft.bookingengine.strategy.auctionwinner.api.LessBookingsWithinPeriodConfigInfo;
-import com.jusoft.bookingengine.strategy.auctionwinner.api.NoAuctionConfigInfo;
 import com.jusoft.bookingengine.strategy.slotcreation.api.MaxNumberOfSlotsStrategyConfigInfo;
 import lombok.experimental.UtilityClass;
 
@@ -33,14 +30,10 @@ public class RoomFixtures {
   public static final List<DayOfWeek> AVAILABLE_DAYS = Arrays.asList(DayOfWeek.MONDAY, DayOfWeek.TUESDAY);
   public static final int MAX_SLOTS = 2;
 
-  public static final int AUCTION_DURATION = 0;
-  public static final int END_RANGE_TIME_IN_DAYS = 5;
   public static final MaxNumberOfSlotsStrategyConfigInfo MAX_NUMBER_OF_SLOTS_STRATEGY_CONFIG_INFO = new MaxNumberOfSlotsStrategyConfigInfo(MAX_SLOTS);
-  public static final AuctionConfigInfo LESS_BOOKINGS_WITHIN_PERIOD_CONFIG = LessBookingsWithinPeriodConfigInfo.of(AUCTION_DURATION, END_RANGE_TIME_IN_DAYS);
-  public static final AuctionConfigInfo NO_AUCTION_CONFIG = NoAuctionConfigInfo.getInstance();
 
   public static final Function<Long, CreateRoomCommand> CREATE_ROOM_COMMAND = (buildingId) ->
     CreateRoomCommand.of(buildingId, MAX_NUMBER_OF_SLOTS_STRATEGY_CONFIG_INFO,
-      SLOT_DURATION_IN_MINUTES, OPEN_TIMES, AVAILABLE_DAYS, NO_AUCTION_CONFIG);
+      SLOT_DURATION_IN_MINUTES, OPEN_TIMES, AVAILABLE_DAYS);
 
 }

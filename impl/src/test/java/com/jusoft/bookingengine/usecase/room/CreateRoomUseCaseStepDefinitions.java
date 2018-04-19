@@ -10,8 +10,6 @@ import com.jusoft.bookingengine.component.slot.api.SlotView;
 import com.jusoft.bookingengine.component.timer.OpenTime;
 import com.jusoft.bookingengine.config.AbstractUseCaseStepDefinitions;
 import com.jusoft.bookingengine.holder.DataHolder;
-import com.jusoft.bookingengine.strategy.auctionwinner.api.LessBookingsWithinPeriodConfigInfo;
-import com.jusoft.bookingengine.strategy.auctionwinner.api.NoAuctionConfigInfo;
 import com.jusoft.bookingengine.strategy.slotcreation.api.MaxNumberOfSlotsStrategyConfigInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -50,7 +48,6 @@ public class CreateRoomUseCaseStepDefinitions extends AbstractUseCaseStepDefinit
       assertThat(roomView.getSlotCreationConfigInfo()).isEqualTo(roomCreated.getSlotCreationConfigInfo());
       assertThat(roomView.getAvailableDays()).isEqualTo(roomCreated.getAvailableDays());
       assertThat(roomView.getOpenTimesPerDay()).isEqualTo(roomCreated.getOpenTimesPerDay());
-      assertThat(roomView.getAuctionConfigInfo()).isEqualTo(roomCreated.getAuctionConfigInfo());
     });
     Then("^a notification of a created room should be published$", () -> {
       verify(messagePublisher).publish(messageCaptor.capture());
@@ -68,10 +65,6 @@ public class CreateRoomUseCaseStepDefinitions extends AbstractUseCaseStepDefinit
       roomBuilder.slotCreationConfigInfo = new MaxNumberOfSlotsStrategyConfigInfo(slots));
     Given("^the slots time is of (.*) minute$", (Integer slotDurationInMinutes) ->
       roomBuilder.slotDurationInMinutes = slotDurationInMinutes);
-    Given("^the room has a (.*) minutes auction time and a (.*) days bookings created window$", (Integer auctionDuration, Integer daysRange) ->
-      roomBuilder.auctionConfigInfo = LessBookingsWithinPeriodConfigInfo.of(auctionDuration, daysRange));
-    Given("^the room has a no auctions configuration$", () ->
-      roomBuilder.auctionConfigInfo = NoAuctionConfigInfo.getInstance());
     When("^the room is created with that configuration$", () ->
       roomCreated = createRoomUseCase.createRoom(roomBuilder.build(buildingCreated.getId())));
     Then("^(.*) slots should have been created$", (Integer slotsToBeCreated) ->

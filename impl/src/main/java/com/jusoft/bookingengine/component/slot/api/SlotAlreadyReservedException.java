@@ -1,10 +1,13 @@
-package com.jusoft.bookingengine.component.booking.api;
+package com.jusoft.bookingengine.component.slot.api;
 
 import lombok.Getter;
 
 @Getter
 public class SlotAlreadyReservedException extends RuntimeException {
-  private static final String MESSAGE = "Slot %s already taken";
+
+  private static final long serialVersionUID = 2884146960146660578L;
+
+  private static final String MESSAGE = "Slot %s already reserved";
 
   private final long slotId;
 

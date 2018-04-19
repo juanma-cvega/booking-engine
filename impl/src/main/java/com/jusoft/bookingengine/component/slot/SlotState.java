@@ -14,7 +14,7 @@ interface SlotState {
 
   SlotState reserve(Slot slot, Clock clock);
 
-  default boolean isAvailable(Slot slot, Clock clock) {
+  default boolean isOpen(Slot slot, Clock clock) {
     return false;
   }
 }

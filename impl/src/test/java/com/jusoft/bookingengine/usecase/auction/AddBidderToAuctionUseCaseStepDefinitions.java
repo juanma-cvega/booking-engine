@@ -28,7 +28,7 @@ public class AddBidderToAuctionUseCaseStepDefinitions extends AbstractUseCaseSte
 
   public AddBidderToAuctionUseCaseStepDefinitions() {
     When("^user (.*) bids on the auction$", (Long userId) ->
-      addBidderToAuctionUseCase.addBidderToAuctionFor(userId, slotCreated.getId()));
+      addBidderToAuctionUseCase.addBidderToAuctionFor(userId, auctionCreated.getReferenceId()));
     When("^user (.*) tries to bid on the auction$", (Long userId) ->
       storeException(() -> addBidderToAuctionUseCase.addBidderToAuctionFor(userId, slotCreated.getId())));
     Then("^the auction should contain the user (\\d+) bid created at (.*)$", (Integer userId, String creationTime) -> {

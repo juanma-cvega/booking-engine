@@ -6,11 +6,11 @@ import com.jusoft.bookingengine.component.authorization.api.AuthorizationManager
 import com.jusoft.bookingengine.component.authorization.api.SlotStatus;
 import com.jusoft.bookingengine.component.authorization.api.Tag;
 import com.jusoft.bookingengine.component.authorization.api.UnauthorizedReservationException;
-import com.jusoft.bookingengine.component.booking.api.SlotAlreadyReservedException;
-import com.jusoft.bookingengine.component.booking.api.SlotNotAvailableException;
-import com.jusoft.bookingengine.component.booking.api.SlotPendingAuctionException;
 import com.jusoft.bookingengine.component.member.api.UserNotMemberException;
+import com.jusoft.bookingengine.component.slot.api.SlotAlreadyReservedException;
 import com.jusoft.bookingengine.component.slot.api.SlotManagerComponent;
+import com.jusoft.bookingengine.component.slot.api.SlotNotOpenException;
+import com.jusoft.bookingengine.component.slot.api.SlotPendingAuctionException;
 import com.jusoft.bookingengine.component.slot.api.SlotReservedEvent;
 import com.jusoft.bookingengine.component.slot.api.SlotState;
 import com.jusoft.bookingengine.component.slot.api.SlotView;
@@ -77,8 +77,8 @@ public class ReserveSlotUseCaseStepDefinitions extends AbstractUseCaseStepDefini
       assertThat(exception.getSlotId()).isEqualTo(slotCreated.getId());
     });
     Then("^the user should get a notification that the slot is already started$", () -> {
-      assertThat(exceptionThrown).isInstanceOf(SlotNotAvailableException.class);
-      SlotNotAvailableException exception = (SlotNotAvailableException) exceptionThrown;
+      assertThat(exceptionThrown).isInstanceOf(SlotNotOpenException.class);
+      SlotNotOpenException exception = (SlotNotOpenException) exceptionThrown;
       assertThat(exception.getSlotId()).isEqualTo(slotCreated.getId());
     });
     Then("^the user (\\d+) should receive a notification he is not authorized to use the room created$", (Long userId) -> {

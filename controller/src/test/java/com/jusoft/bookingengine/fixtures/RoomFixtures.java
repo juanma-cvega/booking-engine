@@ -3,8 +3,6 @@ package com.jusoft.bookingengine.fixtures;
 import com.jusoft.bookingengine.component.room.api.RoomCreatedEvent;
 import com.jusoft.bookingengine.component.room.api.SlotRequiredEvent;
 import com.jusoft.bookingengine.component.timer.OpenTime;
-import com.jusoft.bookingengine.strategy.auctionwinner.api.AuctionConfigInfo;
-import com.jusoft.bookingengine.strategy.auctionwinner.api.NoAuctionConfigInfo;
 import lombok.experimental.UtilityClass;
 
 import java.time.Clock;
@@ -30,8 +28,7 @@ public class RoomFixtures {
   public static final OpenTime OPEN_TIME_NIGHT = OpenTime.of(START_TIME_NIGHT, END_TIME_NIGHT, CLOCK.getZone(), CLOCK);
   public static final List<OpenTime> OPEN_TIMES = Arrays.asList(OPEN_TIME_MORNING, OPEN_TIME_AFTERNOON, OPEN_TIME_NIGHT);
   public static final List<DayOfWeek> AVAILABLE_DAYS = Arrays.asList(DayOfWeek.MONDAY, DayOfWeek.TUESDAY);
-  public static final AuctionConfigInfo AUCTION_CONFIG_INFO = NoAuctionConfigInfo.getInstance();
 
-  public static final RoomCreatedEvent ROOM_CREATED_EVENT = RoomCreatedEvent.of(ROOM_ID, SLOT_DURATION_IN_MINUTES, OPEN_TIMES, AVAILABLE_DAYS, AUCTION_CONFIG_INFO);
+  public static final RoomCreatedEvent ROOM_CREATED_EVENT = RoomCreatedEvent.of(ROOM_ID, SLOT_DURATION_IN_MINUTES, OPEN_TIMES, AVAILABLE_DAYS);
   public static final SlotRequiredEvent SLOT_REQUIRED_EVENT = SlotRequiredEvent.of(ROOM_ID);
 }

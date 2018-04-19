@@ -11,6 +11,7 @@ import java.time.DayOfWeek;
 
 import static com.jusoft.bookingengine.fixture.SlotLifeCycleFixtures.SLOT_VALIDATION_INFO;
 import static com.jusoft.bookingengine.holder.DataHolder.createSlotLifeCycleManagerBuilder;
+import static com.jusoft.bookingengine.holder.DataHolder.slotLifeCycleManager;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CreateSlotLifeCycleManagerUseCaseStepDefinitions extends AbstractUseCaseStepDefinitions {
@@ -31,9 +32,9 @@ public class CreateSlotLifeCycleManagerUseCaseStepDefinitions extends AbstractUs
     Given("^the slots are open from (.*) to (.*)$", (String startOpenTime, String endOpenTime) ->
       createSlotLifeCycleManagerBuilder.slotsTimetableBuilder.openTimes.add(OpenTime.of(startOpenTime, endOpenTime, clock.getZone(), clock)));
     Given("^the slot lifecycle is created with that configuration$", () ->
-      createSlotLifeCycleManagerUseCase.createSlotLifeCycleManager(createSlotLifeCycleManagerBuilder.build()));
-    When("^a slot lifecycle manager for room (\\d+) is created$", (Long roomId) ->
-      createSlotLifeCycleManagerUseCase.createSlotLifeCycleManager(CreateSlotLifeCycleManagerCommand.of(roomId, SLOT_VALIDATION_INFO)));
+      slotLifeCycleManager = createSlotLifeCycleManagerUseCase.createSlotLifeCycleManager(createSlotLifeCycleManagerBuilder.build()));
+    Given("^a slot lifecycle manager for room (\\d+) is created$", (Long roomId) ->
+      slotLifeCycleManager = createSlotLifeCycleManagerUseCase.createSlotLifeCycleManager(CreateSlotLifeCycleManagerCommand.of(roomId, SLOT_VALIDATION_INFO)));
     Then("^a slot lifecycle manager for room (.*) should be created$", (Long roomId) ->
       assertThat(slotLifeCycleManagerComponent.find(roomId)).isNotNull());
   }

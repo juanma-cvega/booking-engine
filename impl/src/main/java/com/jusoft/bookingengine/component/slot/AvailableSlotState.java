@@ -1,8 +1,8 @@
 package com.jusoft.bookingengine.component.slot;
 
-import com.jusoft.bookingengine.component.booking.api.SlotNotAvailableException;
 import com.jusoft.bookingengine.component.slot.api.SlotAlreadyAvailableException;
 import com.jusoft.bookingengine.component.slot.api.SlotNotInAuctionException;
+import com.jusoft.bookingengine.component.slot.api.SlotNotOpenException;
 
 import java.time.Clock;
 import java.time.ZonedDateTime;
@@ -36,8 +36,8 @@ class AvailableSlotState implements SlotState {
 
   @Override
   public SlotState reserve(Slot slot, Clock clock) {
-    if (!isAvailable(slot, clock)) {
-      throw new SlotNotAvailableException(slot.getId());
+    if (!isOpen(slot, clock)) {
+      throw new SlotNotOpenException(slot.getId());
     }
     return ReservedState.getInstance();
   }
@@ -50,7 +50,7 @@ class AvailableSlotState implements SlotState {
    * @return whether the slot is available for booking
    */
   @Override
-  public boolean isAvailable(Slot slot, Clock clock) {
+  public boolean isOpen(Slot slot, Clock clock) {
     ZonedDateTime now = ZonedDateTime.now(clock);
     return slot.getOpenDate().getStartTime().isAfter(now);
   }

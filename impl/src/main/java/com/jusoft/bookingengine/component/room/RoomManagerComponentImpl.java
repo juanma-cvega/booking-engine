@@ -1,12 +1,10 @@
 package com.jusoft.bookingengine.component.room;
 
-import com.jusoft.bookingengine.component.room.api.AuctionRequiredEvent;
 import com.jusoft.bookingengine.component.room.api.CreateRoomCommand;
 import com.jusoft.bookingengine.component.room.api.NextSlotConfig;
 import com.jusoft.bookingengine.component.room.api.RoomManagerComponent;
 import com.jusoft.bookingengine.component.room.api.RoomNotFoundException;
 import com.jusoft.bookingengine.component.room.api.RoomView;
-import com.jusoft.bookingengine.component.room.api.SlotReadyEvent;
 import com.jusoft.bookingengine.publisher.MessagePublisher;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -46,16 +44,6 @@ class RoomManagerComponentImpl implements RoomManagerComponent {
   public NextSlotConfig findFirstSlotOpenDate(long roomId) {
     Room room = findRoom(roomId);
     return room.findFirstSlotDate(clock);
-  }
-
-  @Override
-  public void verifyAuctionRequirementFor(long roomId, long slotId) {
-    Room room = findRoom(roomId);
-    if (room.isAuctionRequired()) {
-      messagePublisher.publish(AuctionRequiredEvent.of(slotId, room.getAuctionConfigInfo()));
-    } else {
-      messagePublisher.publish(SlotReadyEvent.of(slotId));
-    }
   }
 
   private Room findRoom(long roomId) {

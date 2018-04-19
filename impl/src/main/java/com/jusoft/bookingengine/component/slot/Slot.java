@@ -40,7 +40,7 @@ class Slot {
   }
 
   public boolean isAvailable(Clock clock) {
-    return state.isAvailable(this, clock);
+    return state.isOpen(this, clock);
   }
 
   public Slot makeAvailable() {

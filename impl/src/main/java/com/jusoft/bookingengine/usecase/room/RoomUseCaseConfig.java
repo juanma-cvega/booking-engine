@@ -19,9 +19,4 @@ public class RoomUseCaseConfig {
   public CreateRoomUseCase createRoomUseCase() {
     return new CreateRoomUseCase(roomManagerComponent, buildingManagerComponent);
   }
-
-  @Bean
-  public VerifyAuctionRequirementForSlotUseCase verifyAuctionRequirementForSlotUseCase() {
-    return new VerifyAuctionRequirementForSlotUseCase(roomManagerComponent);
-  }
 }

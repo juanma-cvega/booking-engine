@@ -5,9 +5,7 @@ Feature: As an admin, I want a slot to wait for the result of an auction after i
     And a building is created
 
   Scenario: As an admin, I want a slot to wait for the result of an auction
-    Given a room is to be created
-    And the room has a 5 minutes auction time and a 5 days bookings created window
-    And the room is created with that configuration
+    Given a room is created
     And a slot is created
     And that sets the background
     When the slot is made wait for the result of an auction

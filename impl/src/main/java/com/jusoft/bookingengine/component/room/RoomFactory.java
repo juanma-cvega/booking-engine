@@ -19,8 +19,7 @@ class RoomFactory {
       createRoomCommand.getSlotCreationConfigInfo(),
       createRoomCommand.getSlotDurationInMinutes(),
       createRoomCommand.getOpenTimePerDay(),
-      createRoomCommand.getAvailableDays(),
-      createRoomCommand.getAuctionConfigInfo());
+      createRoomCommand.getAvailableDays());
   }
 
   RoomView createFrom(Room room) {
@@ -30,7 +29,6 @@ class RoomFactory {
       room.getSlotCreationConfigInfo(),
       room.getSlotDurationInMinutes(),
       room.getOpenTimesPerDay(),
-      room.getAvailableDays(),
-      room.getAuctionConfigInfo());
+      room.getAvailableDays());
   }
 }

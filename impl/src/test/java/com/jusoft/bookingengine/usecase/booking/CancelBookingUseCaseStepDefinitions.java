@@ -2,8 +2,8 @@ package com.jusoft.bookingengine.usecase.booking;
 
 import com.jusoft.bookingengine.component.booking.api.BookingManagerComponent;
 import com.jusoft.bookingengine.component.booking.api.BookingNotFoundException;
-import com.jusoft.bookingengine.component.booking.api.SlotNotAvailableException;
 import com.jusoft.bookingengine.component.booking.api.WrongBookingUserException;
+import com.jusoft.bookingengine.component.slot.api.SlotNotOpenException;
 import com.jusoft.bookingengine.config.AbstractUseCaseStepDefinitions;
 import com.jusoft.bookingengine.holder.DataHolder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,8 +39,8 @@ public class CancelBookingUseCaseStepDefinitions extends AbstractUseCaseStepDefi
       assertThatExceptionOfType(BookingNotFoundException.class)
         .isThrownBy(() -> bookingManagerComponent.find(bookingCreated.getId())));
     Then("^the user should be notified the booking is already started$", () -> {
-      assertThat(exceptionThrown).isNotNull().isInstanceOf(SlotNotAvailableException.class);
-      SlotNotAvailableException exceptionThrown = (SlotNotAvailableException) DataHolder.exceptionThrown;
+      assertThat(exceptionThrown).isNotNull().isInstanceOf(SlotNotOpenException.class);
+      SlotNotOpenException exceptionThrown = (SlotNotOpenException) DataHolder.exceptionThrown;
       assertThat(exceptionThrown.getSlotId()).isEqualTo(bookingCreated.getSlotId());
     });
     Then("^the user (.*) should be notified the booking does belong to other user$", (Long userId) -> {

@@ -7,9 +7,9 @@
 //import com.jusoft.bookingengine.component.booking.api.BookingView;
 //import com.jusoft.bookingengine.component.booking.api.CancelBookingCommand;
 //import com.jusoft.bookingengine.component.booking.api.CreateBookingCommand;
-//import com.jusoft.bookingengine.component.booking.api.SlotAlreadyReservedException;
-//import com.jusoft.bookingengine.component.booking.api.SlotNotAvailableException;
-//import com.jusoft.bookingengine.component.booking.api.SlotPendingAuctionException;
+//import com.jusoft.bookingengine.component.slot.api.SlotAlreadyReservedException;
+//import com.jusoft.bookingengine.component.slot.api.SlotNotOpenException;
+//import com.jusoft.bookingengine.component.slot.api.SlotPendingAuctionException;
 //import com.jusoft.bookingengine.component.booking.api.WrongBookingUserException;
 //import com.jusoft.bookingengine.fixture.CommonFixtures;
 //import com.jusoft.bookingengine.component.slot.api.SlotManagerComponent;
@@ -94,7 +94,7 @@
 //    Then("^the user should be notified the booking is already started$", () ->
 //      assertThat(exceptionThrown)
 //        .isNotNull()
-//        .isInstanceOf(SlotNotAvailableException.class));
+//        .isInstanceOf(SlotNotOpenException.class));
 //    When("^user (.*) cancels the booking$", (Long userId) ->
 //      storeException(() -> cancelBookingUseCase.cancel(new CancelBookingCommand(userId, extractBookingId(userId)))));
 //    When("^the user (.*) enters the auction$", (Integer userId) ->

@@ -11,6 +11,4 @@ public interface RoomManagerComponent {
   NextSlotConfig findNextSlotOpenDate(ZonedDateTime lastSlotEndTime, long roomId);
 
   NextSlotConfig findFirstSlotOpenDate(long roomId);
-
-  void verifyAuctionRequirementFor(long roomId, long slotId);
 }

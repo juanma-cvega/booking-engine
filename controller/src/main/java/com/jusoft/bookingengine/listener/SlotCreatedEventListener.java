@@ -2,7 +2,7 @@ package com.jusoft.bookingengine.listener;
 
 import com.jusoft.bookingengine.publisher.message.SlotCreatedMessage;
 import com.jusoft.bookingengine.usecase.slot.ScheduleNextSlotUseCase;
-import com.jusoft.bookingengine.usecase.room.VerifyAuctionRequirementForSlotUseCase;
+import com.jusoft.bookingengine.usecase.slotlifecycle.FindNextSlotStateUseCase;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +13,7 @@ import org.springframework.context.event.EventListener;
 class SlotCreatedEventListener implements MessageListener {
 
   private final ScheduleNextSlotUseCase scheduleNextSlotUseCase;
-  private final VerifyAuctionRequirementForSlotUseCase verifyAuctionRequirementForSlotUseCase;
+  private final FindNextSlotStateUseCase findNextSlotStateUseCase;
 
   @EventListener(SlotCreatedMessage.class)
   public void scheduleNextSlot(SlotCreatedMessage event) {
@@ -26,6 +26,6 @@ class SlotCreatedEventListener implements MessageListener {
   public void startAuction(SlotCreatedMessage event) {
     log.info("SlotCreatedEvent consumed for auction: slotId={}, roomId={}, openDate={}, endTime={}",
       event.getSlotId(), event.getRoomId(), event.getOpenDate());
-    verifyAuctionRequirementForSlotUseCase.isAuctionRequiredFor(event.getRoomId(), event.getSlotId());
+    findNextSlotStateUseCase.findNextSlotStateUseCase(event.getSlotId(), event.getRoomId(), event.getOpenDate().getStartTime());
   }
 }

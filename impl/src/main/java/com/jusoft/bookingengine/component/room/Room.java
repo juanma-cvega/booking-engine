@@ -4,7 +4,6 @@ import com.jusoft.bookingengine.component.room.api.NextSlotConfig;
 import com.jusoft.bookingengine.component.timer.OpenDate;
 import com.jusoft.bookingengine.component.timer.OpenTime;
 import com.jusoft.bookingengine.component.timer.SystemLocalTime;
-import com.jusoft.bookingengine.strategy.auctionwinner.api.AuctionConfigInfo;
 import com.jusoft.bookingengine.strategy.slotcreation.api.SlotCreationConfigInfo;
 import lombok.Data;
 import org.apache.commons.lang3.Validate;
@@ -33,10 +32,8 @@ class Room {
   private final int slotDurationInMinutes;
   private final List<OpenTime> openTimesPerDay;
   private final List<DayOfWeek> availableDays;
-  private final AuctionConfigInfo auctionConfigInfo;
 
-  Room(long id, long clubId, long buildingId, SlotCreationConfigInfo slotCreationConfigInfo, int slotDurationInMinutes, List<OpenTime> openTimesPerDay, List<DayOfWeek> availableDays, AuctionConfigInfo auctionConfigInfo) {
-    Validate.notNull(auctionConfigInfo);
+  Room(long id, long clubId, long buildingId, SlotCreationConfigInfo slotCreationConfigInfo, int slotDurationInMinutes, List<OpenTime> openTimesPerDay, List<DayOfWeek> availableDays) {
     Validate.notNull(slotCreationConfigInfo);
     Validate.notEmpty(openTimesPerDay);
     Validate.notEmpty(availableDays);
@@ -48,7 +45,6 @@ class Room {
     this.slotDurationInMinutes = slotDurationInMinutes;
     this.openTimesPerDay = new ArrayList<>(openTimesPerDay);
     this.availableDays = new ArrayList<>(availableDays);
-    this.auctionConfigInfo = auctionConfigInfo;
     validateOpenTimesDurationAreMultiplesOfSlotDuration(openTimesPerDay, slotDurationInMinutes);
   }
 
@@ -172,7 +168,4 @@ class Room {
     return new ArrayList<>(availableDays);
   }
 
-  public boolean isAuctionRequired() {
-    return auctionConfigInfo.getAuctionDuration() > 0;
-  }
 }

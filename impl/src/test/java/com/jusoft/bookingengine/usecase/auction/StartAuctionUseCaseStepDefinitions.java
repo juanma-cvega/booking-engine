@@ -7,10 +7,10 @@ import com.jusoft.bookingengine.component.auction.api.AuctionView;
 import com.jusoft.bookingengine.component.auction.api.StartAuctionCommand;
 import com.jusoft.bookingengine.config.AbstractUseCaseStepDefinitions;
 import com.jusoft.bookingengine.holder.DataHolder;
+import com.jusoft.bookingengine.strategy.auctionwinner.api.LessBookingsWithinPeriodConfigInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static com.jusoft.bookingengine.holder.DataHolder.auctionCreated;
-import static com.jusoft.bookingengine.holder.DataHolder.roomCreated;
 import static com.jusoft.bookingengine.holder.DataHolder.slotCreated;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -27,8 +27,8 @@ public class StartAuctionUseCaseStepDefinitions extends AbstractUseCaseStepDefin
   private StartAuctionUseCase startAuctionUseCase;
 
   public StartAuctionUseCaseStepDefinitions() {
-    When("^an auction is created for the slot$", () ->
-      auctionCreated = startAuctionUseCase.startAuction(StartAuctionCommand.of(slotCreated.getId(), roomCreated.getAuctionConfigInfo())));
+    When("^an auction is created for the slot with a (.*) minutes auction time and a (.*) days bookings created window$", (Integer auctionDuration, Integer daysRange) ->
+      auctionCreated = startAuctionUseCase.startAuction(StartAuctionCommand.of(slotCreated.getId(), LessBookingsWithinPeriodConfigInfo.of(auctionDuration, daysRange))));
     Then("^the auction should be stored$", () -> {
       AuctionView auction = auctionManagerComponent.find(DataHolder.auctionCreated.getId());
       assertThat(auction.getBidders()).hasSameElementsAs(DataHolder.auctionCreated.getBidders());
