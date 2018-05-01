@@ -15,8 +15,9 @@ public class ScheduleNextSlotUseCase {
   private final SchedulerComponent schedulerComponent;
   private final SlotCreationStrategyRegistrar slotCreationStrategyRegistrar;
 
-  //FIXME possible race condition. Two threads coming at the same time can see the number
-  //FIXME of slots at max - 1 and decide to schedule a slot at the same time
+  //WARNING: in case a new option is added to schedule slots manually or by any other mean other than the current one,
+  //there could exist a race condition where the strategy decides to create a new slot not considering what other
+  //thread could be doing at the same time
   public void scheduleNextSlot(long roomId) {
     RoomView room = roomManagerComponent.find(roomId);
     SlotCreationStrategy strategy = slotCreationStrategyRegistrar.createStrategyWith(room.getSlotCreationConfigInfo());

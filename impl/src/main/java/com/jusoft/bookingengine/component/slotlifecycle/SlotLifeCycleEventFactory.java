@@ -1,24 +1,33 @@
 package com.jusoft.bookingengine.component.slotlifecycle;
 
-import com.jusoft.bookingengine.component.slotlifecycle.api.SlotNeededForClassEvent;
-import com.jusoft.bookingengine.component.slotlifecycle.api.SlotPreReservedEvent;
-import com.jusoft.bookingengine.component.slotlifecycle.api.SlotReadyEvent;
+import com.jusoft.bookingengine.component.slotlifecycle.api.ClassReservationCreatedEvent;
+import com.jusoft.bookingengine.component.slotlifecycle.api.PersonReservationCreatedEvent;
+import com.jusoft.bookingengine.component.slotlifecycle.api.SlotCanBeMadeAvailableEvent;
 import com.jusoft.bookingengine.component.slotlifecycle.api.SlotRequiresAuctionEvent;
+import com.jusoft.bookingengine.component.slotlifecycle.api.SlotRequiresPreReservationEvent;
+import com.jusoft.bookingengine.component.slotlifecycle.api.SlotUser;
+import com.jusoft.bookingengine.component.slotlifecycle.api.SlotUser.UserType;
 import com.jusoft.bookingengine.publisher.Event;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
 import java.util.stream.Stream;
 
+import static com.jusoft.bookingengine.component.slotlifecycle.api.SlotUser.UserType.CLASS;
+import static com.jusoft.bookingengine.component.slotlifecycle.api.SlotUser.UserType.PERSON;
+
 class SlotLifeCycleEventFactory {
 
-  public <T extends NextSlotState> Event getEventFrom(T nextSlotState) {
+  <T extends NextSlotState> Event getEventFrom(T nextSlotState) {
     return EventType.valueOf(nextSlotState).createEventFrom(nextSlotState);
+  }
+
+  Event getEventFrom(long slotId, SlotUser slotUser) {
+    return ReservationEventType.valueOf(slotUser.getUserType()).createEventFrom(slotId, slotUser);
   }
 
   private enum EventType {
     IN_AUCTION(InAuctionSlotStateFactory.INSTANCE),
-    RESERVED_FOR_CLASS(ReservedForClassSlotStateFactory.INSTANCE),
     PRE_RESERVED(PreReservedSlotStateFactory.INSTANCE),
     AVAILABLE(AvailableSlotStateFactory.INSTANCE);
 
@@ -29,7 +38,7 @@ class SlotLifeCycleEventFactory {
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends NextSlotState> Event createEventFrom(T slotState) {
+    <T extends NextSlotState> Event createEventFrom(T slotState) {
       return factory.getEventFrom(slotState);
     }
 
@@ -66,29 +75,13 @@ class SlotLifeCycleEventFactory {
   }
 
   @AllArgsConstructor(access = AccessLevel.PRIVATE)
-  private static class ReservedForClassSlotStateFactory implements SlotStateFactory<SlotNeededForClassEvent, ReservedForClassState> {
-
-    private static final ReservedForClassSlotStateFactory INSTANCE = new ReservedForClassSlotStateFactory();
-
-    @Override
-    public SlotNeededForClassEvent getEventFrom(ReservedForClassState nextSlotState) {
-      return SlotNeededForClassEvent.of(nextSlotState.getSlotId(), nextSlotState.getClassId());
-    }
-
-    @Override
-    public Class<ReservedForClassState> getState() {
-      return ReservedForClassState.class;
-    }
-  }
-
-  @AllArgsConstructor(access = AccessLevel.PRIVATE)
-  private static class PreReservedSlotStateFactory implements SlotStateFactory<SlotPreReservedEvent, PreReservedState> {
+  private static class PreReservedSlotStateFactory implements SlotStateFactory<SlotRequiresPreReservationEvent, PreReservedState> {
 
     private static final PreReservedSlotStateFactory INSTANCE = new PreReservedSlotStateFactory();
 
     @Override
-    public SlotPreReservedEvent getEventFrom(PreReservedState nextSlotState) {
-      return SlotPreReservedEvent.of(nextSlotState.getUserId(), nextSlotState.getSlotId());
+    public SlotRequiresPreReservationEvent getEventFrom(PreReservedState nextSlotState) {
+      return SlotRequiresPreReservationEvent.of(nextSlotState.getSlotId(), nextSlotState.getUser());
     }
 
     @Override
@@ -98,13 +91,13 @@ class SlotLifeCycleEventFactory {
   }
 
   @AllArgsConstructor(access = AccessLevel.PRIVATE)
-  private static class AvailableSlotStateFactory implements SlotStateFactory<SlotReadyEvent, AvailableState> {
+  private static class AvailableSlotStateFactory implements SlotStateFactory<SlotCanBeMadeAvailableEvent, AvailableState> {
 
     private static final AvailableSlotStateFactory INSTANCE = new AvailableSlotStateFactory();
 
     @Override
-    public SlotReadyEvent getEventFrom(AvailableState nextSlotState) {
-      return SlotReadyEvent.of(nextSlotState.getSlotId());
+    public SlotCanBeMadeAvailableEvent getEventFrom(AvailableState nextSlotState) {
+      return SlotCanBeMadeAvailableEvent.of(nextSlotState.getSlotId());
     }
 
     @Override
@@ -113,4 +106,62 @@ class SlotLifeCycleEventFactory {
     }
   }
 
+  private enum ReservationEventType {
+    PERSON_RESERVATION(PersonReservationCreatedEventFactory.INSTANCE),
+    CLASS_RESERVATION(ClassReservationCreatedEventFactory.INSTANCE);
+
+    private final ReservationEventFactory factory;
+
+    ReservationEventType(ReservationEventFactory factory) {
+      this.factory = factory;
+    }
+
+    Event createEventFrom(long slotId, SlotUser slotUser) {
+      return factory.createEventFrom(slotId, slotUser);
+    }
+
+    static ReservationEventType valueOf(UserType userType) {
+      return Stream.of(values())
+        .filter(eventType -> eventType.factory.getUserType().equals(userType))
+        .findFirst()
+        .orElseThrow(() -> new IllegalArgumentException("User type not supported"));
+    }
+  }
+
+  private interface ReservationEventFactory {
+
+    Event createEventFrom(long slotId, SlotUser slotUser);
+
+    UserType getUserType();
+  }
+
+  private static class PersonReservationCreatedEventFactory implements ReservationEventFactory {
+
+    private static final PersonReservationCreatedEventFactory INSTANCE = new PersonReservationCreatedEventFactory();
+
+    @Override
+    public Event createEventFrom(long slotId, SlotUser slotUser) {
+      return PersonReservationCreatedEvent.of(slotId, slotUser.getId());
+    }
+
+    @Override
+    public UserType getUserType() {
+      return PERSON;
+    }
+  }
+
+  private static class ClassReservationCreatedEventFactory implements ReservationEventFactory {
+
+    private static final ClassReservationCreatedEventFactory INSTANCE = new ClassReservationCreatedEventFactory();
+
+    @Override
+    public Event createEventFrom(long slotId, SlotUser slotUser) {
+      return ClassReservationCreatedEvent.of(slotId, slotUser.getId());
+    }
+
+    @Override
+    public UserType getUserType() {
+      return CLASS;
+    }
+  }
 }

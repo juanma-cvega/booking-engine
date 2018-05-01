@@ -5,9 +5,9 @@ import lombok.Getter;
 @Getter
 public class SlotLifeCycleManagerNotFoundException extends RuntimeException {
 
-  private static final String MESSAGE = "Slot life cycle manager for room %s not found";
-
   private static final long serialVersionUID = -8984436501593033852L;
+
+  private static final String MESSAGE = "Slot life cycle manager for room %s not found";
 
   private final long roomId;
 

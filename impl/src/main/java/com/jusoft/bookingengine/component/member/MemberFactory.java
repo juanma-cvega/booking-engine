@@ -16,7 +16,7 @@ class MemberFactory {
     return new Member(idSupplier.get(),
       command.getUserId(),
       command.getClubId(),
-      null); //FIXME add personal info somehow. Is personal info shared from the users profile??
+      null); //TODO add personal info somehow. Is personal info shared from the users profile??
   }
 
   public MemberView createFrom(Member member) {
@@ -24,6 +24,6 @@ class MemberFactory {
       member.getId(),
       member.getUserId(),
       member.getClubId(),
-      null);//FIXME add personal info somehow. Is personal info shared from the users profile??
+      null);//TODO add personal info somehow. Is personal info shared from the users profile??
   }
 }

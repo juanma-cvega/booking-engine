@@ -1,5 +1,6 @@
 package com.jusoft.bookingengine.component.slotlifecycle;
 
+import com.jusoft.bookingengine.component.slotlifecycle.api.SlotUser;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -8,5 +9,5 @@ import lombok.EqualsAndHashCode;
 class PreReservedState implements NextSlotState {
 
   private final long slotId;
-  private final long userId;
+  private final SlotUser user;
 }

@@ -8,6 +8,7 @@ import com.jusoft.bookingengine.component.slotlifecycle.api.PreReservation;
 import com.jusoft.bookingengine.component.slotlifecycle.api.PreReservationNotFoundException;
 import com.jusoft.bookingengine.component.slotlifecycle.api.ReservationDateNotValidException;
 import com.jusoft.bookingengine.component.slotlifecycle.api.SlotAlreadyTakenException;
+import com.jusoft.bookingengine.component.slotlifecycle.api.SlotUser;
 import com.jusoft.bookingengine.component.slotlifecycle.api.SlotsTimetable;
 import com.jusoft.bookingengine.component.slotlifecycle.api.SlotsTimetableInvalidException;
 import com.jusoft.bookingengine.strategy.auctionwinner.api.AuctionConfigInfo;
@@ -25,6 +26,8 @@ import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+import static com.jusoft.bookingengine.component.slotlifecycle.api.SlotUser.UserType.CLASS;
+import static com.jusoft.bookingengine.component.slotlifecycle.api.SlotUser.UserType.PERSON;
 import static java.time.ZonedDateTime.now;
 import static java.util.stream.Collectors.toList;
 
@@ -70,24 +73,20 @@ class SlotLifeCycleManager {
     return () -> classesConfig.values().stream()
       .filter(currentClass -> currentClass.contains(startTime, clock))
       .findFirst()
-      .map(classFound -> ReservedForClassState.of(slotId, classFound.getClassId()));
+      .map(classFound -> PreReservedState.of(slotId, SlotUser.of(classFound.getClassId(), CLASS)));
   }
 
   private Supplier<Optional<NextSlotState>> isPreReservedState(long slotId, ZonedDateTime slotStartTime) {
     return () -> preReservations.stream()
       .filter(preReservation -> preReservation.getReservationDate().isEqual(slotStartTime))
       .findFirst()
-      .map(preReservation -> PreReservedState.of(slotId, preReservation.getUserId()));
+      .map(preReservation -> PreReservedState.of(slotId, SlotUser.of(preReservation.getUserId(), PERSON)));
   }
 
   private Supplier<Optional<NextSlotState>> isInAuctionState(long slotId) {
-    return () -> {
-      Optional<NextSlotState> auctionRequired = Optional.empty();
-      if (auctionConfigInfo.getAuctionDuration() > 0) {
-        auctionRequired = Optional.of(InAuctionState.of(slotId, auctionConfigInfo));
-      }
-      return auctionRequired;
-    };
+    return () -> auctionConfigInfo.getAuctionDuration() > 0
+      ? Optional.of(InAuctionState.of(slotId, auctionConfigInfo))
+      : Optional.empty();
   }
 
   SlotLifeCycleManager replaceAuctionConfigWith(AuctionConfigInfo auctionConfigInfo) {

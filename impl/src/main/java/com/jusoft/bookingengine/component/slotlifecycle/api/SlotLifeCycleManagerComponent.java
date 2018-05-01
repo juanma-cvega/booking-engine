@@ -24,4 +24,5 @@ public interface SlotLifeCycleManagerComponent {
 
   void findNextSlotStateFor(long slotId, long roomId, ZonedDateTime slotStartTime);
 
+  void notifyOfSlotReservation(long slotId, SlotUser slotUser);
 }

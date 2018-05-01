@@ -15,7 +15,7 @@ Feature: As a user, I want to reserve a slot
     Then the slot should be reserved
     And a notification of a slot reserved by user 1 should be published
 
-  Scenario: As a user, I want to reserve a slot available after its auction finished without a winner
+  Scenario: As a user, I want to reserve a slot after it's made available
     Given current time is 06:00
     And user 1 is the member 4 of the club created
     And the slot is made available
@@ -45,11 +45,10 @@ Feature: As a user, I want to reserve a slot
     When the user 1 tries to reserve the slot
     Then the user should get a notification that the slot is already started
 
-  Scenario: As a user, I shouldn't be able to reserved a slot while is open for auction
-    Given the slot is made wait for the result of an auction
-    And user 1 is the member 4 of the club created
+  Scenario: As a user, I shouldn't be able to reserved a slot while is still not available
+    Given user 1 is the member 4 of the club created
     When the user 1 tries to reserve the slot
-    Then the user should be notified the slot is still in auction
+    Then the user should be notified the slot is not available
 
   Scenario: As a user, I cannot reserve a slot if I'm not a member of the club
     Given the slot is made available

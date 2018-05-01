@@ -43,7 +43,7 @@
     <cucumber.version>2.4.0</cucumber.version>
     <awaitility.version>3.0.0</awaitility.version>
     <maven-resources-plugin.version>3.0.2</maven-resources-plugin.version>
-    <jacoco-maven-plugin.version>0.8.0</jacoco-maven-plugin.version>
+    <jacoco-maven-plugin.version>0.8.1</jacoco-maven-plugin.version>
   </properties>
 
   <dependencyManagement>

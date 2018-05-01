@@ -5,6 +5,8 @@ import lombok.Getter;
 @Getter
 public class ClubWithNameNotFoundException extends RuntimeException {
 
+  private static final long serialVersionUID = 5785748568910803393L;
+
   private static final String MESSAGE = "Club with name %s not found";
 
   private final String name;

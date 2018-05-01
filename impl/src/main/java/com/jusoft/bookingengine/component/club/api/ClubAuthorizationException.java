@@ -5,6 +5,8 @@ import lombok.Getter;
 @Getter
 public class ClubAuthorizationException extends RuntimeException {
 
+  private static final long serialVersionUID = 4316854268319741497L;
+
   private static final String MESSAGE = "User %s has no admin rights in club %s";
 
   private final long userId;

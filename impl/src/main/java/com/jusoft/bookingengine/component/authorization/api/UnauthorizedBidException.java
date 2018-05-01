@@ -5,7 +5,10 @@ import lombok.Getter;
 @Getter
 public class UnauthorizedBidException extends RuntimeException {
 
+  private static final long serialVersionUID = -5490265838108581267L;
+
   private static final String MESSAGE = "User %s is not authorized to bid in auctions for club %s, building %s and room %s";
+
   private final long userId;
   private final long clubId;
   private final long buildingId;

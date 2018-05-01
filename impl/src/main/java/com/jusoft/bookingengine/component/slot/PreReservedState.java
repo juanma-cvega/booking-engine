@@ -4,11 +4,11 @@ import com.jusoft.bookingengine.component.slot.api.SlotAlreadyReservedException;
 
 import java.time.Clock;
 
-class ReservedState implements SlotState {
+class PreReservedState implements SlotState {
 
-  private static final ReservedState INSTANCE = new ReservedState();
+  private static final PreReservedState INSTANCE = new PreReservedState();
 
-  private ReservedState() {
+  private PreReservedState() {
   }
 
   @Override

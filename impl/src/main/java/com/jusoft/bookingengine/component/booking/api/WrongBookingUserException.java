@@ -5,6 +5,8 @@ import lombok.Getter;
 @Getter
 public class WrongBookingUserException extends RuntimeException {
 
+  private static final long serialVersionUID = -3409360647626798706L;
+
   private static final String MESSAGE = "The provided user %s, does not match the expected user %s for booking %s";
 
   private final long providedId;

@@ -5,6 +5,7 @@ import com.jusoft.bookingengine.component.slotlifecycle.api.PreReservation;
 import com.jusoft.bookingengine.component.slotlifecycle.api.SlotLifeCycleManagerComponent;
 import com.jusoft.bookingengine.component.slotlifecycle.api.SlotLifeCycleManagerNotFoundException;
 import com.jusoft.bookingengine.component.slotlifecycle.api.SlotLifeCycleManagerView;
+import com.jusoft.bookingengine.component.slotlifecycle.api.SlotUser;
 import com.jusoft.bookingengine.component.slotlifecycle.api.SlotsTimetable;
 import com.jusoft.bookingengine.publisher.MessagePublisher;
 import com.jusoft.bookingengine.strategy.auctionwinner.api.AuctionConfigInfo;
@@ -95,6 +96,11 @@ class SlotLifeCycleManagerComponentImpl implements SlotLifeCycleManagerComponent
     SlotLifeCycleManager slotLifeCycleManager = repository.find(roomId).orElseThrow(supplySlotLifeCycleManagerNotFoundException(roomId));
     NextSlotState nextSlotState = slotLifeCycleManager.nextStateFor(slotId, slotStartTime, clock);
     messagePublisher.publish(eventFactory.getEventFrom(nextSlotState));
+  }
+
+  @Override
+  public void notifyOfSlotReservation(long slotId, SlotUser slotUser) {
+    messagePublisher.publish(eventFactory.getEventFrom(slotId, slotUser));
   }
 
   private SlotLifeCycleManager findOrFail(long roomId) {

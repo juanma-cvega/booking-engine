@@ -4,9 +4,10 @@ import com.jusoft.bookingengine.component.slot.api.CreateSlotCommand;
 import com.jusoft.bookingengine.component.slot.api.SlotMadeAvailableEvent;
 import com.jusoft.bookingengine.component.slot.api.SlotManagerComponent;
 import com.jusoft.bookingengine.component.slot.api.SlotNotFoundException;
+import com.jusoft.bookingengine.component.slot.api.SlotPreReservedEvent;
 import com.jusoft.bookingengine.component.slot.api.SlotReservedEvent;
+import com.jusoft.bookingengine.component.slot.api.SlotUser;
 import com.jusoft.bookingengine.component.slot.api.SlotView;
-import com.jusoft.bookingengine.component.slot.api.SlotWaitingForAuctionEvent;
 import com.jusoft.bookingengine.publisher.MessagePublisher;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -54,9 +55,15 @@ class SlotManagerComponentImpl implements SlotManagerComponent {
   }
 
   @Override
-  public void reserveSlot(long slotId, long userId) {
-    Slot slot = slotRepository.execute(slotId, slotFound -> slotFound.reserve(clock));
-    messagePublisher.publish(SlotReservedEvent.of(slot.getId(), userId));
+  public void reserveSlot(long slotId, SlotUser slotUser) {
+    slotRepository.execute(slotId, slotFound -> slotFound.reserve(clock));
+    messagePublisher.publish(SlotReservedEvent.of(slotId, slotUser));
+  }
+
+  @Override
+  public void preReserveSlot(long slotId, SlotUser slotUser) {
+    slotRepository.execute(slotId, slotFound -> slotFound.preReserve(clock));
+    messagePublisher.publish(SlotPreReservedEvent.of(slotId, slotUser));
   }
 
   @Override
@@ -66,25 +73,13 @@ class SlotManagerComponentImpl implements SlotManagerComponent {
   }
 
   @Override
-  public void reserveSlotForAuctionWinner(long slotId, long userId) {
-    Slot slot = slotRepository.execute(slotId, Slot::reserveForAuctionWinner);
-    messagePublisher.publish(SlotReservedEvent.of(slot.getId(), userId));
-  }
-
-  @Override
-  public void makeWaitForAuction(long slotId) {
-    Slot slot = slotRepository.execute(slotId, Slot::makeWaitForAuction);
-    messagePublisher.publish(SlotWaitingForAuctionEvent.of(slot.getId()));
-  }
-
-  @Override
   public SlotView find(long slotId) {
     return slotFactory.createFrom(findSlotOrFail(slotId));
   }
 
   @Override
   public boolean isSlotOpen(long slotId) {
-    return findSlotOrFail(slotId).isAvailable(clock);
+    return findSlotOrFail(slotId).isOpen(clock);
   }
 
   private Slot findSlotOrFail(long slotId) {

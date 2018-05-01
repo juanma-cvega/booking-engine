@@ -39,17 +39,13 @@ public class SlotUseCaseConfig {
   }
 
   @Bean
-  public ReserveSlotForAuctionWinnerUseCase reserveSlotForAuctionWinnerUseCase() {
-    return new ReserveSlotForAuctionWinnerUseCase(slotManagerComponent);
+  public PreReserveSlotUseCase reserveSlotForAuctionWinnerUseCase() {
+    return new PreReserveSlotUseCase(slotManagerComponent);
   }
 
   @Bean
-  public ReserveSlotUseCase reserveSlotUseCase() {
-    return new ReserveSlotUseCase(authorizationManagerComponent, slotManagerComponent);
+  public ReserveSlotForPersonUseCase reserveSlotUseCase() {
+    return new ReserveSlotForPersonUseCase(authorizationManagerComponent, slotManagerComponent);
   }
 
-  @Bean
-  public MakeSlotWaitForAuctionUseCase makeSlotWaitForAuctionUseCase() {
-    return new MakeSlotWaitForAuctionUseCase(slotManagerComponent);
-  }
 }

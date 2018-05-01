@@ -4,7 +4,8 @@ import com.jusoft.bookingengine.publisher.Event;
 import lombok.Data;
 
 @Data(staticConstructor = "of")
-public class SlotLifeCycleManagerCreatedEvent implements Event {
+public class SlotRequiresPreReservationEvent implements Event {
 
-  private final long roomId;
+  private final long slotId;
+  private final SlotUser slotUser;
 }

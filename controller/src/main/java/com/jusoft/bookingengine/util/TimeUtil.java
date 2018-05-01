@@ -9,7 +9,7 @@ public final class TimeUtil {
   private TimeUtil() {
   }
 
-  //FIXME find better serialization
+  //TODO find better serialization
   public static long getTimeFrom(ZonedDateTime time) {
     return time.toInstant().getEpochSecond();
   }

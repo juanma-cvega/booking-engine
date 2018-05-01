@@ -18,8 +18,8 @@ class Club {
   private final long id;
   private final String name;
   private final String description;
-  private final Set<Long> admins; //FIXME should Member contain the role of the user? Would that remove this list?
-  private final Set<JoinRequest> joinRequests; //FIXME should JoinRequest be its own component??
+  private final Set<Long> admins; //TODO should Member contain the role of the user? Would that remove this list?
+  private final Set<JoinRequest> joinRequests; //TODO should JoinRequest be its own component??
 
   Club(long id, String name, String description, Set<Long> admins, Set<JoinRequest> joinRequests) {
     Validate.notNull(name);

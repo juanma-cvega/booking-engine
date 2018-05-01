@@ -7,5 +7,5 @@ import lombok.Data;
 public class SlotReservedEvent implements Event {
 
   private final long slotId;
-  private final long userId;
+  private final SlotUser slotUser;
 }

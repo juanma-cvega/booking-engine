@@ -18,11 +18,11 @@ class Slot {
   private final OpenDate openDate;
   private final SlotState state;
 
-  public Slot(long id, long roomId, long buildingId, long clubId, ZonedDateTime creationTime, OpenDate openDate) {
+  Slot(long id, long roomId, long buildingId, long clubId, ZonedDateTime creationTime, OpenDate openDate) {
     this(id, roomId, buildingId, clubId, creationTime, openDate, CreatedSlotState.getInstance());
   }
 
-  public Slot(long id, long roomId, long buildingId, long clubId, ZonedDateTime creationTime, OpenDate openDate, SlotState state) {
+  Slot(long id, long roomId, long buildingId, long clubId, ZonedDateTime creationTime, OpenDate openDate, SlotState state) {
     Validate.notNull(creationTime);
     Validate.notNull(openDate);
     Validate.notNull(state);
@@ -35,24 +35,21 @@ class Slot {
     this.state = state;
   }
 
-  public Slot reserve(Clock clock) {
+  Slot reserve(Clock clock) {
     return from(state.reserve(this, clock));
   }
 
-  public boolean isAvailable(Clock clock) {
-    return state.isOpen(this, clock);
+  Slot preReserve(Clock clock) {
+    return from(state.preReserve(this, clock));
   }
 
-  public Slot makeAvailable() {
+  Slot makeAvailable() {
     return from(state.makeAvailable(this));
   }
 
-  public Slot reserveForAuctionWinner() {
-    return from(state.reserveForAuctionWinner(this));
-  }
-
-  public Slot makeWaitForAuction() {
-    return from(state.waitForAuction(this));
+  boolean isOpen(Clock clock) {
+    ZonedDateTime now = ZonedDateTime.now(clock);
+    return openDate.getStartTime().isAfter(now) || openDate.getStartTime().isEqual(now);
   }
 
   private Slot from(SlotState state) {

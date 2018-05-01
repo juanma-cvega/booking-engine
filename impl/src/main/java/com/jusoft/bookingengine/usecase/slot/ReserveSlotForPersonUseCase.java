@@ -3,16 +3,19 @@ package com.jusoft.bookingengine.usecase.slot;
 import com.jusoft.bookingengine.component.authorization.api.AuthorizationManagerComponent;
 import com.jusoft.bookingengine.component.authorization.api.AuthorizeCommand;
 import com.jusoft.bookingengine.component.slot.api.SlotManagerComponent;
+import com.jusoft.bookingengine.component.slot.api.SlotUser;
 import com.jusoft.bookingengine.component.slot.api.SlotView;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class ReserveSlotUseCase {
+public class ReserveSlotForPersonUseCase {
+
+  private static final String USER_TYPE_PERSON = "PERSON";
 
   private final AuthorizationManagerComponent authorizationManagerComponent;
   private final SlotManagerComponent slotManagerComponent;
 
-  public void reserveSlot(long slotId, long userId) {
+  public void reserveSlotForPerson(long slotId, long userId) {
     SlotView slot = slotManagerComponent.find(slotId);
     authorizationManagerComponent.authorizeReserveSlot(AuthorizeCommand.of(
       userId,
@@ -21,6 +24,6 @@ public class ReserveSlotUseCase {
       slot.getClubId(),
       slot.getCreationTime()
     ));
-    slotManagerComponent.reserveSlot(slotId, userId);
+    slotManagerComponent.reserveSlot(slotId, SlotUser.of(userId, USER_TYPE_PERSON));
   }
 }

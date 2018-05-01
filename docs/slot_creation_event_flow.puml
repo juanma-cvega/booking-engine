@@ -6,11 +6,13 @@ repeat
 fork
   :FindNextSlotStateUseCase|
   if (pre reservation needs slot?) then (yes)
+    ->slotRequiresPreReservationEvent;
+    :PreReserveSlotUseCase|
     ->slotPreReservedEvent;
-    :ReserveSlotUseCase|
   elseif (class needs slot?) then (yes)
-    ->slotNeededForClassEvent;
-    :ReserveSlotUseCase|
+    ->slotRequiresPreReservationEvent;
+    :PreReserveSlotUseCase|
+    ->slotPreReservedEvent;
   elseif (auctionRequired?) then (yes)
     ->auctionRequiredEvent;
     :StartAuctionUseCase|
@@ -24,15 +26,15 @@ fork
     :FinishAuctionUseCase|
     if (auctionWinnerFound?) then (yes)
       ->auctionWinnerFoundEvent;
-      :ReserveSlotForAuctionWinnerUseCase|
-      ->slotReservedEvent;
+      :PreReserveSlotUseCase|
+      ->slotPreReservedEvent;
     else (no)
       ->auctionUnsuccessfulEvent;
       :MakeSlotAvailableUseCase|
       ->slotMadeAvailableEvent;
     endif
   else (no)
-    ->slotReadyEvent;
+    ->slotCanBeMadeAvailableEvent;
     :MakeSlotAvailableUseCase|
   endif
   stop

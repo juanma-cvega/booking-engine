@@ -50,4 +50,9 @@ public class SlotLifeCycleManagerUseCaseConfig {
   public FindNextSlotStateUseCase findNextSlotStateUseCase() {
     return new FindNextSlotStateUseCase(slotLifeCycleManagerComponent);
   }
+
+  @Bean
+  public NotifyOfSlotReservationUseCase notifyOfSlotReservationUseCase() {
+    return new NotifyOfSlotReservationUseCase(slotLifeCycleManagerComponent);
+  }
 }

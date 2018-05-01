@@ -1,11 +1,8 @@
 package com.jusoft.bookingengine.component.slot;
 
-import com.jusoft.bookingengine.component.slot.api.SlotAlreadyAvailableException;
-import com.jusoft.bookingengine.component.slot.api.SlotNotInAuctionException;
 import com.jusoft.bookingengine.component.slot.api.SlotNotOpenException;
 
 import java.time.Clock;
-import java.time.ZonedDateTime;
 
 class AvailableSlotState implements SlotState {
 
@@ -20,42 +17,24 @@ class AvailableSlotState implements SlotState {
   }
 
   @Override
-  public SlotState waitForAuction(Slot slot) {
-    throw new SlotAlreadyAvailableException(slot.getId());
-  }
-
-  @Override
-  public SlotState reserveForAuctionWinner(Slot slot) {
-    throw new SlotNotInAuctionException(slot.getId());
-  }
-
-  @Override
-  public SlotState reserveForClass(Slot slot) {
+  public SlotState reserve(Slot slot, Clock clock) {
+    checkIfOpen(slot, clock);
     return ReservedState.getInstance();
   }
 
   @Override
-  public SlotState reserve(Slot slot, Clock clock) {
-    if (!isOpen(slot, clock)) {
+  public SlotState preReserve(Slot slot, Clock clock) {
+    checkIfOpen(slot, clock);
+    return ReservedState.getInstance();
+  }
+
+  private void checkIfOpen(Slot slot, Clock clock) {
+    if (!slot.isOpen(clock)) {
       throw new SlotNotOpenException(slot.getId());
     }
-    return ReservedState.getInstance();
   }
 
-  /**
-   * A slot is only available if the current time is before the slot starting time
-   *
-   * @param slot  Slot the state is attached to
-   * @param clock The system clock
-   * @return whether the slot is available for booking
-   */
-  @Override
-  public boolean isOpen(Slot slot, Clock clock) {
-    ZonedDateTime now = ZonedDateTime.now(clock);
-    return slot.getOpenDate().getStartTime().isAfter(now);
-  }
-
-  public static SlotState getInstance() {
+  static SlotState getInstance() {
     return INSTANCE;
   }
 }

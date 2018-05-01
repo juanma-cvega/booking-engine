@@ -21,7 +21,7 @@ public class SlotFixtures {
   public static final ZonedDateTime START_DATE = ZonedDateTime.now();
   public static final ZonedDateTime END_DATE = ZonedDateTime.now().plusMinutes(10);
   public static final OpenDate OPEN_DATE = OpenDate.of(START_DATE, END_DATE);
-  public static final SlotState SLOT_STATE = SlotState.IN_AUCTION;
+  public static final SlotState SLOT_STATE = SlotState.CREATED;
 
   public static final SlotResource SLOT_RESOURCE_1 = new SlotResource(SLOT_ID_1, ROOM_ID, START_TIME, END_TIME);
 
