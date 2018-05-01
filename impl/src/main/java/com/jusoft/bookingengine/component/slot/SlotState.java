@@ -1,13 +1,19 @@
 package com.jusoft.bookingengine.component.slot;
 
+import com.jusoft.bookingengine.component.slot.api.SlotAlreadyReservedException;
+
 import java.time.Clock;
 
 interface SlotState {
 
   SlotState makeAvailable(Slot slot);
 
-  SlotState reserve(Slot slot, Clock clock);
+  default SlotState reserve(Slot slot, Clock clock) {
+    throw new SlotAlreadyReservedException(slot.getId());
+  }
 
-  SlotState preReserve(Slot slot, Clock clock);
+  default SlotState preReserve(Slot slot, Clock clock) {
+    throw new SlotAlreadyReservedException(slot.getId());
+  }
 
 }
