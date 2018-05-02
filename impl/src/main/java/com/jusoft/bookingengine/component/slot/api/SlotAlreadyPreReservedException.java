@@ -10,8 +10,8 @@ public class SlotAlreadyPreReservedException extends RuntimeException {
   private static final String MESSAGE = "Slot %s is already pre reserved by user %s, user %s cannot reserve it";
 
   private final long slotId;
-  private final SlotUser previousUser;
-  private final SlotUser newUser;
+  private final transient SlotUser previousUser;
+  private final transient SlotUser newUser;
 
   public SlotAlreadyPreReservedException(long slotId, SlotUser previousUser, SlotUser newUser) {
     super(String.format(MESSAGE, slotId, previousUser, newUser));
