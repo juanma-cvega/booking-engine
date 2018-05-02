@@ -1,6 +1,7 @@
 package com.jusoft.bookingengine.component.slot;
 
 import com.jusoft.bookingengine.component.slot.api.SlotNotOpenException;
+import com.jusoft.bookingengine.component.slot.api.SlotUser;
 
 import java.time.Clock;
 
@@ -17,15 +18,15 @@ class AvailableSlotState implements SlotState {
   }
 
   @Override
-  public SlotState reserve(Slot slot, Clock clock) {
+  public SlotState reserve(Slot slot, Clock clock, SlotUser slotUser) {
     checkIfOpen(slot, clock);
-    return ReservedState.getInstance();
+    return ReservedState.of(slotUser);
   }
 
   @Override
-  public SlotState preReserve(Slot slot, Clock clock) {
+  public SlotState preReserve(Slot slot, Clock clock, SlotUser slotUser) {
     checkIfOpen(slot, clock);
-    return PreReservedState.getInstance();
+    return ReservedState.of(slotUser);
   }
 
   private void checkIfOpen(Slot slot, Clock clock) {

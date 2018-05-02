@@ -1,5 +1,6 @@
 package com.jusoft.bookingengine.component.slot;
 
+import com.jusoft.bookingengine.component.slot.api.SlotUser;
 import com.jusoft.bookingengine.component.timer.OpenDate;
 import lombok.Data;
 import org.apache.commons.lang3.Validate;
@@ -35,12 +36,12 @@ class Slot {
     this.state = state;
   }
 
-  Slot reserve(Clock clock) {
-    return from(state.reserve(this, clock));
+  Slot reserve(Clock clock, SlotUser slotUser) {
+    return from(state.reserve(this, clock, slotUser));
   }
 
-  Slot preReserve(Clock clock) {
-    return from(state.preReserve(this, clock));
+  Slot preReserve(Clock clock, SlotUser slotUser) {
+    return from(state.preReserve(this, clock, slotUser));
   }
 
   Slot makeAvailable() {

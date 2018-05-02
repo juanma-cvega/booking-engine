@@ -29,8 +29,10 @@ import static com.jusoft.bookingengine.fixtures.BookingFixtures.CREATE_BOOKING_R
 import static com.jusoft.bookingengine.fixtures.CommonFixtures.USER_ID_1;
 import static com.jusoft.bookingengine.fixtures.CommonFixtures.USER_ID_2;
 import static com.jusoft.bookingengine.fixtures.RoomFixtures.ROOM_ID;
+import static com.jusoft.bookingengine.fixtures.SlotFixtures.ANOTHER_SLOT_USER;
 import static com.jusoft.bookingengine.fixtures.SlotFixtures.END_TIME;
 import static com.jusoft.bookingengine.fixtures.SlotFixtures.SLOT_ID_1;
+import static com.jusoft.bookingengine.fixtures.SlotFixtures.SLOT_USER;
 import static com.jusoft.bookingengine.fixtures.SlotFixtures.START_TIME;
 import static com.jusoft.bookingengine.util.HelpUtils.OBJECT_MAPPER;
 import static org.hamcrest.CoreMatchers.is;
@@ -165,7 +167,7 @@ public class BookingControllerRestTest {
     String createUrl = String.format(CREATE_BOOKING_URL_TEMPLATE, ROOM_ID, SLOT_ID_1);
     String urlTemplate = new StringJoiner(FORTHSLASH).add(BOOKINGS_URL).add(createUrl).toString();
     when(mockBookingCommandFactory.createFrom(ROOM_ID, SLOT_ID_1, USER_ID_1)).thenReturn(CREATE_BOOKING_COMMAND);
-    when(mockBookingManagerComponent.book(CREATE_BOOKING_COMMAND)).thenThrow(new SlotAlreadyReservedException(SLOT_ID_1));
+    when(mockBookingManagerComponent.book(CREATE_BOOKING_COMMAND)).thenThrow(new SlotAlreadyReservedException(SLOT_ID_1, SLOT_USER, ANOTHER_SLOT_USER));
 
     mockMvc.perform(post(urlTemplate)
       .contentType(APPLICATION_JSON)

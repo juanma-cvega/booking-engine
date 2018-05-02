@@ -56,13 +56,13 @@ class SlotManagerComponentImpl implements SlotManagerComponent {
 
   @Override
   public void reserveSlot(long slotId, SlotUser slotUser) {
-    slotRepository.execute(slotId, slotFound -> slotFound.reserve(clock));
+    slotRepository.execute(slotId, slotFound -> slotFound.reserve(clock, slotUser));
     messagePublisher.publish(SlotReservedEvent.of(slotId, slotUser));
   }
 
   @Override
   public void preReserveSlot(long slotId, SlotUser slotUser) {
-    slotRepository.execute(slotId, slotFound -> slotFound.preReserve(clock));
+    slotRepository.execute(slotId, slotFound -> slotFound.preReserve(clock, slotUser));
     messagePublisher.publish(SlotPreReservedEvent.of(slotId, slotUser));
   }
 
