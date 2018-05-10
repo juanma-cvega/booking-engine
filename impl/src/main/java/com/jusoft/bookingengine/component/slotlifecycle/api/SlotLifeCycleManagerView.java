@@ -13,5 +13,5 @@ public class SlotLifeCycleManagerView {
   private final SlotsTimetable slotsTimetable;
   private final AuctionConfigInfo auctionConfigInfo;
   private final List<PreReservation> preReservations;
-  private final Map<Long, ClassTimetable> classesConfig;
+  private final Map<Long, ClassTimetable> classesTimetable;
 }

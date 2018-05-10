@@ -4,6 +4,7 @@ import com.jusoft.bookingengine.component.auction.AuctionManagerComponentConfig;
 import com.jusoft.bookingengine.component.authorization.AuthorizationManagerComponentConfig;
 import com.jusoft.bookingengine.component.booking.BookingManagerComponentConfig;
 import com.jusoft.bookingengine.component.building.BuildingManagerComponentConfig;
+import com.jusoft.bookingengine.component.classmanager.ClassManagerComponentConfig;
 import com.jusoft.bookingengine.component.club.ClubManagerComponentConfig;
 import com.jusoft.bookingengine.component.member.MemberManagerComponentConfig;
 import com.jusoft.bookingengine.component.room.RoomManagerComponentConfig;
@@ -17,6 +18,7 @@ import com.jusoft.bookingengine.usecase.auction.AuctionUseCaseConfig;
 import com.jusoft.bookingengine.usecase.authorization.AuthorizationUseCaseConfig;
 import com.jusoft.bookingengine.usecase.booking.BookingUseCaseConfig;
 import com.jusoft.bookingengine.usecase.building.BuildingUseCaseConfig;
+import com.jusoft.bookingengine.usecase.classmanager.ClassManagerUseCaseConfig;
 import com.jusoft.bookingengine.usecase.club.ClubUseCaseConfig;
 import com.jusoft.bookingengine.usecase.member.MemberUseCaseConfig;
 import com.jusoft.bookingengine.usecase.room.RoomUseCaseConfig;
@@ -40,6 +42,7 @@ import org.springframework.context.annotation.Import;
   AuctionWinnerStrategyConfig.class,
   SlotCreationStrategyConfig.class,
   AuthorizationManagerComponentConfig.class,
+  ClassManagerComponentConfig.class,
   RoomUseCaseConfig.class,
   SlotUseCaseConfig.class,
   ClubUseCaseConfig.class,
@@ -48,6 +51,7 @@ import org.springframework.context.annotation.Import;
   BookingUseCaseConfig.class,
   AuctionUseCaseConfig.class,
   AuthorizationUseCaseConfig.class,
-  SlotLifeCycleManagerUseCaseConfig.class})
+  SlotLifeCycleManagerUseCaseConfig.class,
+  ClassManagerUseCaseConfig.class})
 public class MainConfig {
 }

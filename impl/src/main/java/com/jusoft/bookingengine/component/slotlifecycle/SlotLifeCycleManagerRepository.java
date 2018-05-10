@@ -13,4 +13,5 @@ interface SlotLifeCycleManagerRepository extends Repository {
   Optional<SlotLifeCycleManager> find(long roomId);
 
   void execute(long roomId, UnaryOperator<SlotLifeCycleManager> modifier, Supplier<? extends RuntimeException> notFoundExceptionSupplier);
+
 }

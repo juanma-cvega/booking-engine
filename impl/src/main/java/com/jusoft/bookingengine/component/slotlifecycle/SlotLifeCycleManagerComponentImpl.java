@@ -13,7 +13,10 @@ import lombok.AllArgsConstructor;
 
 import java.time.Clock;
 import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.function.Supplier;
+
+import static java.util.stream.Collectors.toList;
 
 @AllArgsConstructor
 class SlotLifeCycleManagerComponentImpl implements SlotLifeCycleManagerComponent {
@@ -34,15 +37,6 @@ class SlotLifeCycleManagerComponentImpl implements SlotLifeCycleManagerComponent
   public SlotLifeCycleManagerView find(long roomId) {
     SlotLifeCycleManager slotLifeCycleManager = findOrFail(roomId);
     return createFrom(slotLifeCycleManager);
-  }
-
-  private SlotLifeCycleManagerView createFrom(SlotLifeCycleManager slotLifeCycleManager) {
-    return SlotLifeCycleManagerView.of(
-      slotLifeCycleManager.getRoomId(),
-      slotLifeCycleManager.getSlotsTimetable(),
-      slotLifeCycleManager.getAuctionConfigInfo(),
-      slotLifeCycleManager.getPreReservations(),
-      slotLifeCycleManager.getClassesConfig());
   }
 
   @Override
@@ -105,5 +99,18 @@ class SlotLifeCycleManagerComponentImpl implements SlotLifeCycleManagerComponent
 
   private SlotLifeCycleManager findOrFail(long roomId) {
     return repository.find(roomId).orElseThrow(() -> new SlotLifeCycleManagerNotFoundException(roomId));
+  }
+
+  private List<SlotLifeCycleManagerView> createFrom(List<SlotLifeCycleManager> slotLifeCycleManagers) {
+    return slotLifeCycleManagers.stream().map(this::createFrom).collect(toList());
+  }
+
+  private SlotLifeCycleManagerView createFrom(SlotLifeCycleManager slotLifeCycleManager) {
+    return SlotLifeCycleManagerView.of(
+      slotLifeCycleManager.getRoomId(),
+      slotLifeCycleManager.getSlotsTimetable(),
+      slotLifeCycleManager.getAuctionConfigInfo(),
+      slotLifeCycleManager.getPreReservations(),
+      slotLifeCycleManager.getClassesTimeTable());
   }
 }

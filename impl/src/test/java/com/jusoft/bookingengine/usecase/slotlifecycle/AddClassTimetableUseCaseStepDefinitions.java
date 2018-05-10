@@ -32,8 +32,8 @@ public class AddClassTimetableUseCaseStepDefinitions extends AbstractUseCaseStep
     });
     Then("^slot lifecycle manager for room (\\d+) should contain class (\\d+) to use the room$", (Long roomId, Long classId, DataTable dataTable) -> {
       SlotLifeCycleManagerView managerView = slotLifeCycleManagerComponent.find(roomId);
-      assertThat(managerView.getClassesConfig().get(classId)).isNotNull();
-      ClassTimetable classTimetable = managerView.getClassesConfig().get(classId);
+      assertThat(managerView.getClassesTimetable().get(classId)).isNotNull();
+      ClassTimetable classTimetable = managerView.getClassesTimetable().get(classId);
       assertThat(classTimetable.getClassId()).isEqualTo(classId);
       verifyClassTimetable(createDaysReservedSlotsFrom(dataTable), classTimetable.getReservedSlotsOfDays());
     });

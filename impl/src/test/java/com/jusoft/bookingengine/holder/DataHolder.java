@@ -3,6 +3,8 @@ package com.jusoft.bookingengine.holder;
 import com.jusoft.bookingengine.component.auction.api.AuctionView;
 import com.jusoft.bookingengine.component.booking.api.BookingView;
 import com.jusoft.bookingengine.component.building.api.BuildingView;
+import com.jusoft.bookingengine.component.classmanager.api.ClassView;
+import com.jusoft.bookingengine.component.classmanager.api.CreateClassCommand;
 import com.jusoft.bookingengine.component.club.api.ClubView;
 import com.jusoft.bookingengine.component.club.api.JoinRequest;
 import com.jusoft.bookingengine.component.member.api.MemberView;
@@ -29,6 +31,8 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import static com.jusoft.bookingengine.component.timer.SystemLocalTime.ofToday;
+import static com.jusoft.bookingengine.fixture.ClassFixtures.CLASS_DESCRIPTION;
+import static com.jusoft.bookingengine.fixture.ClassFixtures.CLASS_TYPE;
 import static com.jusoft.bookingengine.fixture.RoomFixtures.AVAILABLE_DAYS;
 import static com.jusoft.bookingengine.fixture.RoomFixtures.MAX_NUMBER_OF_SLOTS_STRATEGY_CONFIG_INFO;
 import static com.jusoft.bookingengine.fixture.RoomFixtures.OPEN_TIMES;
@@ -46,11 +50,14 @@ public class DataHolder {
   public static AuctionView auctionCreated;
   public static ClubView clubCreated;
   public static BuildingView buildingCreated;
+  public static List<BuildingView> buildingsCreated = new ArrayList<>();
   public static JoinRequest joinRequestCreated;
   public static Long clubAdmin;
   public static Set<JoinRequest> joinRequestsCreated = new HashSet<>();
   public static MemberView memberCreated;
   public static SlotLifeCycleManagerView slotLifeCycleManager;
+  public static ClassView classCreated;
+  public static List<ClassView> classesCreated;
 
   public static RuntimeException exceptionThrown;
 
@@ -80,11 +87,14 @@ public class DataHolder {
     auctionCreated = null;
     clubCreated = null;
     buildingCreated = null;
+    buildingsCreated = new ArrayList<>();
     joinRequestCreated = null;
     clubAdmin = null;
     joinRequestsCreated = new HashSet<>();
     memberCreated = null;
     slotLifeCycleManager = null;
+    classCreated = null;
+    classesCreated = new ArrayList<>();
 
     roomBuilder = null;
     createSlotLifeCycleManagerBuilder = null;
@@ -148,6 +158,22 @@ public class DataHolder {
         Stream.of(slotsStartTime.split(","))
           .map(localTime -> ofToday(localTime, ZoneId.of(zoneId), clock))
           .collect(toList()));
+    }
+  }
+
+  public static class CreateClassCommandBuilder {
+    public Long buildingId;
+    public String description;
+    public String type;
+    public List<Long> instructors = new ArrayList<>();
+    public List<Long> roomRegistered = new ArrayList<>();
+
+    public CreateClassCommand build(long buildingId, List<Long> instructors) {
+      return CreateClassCommand.of(buildingId,
+        description == null ? CLASS_DESCRIPTION : description,
+        type == null ? CLASS_TYPE : type,
+        instructors
+      );
     }
   }
 }

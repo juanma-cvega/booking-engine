@@ -12,7 +12,7 @@ import java.time.temporal.ChronoUnit;
 import static com.jusoft.bookingengine.fixture.CommonFixtures.USER_ID_1;
 
 @UtilityClass
-public class SlotsFixtures {
+public class SlotFixtures {
 
   public static final ZonedDateTime END_TIME = ZonedDateTime.now().plus(5, ChronoUnit.DAYS);
   public static final ZonedDateTime START_TIME = ZonedDateTime.now().plus(1, ChronoUnit.DAYS);

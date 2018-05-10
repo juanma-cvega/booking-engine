@@ -11,9 +11,9 @@ import java.util.Set;
 
 import static com.jusoft.bookingengine.fixture.AuctionFixtures.AUCTION_ID;
 import static com.jusoft.bookingengine.fixture.CommonFixtures.USER_ID_1;
-import static com.jusoft.bookingengine.fixture.SlotsFixtures.NO_AUCTION_CONFIG_INFO;
-import static com.jusoft.bookingengine.fixture.SlotsFixtures.SLOT_ID_1;
-import static com.jusoft.bookingengine.fixture.SlotsFixtures.START_TIME;
+import static com.jusoft.bookingengine.fixture.SlotFixtures.NO_AUCTION_CONFIG_INFO;
+import static com.jusoft.bookingengine.fixture.SlotFixtures.SLOT_ID_1;
+import static com.jusoft.bookingengine.fixture.SlotFixtures.START_TIME;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AuctionTest {

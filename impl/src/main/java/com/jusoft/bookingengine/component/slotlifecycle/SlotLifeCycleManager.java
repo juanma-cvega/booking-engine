@@ -40,7 +40,7 @@ class SlotLifeCycleManager {
   @NonNull
   private final AuctionConfigInfo auctionConfigInfo;
   @NonNull
-  private final Map<Long, ClassTimetable> classesConfig;
+  private final Map<Long, ClassTimetable> classesTimetable;
   @NonNull
   private final List<PreReservation> preReservations;
 
@@ -48,11 +48,11 @@ class SlotLifeCycleManager {
     this(roomId, slotsTimetable, NoAuctionConfigInfo.getInstance(), new HashMap<>(), new ArrayList<>());
   }
 
-  SlotLifeCycleManager(long roomId, SlotsTimetable slotsTimetable, AuctionConfigInfo auctionConfigInfo, Map<Long, ClassTimetable> classesConfig, List<PreReservation> preReservations) {
+  SlotLifeCycleManager(long roomId, SlotsTimetable slotsTimetable, AuctionConfigInfo auctionConfigInfo, Map<Long, ClassTimetable> classesTimetable, List<PreReservation> preReservations) {
     this.roomId = roomId;
     this.slotsTimetable = slotsTimetable;
     this.auctionConfigInfo = auctionConfigInfo;
-    this.classesConfig = classesConfig;
+    this.classesTimetable = classesTimetable;
     this.preReservations = preReservations;
   }
 
@@ -70,7 +70,7 @@ class SlotLifeCycleManager {
   }
 
   private Supplier<Optional<NextSlotState>> isReservedForClassState(long slotId, ZonedDateTime startTime, Clock clock) {
-    return () -> classesConfig.values().stream()
+    return () -> classesTimetable.values().stream()
       .filter(currentClass -> currentClass.contains(startTime, clock))
       .findFirst()
       .map(classFound -> PreReservedState.of(slotId, SlotUser.of(classFound.getClassId(), CLASS)));
@@ -90,7 +90,7 @@ class SlotLifeCycleManager {
   }
 
   SlotLifeCycleManager replaceAuctionConfigWith(AuctionConfigInfo auctionConfigInfo) {
-    return new SlotLifeCycleManager(roomId, slotsTimetable, auctionConfigInfo, classesConfig, preReservations);
+    return new SlotLifeCycleManager(roomId, slotsTimetable, auctionConfigInfo, classesTimetable, preReservations);
   }
 
   SlotLifeCycleManager addClass(ClassTimetable classTimetable, Clock clock) {
@@ -100,8 +100,8 @@ class SlotLifeCycleManager {
     if (isPreReservationWithinClassTimetable(classTimetable, clock) || isClassTimetableOverlappingAnyClass(classTimetable)) {
       throw new ClassTimetableOverlappingException(roomId, classTimetable);
     }
-    classesConfig.put(classTimetable.getClassId(), classTimetable);
-    return new SlotLifeCycleManager(roomId, slotsTimetable, auctionConfigInfo, classesConfig, preReservations);
+    classesTimetable.put(classTimetable.getClassId(), classTimetable);
+    return new SlotLifeCycleManager(roomId, slotsTimetable, auctionConfigInfo, classesTimetable, preReservations);
   }
 
   private boolean areClassReservedSlotsCovered(ClassTimetable classTimetable) {
@@ -109,7 +109,7 @@ class SlotLifeCycleManager {
   }
 
   private boolean isClassTimetableOverlappingAnyClass(ClassTimetable classTimetable) {
-    return classesConfig.values().stream()
+    return classesTimetable.values().stream()
       .anyMatch(configuredClassTimetable -> configuredClassTimetable.intersectsWith(classTimetable.getReservedSlotsOfDays()));
   }
 
@@ -120,11 +120,11 @@ class SlotLifeCycleManager {
   }
 
   SlotLifeCycleManager removeClass(long classId) {
-    ClassTimetable classRemoved = classesConfig.remove(classId);
+    ClassTimetable classRemoved = classesTimetable.remove(classId);
     if (classRemoved == null) {
       throw new ClassTimetableNotFoundException(classId, roomId);
     }
-    return new SlotLifeCycleManager(roomId, slotsTimetable, auctionConfigInfo, classesConfig, preReservations);
+    return new SlotLifeCycleManager(roomId, slotsTimetable, auctionConfigInfo, classesTimetable, preReservations);
   }
 
   SlotLifeCycleManager addPreReservation(PreReservation preReservation, Clock clock) {
@@ -136,7 +136,7 @@ class SlotLifeCycleManager {
       throw new SlotAlreadyTakenException(preReservation.getReservationDate());
     }
     preReservations.add(preReservation);
-    return new SlotLifeCycleManager(roomId, slotsTimetable, auctionConfigInfo, classesConfig, preReservations);
+    return new SlotLifeCycleManager(roomId, slotsTimetable, auctionConfigInfo, classesTimetable, preReservations);
   }
 
   private List<PreReservation> findPassedPreReservations(Clock clock) {
@@ -160,11 +160,11 @@ class SlotLifeCycleManager {
       .findFirst()
       .orElseThrow(() -> new PreReservationNotFoundException(roomId, slotStartTime));
     preReservations.remove(preReservationFound);
-    return new SlotLifeCycleManager(roomId, slotsTimetable, auctionConfigInfo, classesConfig, preReservations);
+    return new SlotLifeCycleManager(roomId, slotsTimetable, auctionConfigInfo, classesTimetable, preReservations);
   }
 
   private boolean anyClassContains(ZonedDateTime reservationDate, Clock clock) {
-    return classesConfig.values().stream()
+    return classesTimetable.values().stream()
       .anyMatch(classTimetable -> classTimetable.getReservedSlotsOfDays().stream()
         .anyMatch(reservedSlotsOfDay -> reservedSlotsOfDay.contains(reservationDate, clock)));
   }
@@ -174,7 +174,7 @@ class SlotLifeCycleManager {
       SlotsTimetable slotsTimetableDetails = SlotsTimetable.of(slotsTimetable.getSlotDurationInMinutes(), slotsTimetable.getOpenTimesPerDay(), slotsTimetable.getAvailableDays());
       throw new SlotsTimetableInvalidException(roomId, slotsTimetableDetails);
     }
-    return new SlotLifeCycleManager(roomId, slotsTimetable, auctionConfigInfo, classesConfig, preReservations);
+    return new SlotLifeCycleManager(roomId, slotsTimetable, auctionConfigInfo, classesTimetable, preReservations);
   }
 
   private boolean areCurrentPreReservationsCoveredBy(SlotsTimetable slotsTimetable, Clock clock) {
@@ -182,7 +182,7 @@ class SlotLifeCycleManager {
   }
 
   private boolean areCurrentClassesCoveredBy(SlotsTimetable slotsTimetable) {
-    return classesConfig.values().stream()
+    return classesTimetable.values().stream()
       .flatMap(classTimetable -> classTimetable.getReservedSlotsOfDays().stream())
       .allMatch(slotsTimetable::isCovered);
   }
@@ -191,7 +191,7 @@ class SlotLifeCycleManager {
     return new ArrayList<>(preReservations);
   }
 
-  Map<Long, ClassTimetable> getClassesConfig() {
-    return new HashMap<>(classesConfig);
+  Map<Long, ClassTimetable> getClassesTimeTable() {
+    return new HashMap<>(classesTimetable);
   }
 }

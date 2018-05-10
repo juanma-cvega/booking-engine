@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import static com.jusoft.bookingengine.fixture.BuildingFixtures.ADDRESS;
 import static com.jusoft.bookingengine.fixture.BuildingFixtures.BUILDING_DESCRIPTION;
 import static com.jusoft.bookingengine.holder.DataHolder.buildingCreated;
+import static com.jusoft.bookingengine.holder.DataHolder.buildingsCreated;
 import static com.jusoft.bookingengine.holder.DataHolder.clubCreated;
 import static com.jusoft.bookingengine.holder.DataHolder.exceptionThrown;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -18,7 +19,8 @@ import static org.mockito.Mockito.verify;
 
 public class CreateBuildingUseCaseStepDefinitions extends AbstractUseCaseStepDefinitions {
 
-  public static final int NON_EXISTING_CLUB_ID = 567;
+  private static final int NON_EXISTING_CLUB_ID = 567;
+
   @Autowired
   private BuildingManagerComponent buildingManagerComponent;
 
@@ -26,9 +28,11 @@ public class CreateBuildingUseCaseStepDefinitions extends AbstractUseCaseStepDef
   private CreateBuildingUseCase createBuildingUseCase;
 
   public CreateBuildingUseCaseStepDefinitions() {
-    When("^a building is created$", () ->
+    When("^a building is created$", () -> {
       buildingCreated = createBuildingUseCase.createBuildingFrom(
-        CreateBuildingCommand.of(clubCreated.getId(), ADDRESS, BUILDING_DESCRIPTION)));
+        CreateBuildingCommand.of(clubCreated.getId(), ADDRESS, BUILDING_DESCRIPTION));
+      buildingsCreated.add(buildingCreated);
+    });
     Then("^the building should be stored$", () -> {
       BuildingView buildingView = buildingManagerComponent.find(buildingCreated.getId());
       assertThat(buildingView.getAddress()).isEqualTo(buildingCreated.getAddress());

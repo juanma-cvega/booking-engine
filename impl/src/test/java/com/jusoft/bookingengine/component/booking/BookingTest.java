@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import static com.jusoft.bookingengine.fixture.BookingFixtures.BOOKING_ID;
 import static com.jusoft.bookingengine.fixture.CommonFixtures.USER_ID_1;
-import static com.jusoft.bookingengine.fixture.SlotsFixtures.SLOT_ID_1;
+import static com.jusoft.bookingengine.fixture.SlotFixtures.SLOT_ID_1;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class BookingTest {

@@ -35,7 +35,7 @@ public class SlotLifeCycleManagerRepositoryInMemory implements SlotLifeCycleMana
       slotLifeCycleManager.getRoomId(),
       slotLifeCycleManager.getSlotsTimetable(),
       slotLifeCycleManager.getAuctionConfigInfo(),
-      slotLifeCycleManager.getClassesConfig().entrySet().stream()
+      slotLifeCycleManager.getClassesTimeTable().entrySet().stream()
         .map(entry -> ClassTimetable.of(entry.getKey(), entry.getValue().getReservedSlotsOfDays()))
         .collect(toMap(ClassTimetable::getClassId, classTimetable -> classTimetable)),
       slotLifeCycleManager.getPreReservations().stream()

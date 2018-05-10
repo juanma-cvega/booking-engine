@@ -22,7 +22,7 @@ public class RemoveClassTimetableUseCaseStepDefinitions extends AbstractUseCaseS
     });
     Then("^a slot lifecycle manager for room (\\d+) should not contain a configuration for class (\\d+)$", (Long roomId, Long classId) -> {
       SlotLifeCycleManagerView managerView = slotLifeCycleManagerComponent.find(roomId);
-      assertThat(managerView.getClassesConfig().get(classId)).isNull();
+      assertThat(managerView.getClassesTimetable().get(classId)).isNull();
     });
     When("^the class (\\d+) is tried to be removed from room (\\d+)$", (Long classId, Long roomId) -> {
       storeException(() -> removeClassTimetableUseCase.removeClassTimetableFrom(roomId, classId));
