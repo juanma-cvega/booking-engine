@@ -4,6 +4,7 @@ import com.jusoft.bookingengine.component.classmanager.api.AddInstructorCommand;
 import com.jusoft.bookingengine.component.classmanager.api.ClassCreatedEvent;
 import com.jusoft.bookingengine.component.classmanager.api.ClassInstructorAddedEvent;
 import com.jusoft.bookingengine.component.classmanager.api.ClassInstructorRemovedEvent;
+import com.jusoft.bookingengine.component.classmanager.api.ClassIsStillRegisteredInRoomsException;
 import com.jusoft.bookingengine.component.classmanager.api.ClassManagerComponent;
 import com.jusoft.bookingengine.component.classmanager.api.ClassNotFoundException;
 import com.jusoft.bookingengine.component.classmanager.api.ClassRemovedEvent;
@@ -53,7 +54,10 @@ class ClassManagerComponentImpl implements ClassManagerComponent {
 
   @Override
   public void remove(long classId) {
-    repository.removeIf(classId, Class::canBeRemoved);
+    boolean isRemoved = repository.removeIf(classId, Class::canBeRemoved);
+    if (!isRemoved) {
+      throw new ClassIsStillRegisteredInRoomsException(classId);
+    }
     messagePublisher.publish(ClassRemovedEvent.of(classId));
   }
 

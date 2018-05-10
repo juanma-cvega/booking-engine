@@ -30,11 +30,6 @@ class ClassManagerComponentRepositoryInMemory implements ClassManagerComponentRe
   }
 
   @Override
-  public void remove(long classId) {
-    store.remove(classId);
-  }
-
-  @Override
   public boolean removeIf(long classId, Predicate<Class> condition) {
     try {
       Class classRemoved = store.computeIfPresent(classId, (id, classFound) -> remapToNullIfOrReturn(condition, classFound));

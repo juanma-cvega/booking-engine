@@ -10,8 +10,6 @@ interface ClassManagerComponentRepository {
 
   Optional<Class> find(long classId);
 
-  void remove(long classId);
-
   boolean removeIf(long classId, Predicate<Class> condition);
 
   void execute(long classId, UnaryOperator<Class> modifier);
