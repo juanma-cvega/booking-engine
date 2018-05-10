@@ -25,9 +25,4 @@ public class OpenTime {
   public static OpenTime of(LocalTime startTime, LocalTime endTime, ZoneId sourceZone, Clock systemClock) {
     return new OpenTime(SystemLocalTime.ofToday(startTime, sourceZone, systemClock), SystemLocalTime.ofToday(endTime, sourceZone, systemClock));
   }
-
-  public static OpenTime of(SystemLocalTime startTime, SystemLocalTime endTime) {
-    return new OpenTime(startTime, endTime);
-  }
-
 }

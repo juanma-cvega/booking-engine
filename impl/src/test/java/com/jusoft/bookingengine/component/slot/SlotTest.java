@@ -3,6 +3,7 @@ package com.jusoft.bookingengine.component.slot;
 import com.jusoft.bookingengine.component.slot.api.SlotAlreadyPreReservedException;
 import com.jusoft.bookingengine.component.slot.api.SlotAlreadyReservedException;
 import com.jusoft.bookingengine.component.slot.api.SlotNotAvailableException;
+import com.jusoft.bookingengine.component.slot.api.SlotNotOpenException;
 import org.junit.Test;
 
 import java.time.Clock;
@@ -17,6 +18,7 @@ import static com.jusoft.bookingengine.fixture.SlotFixtures.SLOT_ID_1;
 import static com.jusoft.bookingengine.fixture.SlotFixtures.SLOT_USER;
 import static com.jusoft.bookingengine.fixture.SlotFixtures.START_TIME;
 import static java.time.temporal.ChronoUnit.HOURS;
+import static java.time.temporal.ChronoUnit.MINUTES;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -63,6 +65,13 @@ public class SlotTest {
     Slot slot = new Slot(SLOT_ID_1, ROOM_ID, BUILDING_ID, CLUB_ID, START_TIME, OPEN_DATE, AvailableSlotState.getInstance());
     Slot slotModified = slot.reserve(Clock.fixed(START_TIME.toInstant(), START_TIME.getZone()), SLOT_USER);
     assertThat(slotModified.getState()).isEqualTo(ReservedState.of(SLOT_USER));
+  }
+
+  @Test
+  public void given_slot_state_is_available_when_pre_reserving_the_slot_it_should_change_state_to_reserved() {
+    Slot slot = new Slot(SLOT_ID_1, ROOM_ID, BUILDING_ID, CLUB_ID, START_TIME, OPEN_DATE, AvailableSlotState.getInstance());
+    Slot slotModified = slot.preReserve(Clock.fixed(START_TIME.toInstant(), START_TIME.getZone()), SLOT_USER);
+    assertThat(slotModified.getState()).isEqualTo(PreReservedState.of(SLOT_USER));
   }
 
   @Test
@@ -163,6 +172,14 @@ public class SlotTest {
     Slot slot = new Slot(SLOT_ID_1, ROOM_ID, BUILDING_ID, CLUB_ID, START_TIME, OPEN_DATE, CreatedSlotState.getInstance());
     Slot slotModified = slot.preReserve(Clock.fixed(START_TIME.toInstant(), START_TIME.getZone()), SLOT_USER);
     assertThat(slotModified.getState()).isEqualTo(PreReservedState.of(SLOT_USER));
+  }
+
+  @Test
+  public void given_slot_state_is_created_and_is_not_open_when_pre_reserving_the_slot_it_should_throw_slot_not_open_exception() {
+    Slot slot = new Slot(SLOT_ID_1, ROOM_ID, BUILDING_ID, CLUB_ID, START_TIME, OPEN_DATE, CreatedSlotState.getInstance());
+    assertThatThrownBy(() -> slot.preReserve(Clock.fixed(START_TIME.plusMinutes(START_TIME.until(END_TIME, MINUTES)).toInstant(), START_TIME.getZone()), SLOT_USER))
+      .isInstanceOf(SlotNotOpenException.class)
+      .hasFieldOrPropertyWithValue("slotId", SLOT_ID_1);
   }
 
   @Test
