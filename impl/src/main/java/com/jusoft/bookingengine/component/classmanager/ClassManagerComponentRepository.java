@@ -1,11 +1,14 @@
 package com.jusoft.bookingengine.component.classmanager;
 
+import com.jusoft.bookingengine.repository.Repository;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
-interface ClassManagerComponentRepository {
+interface ClassManagerComponentRepository extends Repository {
+
   void save(Class from);
 
   Optional<Class> find(long classId);

@@ -1,7 +1,7 @@
 package com.jusoft.bookingengine.component.classmanager;
 
 import com.jusoft.bookingengine.component.classmanager.api.ClassNotFoundException;
-import lombok.AllArgsConstructor;
+import com.jusoft.bookingengine.repository.AbstractRepositoryInMemory;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,51 +11,49 @@ import java.util.function.UnaryOperator;
 
 import static java.util.stream.Collectors.toList;
 
-@AllArgsConstructor
-class ClassManagerComponentRepositoryInMemory implements ClassManagerComponentRepository {
+class ClassManagerComponentRepositoryInMemory extends AbstractRepositoryInMemory<Long, Class> implements ClassManagerComponentRepository {
 
-  private final ConcurrentMap<Long, Class> store;
-
-  @Override
-  public void save(Class newClass) {
-    if (store.get(newClass.getId()) != null) {
-      throw new IllegalArgumentException("Unable to save new entity. Entity already in store");
-    }
-    store.put(newClass.getId(), newClass);
+  ClassManagerComponentRepositoryInMemory(ConcurrentMap<Long, Class> store) {
+    super(store);
   }
 
   @Override
   public Optional<Class> find(long classId) {
-    return Optional.ofNullable(store.get(classId));
+    return super.find(classId);
   }
 
   @Override
   public boolean removeIf(long classId, Predicate<Class> condition) {
-    try {
-      Class classRemoved = store.computeIfPresent(classId, (id, classFound) -> remapToNullIfOrReturn(condition, classFound));
-      return classRemoved == null;
-    } catch (NullPointerException npe) {
-      throw new ClassNotFoundException(classId);
-    }
-  }
-
-  private Class remapToNullIfOrReturn(Predicate<Class> condition, Class classFound) {
-    if (condition.test(classFound)) {
-      return null;
-    }
-    return classFound;
+    return super.deleteIf(classId, condition);
   }
 
   @Override
   public void execute(long classId, UnaryOperator<Class> modifier) {
-    Class classModified = store.computeIfPresent(classId, (id, classFound) -> modifier.apply(classFound));
-    if (classModified == null) {
-      throw new ClassNotFoundException(classId);
-    }
+    super.execute(classId, modifier);
+  }
+
+  @Override
+  public void save(Class newClass) {
+    super.save(newClass);
+  }
+
+  @Override
+  public boolean deleteIf(Long classId, Predicate<Class> condition) {
+    return super.deleteIf(classId, condition);
   }
 
   @Override
   public List<Class> findByBuildingId(long buildingId) {
     return store.values().stream().filter(classFound -> classFound.getBuildingId() == buildingId).collect(toList());
+  }
+
+  @Override
+  protected Long getIdFrom(Class entity) {
+    return entity.getId();
+  }
+
+  @Override
+  protected RuntimeException createNotFoundException(Long entityId) {
+    return new ClassNotFoundException(entityId);
   }
 }

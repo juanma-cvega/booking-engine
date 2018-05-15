@@ -14,5 +14,6 @@ public class CreateClassCommand implements Command {
   private final String description;
   @NonNull
   private final String type;
+  @NonNull
   private final List<Long> instructorsId;
 }
