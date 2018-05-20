@@ -19,7 +19,7 @@ public interface InstructorManagerComponent {
 
   void unregisterFromBuilding(RemoveFromBuildingCommand command);
 
-  void unregisterClassType(RemoveClassTypesCommand command);
+  void unregisterClassTypes(RemoveClassTypesCommand command);
 
   void addTimetable(AddTimetableCommand command);
 

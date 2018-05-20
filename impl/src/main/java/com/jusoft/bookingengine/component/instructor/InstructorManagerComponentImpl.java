@@ -83,7 +83,7 @@ class InstructorManagerComponentImpl implements InstructorManagerComponent {
   }
 
   @Override
-  public void unregisterClassType(RemoveClassTypesCommand command) {
+  public void unregisterClassTypes(RemoveClassTypesCommand command) {
     repository.execute(command.getInstructorId(), instructor -> instructor.unregisterClassTypes(command.getClassTypes()));
   }
 

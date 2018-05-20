@@ -2,7 +2,7 @@ package com.jusoft.bookingengine.component.instructor;
 
 import com.jusoft.bookingengine.component.instructor.api.CreateInstructorCommand;
 import com.jusoft.bookingengine.component.instructor.api.InstructorView;
-import com.jusoft.bookingengine.component.instructor.api.RoomTimetableDetails;
+import com.jusoft.bookingengine.component.instructortimetables.api.RoomTimetableDetails;
 import lombok.AllArgsConstructor;
 
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ class InstructorFactory {
     return InstructorView.of(
       instructor.getId(),
       instructor.getClubId(),
-      new ArrayList<>(instructor.getBuildings()),
+      new ArrayList<>(instructor.getRegisteredBuildingsId()),
       instructor.getPersonalInfo(),
       new ArrayList<>(instructor.getSupportedClassTypes()),
       getBuildingsTimetablesFrom(instructor.getBuildingsTimetables()));

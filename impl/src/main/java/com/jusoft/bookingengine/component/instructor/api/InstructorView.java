@@ -1,5 +1,6 @@
 package com.jusoft.bookingengine.component.instructor.api;
 
+import com.jusoft.bookingengine.component.instructortimetables.api.RoomTimetableDetails;
 import lombok.Data;
 
 import java.util.List;
