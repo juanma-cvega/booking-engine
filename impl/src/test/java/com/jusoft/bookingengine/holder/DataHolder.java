@@ -7,6 +7,7 @@ import com.jusoft.bookingengine.component.classmanager.api.ClassView;
 import com.jusoft.bookingengine.component.classmanager.api.CreateClassCommand;
 import com.jusoft.bookingengine.component.club.api.ClubView;
 import com.jusoft.bookingengine.component.club.api.JoinRequest;
+import com.jusoft.bookingengine.component.instructor.api.InstructorView;
 import com.jusoft.bookingengine.component.member.api.MemberView;
 import com.jusoft.bookingengine.component.room.api.CreateRoomCommand;
 import com.jusoft.bookingengine.component.room.api.RoomView;
@@ -58,6 +59,7 @@ public class DataHolder {
   public static SlotLifeCycleManagerView slotLifeCycleManager;
   public static ClassView classCreated;
   public static List<ClassView> classesCreated;
+  public static InstructorView instructorCreated;
 
   public static RuntimeException exceptionThrown;
 
@@ -95,6 +97,7 @@ public class DataHolder {
     slotLifeCycleManager = null;
     classCreated = null;
     classesCreated = new ArrayList<>();
+    instructorCreated = null;
 
     roomBuilder = null;
     createSlotLifeCycleManagerBuilder = null;

@@ -31,7 +31,6 @@ public class CreateMemberUseCaseStepDefinitions extends AbstractUseCaseStepDefin
       assertThat(event.getClubId()).isEqualTo(clubCreated.getId());
       assertThat(event.getUserId()).isEqualTo(userId);
       assertThat(event.getMemberId()).isEqualTo(memberCreated.getId());
-
     });
   }
 }

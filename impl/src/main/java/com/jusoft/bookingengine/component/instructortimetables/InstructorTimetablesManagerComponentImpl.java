@@ -1,29 +1,28 @@
 package com.jusoft.bookingengine.component.instructortimetables;
 
-import com.jusoft.bookingengine.component.instructor.api.AddTimetableCommand;
-import com.jusoft.bookingengine.component.instructor.api.RemoveTimetableCommand;
-import com.jusoft.bookingengine.component.instructortimetables.api.FindBuildingTimetablesCommand;
-import com.jusoft.bookingengine.component.instructortimetables.api.FindRoomTimetablesCommand;
-import com.jusoft.bookingengine.component.instructortimetables.api.InstructorBuildingTimetablesView;
-import com.jusoft.bookingengine.component.instructortimetables.api.InstructorRoomTimetablesView;
+import com.jusoft.bookingengine.component.instructortimetables.api.AddTimetableEntriesCommand;
 import com.jusoft.bookingengine.component.instructortimetables.api.InstructorTimetablesManagerComponent;
 import com.jusoft.bookingengine.component.instructortimetables.api.InstructorTimetablesView;
-import com.jusoft.bookingengine.component.instructortimetables.api.SearchCriteriaCommand;
+import com.jusoft.bookingengine.component.instructortimetables.api.RemoveTimetableEntriesCommand;
+import com.jusoft.bookingengine.component.instructortimetables.api.TimetableEntry;
+import com.jusoft.bookingengine.component.timer.OpenTime;
 import lombok.AllArgsConstructor;
 
+import java.time.DayOfWeek;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 class InstructorTimetablesManagerComponentImpl implements InstructorTimetablesManagerComponent {
 
   private final InstructorTimetablesManagerRepository repository;
-  private final InstructorTimetablesFactory factory;
 
   @Override
-  public InstructorTimetablesView registerInstructor(long instructorId) {
+  public void registerInstructor(long instructorId) {
     InstructorTimetables newInstructorTimetables = new InstructorTimetables(instructorId);
     repository.save(newInstructorTimetables);
-    return factory.createFrom(newInstructorTimetables);
   }
 
   @Override
@@ -32,34 +31,33 @@ class InstructorTimetablesManagerComponentImpl implements InstructorTimetablesMa
   }
 
   @Override
-  public Optional<InstructorTimetablesView> getInstructor(long instructorId) {
-    return repository.find(instructorId).map(factory::createFrom);
+  public Optional<InstructorTimetablesView> find(long instructorId) {
+    return repository.find(instructorId).map(this::createFrom);
   }
 
   @Override
-  public void addTimetable(AddTimetableCommand command) {
-    repository.execute(command.getInstructorId(), instructorTimetables -> instructorTimetables.addTimetable(command));
+  public void addTimetable(AddTimetableEntriesCommand command) {
+    List<TimetableEntry> newEntries = command.getSlotsByDayOfWeek().entrySet().stream()
+      .map(entry -> toTimetableEntriesByDayOfWeek(command, entry))
+      .flatMap(List::stream)
+      .collect(Collectors.toList());
+    repository.execute(command.getInstructorId(), instructorTimetables ->
+      instructorTimetables.addTimetableEntries(newEntries));
+  }
+
+  private List<TimetableEntry> toTimetableEntriesByDayOfWeek(AddTimetableEntriesCommand command, Map.Entry<DayOfWeek, List<OpenTime>> entry) {
+    return entry.getValue().stream()
+      .map(openTime -> TimetableEntry.of(command.getBuildingId(), command.getRoomId(), command.getClassType(), entry.getKey(), openTime))
+      .collect(Collectors.toList());
   }
 
   @Override
-  public void removeTimetable(RemoveTimetableCommand command) {
-    repository.execute(command.getInstructorId(), instructorTimetables -> instructorTimetables.removeTimetable(command));
+  public void removeTimetable(RemoveTimetableEntriesCommand command) {
+    repository.execute(command.getInstructorId(), instructorTimetables ->
+      instructorTimetables.removeTimetableEntries(command.getTimetableEntries()));
   }
 
-  @Override
-  public InstructorTimetablesView findBy(SearchCriteriaCommand criteria) {
-    return repository.findBy(criteria);
-  }
-
-  @Override
-  public InstructorBuildingTimetablesView getTimetablesFor(FindBuildingTimetablesCommand command) {
-    InstructorTimetables instructorTimetables = repository.findByInstructorAndBuilding(command.getInstructorId(), command.getBuildingId());
-    return factory.createInstructorBuildingTimetablesViewFrom(instructorTimetables, command.getBuildingId());
-  }
-
-  @Override
-  public InstructorRoomTimetablesView getTimetablesFor(FindRoomTimetablesCommand command) {
-    InstructorTimetables instructorTimetables = repository.findByInstructorAndRoom(command.getInstructorId(), command.getRoomId());
-    return factory.createInstructorRoomTimetablesViewFrom(instructorTimetables, command.getRoomId());
+  private InstructorTimetablesView createFrom(InstructorTimetables newInstructorTimetables) {
+    return InstructorTimetablesView.of(newInstructorTimetables.getInstructorId(), newInstructorTimetables.getTimetableEntries());
   }
 }

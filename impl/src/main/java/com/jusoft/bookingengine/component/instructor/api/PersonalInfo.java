@@ -8,5 +8,5 @@ public class PersonalInfo {
   private final String name;
   private final String surname;
   private final Address address;
-  private final String phoneNumber;
+  private final PhoneNumber phoneNumber;
 }

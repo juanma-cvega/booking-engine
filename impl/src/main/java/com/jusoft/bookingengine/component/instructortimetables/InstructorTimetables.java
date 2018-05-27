@@ -1,68 +1,79 @@
 package com.jusoft.bookingengine.component.instructortimetables;
 
-import com.jusoft.bookingengine.component.instructor.api.AddTimetableCommand;
-import com.jusoft.bookingengine.component.instructor.api.InstructorTimetableNotPresentException;
-import com.jusoft.bookingengine.component.instructor.api.InstructorTimetableOverlappingException;
-import com.jusoft.bookingengine.component.instructor.api.RemoveTimetableCommand;
-import lombok.Data;
-import org.apache.commons.lang3.Validate;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.jusoft.bookingengine.component.instructortimetables.api.TimetableEntriesNotFoundException;
+import com.jusoft.bookingengine.component.instructortimetables.api.TimetableEntry;
+import com.jusoft.bookingengine.component.instructortimetables.api.TimetableEntryOverlappingException;
+import lombok.Data;
+import org.apache.commons.lang3.tuple.Pair;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
-import static java.util.stream.Collectors.toMap;
+import static java.util.Comparator.comparing;
 
 @Data
 class InstructorTimetables {
 
-  private final long id;
-  private final Map<Long, BuildingTimetables> buildingsTimetables;
+  private final long instructorId;
+  private final List<TimetableEntry> timetableEntries;
 
-  InstructorTimetables(long id) {
-    this(id, new HashMap<>());
+  InstructorTimetables(long instructorId) {
+    this(instructorId, new ArrayList<>());
   }
 
-  InstructorTimetables(long id, Map<Long, BuildingTimetables> buildingsTimetables) {
-    Objects.requireNonNull(buildingsTimetables);
-    this.id = id;
-    this.buildingsTimetables = new HashMap<>(buildingsTimetables);
+  InstructorTimetables(long instructorId, List<TimetableEntry> timetableEntries) {
+    Objects.requireNonNull(timetableEntries);
+    this.instructorId = instructorId;
+    this.timetableEntries = new ArrayList<>(timetableEntries);
   }
 
-  InstructorTimetables addTimetable(AddTimetableCommand command) {
-    BuildingTimetables buildingTimetables = buildingsTimetables.getOrDefault(command.getBuildingId(), BuildingTimetables.of(command.getBuildingId()));
-    if (!buildingTimetables.addTimetable(command.getRoomId(), command.getTimetable())) {
-      throw new InstructorTimetableOverlappingException(command.getInstructorId(), command.getTimetable());
+  InstructorTimetables addTimetableEntries(List<TimetableEntry> newEntries) {
+    List<TimetableEntry> newTimetableEntries = createNewSortedEntryListWith(newEntries);
+
+    verifyTimetableEntriesAreValid(newTimetableEntries);
+    return new InstructorTimetables(instructorId, newTimetableEntries);
+  }
+
+  private List<TimetableEntry> createNewSortedEntryListWith(List<TimetableEntry> newEntries) {
+    List<TimetableEntry> newTimetableEntries = new ArrayList<>(this.timetableEntries);
+    newTimetableEntries.addAll(newEntries);
+    newTimetableEntries.sort(comparing(TimetableEntry::getDayOfWeek).thenComparing(TimetableEntry::getClassPeriod));
+    return newTimetableEntries;
+  }
+
+  private void verifyTimetableEntriesAreValid(List<TimetableEntry> timetableEntries) {
+    List<Pair<TimetableEntry, TimetableEntry>> overlappingEntries = findOverlappingEntriesIn(timetableEntries);
+    if (!overlappingEntries.isEmpty()) {
+      throw new TimetableEntryOverlappingException(instructorId, overlappingEntries);
     }
-    buildingsTimetables.put(command.getBuildingId(), buildingTimetables);
-    return copy();
   }
 
-  InstructorTimetables removeTimetable(RemoveTimetableCommand command) {
-    Validate.notNull(buildingsTimetables.get(command.getBuildingId()),
-      String.format("Instructor %s does not have timetables created for building %s", command.getInstructorId(), command.getBuildingId()));
-    Validate.notNull(buildingsTimetables.get(command.getBuildingId()).getRoomsTimetable().get(command.getRoomId()),
-      String.format("Instructor %s does not have timetables created for building %s", command.getInstructorId(), command.getBuildingId()));
-    RoomTimetable roomTimetable = buildingsTimetables.get(command.getBuildingId()).getRoomsTimetable().get(command.getRoomId());
-    if (roomTimetable.removeTimetable(command.getTimetable())) {
-      throw new InstructorTimetableNotPresentException(command.getInstructorId(), command.getBuildingId(), command.getRoomId(), command.getTimetable());
+  private List<Pair<TimetableEntry, TimetableEntry>> findOverlappingEntriesIn(List<TimetableEntry> timetableEntries) {
+    List<Pair<TimetableEntry, TimetableEntry>> overlappingEntries = new ArrayList<>();
+    for (int index = 0; index < timetableEntries.size() - 1; index++) {
+      TimetableEntry firstEntry = timetableEntries.get(index);
+      TimetableEntry secondEntry = timetableEntries.get(index + 1);
+      if (firstEntry.getDayOfWeek().equals(secondEntry.getDayOfWeek())
+        && firstEntry.getClassPeriod().isOverlappingWith(secondEntry.getClassPeriod())) {
+        overlappingEntries.add(Pair.of(firstEntry, secondEntry));
+      }
     }
-    return copy();
+    return overlappingEntries;
   }
 
-  private InstructorTimetables copy() {
-    return new InstructorTimetables(id, copyBuildingTimetables());
-  }
-
-  private Map<Long, BuildingTimetables> copyBuildingTimetables() {
-    return buildingsTimetables.values().stream()
-      .map(buildingTimetables -> BuildingTimetables.of(
-        buildingTimetables.getBuildingId(),
-        new HashMap<>(buildingTimetables.getRoomsTimetable())))
-      .collect(toMap(BuildingTimetables::getBuildingId, buildingTimetables -> buildingTimetables));
-  }
-
-  Map<Long, BuildingTimetables> getBuildingsTimetables() {
-    return new HashMap<>(buildingsTimetables);
+  InstructorTimetables removeTimetableEntries(List<TimetableEntry> entriesToRemove) {
+    List<TimetableEntry> remainingEntries = new ArrayList<>(timetableEntries);
+    List<TimetableEntry> notRemovedEntries = new ArrayList<>();
+    for (TimetableEntry entry : entriesToRemove) {
+      if (!remainingEntries.remove(entry)) {
+        notRemovedEntries.add(entry);
+      }
+    }
+    if (!notRemovedEntries.isEmpty()) {
+      throw new TimetableEntriesNotFoundException(instructorId, notRemovedEntries, remainingEntries);
+    }
+    return new InstructorTimetables(instructorId, remainingEntries);
   }
 }

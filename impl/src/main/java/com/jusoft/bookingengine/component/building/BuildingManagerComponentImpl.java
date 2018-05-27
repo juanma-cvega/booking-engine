@@ -2,12 +2,13 @@ package com.jusoft.bookingengine.component.building;
 
 import com.jusoft.bookingengine.component.building.api.BuildingCreatedEvent;
 import com.jusoft.bookingengine.component.building.api.BuildingManagerComponent;
-import com.jusoft.bookingengine.component.building.api.BuildingNotFoundException;
 import com.jusoft.bookingengine.component.building.api.BuildingView;
 import com.jusoft.bookingengine.component.building.api.CreateBuildingCommand;
 import com.jusoft.bookingengine.publisher.MessagePublisher;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+
+import java.util.Optional;
 
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class BuildingManagerComponentImpl implements BuildingManagerComponent {
@@ -25,8 +26,7 @@ class BuildingManagerComponentImpl implements BuildingManagerComponent {
   }
 
   @Override
-  public BuildingView find(long id) {
-    return buildingFactory.createFrom(
-      repository.find(id).orElseThrow(() -> new BuildingNotFoundException(id)));
+  public Optional<BuildingView> find(long id) {
+    return repository.find(id).map(buildingFactory::createFrom);
   }
 }

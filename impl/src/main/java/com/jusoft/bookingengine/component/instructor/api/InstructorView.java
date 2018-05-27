@@ -1,18 +1,15 @@
 package com.jusoft.bookingengine.component.instructor.api;
 
-import com.jusoft.bookingengine.component.instructortimetables.api.RoomTimetableDetails;
 import lombok.Data;
 
-import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 @Data(staticConstructor = "of")
 public class InstructorView {
 
   private final long id;
   private final long clubId;
-  private final List<Long> buildings;
+  private final Set<Long> buildings;
   private final PersonalInfo personalInfo;
-  private final List<String> supportedClassTypes;
-  private final Map<Long, List<RoomTimetableDetails>> buildingsTimetables;
+  private final Set<String> supportedClassTypes;
 }

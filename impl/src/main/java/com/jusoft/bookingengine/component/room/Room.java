@@ -1,6 +1,8 @@
 package com.jusoft.bookingengine.component.room;
 
+import com.jusoft.bookingengine.component.room.api.InvalidSlotsForRoomException;
 import com.jusoft.bookingengine.component.room.api.NextSlotConfig;
+import com.jusoft.bookingengine.component.room.api.RoomTimetable;
 import com.jusoft.bookingengine.component.timer.OpenDate;
 import com.jusoft.bookingengine.component.timer.OpenTime;
 import com.jusoft.bookingengine.component.timer.SystemLocalTime;
@@ -13,14 +15,19 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZonedDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static com.jusoft.bookingengine.component.timer.SystemLocalTime.ofToday;
+import static java.time.temporal.ChronoUnit.MINUTES;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 @Data
 class Room {
@@ -50,7 +57,7 @@ class Room {
 
   private void validateOpenTimesDurationAreMultiplesOfSlotDuration(List<OpenTime> openTimesPerDay, int slotDurationInMinutes) {
     openTimesPerDay.forEach(openTime -> {
-      long minutesInOpenTime = openTime.getStartTime().until(openTime.getEndTime(), ChronoUnit.MINUTES);
+      long minutesInOpenTime = openTime.getStartTime().until(openTime.getEndTime(), MINUTES);
       Validate.isTrue(minutesInOpenTime % slotDurationInMinutes == 0,
         "Open time not valid: startTime=%s, endTime=%s",
         openTime.getStartTime(), openTime.getEndTime());
@@ -96,7 +103,7 @@ class Room {
   }
 
   private ZonedDateTime findPreviousSlotEndTimeWithin(OpenTime openTime, Clock clock) {
-    long minutesFromStartToNow = openTime.getStartTime().until(LocalTime.now(clock), ChronoUnit.MINUTES);
+    long minutesFromStartToNow = openTime.getStartTime().until(LocalTime.now(clock), MINUTES);
     double slotsToNow = (double) minutesFromStartToNow / slotDurationInMinutes;
     int nextSlotNumber = findNextSlotNumber(slotsToNow);
     return ZonedDateTime.of(LocalDate.now(clock), findSlotStartTimeFor(openTime, nextSlotNumber).getLocalTime(), clock.getZone());
@@ -120,11 +127,6 @@ class Room {
     return openTime.getStartTime().plusMinutes(nextSlotNumber * (long) slotDurationInMinutes);
   }
 
-  private Predicate<OpenTime> isOpenTimeIncluding(SystemLocalTime localTime) {
-    return openTime -> localTime.isAfter(openTime.getStartTime()) && localTime.isBefore(openTime.getEndTime());
-  }
-
-  //Relies on the order of openTimesPerDay list
   private OpenTime findClosestOpenTimeFor(SystemLocalTime now) {
     OpenTime closestOpenTime = null;
     for (OpenTime openTime : new LinkedList<>(openTimesPerDay)) {
@@ -139,7 +141,6 @@ class Room {
     }
     return closestOpenTime;
   }
-
   private ZonedDateTime getNextSlotEndTime(ZonedDateTime lastSlotEndTime, Clock clock) {
     ZonedDateTime endTimeNextSlot = lastSlotEndTime.plusMinutes(slotDurationInMinutes);
     OpenTime closestOpenTimeForLastSlotEnd = findClosestOpenTimeFor(ofToday(lastSlotEndTime.toLocalTime(), lastSlotEndTime.getZone(), clock));
@@ -160,12 +161,54 @@ class Room {
     return closestOpenTimeForLastSlotEnd.getStartTime().equals(closestOpenTimeForSlotNextEnd.getStartTime());
   }
 
-  public List<OpenTime> getOpenTimesPerDay() {
+  List<OpenTime> getOpenTimesPerDay() {
     return new ArrayList<>(openTimesPerDay);
   }
 
-  public List<DayOfWeek> getAvailableDays() {
+  List<DayOfWeek> getAvailableDays() {
     return new ArrayList<>(availableDays);
   }
 
+  private Predicate<OpenTime> isOpenTimeIncluding(SystemLocalTime localTime) {
+    return openTime -> localTime.isAfter(openTime.getStartTime()) && localTime.isBefore(openTime.getEndTime());
+  }
+
+  private boolean isInvalidStartSlotTime(SystemLocalTime localTime, OpenTime openTime) {
+    return openTime.getStartTime().until(localTime, MINUTES) % slotDurationInMinutes != 0;
+  }
+
+  RoomTimetable getTimetableFor(Map<DayOfWeek, List<SystemLocalTime>> timetableRequest) {
+    validateTimetableRequest(timetableRequest);
+    Map<DayOfWeek, List<OpenTime>> timetable = timetableRequest.entrySet().stream()
+      .collect(toMap(Map.Entry::getKey, this::toListOfOpenTime));
+    return RoomTimetable.of(timetable);
+  }
+
+  private void validateTimetableRequest(Map<DayOfWeek, List<SystemLocalTime>> timetableRequest) {
+    Set<SystemLocalTime> slotsStartTime = timetableRequest.values().stream().flatMap(List::stream).collect(Collectors.toSet());
+    List<SystemLocalTime> invalidSlotsStartTime = findInvalidSlotsStartTimeIn(slotsStartTime);
+    if (!invalidSlotsStartTime.isEmpty()) {
+      throw new InvalidSlotsForRoomException(id, invalidSlotsStartTime);
+    }
+  }
+
+  private List<SystemLocalTime> findInvalidSlotsStartTimeIn(Set<SystemLocalTime> slotsTime) {
+    return slotsTime.stream()
+      .filter(byInvalidSlotStartTime())
+      .collect(toList());
+  }
+
+  private Predicate<SystemLocalTime> byInvalidSlotStartTime() {
+    return localTime -> openTimesPerDay.stream()
+      .filter(isOpenTimeIncluding(localTime))
+      .findFirst()
+      .map(openTime -> isInvalidStartSlotTime(localTime, openTime))
+      .orElse(true);
+  }
+
+  private List<OpenTime> toListOfOpenTime(Map.Entry<DayOfWeek, List<SystemLocalTime>> entry) {
+    return entry.getValue().stream()
+      .map(startTime -> OpenTime.of(startTime, startTime.plusMinutes(slotDurationInMinutes)))
+      .collect(toList());
+  }
 }

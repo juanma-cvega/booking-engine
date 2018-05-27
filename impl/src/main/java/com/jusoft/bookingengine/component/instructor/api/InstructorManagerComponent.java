@@ -7,21 +7,18 @@ public interface InstructorManagerComponent {
 
   InstructorView create(CreateInstructorCommand command);
 
-  void addToBuilding(AddToBuildingCommand command);
+  void registerOnBuilding(RegisterWithBuildingCommand command);
 
-  void addClassType(AddClassTypeCommand command);
+  void addClassTypes(AddClassTypeCommand command);
 
   Optional<InstructorView> find(long instructorId);
 
   List<InstructorView> findBy(SearchCriteriaCommand command);
 
-  void delete(long instructorId);
+  void remove(long instructorId);
 
-  void unregisterFromBuilding(RemoveFromBuildingCommand command);
+  void unregisterFromBuilding(UnregisterFromBuildingCommand command);
 
-  void unregisterClassTypes(RemoveClassTypesCommand command);
+  void removeClassTypes(RemoveClassTypesCommand command);
 
-  void addTimetable(AddTimetableCommand command);
-
-  void removeTimetable(RemoveTimetableCommand command);
 }

@@ -1,9 +1,11 @@
 package com.jusoft.bookingengine.component.room;
 
 import com.jusoft.bookingengine.component.room.api.CreateRoomCommand;
+import com.jusoft.bookingengine.component.room.api.GetTimetableCommand;
 import com.jusoft.bookingengine.component.room.api.NextSlotConfig;
 import com.jusoft.bookingengine.component.room.api.RoomManagerComponent;
 import com.jusoft.bookingengine.component.room.api.RoomNotFoundException;
+import com.jusoft.bookingengine.component.room.api.RoomTimetable;
 import com.jusoft.bookingengine.component.room.api.RoomView;
 import com.jusoft.bookingengine.publisher.MessagePublisher;
 import lombok.AccessLevel;
@@ -32,6 +34,12 @@ class RoomManagerComponentImpl implements RoomManagerComponent {
   @Override
   public RoomView find(long roomId) {
     return roomFactory.createFrom(roomRepository.find(roomId).orElseThrow(() -> new RoomNotFoundException(roomId)));
+  }
+
+  @Override
+  public RoomTimetable getTimetableFor(GetTimetableCommand command) {
+    Room room = findRoom(command.getRoomId());
+    return room.getTimetableFor(command.getTimetableRequest());
   }
 
   @Override

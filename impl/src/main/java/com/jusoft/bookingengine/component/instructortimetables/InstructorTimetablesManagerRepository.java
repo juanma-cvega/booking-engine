@@ -1,7 +1,5 @@
 package com.jusoft.bookingengine.component.instructortimetables;
 
-import com.jusoft.bookingengine.component.instructortimetables.api.InstructorTimetablesView;
-import com.jusoft.bookingengine.component.instructortimetables.api.SearchCriteriaCommand;
 import com.jusoft.bookingengine.repository.Repository;
 
 import java.util.Optional;
@@ -17,9 +15,4 @@ interface InstructorTimetablesManagerRepository extends Repository {
 
   void execute(long instructorId, UnaryOperator<InstructorTimetables> modifier);
 
-  InstructorTimetables findByInstructorAndBuilding(long instructorId, long buildingId);
-
-  InstructorTimetables findByInstructorAndRoom(long instructorId, long roomId);
-
-  Optional<InstructorTimetablesView> findBy(SearchCriteriaCommand criteria);
 }

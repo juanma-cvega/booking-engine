@@ -6,15 +6,16 @@ import lombok.NonNull;
 
 import java.time.DayOfWeek;
 
-@Data
+@Data(staticConstructor = "of")
 public class TimetableEntry {
 
   private final long buildingId;
   private final long roomId;
   @NonNull
-  private final String classType;
+  private final Class classInfo;
   @NonNull
   private final DayOfWeek dayOfWeek;
   @NonNull
-  private final OpenTime openTime;
+  private final OpenTime classPeriod;
+
 }

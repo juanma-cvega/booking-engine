@@ -1,25 +1,17 @@
 package com.jusoft.bookingengine.component.instructortimetables.api;
 
-import com.jusoft.bookingengine.component.instructor.api.AddTimetableCommand;
-import com.jusoft.bookingengine.component.instructor.api.RemoveTimetableCommand;
-
 import java.util.Optional;
 
 public interface InstructorTimetablesManagerComponent {
 
-  InstructorTimetablesView registerInstructor(long instructorId);
+  void registerInstructor(long instructorId);
 
   void unregisterInstructor(long instructorId);
 
-  Optional<InstructorTimetablesView> getInstructor(long instructorId);
+  Optional<InstructorTimetablesView> find(long instructorId);
 
-  void addTimetable(AddTimetableCommand command);
+  void addTimetable(AddTimetableEntriesCommand command);
 
-  void removeTimetable(RemoveTimetableCommand command);
+  void removeTimetable(RemoveTimetableEntriesCommand command);
 
-  InstructorTimetablesView findBy(SearchCriteriaCommand command);
-
-  InstructorBuildingTimetablesView getTimetablesFor(FindBuildingTimetablesCommand command);
-
-  InstructorRoomTimetablesView getTimetablesFor(FindRoomTimetablesCommand command);
 }

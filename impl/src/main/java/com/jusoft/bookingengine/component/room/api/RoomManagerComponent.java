@@ -8,6 +8,8 @@ public interface RoomManagerComponent {
 
   RoomView find(long roomId);
 
+  RoomTimetable getTimetableFor(GetTimetableCommand command);
+
   NextSlotConfig findNextSlotOpenDate(ZonedDateTime lastSlotEndTime, long roomId);
 
   NextSlotConfig findFirstSlotOpenDate(long roomId);

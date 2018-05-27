@@ -12,7 +12,7 @@ import java.time.ZoneId;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Data
-public class OpenTime {
+public class OpenTime implements Comparable<OpenTime> {
 
   @NonNull
   private final SystemLocalTime startTime;
@@ -33,6 +33,12 @@ public class OpenTime {
   }
 
   public boolean isOverlappingWith(OpenTime openTime) {
-    return !(endTime.isBefore(openTime.startTime) || startTime.isAfter(openTime.endTime));
+    return !(endTime.isBefore(openTime.startTime) || endTime.equals(openTime.startTime)
+      || startTime.isAfter(openTime.endTime) || startTime.equals(openTime.endTime));
+  }
+
+  @Override
+  public int compareTo(OpenTime other) {
+    return startTime.compareTo(other.startTime);
   }
 }

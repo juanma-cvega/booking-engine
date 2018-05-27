@@ -2,11 +2,11 @@ package com.jusoft.bookingengine.component.instructortimetables.api;
 
 import lombok.Data;
 
-import java.util.Map;
+import java.util.List;
 
 @Data(staticConstructor = "of")
 public class InstructorTimetablesView {
 
   private final long id;
-  private final Map<Long, BuildingTimetablesView> buildingsTimetable;
+  private final List<TimetableEntry> timetableEntries;
 }
