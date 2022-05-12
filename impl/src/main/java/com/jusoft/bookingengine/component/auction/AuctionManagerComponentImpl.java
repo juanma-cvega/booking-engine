@@ -49,12 +49,11 @@ class AuctionManagerComponentImpl implements AuctionManagerComponent {
       .find(auctionId)
       .orElseThrow(() -> new AuctionNotFoundException(auctionId));
     Optional<Long> winnerFound = auction.findAuctionWinner(auctionWinnerStrategy);
-    if (winnerFound.isPresent()) {
-      Long auctionWinner = winnerFound.get();
-      messagePublisher.publish(AuctionWinnerFoundEvent.of(auction.getId(), auctionWinner, auction.getReferenceId()));
-    } else {
-      messagePublisher.publish(AuctionUnsuccessfulEvent.of(auction.getId(), auction.getReferenceId()));
-    }
+    winnerFound.ifPresentOrElse(
+      auctionWinner -> messagePublisher.publish(
+        AuctionWinnerFoundEvent.of(auction.getId(), auctionWinner, auction.getReferenceId())),
+      () -> messagePublisher.publish(
+        AuctionUnsuccessfulEvent.of(auction.getId(), auction.getReferenceId())));
   }
 
   @Override

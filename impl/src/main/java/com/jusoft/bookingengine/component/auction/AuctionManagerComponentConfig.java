@@ -19,8 +19,6 @@ public class AuctionManagerComponentConfig {
   @Autowired
   private MessagePublisher messagePublisher;
   @Autowired
-  private BookingManagerComponent bookingManagerComponent;
-  @Autowired
   private Clock clock;
 
   @Bean
