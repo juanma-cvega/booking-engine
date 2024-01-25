@@ -1,0 +1,7 @@
+name: Booking engine pipeline
+on: [push]
+jobs:
+  test:
+    runs-on: [ubuntu-latest]
+    steps:
+      - run: echo "Start testing"
