@@ -5,6 +5,8 @@ import com.jusoft.bookingengine.component.timer.OpenTime;
 import com.jusoft.bookingengine.config.AbstractUseCaseStepDefinitions;
 import com.jusoft.bookingengine.holder.DataHolder;
 import cucumber.api.DataTable;
+import cucumber.api.java.en.Given;
+import cucumber.api.java.en.Then;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.DayOfWeek;
@@ -22,20 +24,32 @@ public class CreateSlotLifeCycleManagerUseCaseStepDefinitions extends AbstractUs
   @Autowired
   private CreateSlotLifeCycleManagerUseCase createSlotLifeCycleManagerUseCase;
 
-  public CreateSlotLifeCycleManagerUseCaseStepDefinitions() {
-    Given("^a slot lifecycle manager for room (\\d+) is to be created$",
-      DataHolder::createSlotLifeCycleManagerBuilder);
-    Given("^the slot duration is (\\d+) minutes$", (Integer slotDuration) ->
-      createSlotLifeCycleManagerBuilder.slotsTimetableBuilder.slotDurationInMinutes = slotDuration);
-    Given("^the slots are open$", (DataTable openDays) ->
-      createSlotLifeCycleManagerBuilder.slotsTimetableBuilder.availableDays = openDays.asList(DayOfWeek.class));
-    Given("^the slots are open from (.*) to (.*)$", (String startOpenTime, String endOpenTime) ->
-      createSlotLifeCycleManagerBuilder.slotsTimetableBuilder.openTimes.add(OpenTime.of(startOpenTime, endOpenTime, clock.getZone(), clock)));
-    Given("^the slot lifecycle is created with that configuration$", () ->
-      slotLifeCycleManager = createSlotLifeCycleManagerUseCase.createSlotLifeCycleManager(createSlotLifeCycleManagerBuilder.build()));
-    Given("^a slot lifecycle manager for room (\\d+) is created$", (Long roomId) ->
-      slotLifeCycleManager = createSlotLifeCycleManagerUseCase.createSlotLifeCycleManager(CreateSlotLifeCycleManagerCommand.of(roomId, SLOT_VALIDATION_INFO)));
-    Then("^a slot lifecycle manager for room (.*) should be created$", (Long roomId) ->
-      assertThat(slotLifeCycleManagerComponent.find(roomId)).isNotNull());
+  @Given("^a slot lifecycle manager for room (\\d+) is to be created$")
+  public void a_slot_lifecycle_manager_for_room_is_to_be_created(Long roomId) {
+    DataHolder.createSlotLifeCycleManagerBuilder(roomId);
+  }
+  @Given("^the slot duration is (\\d+) minutes$")
+  public void the_slot_duration_is_minutes(Integer slotDuration) {
+    createSlotLifeCycleManagerBuilder.slotsTimetableBuilder.slotDurationInMinutes = slotDuration;
+  }
+  @Given("^the slots are open$")
+  public void the_slots_are_open(DataTable openDays) {
+    createSlotLifeCycleManagerBuilder.slotsTimetableBuilder.availableDays = openDays.asList(DayOfWeek.class);
+  }
+  @Given("^the slots are open from (.*) to (.*)$")
+  public void the_slots_are_open_from_to(String startOpenTime, String endOpenTime) {
+    createSlotLifeCycleManagerBuilder.slotsTimetableBuilder.openTimes.add(OpenTime.of(startOpenTime, endOpenTime, clock.getZone(), clock));
+  }
+  @Given("^the slot lifecycle is created with that configuration$")
+  public void the_slot_lifecycle_is_created_with_that_configuration() {
+    slotLifeCycleManager = createSlotLifeCycleManagerUseCase.createSlotLifeCycleManager(createSlotLifeCycleManagerBuilder.build());
+  }
+  @Given("^a slot lifecycle manager for room (\\d+) is created$")
+  public void a_slot_lifecycle_manager_for_room_is_created(Long roomId) {
+    slotLifeCycleManager = createSlotLifeCycleManagerUseCase.createSlotLifeCycleManager(CreateSlotLifeCycleManagerCommand.of(roomId, SLOT_VALIDATION_INFO));
+  }
+  @Then("^a slot lifecycle manager for room (.*) should be created$")
+  public void a_slot_lifecycle_manager_for_room_should_be_created(Long roomId) {
+    assertThat(slotLifeCycleManagerComponent.find(roomId)).isNotNull();
   }
 }

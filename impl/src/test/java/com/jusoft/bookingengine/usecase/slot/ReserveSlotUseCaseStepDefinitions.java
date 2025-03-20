@@ -15,6 +15,9 @@ import com.jusoft.bookingengine.component.slot.api.SlotReservedEvent;
 import com.jusoft.bookingengine.component.slot.api.SlotState;
 import com.jusoft.bookingengine.component.slot.api.SlotView;
 import com.jusoft.bookingengine.config.AbstractUseCaseStepDefinitions;
+import cucumber.api.java.en.Given;
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static com.jusoft.bookingengine.holder.DataHolder.buildingCreated;
@@ -36,59 +39,72 @@ public class ReserveSlotUseCaseStepDefinitions extends AbstractUseCaseStepDefini
   @Autowired
   private ReserveSlotForPersonUseCase reserveSlotForPersonUseCase;
 
-  public ReserveSlotUseCaseStepDefinitions() {
-    Given("^user (\\d+) is the member (.*) of the club created$", (Long userId, Long memberId) ->
-      authorizationManagerComponent.createMember(memberId, userId, roomCreated.getClubId()));
-    Given("^the room created requires authorization to use it$", () ->
-      authorizationManagerComponent.addRoomTagsToClub(AddRoomTagsToClubCommand.of(
-        clubCreated.getId(),
-        buildingCreated.getId(),
-        roomCreated.getId(),
-        SlotStatus.NORMAL,
-        ImmutableList.of(Tag.of(TAG_ONLY_IN_CLUB))
-      )));
-    Then("^the user (.*) should get a notification that he is not a member of the club$", (Long userId) -> {
-      assertThat(exceptionThrown).isInstanceOf(UserNotMemberException.class);
-      UserNotMemberException exception = (UserNotMemberException) exceptionThrown;
-      assertThat(exception.getUserId()).isEqualTo(userId);
-      assertThat(exception.getClubId()).isEqualTo(clubCreated.getId());
-    });
-    When("^the slot is reserved by user (\\d+)$", (Long userId) ->
-      reserveSlotForPersonUseCase.reserveSlotForPerson(slotCreated.getId(), userId));
-    When("^the user (\\d+) tries to reserve the slot$", (Long userId) ->
-      storeException(() -> reserveSlotForPersonUseCase.reserveSlotForPerson(slotCreated.getId(), userId)));
-    Then("^the slot should be reserved$", () -> {
-      SlotView slot = slotManagerComponent.find(slotCreated.getId());
-      assertThat(slot.getState()).isEqualTo(SlotState.RESERVED);
-    });
-    Then("^a notification of a slot reserved by user (\\d+) should be published$", (Long userId) -> {
-      SlotReservedEvent event = verifyAndGetMessageOfType(SlotReservedEvent.class);
-      assertThat(event.getSlotId()).isEqualTo(slotCreated.getId());
-      assertThat(event.getSlotUser().getUserId()).isEqualTo(userId);
-    });
-    Then("^the user should get a notification that the slot is already reserved$", () -> {
-      assertThat(exceptionThrown).isInstanceOf(SlotAlreadyReservedException.class);
-      SlotAlreadyReservedException exception = (SlotAlreadyReservedException) exceptionThrown;
-      assertThat(exception.getSlotId()).isEqualTo(slotCreated.getId());
-    });
-    Then("^the user should be notified the slot is not available$", () -> {
-      assertThat(exceptionThrown).isInstanceOf(SlotNotAvailableException.class);
-      SlotNotAvailableException exception = (SlotNotAvailableException) exceptionThrown;
-      assertThat(exception.getSlotId()).isEqualTo(slotCreated.getId());
-    });
-    Then("^the user should get a notification that the slot is already started$", () -> {
-      assertThat(exceptionThrown).isInstanceOf(SlotNotOpenException.class);
-      SlotNotOpenException exception = (SlotNotOpenException) exceptionThrown;
-      assertThat(exception.getSlotId()).isEqualTo(slotCreated.getId());
-    });
-    Then("^the user (\\d+) should receive a notification he is not authorized to use the room created$", (Long userId) -> {
-      assertThat(exceptionThrown).isNotNull();
-      assertThat(exceptionThrown).isInstanceOf(UnauthorizedReservationException.class);
-      UnauthorizedReservationException exception = (UnauthorizedReservationException) exceptionThrown;
-      assertThat(exception.getBuildingId()).isEqualTo(roomCreated.getBuildingId());
-      assertThat(exception.getClubId()).isEqualTo(roomCreated.getClubId());
-      assertThat(exception.getRoomId()).isEqualTo(roomCreated.getId());
-      assertThat(exception.getUserId()).isEqualTo(userId);
-    });
+  @Given("^user (\\d+) is the member (.*) of the club created$")
+  public void user_is_the_member_of_the_club_created (Long userId, Long memberId) {
+    authorizationManagerComponent.createMember(memberId, userId, roomCreated.getClubId());
+  }
+  @Given("^the room created requires authorization to use it$")
+  public void the_room_created_requires_authorization_to_use_it() {
+    authorizationManagerComponent.addRoomTagsToClub(AddRoomTagsToClubCommand.of(
+      clubCreated.getId(),
+      buildingCreated.getId(),
+      roomCreated.getId(),
+      SlotStatus.NORMAL,
+      ImmutableList.of(Tag.of(TAG_ONLY_IN_CLUB))
+    ));
+  }
+  @Then("^the user (.*) should get a notification that he is not a member of the club$")
+  public void the_user_should_get_a_notification_that_he_is_not_a_member_of_the_club(Long userId) {
+    assertThat(exceptionThrown).isInstanceOf(UserNotMemberException.class);
+    UserNotMemberException exception = (UserNotMemberException) exceptionThrown;
+    assertThat(exception.getUserId()).isEqualTo(userId);
+    assertThat(exception.getClubId()).isEqualTo(clubCreated.getId());
+  };
+  @When("^the slot is reserved by user (\\d+)$")
+  public void the_slot_is_reserved_by_user (Long userId) {
+    reserveSlotForPersonUseCase.reserveSlotForPerson(slotCreated.getId(), userId);
+  }
+  @When("^the user (\\d+) tries to reserve the slot$")
+  public void the_user_tries_to_reserve_the_slot(Long userId) {
+    storeException(() -> reserveSlotForPersonUseCase.reserveSlotForPerson(slotCreated.getId(), userId));
+  }
+  @Then("^the slot should be reserved$")
+  public void the_slot_should_be_reserved() {
+    SlotView slot = slotManagerComponent.find(slotCreated.getId());
+    assertThat(slot.getState()).isEqualTo(SlotState.RESERVED);
+  }
+  @Then("^a notification of a slot reserved by user (\\d+) should be published$")
+  public void a_notification_of_a_slot_reserved_by_user_should_be_published(Long userId) {
+    SlotReservedEvent event = verifyAndGetMessageOfType(SlotReservedEvent.class);
+    assertThat(event.getSlotId()).isEqualTo(slotCreated.getId());
+    assertThat(event.getSlotUser().getUserId()).isEqualTo(userId);
+  }
+  @Then("^the user should get a notification that the slot is already reserved$")
+  public void the_user_should_get_a_notification_that_the_slot_is_already_reserved() {
+    assertThat(exceptionThrown).isInstanceOf(SlotAlreadyReservedException.class);
+    SlotAlreadyReservedException exception = (SlotAlreadyReservedException) exceptionThrown;
+    assertThat(exception.getSlotId()).isEqualTo(slotCreated.getId());
+  }
+  @Then("^the user should be notified the slot is not available$")
+  public void the_user_should_be_notified_the_slot_is_not_available() {
+    assertThat(exceptionThrown).isInstanceOf(SlotNotAvailableException.class);
+    SlotNotAvailableException exception = (SlotNotAvailableException) exceptionThrown;
+    assertThat(exception.getSlotId()).isEqualTo(slotCreated.getId());
+  }
+  @Then("^the user should get a notification that the slot is already started$")
+  public void the_user_should_get_a_notification_that_the_slot_is_already_started() {
+    assertThat(exceptionThrown).isInstanceOf(SlotNotOpenException.class);
+    SlotNotOpenException exception = (SlotNotOpenException) exceptionThrown;
+    assertThat(exception.getSlotId()).isEqualTo(slotCreated.getId());
+  }
+  @Then("^the user (\\d+) should receive a notification he is not authorized to use the room created$")
+  public void the_user_should_receive_a_notification_he_is_not_authorized_to_use_the_room_created (Long userId) {
+    assertThat(exceptionThrown).isNotNull();
+    assertThat(exceptionThrown).isInstanceOf(UnauthorizedReservationException.class);
+    UnauthorizedReservationException exception = (UnauthorizedReservationException) exceptionThrown;
+    assertThat(exception.getBuildingId()).isEqualTo(roomCreated.getBuildingId());
+    assertThat(exception.getClubId()).isEqualTo(roomCreated.getClubId());
+    assertThat(exception.getRoomId()).isEqualTo(roomCreated.getId());
+    assertThat(exception.getUserId()).isEqualTo(userId);
   }
 }

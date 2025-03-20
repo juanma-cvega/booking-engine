@@ -4,6 +4,8 @@ import com.jusoft.bookingengine.component.building.api.BuildingView;
 import com.jusoft.bookingengine.component.classmanager.api.ClassManagerComponent;
 import com.jusoft.bookingengine.component.classmanager.api.ClassView;
 import com.jusoft.bookingengine.config.AbstractUseCaseStepDefinitions;
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -22,19 +24,22 @@ public class FindClassesByBuildingUseCaseStepDefinitions extends AbstractUseCase
 
   private List<ClassView> classesForBuilding;
 
-  public FindClassesByBuildingUseCaseStepDefinitions() {
-    When("^the list of classes for the created building (\\d+) is looked up$", (Integer createdBuildingIndex) -> {
-      BuildingView building = buildingsCreated.get(createdBuildingIndex - 1);
-      classesForBuilding = findClassesByBuildingUseCase.findClassesBy(building.getId());
-    });
-    Then("^all created classes should be found$", () ->
-      assertThat(classesForBuilding).hasSameSizeAs(classesCreated));
-    Then("^only class created (\\d+) should be found$", (Integer createdClassIndex) -> {
-      assertThat(classesForBuilding).hasSize(1);
-      assertThat(classesCreated.get(createdClassIndex - 1)).isEqualTo(classesForBuilding.get(0));
-    });
-    Then("^the list of created classes found should be empty$", () -> {
-      assertThat(classesForBuilding).isEmpty();
-    });
+  @When("^the list of classes for the created building (\\d+) is looked up$")
+  public void the_list_of_classes_for_the_created_building_is_looked_up(Integer createdBuildingIndex) {
+    BuildingView building = buildingsCreated.get(createdBuildingIndex - 1);
+    classesForBuilding = findClassesByBuildingUseCase.findClassesBy(building.getId());
+  }
+  @Then("^all created classes should be found$")
+  public void all_created_classes_should_be_found() {
+    assertThat(classesForBuilding).hasSameSizeAs(classesCreated);
+  }
+  @Then("^only class created (\\d+) should be found$")
+  public void only_class_created_should_be_found(Integer createdClassIndex) {
+    assertThat(classesForBuilding).hasSize(1);
+    assertThat(classesCreated.get(createdClassIndex - 1)).isEqualTo(classesForBuilding.get(0));
+  }
+  @Then("^the list of created classes found should be empty$")
+  public void the_list_of_created_classes_found_should_be_empty() {
+    assertThat(classesForBuilding).isEmpty();
   }
 }

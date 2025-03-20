@@ -4,6 +4,8 @@ import com.jusoft.bookingengine.component.slot.api.SlotCreatedEvent;
 import com.jusoft.bookingengine.component.slot.api.SlotManagerComponent;
 import com.jusoft.bookingengine.component.slot.api.SlotView;
 import com.jusoft.bookingengine.config.AbstractUseCaseStepDefinitions;
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
@@ -22,32 +24,37 @@ public class CreateSlotUseCaseStepDefinitions extends AbstractUseCaseStepDefinit
   @Autowired
   private CreateSlotUseCase createSlotUseCase;
 
-
-  public CreateSlotUseCaseStepDefinitions() {
-    When("^a slot is created$", () ->
-      slotCreated = createSlotUseCase.createSlotFor(roomCreated.getId()));
-    When("(.*) slots are created", (Integer slotsToCreate) ->
-      IntStream.range(0, slotsToCreate).forEach((index) -> createSlotUseCase.createSlotFor(roomCreated.getId())));
-    Then("^a notification of a created slot starting at (.*) and ending at (.*) should be published$", (String startTime, String endTime) -> {
-      ZonedDateTime startDate = getDateFrom(startTime);
-      ZonedDateTime endDate = getDateFrom(endTime);
-      verifySlotCreatedEvent(startDate, endDate);
-    });
-    Then("^a notification of a created slot starting the next day at (.*) and ending at (.*) should be published$", (String startTime, String endTime) -> {
-      ZonedDateTime startDate = getDateFrom(startTime, LocalDate.now(clock).plusDays(1));
-      ZonedDateTime endDate = getDateFrom(endTime, LocalDate.now(clock).plusDays(1));
-      verifySlotCreatedEvent(startDate, endDate);
-    });
-    Then("^the slot should be stored starting at (.*) and ending at (.*)$", (String startTime, String endTime) -> {
-      ZonedDateTime startDate = getDateFrom(startTime);
-      ZonedDateTime endDate = getDateFrom(endTime);
-      verifySlotCreatedStored(startDate, endDate);
-    });
-    Then("^the slot should be stored starting the next day at (.*) and ending at (.*)", (String startTime, String endTime) -> {
-      ZonedDateTime startDate = getDateFrom(startTime, LocalDate.now(clock).plusDays(1));
-      ZonedDateTime endDate = getDateFrom(endTime, LocalDate.now(clock).plusDays(1));
-      verifySlotCreatedStored(startDate, endDate);
-    });
+  @When("^a slot is created$")
+  public void a_slot_is_created() {
+    slotCreated = createSlotUseCase.createSlotFor(roomCreated.getId());
+  }
+  @When("(.*) slots are created")
+  public void slots_are_created(Integer slotsToCreate) {
+    IntStream.range(0, slotsToCreate).forEach((index) -> createSlotUseCase.createSlotFor(roomCreated.getId()));
+  }
+  @Then("^a notification of a created slot starting at (.*) and ending at (.*) should be published$")
+  public void a_notification_of_a_created_slot_starting_at_and_ending_at_should_be_published (String startTime, String endTime) {
+    ZonedDateTime startDate = getDateFrom(startTime);
+    ZonedDateTime endDate = getDateFrom(endTime);
+    verifySlotCreatedEvent(startDate, endDate);
+  }
+  @Then("^a notification of a created slot starting the next day at (.*) and ending at (.*) should be published$")
+  public void a_notification_of_a_created_slot_starting_the_next_day_at_and_ending_at_should_be_published (String startTime, String endTime) {
+    ZonedDateTime startDate = getDateFrom(startTime, LocalDate.now(clock).plusDays(1));
+    ZonedDateTime endDate = getDateFrom(endTime, LocalDate.now(clock).plusDays(1));
+    verifySlotCreatedEvent(startDate, endDate);
+  }
+  @Then("^the slot should be stored starting at (.*) and ending at (.*)$")
+  public void the_slot_should_be_stored_starting_at_and_ending_at (String startTime, String endTime) {
+    ZonedDateTime startDate = getDateFrom(startTime);
+    ZonedDateTime endDate = getDateFrom(endTime);
+    verifySlotCreatedStored(startDate, endDate);
+  }
+  @Then("^the slot should be stored starting the next day at (.*) and ending at (.*)")
+  public void the_slot_should_be_stored_starting_the_next_day_at_and_ending_at (String startTime, String endTime){
+    ZonedDateTime startDate = getDateFrom(startTime, LocalDate.now(clock).plusDays(1));
+    ZonedDateTime endDate = getDateFrom(endTime, LocalDate.now(clock).plusDays(1));
+    verifySlotCreatedStored(startDate, endDate);
   }
 
   private void verifySlotCreatedStored(ZonedDateTime startDate, ZonedDateTime endDate) {

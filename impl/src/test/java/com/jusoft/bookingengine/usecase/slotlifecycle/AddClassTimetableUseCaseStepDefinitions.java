@@ -9,6 +9,8 @@ import com.jusoft.bookingengine.component.slotlifecycle.api.SlotLifeCycleManager
 import com.jusoft.bookingengine.config.AbstractUseCaseStepDefinitions;
 import com.jusoft.bookingengine.holder.DataHolder;
 import cucumber.api.DataTable;
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -24,36 +26,39 @@ public class AddClassTimetableUseCaseStepDefinitions extends AbstractUseCaseStep
   @Autowired
   private AddClassTimetableUseCase addClassTimetableUseCase;
 
-  public AddClassTimetableUseCaseStepDefinitions() {
-    When("^class (\\d+) is configured in slot lifecycle manager for room (\\d+) to use$", (Long classId, Long roomId, DataTable dataTable) -> {
-      List<ReservedSlotsOfDay> reservedSlots = createDaysReservedSlotsFrom(dataTable);
-      ClassTimetable classTimetable = ClassTimetable.of(classId, reservedSlots);
-      addClassTimetableUseCase.addClassTimetableTo(roomId, classTimetable);
-    });
-    Then("^slot lifecycle manager for room (\\d+) should contain class (\\d+) to use the room$", (Long roomId, Long classId, DataTable dataTable) -> {
-      SlotLifeCycleManagerView managerView = slotLifeCycleManagerComponent.find(roomId);
-      assertThat(managerView.getClassesTimetable().get(classId)).isNotNull();
-      ClassTimetable classTimetable = managerView.getClassesTimetable().get(classId);
-      assertThat(classTimetable.getClassId()).isEqualTo(classId);
-      verifyClassTimetable(createDaysReservedSlotsFrom(dataTable), classTimetable.getReservedSlotsOfDays());
-    });
-    When("^class (\\d+) is tried to be configured in room (\\d+) to use$", (Long classId, Long roomId, DataTable dataTable) -> {
-      List<ReservedSlotsOfDay> daysReservedSlots = createDaysReservedSlotsFrom(dataTable);
-      ClassTimetable classTimetable = ClassTimetable.of(classId, daysReservedSlots);
-      storeException(() -> addClassTimetableUseCase.addClassTimetableTo(roomId, classTimetable));
-    });
-    Then("^the admin should receive a notification the class information is not valid for class (\\d+) for room (\\d+)$", (Long classId, Long roomId, DataTable dataTable) -> {
-      ClassTimetableNotValidException exception = verifyAndGetExceptionThrown(ClassTimetableNotValidException.class);
-      assertThat(exception.getRoomId()).isEqualTo(roomId);
-      assertThat(exception.getClassTimetable().getClassId()).isEqualTo(classId);
-      verifyClassTimetable(createDaysReservedSlotsFrom(dataTable), exception.getClassTimetable().getReservedSlotsOfDays());
-    });
-    Then("^the admin should receive a notification the class information overlaps with an already reserved slot for class (\\d+) for room (\\d+)$", (Long classId, Long roomId, DataTable dataTable) -> {
-      ClassTimetableOverlappingException exception = verifyAndGetExceptionThrown(ClassTimetableOverlappingException.class);
-      assertThat(exception.getRoomId()).isEqualTo(roomId);
-      assertThat(exception.getClassTimetable().getClassId()).isEqualTo(classId);
-      verifyClassTimetable(createDaysReservedSlotsFrom(dataTable), exception.getClassTimetable().getReservedSlotsOfDays());
-    });
+  @When("^class (\\d+) is configured in slot lifecycle manager for room (\\d+) to use$")
+  public void class_is_configured_in_slot_lifecycle_manager_for_room_to_use(Long classId, Long roomId, DataTable dataTable) {
+    List<ReservedSlotsOfDay> reservedSlots = createDaysReservedSlotsFrom(dataTable);
+    ClassTimetable classTimetable = ClassTimetable.of(classId, reservedSlots);
+    addClassTimetableUseCase.addClassTimetableTo(roomId, classTimetable);
+  }
+  @Then("^slot lifecycle manager for room (\\d+) should contain class (\\d+) to use the room$")
+  public void slot_lifecycle_manager_for_room_should_contain_class_to_use_the_room(Long roomId, Long classId, DataTable dataTable) {
+    SlotLifeCycleManagerView managerView = slotLifeCycleManagerComponent.find(roomId);
+    assertThat(managerView.getClassesTimetable().get(classId)).isNotNull();
+    ClassTimetable classTimetable = managerView.getClassesTimetable().get(classId);
+    assertThat(classTimetable.getClassId()).isEqualTo(classId);
+    verifyClassTimetable(createDaysReservedSlotsFrom(dataTable), classTimetable.getReservedSlotsOfDays());
+  }
+  @When("^class (\\d+) is tried to be configured in room (\\d+) to use$")
+  public void class_is_tried_to_be_configured_in_room_to_use(Long classId, Long roomId, DataTable dataTable) {
+    List<ReservedSlotsOfDay> daysReservedSlots = createDaysReservedSlotsFrom(dataTable);
+    ClassTimetable classTimetable = ClassTimetable.of(classId, daysReservedSlots);
+    storeException(() -> addClassTimetableUseCase.addClassTimetableTo(roomId, classTimetable));
+  }
+  @Then("^the admin should receive a notification the class information is not valid for class (\\d+) for room (\\d+)$")
+  public void the_admin_should_receive_a_notification_the_class_information_is_not_valid_for_class_for_room(Long classId, Long roomId, DataTable dataTable) {
+    ClassTimetableNotValidException exception = verifyAndGetExceptionThrown(ClassTimetableNotValidException.class);
+    assertThat(exception.getRoomId()).isEqualTo(roomId);
+    assertThat(exception.getClassTimetable().getClassId()).isEqualTo(classId);
+    verifyClassTimetable(createDaysReservedSlotsFrom(dataTable), exception.getClassTimetable().getReservedSlotsOfDays());
+  }
+  @Then("^the admin should receive a notification the class information overlaps with an already reserved slot for class (\\d+) for room (\\d+)$")
+  public void the_admin_should_receive_a_notification_the_class_information_overlaps_with_an_already_reserved_slot_for_class_for_room(Long classId, Long roomId, DataTable dataTable) {
+    ClassTimetableOverlappingException exception = verifyAndGetExceptionThrown(ClassTimetableOverlappingException.class);
+    assertThat(exception.getRoomId()).isEqualTo(roomId);
+    assertThat(exception.getClassTimetable().getClassId()).isEqualTo(classId);
+    verifyClassTimetable(createDaysReservedSlotsFrom(dataTable), exception.getClassTimetable().getReservedSlotsOfDays());
   }
 
   private List<ReservedSlotsOfDay> createDaysReservedSlotsFrom(DataTable dataTable) {

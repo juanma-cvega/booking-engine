@@ -16,11 +16,11 @@
   </modules>
 
   <properties>
-    <lombok.version>1.16.18</lombok.version>
+    <lombok.version>1.18.36</lombok.version>
     <maven-compiler-plugin>1.8</maven-compiler-plugin>
     <spring.version>4.3.6.RELEASE</spring.version>
     <tomcat.version>8.0.39</tomcat.version>
-    <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
+    <maven-compiler-plugin.version>3.6.2</maven-compiler-plugin.version>
     <tomcat7-maven-plugin.version>2.2</tomcat7-maven-plugin.version>
     <spring-boot.version>1.5.9.RELEASE</spring-boot.version>
     <assertj.version>3.9.1</assertj.version>
@@ -36,6 +36,7 @@
     <slf4j-api.version>1.7.25</slf4j-api.version>
     <java-target>1.8</java-target>
     <java-source>1.8</java-source>
+    <java.version>8</java.version>
     <failsafe-maven-plugin.version>2.19.1</failsafe-maven-plugin.version>
     <commons-collections4.version>4.1</commons-collections4.version>
     <guava.version>23.0</guava.version>
@@ -215,6 +216,13 @@
           <source>${java-source}</source>
           <target>${java-target}</target>
           <encoding>UTF-8</encoding>
+          <annotationProcessorPaths>
+            <path>
+              <groupId>org.projectlombok</groupId>
+              <artifactId>lombok</artifactId>
+              <version>${lombok.version}</version>
+            </path>
+          </annotationProcessorPaths>
         </configuration>
       </plugin>
       <plugin>

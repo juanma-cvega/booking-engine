@@ -8,6 +8,8 @@ import com.jusoft.bookingengine.component.auction.api.StartAuctionCommand;
 import com.jusoft.bookingengine.config.AbstractUseCaseStepDefinitions;
 import com.jusoft.bookingengine.holder.DataHolder;
 import com.jusoft.bookingengine.strategy.auctionwinner.api.LessBookingsWithinPeriodConfigInfo;
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static com.jusoft.bookingengine.holder.DataHolder.auctionCreated;
@@ -26,28 +28,37 @@ public class StartAuctionUseCaseStepDefinitions extends AbstractUseCaseStepDefin
   @Autowired
   private StartAuctionUseCase startAuctionUseCase;
 
-  public StartAuctionUseCaseStepDefinitions() {
-    When("^an auction is created for the slot with a (.*) minutes auction time and a (.*) days bookings created window$", (Integer auctionDuration, Integer daysRange) ->
-      auctionCreated = startAuctionUseCase.startAuction(StartAuctionCommand.of(slotCreated.getId(), LessBookingsWithinPeriodConfigInfo.of(auctionDuration, daysRange))));
-    Then("^the auction should be stored$", () -> {
-      AuctionView auction = auctionManagerComponent.find(DataHolder.auctionCreated.getId());
-      assertThat(auction.getBidders()).hasSameElementsAs(DataHolder.auctionCreated.getBidders());
-      assertThat(auction.getOpenDate().getEndTime()).isEqualTo(DataHolder.auctionCreated.getOpenDate().getEndTime());
-      assertThat(auction.getReferenceId()).isEqualTo(DataHolder.auctionCreated.getReferenceId());
-      assertThat(auction.getOpenDate().getStartTime()).isEqualTo(DataHolder.auctionCreated.getOpenDate().getStartTime());
-    });
-    Then("^the auction shouldn't exist$", () -> {
-      assertThat(auctionCreated).isNull();
-      assertThatThrownBy(() -> auctionManagerComponent.addBidderToAuctionFor(slotCreated.getId(), 0))
-        .isInstanceOf(AuctionNotFoundException.class);
-    });
-    Then("^an auction finished event shouldn't be scheduled to be published$", () ->
-      await().with().pollDelay(1, SECONDS).untilAsserted(() -> verifyZeroInteractions(messagePublisher)));
-    Then("^an auction started event should be published$", () -> {
-      AuctionStartedEvent event = verifyAndGetMessageOfType(AuctionStartedEvent.class);
-      assertThat(event.getAuctionId()).isEqualTo(auctionCreated.getId());
-      assertThat(event.getOpenDate()).isEqualTo(auctionCreated.getOpenDate());
-      assertThat(event.getReferenceId()).isEqualTo(auctionCreated.getReferenceId());
-    });
+  @When("^an auction is created for the slot with a (.*) minutes auction time and a (.*) days bookings created window$")
+  public void an_auction_is_created_for_the_slot_with_a_minutes_auction_time_and_a_days_bookings_created_window(Integer auctionDuration, Integer daysRange){
+      auctionCreated = startAuctionUseCase.startAuction(StartAuctionCommand.of(slotCreated.getId(), LessBookingsWithinPeriodConfigInfo.of(auctionDuration, daysRange)));
+  }
+
+  @Then("^the auction should be stored$")
+  public void the_auction_should_be_store() {
+    AuctionView auction = auctionManagerComponent.find(DataHolder.auctionCreated.getId());
+    assertThat(auction.getBidders()).hasSameElementsAs(DataHolder.auctionCreated.getBidders());
+    assertThat(auction.getOpenDate().getEndTime()).isEqualTo(DataHolder.auctionCreated.getOpenDate().getEndTime());
+    assertThat(auction.getReferenceId()).isEqualTo(DataHolder.auctionCreated.getReferenceId());
+    assertThat(auction.getOpenDate().getStartTime()).isEqualTo(DataHolder.auctionCreated.getOpenDate().getStartTime());
+  }
+
+  @Then("^the auction shouldn't exist$")
+  public void the_auction_should_not_exist() {
+    assertThat(auctionCreated).isNull();
+    assertThatThrownBy(() -> auctionManagerComponent.addBidderToAuctionFor(slotCreated.getId(), 0))
+      .isInstanceOf(AuctionNotFoundException.class);
+  }
+
+  @Then("^an auction finished event shouldn't be scheduled to be published$")
+  public void an_auction_finished_event_should_not_be_scheduled_to_be_published() {
+    await().with().pollDelay(1, SECONDS).untilAsserted(() -> verifyZeroInteractions(messagePublisher));
+  }
+
+  @Then("^an auction started event should be published$")
+  public void an_auction_started_event_should_be_published()  {
+    AuctionStartedEvent event = verifyAndGetMessageOfType(AuctionStartedEvent.class);
+    assertThat(event.getAuctionId()).isEqualTo(auctionCreated.getId());
+    assertThat(event.getOpenDate()).isEqualTo(auctionCreated.getOpenDate());
+    assertThat(event.getReferenceId()).isEqualTo(auctionCreated.getReferenceId());
   }
 }
