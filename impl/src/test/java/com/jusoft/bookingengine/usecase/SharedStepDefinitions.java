@@ -1,7 +1,7 @@
 package com.jusoft.bookingengine.usecase;
 
 import com.jusoft.bookingengine.config.AbstractUseCaseStepDefinitions;
-import cucumber.api.java.en.Given;
+import io.cucumber.java.en.Given;
 
 import java.time.Clock;
 import java.time.LocalDate;

@@ -5,8 +5,8 @@ import com.jusoft.bookingengine.component.classmanager.api.ClassView;
 import com.jusoft.bookingengine.component.classmanager.api.RoomUnregisteredForClassEvent;
 import com.jusoft.bookingengine.component.classmanager.api.UnregisterRoomCommand;
 import com.jusoft.bookingengine.config.AbstractUseCaseStepDefinitions;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static com.jusoft.bookingengine.holder.DataHolder.classCreated;

@@ -3,8 +3,8 @@ package com.jusoft.bookingengine.usecase.authorization;
 import com.jusoft.bookingengine.component.authorization.api.AuthorizationManagerComponent;
 import com.jusoft.bookingengine.component.authorization.api.ClubView;
 import com.jusoft.bookingengine.config.AbstractUseCaseStepDefinitions;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Optional;

@@ -8,13 +8,16 @@ import com.jusoft.bookingengine.component.slotlifecycle.api.SlotLifeCycleManager
 import com.jusoft.bookingengine.component.slotlifecycle.api.SlotLifeCycleManagerView;
 import com.jusoft.bookingengine.config.AbstractUseCaseStepDefinitions;
 import com.jusoft.bookingengine.holder.DataHolder;
-import cucumber.api.DataTable;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
+import io.cucumber.datatable.DataTable;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
+import static com.jusoft.bookingengine.fixture.SlotLifeCycleFixtures.SLOT_VALIDATION_INFO;
+import static com.jusoft.bookingengine.holder.DataHolder.createSlotLifeCycleManagerBuilder;
+import static com.jusoft.bookingengine.holder.DataHolder.slotLifeCycleManager;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -32,6 +35,7 @@ public class AddClassTimetableUseCaseStepDefinitions extends AbstractUseCaseStep
     ClassTimetable classTimetable = ClassTimetable.of(classId, reservedSlots);
     addClassTimetableUseCase.addClassTimetableTo(roomId, classTimetable);
   }
+
   @Then("^slot lifecycle manager for room (\\d+) should contain class (\\d+) to use the room$")
   public void slot_lifecycle_manager_for_room_should_contain_class_to_use_the_room(Long roomId, Long classId, DataTable dataTable) {
     SlotLifeCycleManagerView managerView = slotLifeCycleManagerComponent.find(roomId);
@@ -40,12 +44,14 @@ public class AddClassTimetableUseCaseStepDefinitions extends AbstractUseCaseStep
     assertThat(classTimetable.getClassId()).isEqualTo(classId);
     verifyClassTimetable(createDaysReservedSlotsFrom(dataTable), classTimetable.getReservedSlotsOfDays());
   }
+
   @When("^class (\\d+) is tried to be configured in room (\\d+) to use$")
   public void class_is_tried_to_be_configured_in_room_to_use(Long classId, Long roomId, DataTable dataTable) {
     List<ReservedSlotsOfDay> daysReservedSlots = createDaysReservedSlotsFrom(dataTable);
     ClassTimetable classTimetable = ClassTimetable.of(classId, daysReservedSlots);
     storeException(() -> addClassTimetableUseCase.addClassTimetableTo(roomId, classTimetable));
   }
+
   @Then("^the admin should receive a notification the class information is not valid for class (\\d+) for room (\\d+)$")
   public void the_admin_should_receive_a_notification_the_class_information_is_not_valid_for_class_for_room(Long classId, Long roomId, DataTable dataTable) {
     ClassTimetableNotValidException exception = verifyAndGetExceptionThrown(ClassTimetableNotValidException.class);
@@ -53,6 +59,7 @@ public class AddClassTimetableUseCaseStepDefinitions extends AbstractUseCaseStep
     assertThat(exception.getClassTimetable().getClassId()).isEqualTo(classId);
     verifyClassTimetable(createDaysReservedSlotsFrom(dataTable), exception.getClassTimetable().getReservedSlotsOfDays());
   }
+
   @Then("^the admin should receive a notification the class information overlaps with an already reserved slot for class (\\d+) for room (\\d+)$")
   public void the_admin_should_receive_a_notification_the_class_information_overlaps_with_an_already_reserved_slot_for_class_for_room(Long classId, Long roomId, DataTable dataTable) {
     ClassTimetableOverlappingException exception = verifyAndGetExceptionThrown(ClassTimetableOverlappingException.class);
@@ -62,7 +69,8 @@ public class AddClassTimetableUseCaseStepDefinitions extends AbstractUseCaseStep
   }
 
   private List<ReservedSlotsOfDay> createDaysReservedSlotsFrom(DataTable dataTable) {
-    return dataTable.transpose().asList(DataHolder.ReservedSlotsOfDayHolder.class).stream()
+    List<DataHolder.ReservedSlotsOfDayHolder> list = dataTable.transpose().asList(DataHolder.ReservedSlotsOfDayHolder.class);
+    return list.stream()
       .map(reservedSlotsOfDayHolder -> reservedSlotsOfDayHolder.build(clock))
       .collect(toList());
   }

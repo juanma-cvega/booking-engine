@@ -4,12 +4,15 @@ import com.jusoft.bookingengine.component.slotlifecycle.api.SlotLifeCycleManager
 import com.jusoft.bookingengine.component.timer.OpenTime;
 import com.jusoft.bookingengine.config.AbstractUseCaseStepDefinitions;
 import com.jusoft.bookingengine.holder.DataHolder;
-import cucumber.api.DataTable;
-import cucumber.api.java.en.Given;
-import cucumber.api.java.en.Then;
+import io.cucumber.datatable.DataTable;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.DayOfWeek;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.jusoft.bookingengine.fixture.SlotLifeCycleFixtures.SLOT_VALIDATION_INFO;
 import static com.jusoft.bookingengine.holder.DataHolder.createSlotLifeCycleManagerBuilder;
@@ -33,8 +36,8 @@ public class CreateSlotLifeCycleManagerUseCaseStepDefinitions extends AbstractUs
     createSlotLifeCycleManagerBuilder.slotsTimetableBuilder.slotDurationInMinutes = slotDuration;
   }
   @Given("^the slots are open$")
-  public void the_slots_are_open(DataTable openDays) {
-    createSlotLifeCycleManagerBuilder.slotsTimetableBuilder.availableDays = openDays.asList(DayOfWeek.class);
+  public void the_slots_are_open(List<DayOfWeek> availableDays) {
+    createSlotLifeCycleManagerBuilder.slotsTimetableBuilder.availableDays = availableDays;
   }
   @Given("^the slots are open from (.*) to (.*)$")
   public void the_slots_are_open_from_to(String startOpenTime, String endOpenTime) {

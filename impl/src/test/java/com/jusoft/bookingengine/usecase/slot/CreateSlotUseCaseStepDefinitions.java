@@ -4,8 +4,8 @@ import com.jusoft.bookingengine.component.slot.api.SlotCreatedEvent;
 import com.jusoft.bookingengine.component.slot.api.SlotManagerComponent;
 import com.jusoft.bookingengine.component.slot.api.SlotView;
 import com.jusoft.bookingengine.config.AbstractUseCaseStepDefinitions;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
@@ -28,7 +28,7 @@ public class CreateSlotUseCaseStepDefinitions extends AbstractUseCaseStepDefinit
   public void a_slot_is_created() {
     slotCreated = createSlotUseCase.createSlotFor(roomCreated.getId());
   }
-  @When("(.*) slots are created")
+  @When("^(.*) slots are created")
   public void slots_are_created(Integer slotsToCreate) {
     IntStream.range(0, slotsToCreate).forEach((index) -> createSlotUseCase.createSlotFor(roomCreated.getId()));
   }

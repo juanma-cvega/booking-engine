@@ -6,8 +6,8 @@ import com.jusoft.bookingengine.component.building.api.BuildingView;
 import com.jusoft.bookingengine.component.building.api.CreateBuildingCommand;
 import com.jusoft.bookingengine.component.club.api.ClubNotFoundException;
 import com.jusoft.bookingengine.config.AbstractUseCaseStepDefinitions;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static com.jusoft.bookingengine.fixture.BuildingFixtures.ADDRESS;

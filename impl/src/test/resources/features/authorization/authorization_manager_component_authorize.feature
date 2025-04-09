@@ -108,7 +108,7 @@ Feature: As an admin, I want to authorise users based on their credentials
     And current date time is 2018-01-10 20:00
     And club 3 is added tag for slot status NORMAL to room 3 in building 4
       | MY_ROOM_TAG |
-    And member 6 created is added tag for slot status NORMAL to room 3 in building 4
+    And member 6 is added tag for slot status NORMAL to room 3 in building 4
       | MY_OTHER_ROOM_TAG |
     When admin verifies credentials of user 2 to access slot created the 2018-01-10 at 18:00 in room 3 in building 4 in club 3
     Then the user 2 should receive a notification he is not authorized to use room 3 in building 4 in club 3
@@ -119,7 +119,7 @@ Feature: As an admin, I want to authorise users based on their credentials
     And current date time is 2018-01-10 20:00
     And club 3 is added tag to building 4
       | MY_BUILDING_TAG |
-    And member 6 created is added tag to building 4
+    And member 6 is added tag to building 4
       | MY_BUILDING_TAG |
     And club 3 is added tag for slot status NORMAL to room 3 in building 4
       | MY_ROOM_TAG |

@@ -3,11 +3,11 @@ package com.jusoft.bookingengine.config;
 import com.jusoft.bookingengine.MainConfig;
 import com.jusoft.bookingengine.publisher.Message;
 import com.jusoft.bookingengine.publisher.MessagePublisher;
-import cucumber.api.java8.En;
+import io.cucumber.spring.CucumberContextConfiguration;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ContextConfiguration;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -19,12 +19,10 @@ import static java.time.LocalTime.parse;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 
-@ContextConfiguration(classes = {
-  MainConfig.class,
-  MockConfig.class
-})
+@CucumberContextConfiguration
+@SpringBootTest(classes = { MainConfig.class, MockConfig.class })
 @DirtiesContext
-public class AbstractUseCaseStepDefinitions implements En {
+public class AbstractUseCaseStepDefinitions {
 
   @Autowired
   protected MessagePublisher messagePublisher;

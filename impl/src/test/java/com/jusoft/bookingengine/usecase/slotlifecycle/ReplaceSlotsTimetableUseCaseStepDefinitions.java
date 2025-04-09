@@ -7,13 +7,16 @@ import com.jusoft.bookingengine.component.slotlifecycle.api.SlotsTimetableInvali
 import com.jusoft.bookingengine.component.timer.OpenTime;
 import com.jusoft.bookingengine.config.AbstractUseCaseStepDefinitions;
 import com.jusoft.bookingengine.holder.DataHolder;
-import cucumber.api.DataTable;
-import cucumber.api.java.en.Given;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
+import io.cucumber.datatable.DataTable;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.DayOfWeek;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.jusoft.bookingengine.holder.DataHolder.slotsTimetableBuilder;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,8 +34,8 @@ public class ReplaceSlotsTimetableUseCaseStepDefinitions extends AbstractUseCase
     slotsTimetableBuilder.slotDurationInMinutes = slotDuration;
   }
   @Given("^the new slots are open$")
-  public void the_new_slots_are_open(DataTable openDays) {
-    slotsTimetableBuilder.availableDays = openDays.asList(DayOfWeek.class);
+  public void the_new_slots_are_open(List<DayOfWeek> openDays) {
+    slotsTimetableBuilder.availableDays = openDays;
   }
   @Given("^the new slots are open from (.*) to (.*)$")
   public void the_new_slots_are_open_from_to(String startOpenTime, String endOpenTime) {

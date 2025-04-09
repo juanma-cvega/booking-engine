@@ -1,7 +1,7 @@
 package com.jusoft.bookingengine.usecase;
 
 import com.jusoft.bookingengine.holder.DataHolder;
-import cucumber.api.java.Before;
+import io.cucumber.java.Before;
 
 public class GlobalHooks {
 
