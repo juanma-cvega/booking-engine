@@ -4,8 +4,8 @@ import com.jusoft.bookingengine.util.HostUtils;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import static com.jusoft.bookingengine.component.common.CommonOps.CREATE_SLOT_REQUEST;
 import static com.jusoft.bookingengine.component.common.CommonOps.END_TIME;
@@ -18,12 +18,12 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 
-public class SlotITest {
+class SlotITest {
 
   private static final String FIND_SLOT_URL = SLOTS_URL + "room/{roomId}/slot/{slotId}";
   private static final String GET_SLOTS_URL = SLOTS_URL + "room/{roomId}";
 
-  @BeforeClass
+  @BeforeAll
   public static void setup() {
     RestAssured.baseURI = HostUtils.getHost();
     RestAssured.port = HostUtils.getPort();

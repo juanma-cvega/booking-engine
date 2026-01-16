@@ -69,8 +69,17 @@ public class AddClassTimetableUseCaseStepDefinitions extends AbstractUseCaseStep
   }
 
   private List<ReservedSlotsOfDay> createDaysReservedSlotsFrom(DataTable dataTable) {
-    List<DataHolder.ReservedSlotsOfDayHolder> list = dataTable.transpose().asList(DataHolder.ReservedSlotsOfDayHolder.class);
-    return list.stream()
+    DataTable transposed = dataTable.transpose();
+    List<List<String>> rows = transposed.asLists();
+    
+    return rows.stream()
+      .skip(1) // Skip header row
+      .map(row -> {
+        java.time.DayOfWeek dayOfWeek = java.time.DayOfWeek.valueOf(row.get(0));
+        String slotsStartTime = row.get(1);
+        String zoneId = row.get(2);
+        return new DataHolder.ReservedSlotsOfDayHolder(dayOfWeek, slotsStartTime, zoneId);
+      })
       .map(reservedSlotsOfDayHolder -> reservedSlotsOfDayHolder.build(clock))
       .collect(toList());
   }

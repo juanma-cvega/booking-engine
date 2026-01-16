@@ -29,7 +29,7 @@ public class AddBuildingTagsToClubUseCaseStepDefinitions extends AbstractUseCase
 
   @When("^club (.*) is added tags? to building (\\d+)$")
   public void club_is_added_tags_to_building (Long clubId, Long buildingId, DataTable tagsDataTable) {
-    List<Tag> tags = tagsDataTable.asList().stream().map(Tag::of).collect(Collectors.toList());
+    List<Tag> tags = tagsDataTable.row(0).stream().map(Tag::of).collect(Collectors.toList());
     addBuildingTagsToClubUseCase.addBuildingTagsToClub(AddBuildingTagsToClubCommand.of(clubId, buildingId, tags));
   }
   @Then("^club (\\d+) should have building (.*) added to its list of buildings$")
@@ -41,14 +41,14 @@ public class AddBuildingTagsToClubUseCaseStepDefinitions extends AbstractUseCase
   }
   @Then("^building (\\d+) of club (\\d+) should have tags? in its list of tags$")
   public void building_of_club_should_have_tags_in_its_list_of_tags (Long buildingId, Long clubId, DataTable tagsDataTable) {
-    List<Tag> tags = tagsDataTable.asList().stream().map(Tag::of).collect(Collectors.toList());
+    List<Tag> tags = tagsDataTable.row(0).stream().map(Tag::of).collect(Collectors.toList());
     Optional<ClubView> club = authorizationManagerComponent.findClubBy(clubId);
     assertThat(club).isPresent();
     assertThat(club.get().getBuildings().get(buildingId).getTags()).containsExactlyElementsOf(tags);
   }
   @When("^club (.*) is tried to be added tag to building (\\d+)$")
   public void club_is_tried_to_be_added_tag_to_building(Long clubId, Long buildingId, DataTable tagsDataTable) {
-    List<Tag> tags = tagsDataTable.asList().stream().map(Tag::of).collect(Collectors.toList());
+    List<Tag> tags = tagsDataTable.row(0).stream().map(Tag::of).collect(Collectors.toList());
     storeException(() -> addBuildingTagsToClubUseCase.addBuildingTagsToClub(AddBuildingTagsToClubCommand.of(clubId, buildingId, tags)));
   }
   @Then("^the admin should get a notification the club (.*) does not exist$")

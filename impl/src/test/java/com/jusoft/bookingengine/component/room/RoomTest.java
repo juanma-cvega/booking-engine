@@ -1,7 +1,7 @@
 package com.jusoft.bookingengine.component.room;
 
 import com.jusoft.bookingengine.component.timer.OpenTime;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.time.Clock;
 import java.time.LocalTime;
@@ -20,7 +20,7 @@ import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class RoomTest {
+class RoomTest {
 
   private static final Clock CLOCK = Clock.systemUTC();
   private static final long NOT_MULTIPLE_SLOT_DURATION = SLOT_DURATION_IN_MINUTES - 1;

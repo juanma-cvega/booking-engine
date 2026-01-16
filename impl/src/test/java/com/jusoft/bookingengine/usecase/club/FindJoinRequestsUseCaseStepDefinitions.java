@@ -32,7 +32,7 @@ public class FindJoinRequestsUseCaseStepDefinitions extends AbstractUseCaseStepD
   }
   @Then("^the admin should be able to see the list of join requests containing requests for users$")
   public void the_admin_should_be_able_to_see_the_list_of_join_requests_containing_requests_for_users (DataTable userIdsDataTable) {
-    List<Long> userIds = userIdsDataTable.asList(Long.class);
+    List<Long> userIds = userIdsDataTable.row(0).stream().map(Long::parseLong).collect(java.util.stream.Collectors.toList());
     assertThat(joinRequestsFound).extracting("userId").hasSameElementsAs(userIds);
   }
   @Then("^the user (\\d+) should receive a notification that he is not allowed to see the list$")

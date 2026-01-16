@@ -2,7 +2,7 @@ package com.jusoft.bookingengine.component.auction;
 
 import com.google.common.collect.Sets;
 import com.jusoft.bookingengine.component.auction.api.Bid;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.time.Clock;
 import java.time.ZoneId;
@@ -16,7 +16,7 @@ import static com.jusoft.bookingengine.fixture.SlotFixtures.SLOT_ID_1;
 import static com.jusoft.bookingengine.fixture.SlotFixtures.START_TIME;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AuctionTest {
+class AuctionTest {
 
   private final Clock clock = Clock.fixed(ZonedDateTime.now().toInstant(), ZoneId.systemDefault());
 

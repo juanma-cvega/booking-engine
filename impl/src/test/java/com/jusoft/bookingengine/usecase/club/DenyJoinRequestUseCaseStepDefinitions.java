@@ -17,7 +17,7 @@ import static com.jusoft.bookingengine.holder.DataHolder.exceptionThrown;
 import static com.jusoft.bookingengine.holder.DataHolder.joinRequestCreated;
 import static com.jusoft.bookingengine.holder.DataHolder.joinRequestsCreated;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
 
 public class DenyJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStepDefinitions {
 
@@ -71,6 +71,6 @@ public class DenyJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStepDe
   }
   @Then("^a notification of a join request denied shouldn't be published$")
     public void a_notification_of_a_join_request_denied_should_not_be_published() {
-    verifyZeroInteractions(messagePublisher);
+    verifyNoInteractions(messagePublisher);
   }
 }

@@ -1,14 +1,14 @@
 package com.jusoft.bookingengine.component.slot;
 
 import com.jusoft.bookingengine.component.slot.api.CreateSlotCommand;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.jusoft.bookingengine.fixture.BuildingFixtures.BUILDING_ID;
 import static com.jusoft.bookingengine.fixture.ClubFixtures.CLUB_ID;
 import static com.jusoft.bookingengine.fixture.RoomFixtures.ROOM_ID;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class CreateSlotCommandTest {
+class CreateSlotCommandTest {
 
   @Test
   public void null_open_date_fails_constructor() {

@@ -20,7 +20,7 @@ import static com.jusoft.bookingengine.holder.DataHolder.exceptionThrown;
 import static com.jusoft.bookingengine.holder.DataHolder.joinRequestCreated;
 import static com.jusoft.bookingengine.holder.DataHolder.joinRequestsCreated;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
 
 public class AcceptJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStepDefinitions {
 
@@ -76,7 +76,7 @@ public class AcceptJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStep
   }
   @Then("^a notification of a join request accepted shouldn't be published$")
   public void a_notification_of_a_join_request_accepted_should_not_be_published () {
-    verifyZeroInteractions(messagePublisher);
+    verifyNoInteractions(messagePublisher);
   }
   @Then("^the admin should be notified the join request (.*) does not exist$")
   public void the_admin_should_be_notified_the_join_request_does_not_exist (Long joinRequestId) {

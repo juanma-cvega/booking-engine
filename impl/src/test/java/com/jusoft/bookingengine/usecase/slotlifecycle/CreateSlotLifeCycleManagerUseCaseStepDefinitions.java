@@ -36,7 +36,10 @@ public class CreateSlotLifeCycleManagerUseCaseStepDefinitions extends AbstractUs
     createSlotLifeCycleManagerBuilder.slotsTimetableBuilder.slotDurationInMinutes = slotDuration;
   }
   @Given("^the slots are open$")
-  public void the_slots_are_open(List<DayOfWeek> availableDays) {
+  public void the_slots_are_open(DataTable availableDaysDataTable) {
+    List<DayOfWeek> availableDays = availableDaysDataTable.row(0).stream()
+      .map(DayOfWeek::valueOf)
+      .collect(Collectors.toList());
     createSlotLifeCycleManagerBuilder.slotsTimetableBuilder.availableDays = availableDays;
   }
   @Given("^the slots are open from (.*) to (.*)$")

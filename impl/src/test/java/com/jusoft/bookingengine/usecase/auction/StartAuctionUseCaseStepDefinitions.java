@@ -18,7 +18,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.awaitility.Awaitility.await;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
 
 public class StartAuctionUseCaseStepDefinitions extends AbstractUseCaseStepDefinitions {
 
@@ -51,7 +51,7 @@ public class StartAuctionUseCaseStepDefinitions extends AbstractUseCaseStepDefin
 
   @Then("^an auction finished event shouldn't be scheduled to be published$")
   public void an_auction_finished_event_should_not_be_scheduled_to_be_published() {
-    await().with().pollDelay(1, SECONDS).untilAsserted(() -> verifyZeroInteractions(messagePublisher));
+    await().with().pollDelay(1, SECONDS).untilAsserted(() -> verifyNoInteractions(messagePublisher));
   }
 
   @Then("^an auction started event should be published$")

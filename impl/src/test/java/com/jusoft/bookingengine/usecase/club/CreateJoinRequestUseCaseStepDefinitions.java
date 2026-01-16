@@ -39,7 +39,8 @@ public class CreateJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStep
     joinRequestsCreated.add(joinRequestCreated);
   }
   @Then("^the club should have a? join requests? created for users?$")
-  public void the_club_should_have_join_requests_created_for_users(List<Long> userIds) {
+  public void the_club_should_have_join_requests_created_for_users(DataTable userIdsDataTable) {
+    List<Long> userIds = userIdsDataTable.row(0).stream().map(Long::parseLong).collect(Collectors.toList());
     Set<JoinRequest> joinRequests = clubManagerComponent.findJoinRequests(clubCreated.getId(), clubAdmin);
     assertThat(joinRequests).hasSize(userIds.size());
     assertThat(joinRequests).extracting("userId").hasSameElementsAs(userIds);

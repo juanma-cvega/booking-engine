@@ -5,7 +5,7 @@
 //import com.jusoft.bookingengine.component.scheduler.api.ScheduledEvent;
 //import com.jusoft.bookingengine.component.shared.MessagePublisher;
 //import org.junit.Before;
-//import org.junit.Test;
+//import org.junit.jupiter.api.Test;
 //import org.junit.runner.RunWith;
 //import org.mockito.Mock;
 //import org.mockito.junit.MockitoJUnitRunner;
@@ -25,7 +25,7 @@
 //import static org.mockito.Mockito.verifyNoMoreInteractions;
 //
 //@RunWith(MockitoJUnitRunner.class)
-//public class ScheduledTasksExecutorTest {
+//class ScheduledTasksExecutorTest {
 //
 //  private static final int NORMAL_EXECUTION_DELAY_IN_SECONDS = 1;
 //  private static final int PASSED_EXECUTION_DELAY_IN_SECONDS = 2;

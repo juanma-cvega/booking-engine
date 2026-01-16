@@ -8,11 +8,11 @@ import com.jusoft.bookingengine.publisher.message.BookingCreatedMessage;
 import com.jusoft.bookingengine.publisher.message.RoomCreatedMessage;
 import com.jusoft.bookingengine.publisher.message.SlotCreatedMessage;
 import com.jusoft.bookingengine.publisher.message.SlotRequiredMessage;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static com.jusoft.bookingengine.fixtures.AuctionFixtures.AUCTION_FINISHED_EVENT;
 import static com.jusoft.bookingengine.fixtures.AuctionFixtures.AUCTION_WINNER_FOUND_EVENT;
@@ -23,9 +23,9 @@ import static com.jusoft.bookingengine.fixtures.SlotFixtures.SLOT_CREATED_EVENT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = InfrastructureMessageFactoryConfig.class)
-public class InfrastructureMessageFactoryTest {
+class InfrastructureMessageFactoryTest {
 
   @Autowired
   private InfrastructureMessageFactory infrastructureMessageFactory;

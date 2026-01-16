@@ -12,6 +12,6 @@ import org.junit.runner.RunWith;
   },
   plugin = {"pretty"})
 @RunWith(Cucumber.class)
-public class UseCaseCTest {
+class UseCaseCTest {
 }
 

@@ -27,7 +27,7 @@ public class AddRoomTagsToMemberUseCaseStepDefinitions extends AbstractUseCaseSt
 
   @When("^member (.*) is added tag for slot status (.*) to room (.*) in building (.*)$")
   public void member_is_added_tag_for_slot_status_to_room_in_building (Long memberId, SlotStatus status, Long roomId, Long buildingId, DataTable tagsDataTable) {
-    List<Tag> tags = tagsDataTable.asList().stream().map(Tag::of).collect(Collectors.toList());
+    List<Tag> tags = tagsDataTable.row(0).stream().map(Tag::of).collect(Collectors.toList());
     addRoomTagsToMemberUseCase.addRoomTagsToMember(AddRoomTagsToMemberCommand.of(memberId, buildingId, roomId, status, tags));
   }
   @Then("^member (.*) should have room (\\d+) in building (\\d+) added to its list of buildings$")
@@ -38,14 +38,14 @@ public class AddRoomTagsToMemberUseCaseStepDefinitions extends AbstractUseCaseSt
   }
   @Then("^room (.*) in building (.*) of member (.*) should have tag of slot status (.*) in its list of tags$")
   public void room_in_building_of_member_should_have_tag_of_slot_status_in_its_list_of_tags(Long roomId, Long buildingId, Long memberId, SlotStatus status, DataTable tagsDataTable) {
-    List<Tag> tags = tagsDataTable.asList().stream().map(Tag::of).collect(Collectors.toList());
+    List<Tag> tags = tagsDataTable.row(0).stream().map(Tag::of).collect(Collectors.toList());
     Optional<MemberView> member = authorizationManagerComponent.findMemberBy(memberId);
     assertThat(member).isPresent();
     assertThat(member.get().getBuildings().get(buildingId).getRooms().get(roomId).getTags().get(status)).containsExactlyElementsOf(tags);
   }
   @When("^member (.*) is tried to be added tag for slot status (.*) to room (.*) in building (.*)$")
   public void member_is_tried_to_be_added_tag_for_slot_status_to_room_in_building(Long memberId, SlotStatus status, Long roomId, Long buildingId, DataTable tagsDataTable) {
-    List<Tag> tags = tagsDataTable.asList().stream().map(Tag::of).collect(Collectors.toList());
+    List<Tag> tags = tagsDataTable.row(0).stream().map(Tag::of).collect(Collectors.toList());
     storeException(() -> addRoomTagsToMemberUseCase.addRoomTagsToMember(AddRoomTagsToMemberCommand.of(memberId, buildingId, roomId, status, tags)));
   }
 }

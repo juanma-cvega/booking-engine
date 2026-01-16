@@ -4,8 +4,8 @@ import com.jusoft.bookingengine.util.HostUtils;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import static com.jusoft.bookingengine.component.common.CommonOps.END_TIME;
 import static com.jusoft.bookingengine.component.common.CommonOps.ROOM_ID;
@@ -18,7 +18,7 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 
-public class BookingITest {
+class BookingITest {
 
   private static final String USER_ID = "1234";
   private static final String BOOKINGS_PATH = "/bookings";
@@ -27,7 +27,7 @@ public class BookingITest {
   private static final String BOOKING_PATH = BOOKINGS_PATH + "/user/{userId}/booking/{bookingId}";
   private static final String CREATE_BOOKING_REQUEST = "{\"userId\":" + USER_ID + "}";
 
-  @BeforeClass
+  @BeforeAll
   public static void setup() {
     RestAssured.baseURI = HostUtils.getHost();
     RestAssured.port = HostUtils.getPort();

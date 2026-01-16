@@ -34,7 +34,10 @@ public class ReplaceSlotsTimetableUseCaseStepDefinitions extends AbstractUseCase
     slotsTimetableBuilder.slotDurationInMinutes = slotDuration;
   }
   @Given("^the new slots are open$")
-  public void the_new_slots_are_open(List<DayOfWeek> openDays) {
+  public void the_new_slots_are_open(DataTable openDaysDataTable) {
+    List<DayOfWeek> openDays = openDaysDataTable.row(0).stream()
+      .map(DayOfWeek::valueOf)
+      .collect(Collectors.toList());
     slotsTimetableBuilder.availableDays = openDays;
   }
   @Given("^the new slots are open from (.*) to (.*)$")

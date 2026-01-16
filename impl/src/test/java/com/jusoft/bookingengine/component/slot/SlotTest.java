@@ -4,7 +4,7 @@ import com.jusoft.bookingengine.component.slot.api.SlotAlreadyPreReservedExcepti
 import com.jusoft.bookingengine.component.slot.api.SlotAlreadyReservedException;
 import com.jusoft.bookingengine.component.slot.api.SlotNotAvailableException;
 import com.jusoft.bookingengine.component.slot.api.SlotNotOpenException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.time.Clock;
 
@@ -22,7 +22,7 @@ import static java.time.temporal.ChronoUnit.MINUTES;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class SlotTest {
+class SlotTest {
 
   @Test
   public void slot_without_creation_time_fails_creation() {

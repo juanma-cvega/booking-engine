@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 
 @CucumberContextConfiguration
-@SpringBootTest(classes = { MainConfig.class, MockConfig.class })
+@SpringBootTest(classes = { MainConfig.class, MockConfig.class }, properties = "spring.main.allow-bean-definition-overriding=true")
 @DirtiesContext
 public class AbstractUseCaseStepDefinitions {
 

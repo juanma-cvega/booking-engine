@@ -2,7 +2,7 @@ package com.jusoft.bookingengine.util;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -23,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.awaitility.Awaitility.await;
 
 @Slf4j
-public class LockingTemplateTest {
+class LockingTemplateTest {
 
   private static final int SLOW_TASK = 500;
   private static final int FAST_TASK = 10;
