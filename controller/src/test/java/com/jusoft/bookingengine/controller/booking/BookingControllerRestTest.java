@@ -67,7 +67,7 @@ class BookingControllerRestTest {
   private MockMvc mockMvc;
 
   @BeforeEach
-  public void setup() {
+  void setup() {
     mockMvc = MockMvcBuilders.standaloneSetup(bookingControllerRest).build();
   }
 
