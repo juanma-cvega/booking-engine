@@ -34,6 +34,6 @@ public class RoomFixtures {
             Arrays.asList(DayOfWeek.MONDAY, DayOfWeek.TUESDAY);
 
     public static final RoomCreatedEvent ROOM_CREATED_EVENT =
-            RoomCreatedEvent.of(ROOM_ID, SLOT_DURATION_IN_MINUTES, OPEN_TIMES, AVAILABLE_DAYS);
-    public static final SlotRequiredEvent SLOT_REQUIRED_EVENT = SlotRequiredEvent.of(ROOM_ID);
+            new RoomCreatedEvent(ROOM_ID, SLOT_DURATION_IN_MINUTES, OPEN_TIMES, AVAILABLE_DAYS);
+    public static final SlotRequiredEvent SLOT_REQUIRED_EVENT = new SlotRequiredEvent(ROOM_ID);
 }

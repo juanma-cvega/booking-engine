@@ -31,7 +31,7 @@ public class ScheduleNextSlotUseCaseStepDefinitions extends AbstractUseCaseStepD
                         () -> {
                             SlotRequiredEvent event =
                                     verifyAndGetMessageOfType(SlotRequiredEvent.class);
-                            assertThat(event.getRoomId()).isEqualTo(roomCreated.getId());
+                            assertThat(event.roomId()).isEqualTo(roomCreated.getId());
                         });
     }
 
@@ -42,7 +42,7 @@ public class ScheduleNextSlotUseCaseStepDefinitions extends AbstractUseCaseStepD
         assertThat(tasks).hasSize(1);
         assertThat(tasks.get(0).getExecutionTime()).isEqualTo(getDateFrom(localTime));
         assertThat(tasks.get(0).getScheduledEvent())
-                .isEqualTo(SlotRequiredEvent.of(roomCreated.getId()));
+                .isEqualTo(new SlotRequiredEvent(roomCreated.getId()));
         assertThat(tasks.get(0).getTask().isDone()).isFalse();
     }
 }

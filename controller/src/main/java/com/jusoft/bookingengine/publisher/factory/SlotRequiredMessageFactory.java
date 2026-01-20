@@ -10,6 +10,6 @@ class SlotRequiredMessageFactory implements MessageFactory<SlotRequiredEvent, Sl
 
     @Override
     public SlotRequiredMessage createFrom(SlotRequiredEvent message) {
-        return SlotRequiredMessage.of(message.getRoomId());
+        return SlotRequiredMessage.of(message.roomId());
     }
 }

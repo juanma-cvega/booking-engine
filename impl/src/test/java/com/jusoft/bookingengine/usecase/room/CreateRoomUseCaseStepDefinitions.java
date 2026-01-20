@@ -60,12 +60,11 @@ public class CreateRoomUseCaseStepDefinitions extends AbstractUseCaseStepDefinit
         verify(messagePublisher).publish(messageCaptor.capture());
         assertThat(messageCaptor.getValue()).isInstanceOf(RoomCreatedEvent.class);
         RoomCreatedEvent roomCreatedEvent = (RoomCreatedEvent) messageCaptor.getValue();
-        assertThat(roomCreatedEvent.getRoomId()).isEqualTo(roomCreated.getId());
-        assertThat(roomCreatedEvent.getSlotDurationInMinutes())
+        assertThat(roomCreatedEvent.roomId()).isEqualTo(roomCreated.getId());
+        assertThat(roomCreatedEvent.slotDurationInMinutes())
                 .isEqualTo(roomCreated.getSlotDurationInMinutes());
-        assertThat(roomCreatedEvent.getAvailableDays()).isEqualTo(roomCreated.getAvailableDays());
-        assertThat(roomCreatedEvent.getOpenTimesPerDay())
-                .isEqualTo(roomCreated.getOpenTimesPerDay());
+        assertThat(roomCreatedEvent.availableDays()).isEqualTo(roomCreated.getAvailableDays());
+        assertThat(roomCreatedEvent.openTimesPerDay()).isEqualTo(roomCreated.getOpenTimesPerDay());
     }
     ;
 

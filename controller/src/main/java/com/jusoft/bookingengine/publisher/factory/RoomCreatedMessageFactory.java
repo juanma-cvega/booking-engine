@@ -10,9 +10,9 @@ class RoomCreatedMessageFactory implements MessageFactory<RoomCreatedEvent, Room
     @Override
     public RoomCreatedMessage createFrom(RoomCreatedEvent message) {
         return RoomCreatedMessage.of(
-                message.getRoomId(),
-                message.getSlotDurationInMinutes(),
-                message.getOpenTimesPerDay(),
-                message.getAvailableDays());
+                message.roomId(),
+                message.slotDurationInMinutes(),
+                message.openTimesPerDay(),
+                message.availableDays());
     }
 }

@@ -26,6 +26,6 @@ public class ScheduleNextSlotUseCase {
         SlotCreationStrategy strategy =
                 slotCreationStrategyRegistrar.createStrategyWith(room.getSlotCreationConfigInfo());
         schedulerComponent.schedule(
-                strategy.nextSlotCreationTimeFor(room.getId()), SlotRequiredEvent.of(roomId));
+                strategy.nextSlotCreationTimeFor(room.getId()), new SlotRequiredEvent(roomId));
     }
 }

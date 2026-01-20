@@ -8,7 +8,7 @@ import lombok.AllArgsConstructor;
 class RoomMessageFactory {
 
     RoomCreatedEvent roomCreatedEvent(Room room) {
-        return RoomCreatedEvent.of(
+        return new RoomCreatedEvent(
                 room.getId(),
                 room.getSlotDurationInMinutes(),
                 room.getOpenTimesPerDay(),

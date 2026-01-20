@@ -75,7 +75,7 @@ class InfrastructureMessageFactoryTest {
 
         assertThat(message).isInstanceOf(SlotRequiredMessage.class);
         SlotRequiredMessage openNextSlotMessage = (SlotRequiredMessage) message;
-        assertThat(openNextSlotMessage.getRoomId()).isEqualTo(SLOT_REQUIRED_EVENT.getRoomId());
+        assertThat(openNextSlotMessage.getRoomId()).isEqualTo(SLOT_REQUIRED_EVENT.roomId());
     }
 
     @Test
@@ -84,13 +84,13 @@ class InfrastructureMessageFactoryTest {
 
         assertThat(message).isInstanceOf(RoomCreatedMessage.class);
         RoomCreatedMessage roomCreatedEvent = (RoomCreatedMessage) message;
-        assertThat(roomCreatedEvent.getRoomId()).isEqualTo(ROOM_CREATED_EVENT.getRoomId());
+        assertThat(roomCreatedEvent.getRoomId()).isEqualTo(ROOM_CREATED_EVENT.roomId());
         assertThat(roomCreatedEvent.getSlotDurationInMinutes())
-                .isEqualTo(ROOM_CREATED_EVENT.getSlotDurationInMinutes());
+                .isEqualTo(ROOM_CREATED_EVENT.slotDurationInMinutes());
         assertThat(roomCreatedEvent.getAvailableDays())
-                .isEqualTo(ROOM_CREATED_EVENT.getAvailableDays());
+                .isEqualTo(ROOM_CREATED_EVENT.availableDays());
         assertThat(roomCreatedEvent.getOpenTimesPerDay())
-                .isEqualTo(ROOM_CREATED_EVENT.getOpenTimesPerDay());
+                .isEqualTo(ROOM_CREATED_EVENT.openTimesPerDay());
     }
 
     @Test
