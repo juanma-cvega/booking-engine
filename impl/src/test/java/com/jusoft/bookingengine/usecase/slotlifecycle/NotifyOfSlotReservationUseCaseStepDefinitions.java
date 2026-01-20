@@ -29,8 +29,8 @@ public class NotifyOfSlotReservationUseCaseStepDefinitions extends AbstractUseCa
             Long userId, Long slotId) {
         PersonReservationCreatedEvent event =
                 verifyAndGetMessageOfType(PersonReservationCreatedEvent.class);
-        assertThat(event.getSlotId()).isEqualTo(slotId);
-        assertThat(event.getUserId()).isEqualTo(userId);
+        assertThat(event.slotId()).isEqualTo(slotId);
+        assertThat(event.userId()).isEqualTo(userId);
     }
     ;
 
@@ -40,7 +40,7 @@ public class NotifyOfSlotReservationUseCaseStepDefinitions extends AbstractUseCa
             Long classId, Long slotId) {
         ClassReservationCreatedEvent event =
                 verifyAndGetMessageOfType(ClassReservationCreatedEvent.class);
-        assertThat(event.getSlotId()).isEqualTo(slotId);
-        assertThat(event.getClassId()).isEqualTo(classId);
+        assertThat(event.slotId()).isEqualTo(slotId);
+        assertThat(event.classId()).isEqualTo(classId);
     }
 }

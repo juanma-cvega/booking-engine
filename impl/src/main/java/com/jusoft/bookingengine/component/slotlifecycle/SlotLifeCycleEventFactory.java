@@ -67,7 +67,7 @@ class SlotLifeCycleEventFactory {
 
         @Override
         public SlotRequiresAuctionEvent getEventFrom(InAuctionState nextSlotState) {
-            return SlotRequiresAuctionEvent.of(
+            return new SlotRequiresAuctionEvent(
                     nextSlotState.getSlotId(), nextSlotState.getAuctionConfigInfo());
         }
 
@@ -86,7 +86,7 @@ class SlotLifeCycleEventFactory {
 
         @Override
         public SlotRequiresPreReservationEvent getEventFrom(PreReservedState nextSlotState) {
-            return SlotRequiresPreReservationEvent.of(
+            return new SlotRequiresPreReservationEvent(
                     nextSlotState.getSlotId(), nextSlotState.getUser());
         }
 
@@ -104,7 +104,7 @@ class SlotLifeCycleEventFactory {
 
         @Override
         public SlotCanBeMadeAvailableEvent getEventFrom(AvailableState nextSlotState) {
-            return SlotCanBeMadeAvailableEvent.of(nextSlotState.getSlotId());
+            return new SlotCanBeMadeAvailableEvent(nextSlotState.getSlotId());
         }
 
         @Override
@@ -149,7 +149,7 @@ class SlotLifeCycleEventFactory {
 
         @Override
         public Event createEventFrom(long slotId, SlotUser slotUser) {
-            return PersonReservationCreatedEvent.of(slotId, slotUser.getId());
+            return new PersonReservationCreatedEvent(slotId, slotUser.getId());
         }
 
         @Override
@@ -165,7 +165,7 @@ class SlotLifeCycleEventFactory {
 
         @Override
         public Event createEventFrom(long slotId, SlotUser slotUser) {
-            return ClassReservationCreatedEvent.of(slotId, slotUser.getId());
+            return new ClassReservationCreatedEvent(slotId, slotUser.getId());
         }
 
         @Override

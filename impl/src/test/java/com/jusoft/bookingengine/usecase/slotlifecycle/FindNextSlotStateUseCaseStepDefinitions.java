@@ -40,7 +40,7 @@ public class FindNextSlotStateUseCaseStepDefinitions extends AbstractUseCaseStep
     public void a_notification_that_the_slot_is_available_should_be_published(Long slotId) {
         SlotCanBeMadeAvailableEvent event =
                 verifyAndGetMessageOfType(SlotCanBeMadeAvailableEvent.class);
-        assertThat(event.getSlotId()).isEqualTo(slotId);
+        assertThat(event.slotId()).isEqualTo(slotId);
     }
 
     @Then(
@@ -49,8 +49,8 @@ public class FindNextSlotStateUseCaseStepDefinitions extends AbstractUseCaseStep
             a_notification_that_the_slot_requires_an_auction_of_minutes_duration_and_bookings_period_of_days_should_be_published(
                     Long slotId, Integer auctionDuration, Integer periodValue) {
         SlotRequiresAuctionEvent event = verifyAndGetMessageOfType(SlotRequiresAuctionEvent.class);
-        assertThat(event.getSlotId()).isEqualTo(slotId);
-        assertThat(event.getAuctionConfigInfo())
+        assertThat(event.slotId()).isEqualTo(slotId);
+        assertThat(event.auctionConfigInfo())
                 .isEqualTo(LessBookingsWithinPeriodConfigInfo.of(auctionDuration, periodValue));
     }
 
@@ -60,9 +60,9 @@ public class FindNextSlotStateUseCaseStepDefinitions extends AbstractUseCaseStep
             Long slotId, Long userId) {
         SlotRequiresPreReservationEvent event =
                 verifyAndGetMessageOfType(SlotRequiresPreReservationEvent.class);
-        assertThat(event.getSlotId()).isEqualTo(slotId);
-        assertThat(event.getSlotUser().getId()).isEqualTo(userId);
-        assertThat(event.getSlotUser().getUserType()).isEqualTo(PERSON);
+        assertThat(event.slotId()).isEqualTo(slotId);
+        assertThat(event.slotUser().getId()).isEqualTo(userId);
+        assertThat(event.slotUser().getUserType()).isEqualTo(PERSON);
     }
 
     @Then("^a notification that the slot (\\d+) is reserved for class (\\d+) should be published$")
@@ -70,8 +70,8 @@ public class FindNextSlotStateUseCaseStepDefinitions extends AbstractUseCaseStep
             Long slotId, Long classId) {
         SlotRequiresPreReservationEvent event =
                 verifyAndGetMessageOfType(SlotRequiresPreReservationEvent.class);
-        assertThat(event.getSlotUser().getId()).isEqualTo(classId);
-        assertThat(event.getSlotUser().getUserType()).isEqualTo(CLASS);
-        assertThat(event.getSlotId()).isEqualTo(slotId);
+        assertThat(event.slotUser().getId()).isEqualTo(classId);
+        assertThat(event.slotUser().getUserType()).isEqualTo(CLASS);
+        assertThat(event.slotId()).isEqualTo(slotId);
     }
 }

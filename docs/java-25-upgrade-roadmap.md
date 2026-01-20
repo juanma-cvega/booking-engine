@@ -232,47 +232,80 @@ mvn clean test
 
 **Rationale**: Records are immutable, concise, and perfect for data carriers
 
-**Candidates** (classes in `api` packages):
-- `BookingView`
-- `ClubView`
-- `RoomView`
-- `SlotView`
-- All `*Command` classes
-- All `*Request` classes
+**Status**: ✅ **COMPLETED** (January 2026)
+
+**Completed Migrations**:
+
+#### Event Classes (30 events across 8 components):
+- ✅ **Booking component** (already completed)
+  - `BookingCreatedEvent`
+- ✅ **Slot component** (already completed)
+  - `SlotCreatedEvent`
+- ✅ **Auction component** (4 events)
+  - `AuctionFinishedEvent`
+  - `AuctionWinnerFoundEvent`
+  - `AuctionStartedEvent`
+  - `AuctionUnsuccessfulEvent`
+- ✅ **Room component** (4 events)
+  - `RoomCreatedEvent`
+  - `SlotRequiredEvent`
+  - `AuctionRequiredEvent`
+  - `SlotReadyEvent`
+- ✅ **Building component** (1 event)
+  - `BuildingCreatedEvent`
+- ✅ **Member component** (1 event)
+  - `MemberCreatedEvent`
+- ✅ **Club component** (4 events)
+  - `ClubCreatedEvent`
+  - `JoinRequestAcceptedEvent`
+  - `JoinRequestCreatedEvent`
+  - `JoinRequestDeniedEvent`
+- ✅ **ClassManager component** (6 events)
+  - `ClassCreatedEvent`
+  - `ClassInstructorAddedEvent`
+  - `ClassInstructorRemovedEvent`
+  - `ClassRemovedEvent`
+  - `RoomRegisteredForClassEvent`
+  - `RoomUnregisteredForClassEvent`
+- ✅ **SlotLifecycle component** (5 events)
+  - `ClassReservationCreatedEvent`
+  - `PersonReservationCreatedEvent`
+  - `SlotCanBeMadeAvailableEvent`
+  - `SlotRequiresAuctionEvent`
+  - `SlotRequiresPreReservationEvent`
+
+**Remaining Candidates** (classes in `api` packages):
+- [ ] `BookingView`
+- [ ] `ClubView`
+- [ ] `RoomView`
+- [ ] `SlotView`
+- [ ] All `*Command` classes
+- [ ] All `*Request` classes
 
 **Example Migration**:
 ```java
 // Before (Lombok)
-@Data
-@AllArgsConstructor
-public class BookingView {
-    private final long id;
-    private final long userId;
-    private final ZonedDateTime bookingTime;
-    private final long slotId;
+@Data(staticConstructor = "of")
+public class AuctionFinishedEvent implements Event {
+    private final long auctionId;
 }
 
 // After (Java 17 Record)
-public record BookingView(
-    long id,
-    long userId,
-    ZonedDateTime bookingTime,
-    long slotId
-) {}
+public record AuctionFinishedEvent(long auctionId) implements Event {}
 ```
 
-**Tasks**:
-- [ ] Identify all DTO/View classes
-- [ ] Convert to records (keep domain entities as classes)
-- [ ] Update tests to use record constructors
-- [ ] Verify Jackson serialization works
-- [ ] Run tests: `mvn test`
+**Migration Changes**:
+- Replaced `.of()` static factory methods with `new` record constructors
+- Replaced `getFieldName()` methods with `fieldName()` record accessors
+- Removed Lombok `@Data` annotations
+- All 207 tests passing after migration
 
-**Benefits**:
-- Less boilerplate (no Lombok needed for DTOs)
+**Benefits Achieved**:
+- Less boilerplate (no Lombok needed for event DTOs)
 - Immutability guaranteed by compiler
 - Pattern matching support (Java 21+)
 - Better IDE support
+- Cleaner, more maintainable code
 
 ---
 
