@@ -6,7 +6,7 @@ import lombok.Data;
 @Data(staticConstructor = "of")
 public class BookingCreatedMessage implements InfrastructureMessage {
 
-  private final long bookingId;
-  private final long userId;
-  private final long slotId;
+    private final long bookingId;
+    private final long userId;
+    private final long slotId;
 }

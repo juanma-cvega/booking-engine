@@ -7,9 +7,9 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class ReplaceSlotsTimetableUseCase {
 
-  private final SlotLifeCycleManagerComponent slotLifeCycleManagerComponent;
+    private final SlotLifeCycleManagerComponent slotLifeCycleManagerComponent;
 
-  public void replaceSlotsTimetable(long roomId, SlotsTimetable slotsTimetable) {
-    slotLifeCycleManagerComponent.replaceSlotsTimetableWith(roomId, slotsTimetable);
-  }
+    public void replaceSlotsTimetable(long roomId, SlotsTimetable slotsTimetable) {
+        slotLifeCycleManagerComponent.replaceSlotsTimetableWith(roomId, slotsTimetable);
+    }
 }

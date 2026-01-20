@@ -7,7 +7,6 @@ import lombok.Data;
 @Data(staticConstructor = "of")
 public class StartAuctionCommand implements Command {
 
-  private final long referenceId;
-  private final AuctionConfigInfo auctionConfigInfo;
-
+    private final long referenceId;
+    private final AuctionConfigInfo auctionConfigInfo;
 }

@@ -7,9 +7,9 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class RemoveInstructorUseCase {
 
-  private final ClassManagerComponent classManagerComponent;
+    private final ClassManagerComponent classManagerComponent;
 
-  public void removeInstructor(RemoveInstructorCommand command) {
-    classManagerComponent.removeInstructor(command);
-  }
+    public void removeInstructor(RemoveInstructorCommand command) {
+        classManagerComponent.removeInstructor(command);
+    }
 }

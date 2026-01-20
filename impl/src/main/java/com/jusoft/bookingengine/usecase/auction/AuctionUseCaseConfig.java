@@ -12,39 +12,34 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class AuctionUseCaseConfig {
 
-  @Autowired
-  private AuctionManagerComponent auctionManagerComponent;
+    @Autowired private AuctionManagerComponent auctionManagerComponent;
 
-  @Autowired
-  private AuctionStrategyRegistrar auctionStrategyRegistrar;
+    @Autowired private AuctionStrategyRegistrar auctionStrategyRegistrar;
 
-  @Autowired
-  private SlotManagerComponent slotManagerComponent;
+    @Autowired private SlotManagerComponent slotManagerComponent;
 
-  @Autowired
-  private AuthorizationManagerComponent authorizationManagerComponent;
+    @Autowired private AuthorizationManagerComponent authorizationManagerComponent;
 
-  @Autowired
-  private SchedulerComponent schedulerComponent;
+    @Autowired private SchedulerComponent schedulerComponent;
 
-  @Bean
-  public AddBidderToAuctionUseCase addBidderToAuctionUseCase() {
-    return new AddBidderToAuctionUseCase(auctionManagerComponent, slotManagerComponent, authorizationManagerComponent);
-  }
+    @Bean
+    public AddBidderToAuctionUseCase addBidderToAuctionUseCase() {
+        return new AddBidderToAuctionUseCase(
+                auctionManagerComponent, slotManagerComponent, authorizationManagerComponent);
+    }
 
-  @Bean
-  public FinishAuctionUseCase finishAuctionUseCase() {
-    return new FinishAuctionUseCase(auctionManagerComponent, auctionStrategyRegistrar);
-  }
+    @Bean
+    public FinishAuctionUseCase finishAuctionUseCase() {
+        return new FinishAuctionUseCase(auctionManagerComponent, auctionStrategyRegistrar);
+    }
 
-  @Bean
-  public ScheduleFinishAuctionUseCase scheduleFinishAuctionUseCase() {
-    return new ScheduleFinishAuctionUseCase(schedulerComponent);
-  }
+    @Bean
+    public ScheduleFinishAuctionUseCase scheduleFinishAuctionUseCase() {
+        return new ScheduleFinishAuctionUseCase(schedulerComponent);
+    }
 
-  @Bean
-  public StartAuctionUseCase startAuctionUseCase() {
-    return new StartAuctionUseCase(auctionManagerComponent);
-  }
-
+    @Bean
+    public StartAuctionUseCase startAuctionUseCase() {
+        return new StartAuctionUseCase(auctionManagerComponent);
+    }
 }

@@ -1,4 +1,3 @@
 package com.jusoft.bookingengine.component.slotlifecycle;
 
-interface NextSlotState {
-}
+interface NextSlotState {}

@@ -6,6 +6,6 @@ import lombok.Data;
 @Data(staticConstructor = "of")
 public class CreateJoinRequestCommand implements Command {
 
-  private final long clubId;
-  private final long userId;
+    private final long clubId;
+    private final long userId;
 }

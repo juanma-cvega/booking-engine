@@ -6,14 +6,14 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class NoAuctionConfigInfo implements AuctionConfigInfo {
 
-  private static final NoAuctionConfigInfo INSTANCE = new NoAuctionConfigInfo();
+    private static final NoAuctionConfigInfo INSTANCE = new NoAuctionConfigInfo();
 
-  @Override
-  public int getAuctionDuration() {
-    return 0;
-  }
+    @Override
+    public int getAuctionDuration() {
+        return 0;
+    }
 
-  public static NoAuctionConfigInfo getInstance() {
-    return INSTANCE;
-  }
+    public static NoAuctionConfigInfo getInstance() {
+        return INSTANCE;
+    }
 }

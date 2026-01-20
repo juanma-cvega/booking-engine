@@ -6,9 +6,9 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class MakeSlotAvailableUseCase {
 
-  private final SlotManagerComponent slotManagerComponent;
+    private final SlotManagerComponent slotManagerComponent;
 
-  public void makeSlotAvailable(long slotId) {
-    slotManagerComponent.makeAvailable(slotId);
-  }
+    public void makeSlotAvailable(long slotId) {
+        slotManagerComponent.makeAvailable(slotId);
+    }
 }

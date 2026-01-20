@@ -5,13 +5,8 @@ import io.cucumber.junit.CucumberOptions;
 import org.junit.runner.RunWith;
 
 @CucumberOptions(
-  features = "src/test/resources",
-  glue = {
-    "com.jusoft.bookingengine.usecase",
-    "com.jusoft.bookingengine.config"
-  },
-  plugin = {"pretty"})
+        features = "src/test/resources",
+        glue = {"com.jusoft.bookingengine.usecase", "com.jusoft.bookingengine.config"},
+        plugin = {"pretty"})
 @RunWith(Cucumber.class)
-class UseCaseCTest {
-}
-
+class UseCaseCTest {}

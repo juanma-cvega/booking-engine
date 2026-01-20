@@ -6,6 +6,4 @@ import org.springframework.context.annotation.Import;
 
 @Configuration
 @Import(BookingControllerConfig.class)
-public class ControllerConfig {
-
-}
+public class ControllerConfig {}

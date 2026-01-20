@@ -1,4 +1,3 @@
 package com.jusoft.bookingengine.publisher;
 
-public interface InfrastructureMessage {
-}
+public interface InfrastructureMessage {}

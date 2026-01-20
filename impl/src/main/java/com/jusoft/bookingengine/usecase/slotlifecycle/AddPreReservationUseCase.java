@@ -7,9 +7,9 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class AddPreReservationUseCase {
 
-  private final SlotLifeCycleManagerComponent slotLifeCycleManagerComponent;
+    private final SlotLifeCycleManagerComponent slotLifeCycleManagerComponent;
 
-  public void addPreReservationTo(long roomId, PreReservation preReservation) {
-    slotLifeCycleManagerComponent.addPreReservation(roomId, preReservation);
-  }
+    public void addPreReservationTo(long roomId, PreReservation preReservation) {
+        slotLifeCycleManagerComponent.addPreReservation(roomId, preReservation);
+    }
 }

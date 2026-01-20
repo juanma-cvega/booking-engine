@@ -6,9 +6,10 @@ import lombok.NonNull;
 @Data(staticConstructor = "of")
 public class BuildingView {
 
-  private final long id;
-  private final long clubId;
-  @NonNull
-  private final Address address;
-  private final String description;
+    private final long id;
+    private final long clubId;
+
+    @NonNull private final Address address;
+
+    private final String description;
 }

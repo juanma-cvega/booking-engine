@@ -6,6 +6,6 @@ import lombok.Data;
 @Data(staticConstructor = "of")
 public class CreateSlotLifeCycleManagerCommand {
 
-  private final long roomId;
-  private final SlotsTimetable slotsTimetable;
+    private final long roomId;
+    private final SlotsTimetable slotsTimetable;
 }

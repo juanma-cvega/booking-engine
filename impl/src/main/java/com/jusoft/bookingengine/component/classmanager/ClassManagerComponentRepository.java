@@ -6,13 +6,13 @@ import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
 interface ClassManagerComponentRepository {
-  void save(Class from);
+    void save(Class from);
 
-  Optional<Class> find(long classId);
+    Optional<Class> find(long classId);
 
-  boolean removeIf(long classId, Predicate<Class> condition);
+    boolean removeIf(long classId, Predicate<Class> condition);
 
-  void execute(long classId, UnaryOperator<Class> modifier);
+    void execute(long classId, UnaryOperator<Class> modifier);
 
-  List<Class> findByBuildingId(long buildingId);
+    List<Class> findByBuildingId(long buildingId);
 }

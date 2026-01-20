@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class MaxNumberOfSlotsStrategyConfigInfo implements SlotCreationConfigInfo {
 
-  private final int maxSlots;
+    private final int maxSlots;
 }

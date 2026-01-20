@@ -6,12 +6,11 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-class BookingCreatedMessageFactory implements MessageFactory<BookingCreatedEvent, BookingCreatedMessage> {
-  @Override
-  public BookingCreatedMessage createFrom(BookingCreatedEvent message) {
-    return BookingCreatedMessage.of(
-      message.getBookingId(),
-      message.getUserId(),
-      message.getSlotId());
-  }
+class BookingCreatedMessageFactory
+        implements MessageFactory<BookingCreatedEvent, BookingCreatedMessage> {
+    @Override
+    public BookingCreatedMessage createFrom(BookingCreatedEvent message) {
+        return BookingCreatedMessage.of(
+                message.getBookingId(), message.getUserId(), message.getSlotId());
+    }
 }

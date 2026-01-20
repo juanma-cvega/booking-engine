@@ -1,4 +1,3 @@
 package com.jusoft.bookingengine.publisher;
 
-public interface Command extends Message {
-}
+public interface Command extends Message {}

@@ -7,38 +7,39 @@ import com.jusoft.bookingengine.strategy.auctionwinner.api.AuctionStrategyRegist
 import com.jusoft.bookingengine.strategy.auctionwinner.api.AuctionWinnerStrategyFactory;
 import com.jusoft.bookingengine.strategy.auctionwinner.api.LessBookingsWithinPeriodConfigInfo;
 import com.jusoft.bookingengine.strategy.auctionwinner.api.NoAuctionConfigInfo;
+import java.time.Clock;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.time.Clock;
-import java.util.Map;
-
 @Configuration
 public class AuctionWinnerStrategyConfig {
 
-  @Autowired
-  private BookingManagerComponent bookingManagerComponent;
-  @Autowired
-  private Clock clock;
+    @Autowired private BookingManagerComponent bookingManagerComponent;
 
-  @Bean
-  public AuctionStrategyRegistrar auctionStrategyRegistrar() {
-    return new AuctionStrategyRegistrar(factories());
-  }
+    @Autowired private Clock clock;
 
-  private Map<Class<? extends AuctionConfigInfo>, AuctionWinnerStrategyFactory> factories() {
-    return ImmutableMap.<Class<? extends AuctionConfigInfo>, AuctionWinnerStrategyFactory>builder()
-      .put(LessBookingsWithinPeriodConfigInfo.class, lessBookingsWithinPeriodStrategyFactory())
-      .put(NoAuctionConfigInfo.class, noAuctionStrategyFactory())
-      .build();
-  }
+    @Bean
+    public AuctionStrategyRegistrar auctionStrategyRegistrar() {
+        return new AuctionStrategyRegistrar(factories());
+    }
 
-  private LessBookingsWithinPeriodStrategyFactory lessBookingsWithinPeriodStrategyFactory() {
-    return new LessBookingsWithinPeriodStrategyFactory(bookingManagerComponent, clock);
-  }
+    private Map<Class<? extends AuctionConfigInfo>, AuctionWinnerStrategyFactory> factories() {
+        return ImmutableMap
+                .<Class<? extends AuctionConfigInfo>, AuctionWinnerStrategyFactory>builder()
+                .put(
+                        LessBookingsWithinPeriodConfigInfo.class,
+                        lessBookingsWithinPeriodStrategyFactory())
+                .put(NoAuctionConfigInfo.class, noAuctionStrategyFactory())
+                .build();
+    }
 
-  private NoAuctionStrategyFactory noAuctionStrategyFactory() {
-    return new NoAuctionStrategyFactory();
-  }
+    private LessBookingsWithinPeriodStrategyFactory lessBookingsWithinPeriodStrategyFactory() {
+        return new LessBookingsWithinPeriodStrategyFactory(bookingManagerComponent, clock);
+    }
+
+    private NoAuctionStrategyFactory noAuctionStrategyFactory() {
+        return new NoAuctionStrategyFactory();
+    }
 }

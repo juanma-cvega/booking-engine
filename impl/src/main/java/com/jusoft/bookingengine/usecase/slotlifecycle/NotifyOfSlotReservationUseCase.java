@@ -7,9 +7,9 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class NotifyOfSlotReservationUseCase {
 
-  private final SlotLifeCycleManagerComponent slotLifeCycleManagerComponent;
+    private final SlotLifeCycleManagerComponent slotLifeCycleManagerComponent;
 
-  public void notifyOfSlotReservation(long slotId, SlotUser slotUser) {
-    slotLifeCycleManagerComponent.notifyOfSlotReservation(slotId, slotUser);
-  }
+    public void notifyOfSlotReservation(long slotId, SlotUser slotUser) {
+        slotLifeCycleManagerComponent.notifyOfSlotReservation(slotId, slotUser);
+    }
 }

@@ -6,6 +6,6 @@ import lombok.Data;
 @Data(staticConstructor = "of")
 public class PersonReservationCreatedEvent implements Event {
 
-  private final long slotId;
-  private final long userId;
+    private final long slotId;
+    private final long userId;
 }

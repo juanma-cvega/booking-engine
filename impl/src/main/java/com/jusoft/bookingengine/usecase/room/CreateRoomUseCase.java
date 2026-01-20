@@ -10,11 +10,11 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class CreateRoomUseCase {
 
-  private final RoomManagerComponent roomManagerComponent;
-  private final BuildingManagerComponent buildingManagerComponent;
+    private final RoomManagerComponent roomManagerComponent;
+    private final BuildingManagerComponent buildingManagerComponent;
 
-  public RoomView createRoom(CreateRoomCommand createRoomCommand) {
-    BuildingView building = buildingManagerComponent.find(createRoomCommand.getBuildingId());
-    return roomManagerComponent.create(createRoomCommand, building.getClubId());
-  }
+    public RoomView createRoom(CreateRoomCommand createRoomCommand) {
+        BuildingView building = buildingManagerComponent.find(createRoomCommand.getBuildingId());
+        return roomManagerComponent.create(createRoomCommand, building.getClubId());
+    }
 }

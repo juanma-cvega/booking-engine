@@ -1,33 +1,33 @@
-//package com.jusoft.bookingengine.component.room;
+// package com.jusoft.bookingengine.component.room;
 //
-//import com.google.common.collect.Iterables;
-//import com.jusoft.bookingengine.component.AbstractStepDefinitions;
-//import com.jusoft.bookingengine.strategy.auctionwinner.api.LessBookingsWithinPeriodConfigInfo;
-//import com.jusoft.bookingengine.component.mock.ClockStub;
-//import com.jusoft.bookingengine.component.mock.MessagesSink;
-//import com.jusoft.bookingengine.component.room.api.OpenNextSlotCommand;
-//import com.jusoft.bookingengine.component.room.api.RoomManagerComponent;
-//import com.jusoft.bookingengine.component.scheduler.ScheduledTask;
-//import com.jusoft.bookingengine.publisher.Message;
-//import com.jusoft.bookingengine.component.slot.api.SlotManagerComponent;
-//import com.jusoft.bookingengine.component.slot.api.SlotCreatedEvent;
-//import com.jusoft.bookingengine.component.slot.api.SlotView;
-//import com.jusoft.bookingengine.component.timer.OpenTime;
-//import com.jusoft.bookingengine.usecase.room.CreateRoomUseCase;
-//import lombok.extern.slf4j.Slf4j;
-//import org.springframework.beans.factory.annotation.Autowired;
+// import com.google.common.collect.Iterables;
+// import com.jusoft.bookingengine.component.AbstractStepDefinitions;
+// import com.jusoft.bookingengine.strategy.auctionwinner.api.LessBookingsWithinPeriodConfigInfo;
+// import com.jusoft.bookingengine.component.mock.ClockStub;
+// import com.jusoft.bookingengine.component.mock.MessagesSink;
+// import com.jusoft.bookingengine.component.room.api.OpenNextSlotCommand;
+// import com.jusoft.bookingengine.component.room.api.RoomManagerComponent;
+// import com.jusoft.bookingengine.component.scheduler.ScheduledTask;
+// import com.jusoft.bookingengine.publisher.Message;
+// import com.jusoft.bookingengine.component.slot.api.SlotManagerComponent;
+// import com.jusoft.bookingengine.component.slot.api.SlotCreatedEvent;
+// import com.jusoft.bookingengine.component.slot.api.SlotView;
+// import com.jusoft.bookingengine.component.timer.OpenTime;
+// import com.jusoft.bookingengine.usecase.room.CreateRoomUseCase;
+// import lombok.extern.slf4j.Slf4j;
+// import org.springframework.beans.factory.annotation.Autowired;
 //
-//import java.time.LocalDate;
-//import java.time.LocalTime;
-//import java.time.ZonedDateTime;
-//import java.util.List;
-//import java.util.stream.Collectors;
+// import java.time.LocalDate;
+// import java.time.LocalTime;
+// import java.time.ZonedDateTime;
+// import java.util.List;
+// import java.util.stream.Collectors;
 //
-//import static com.jusoft.bookingengine.fixture.RoomFixtures.CREATE_ROOM_COMMAND;
-//import static org.assertj.core.api.Assertions.assertThat;
+// import static com.jusoft.bookingengine.fixture.RoomFixtures.CREATE_ROOM_COMMAND;
+// import static org.assertj.core.api.Assertions.assertThat;
 //
-//@Slf4j
-//public class RoomManagementStepDefinitions extends AbstractStepDefinitions {
+// @Slf4j
+// public class RoomManagementStepDefinitions extends AbstractStepDefinitions {
 //
 //  private static final long TIMEOUT = 10000;
 //  private static final int WAITING_TIME = 100;
@@ -60,19 +60,24 @@
 //    Given("^a room is to be created$", () ->
 //      roomHolder.createRoomBuilder());
 //    Given("^the room is open between (.*) and (.*)$", (String startTime, String endTime) ->
-//      roomHolder.roomBuilder.openTimes.add(new OpenTime(LocalTime.parse(startTime), LocalTime.parse(endTime))));
+//      roomHolder.roomBuilder.openTimes.add(new OpenTime(LocalTime.parse(startTime),
+// LocalTime.parse(endTime))));
 //    Given("^the room can open up to (.*) slots at the same time$", (Integer slots) ->
 //      roomHolder.roomBuilder.maxSlots = slots);
 //    Given("^the slots time is of (.*) minute$", (Integer slotDurationInMinutes) ->
 //      roomHolder.roomBuilder.slotDurationInMinutes = slotDurationInMinutes);
-//    Given("^the room has a (.*) minutes auction time and a (.*) days bookings created window$", (Integer auctionDuration, Integer daysRange) ->
-//      roomHolder.roomBuilder.auctionConfigInfo = new LessBookingsWithinPeriodConfigInfo(auctionDuration, daysRange));
+//    Given("^the room has a (.*) minutes auction time and a (.*) days bookings created window$",
+// (Integer
+// auctionDuration, Integer daysRange) ->
+//      roomHolder.roomBuilder.auctionConfigInfo = new
+// LessBookingsWithinPeriodConfigInfo(auctionDuration, daysRange));
 //    When("^the room is created with that configuration$", () -> {
 //      roomHolder.roomCreated = roomUseCase.createRoom(roomHolder.roomBuilder.build());
 //      awaitSlotsCreation();
 //    });
 //    Then("^(.*) slots should have been created$", (Integer slotsToBeCreated) -> {
-//      assertThat(slotComponent.findOpenSlotsFor(roomHolder.roomCreated.getId())).hasSize(slotsToBeCreated);
+//
+// assertThat(slotComponent.findOpenSlotsFor(roomHolder.roomCreated.getId())).hasSize(slotsToBeCreated);
 //    });
 //    Then("^the first slot should start at (.*)$", (String startTime) -> {
 //      SlotView slot = slotComponent.findOpenSlotsFor(roomHolder.roomCreated.getId()).get(0);
@@ -80,38 +85,51 @@
 //      assertThat(slot.getStartDate().toLocalTime()).isBetween(time, time);
 //    });
 //    Then("^the last slot should start at (.*)$", (String startTime) -> {
-//      SlotView slot = Iterables.getLast(slotComponent.findOpenSlotsFor(roomHolder.roomCreated.getId()));
+//      SlotView slot =
+// Iterables.getLast(slotComponent.findOpenSlotsFor(roomHolder.roomCreated.getId()));
 //      LocalTime time = LocalTime.parse(startTime);
 //      assertThat(slot.getStartDate().toLocalTime()).isBetween(time, time);
 //    });
 //    Then("^the last slot should start the day after$", () -> {
-//      SlotView slot = Iterables.getLast(slotComponent.findOpenSlotsFor(roomHolder.roomCreated.getId()));
+//      SlotView slot =
+// Iterables.getLast(slotComponent.findOpenSlotsFor(roomHolder.roomCreated.getId()));
 //      LocalDate date = LocalDate.now(clock).plusDays(1);
-//      assertThat(slot.getStartDate().toLocalDate()).isAfterOrEqualTo(date).isBeforeOrEqualTo(date);
+//
+// assertThat(slot.getStartDate().toLocalDate()).isAfterOrEqualTo(date).isBeforeOrEqualTo(date);
 //    });
 //    Then("^the first slot should start the day after$", () -> {
 //      SlotView slot = slotComponent.findOpenSlotsFor(roomHolder.roomCreated.getId()).get(0);
 //      LocalDate date = LocalDate.now(clock).plusDays(1);
-//      assertThat(slot.getStartDate().toLocalDate()).isAfterOrEqualTo(date).isBeforeOrEqualTo(date);
+//
+// assertThat(slot.getStartDate().toLocalDate()).isAfterOrEqualTo(date).isBeforeOrEqualTo(date);
 //    });
 //    Then("^a new slot should be scheduled to be created at (.*)$", (String scheduledTime) -> {
-//      List<ScheduledTask> openNextCommandTasks = getWaitingScheduledEventsOfType(OpenNextSlotCommand.class);
+//      List<ScheduledTask> openNextCommandTasks =
+// getWaitingScheduledEventsOfType(OpenNextSlotCommand.class);
 //      assertThat(openNextCommandTasks).hasSize(1);
-//      ZonedDateTime scheduledZonedDateTime = ZonedDateTime.of(LocalDate.now(clock), LocalTime.parse(scheduledTime), clock.getZone());
-//      assertThat(openNextCommandTasks.get(0).getScheduledEvent().getExecutionTime()).isEqualTo(scheduledZonedDateTime);
+//      ZonedDateTime scheduledZonedDateTime = ZonedDateTime.of(LocalDate.now(clock),
+// LocalTime.parse(scheduledTime),
+// clock.getZone());
+//
+// assertThat(openNextCommandTasks.get(0).getScheduledEvent().getExecutionTime()).isEqualTo(scheduledZonedDateTime);
 //    });
-//    Then("^a new slot should be scheduled to be created next day at (.*)", (String scheduledTime) -> {
-//      List<ScheduledTask> openNextCommandTasks = getWaitingScheduledEventsOfType(OpenNextSlotCommand.class);
+//    Then("^a new slot should be scheduled to be created next day at (.*)", (String scheduledTime)
+// -> {
+//      List<ScheduledTask> openNextCommandTasks =
+// getWaitingScheduledEventsOfType(OpenNextSlotCommand.class);
 //      assertThat(openNextCommandTasks).hasSize(1);
-//      ZonedDateTime scheduledZonedDateTime = ZonedDateTime.of(LocalDate.now(clock).plusDays(1), LocalTime.parse(scheduledTime), clock.getZone());
-//      assertThat(openNextCommandTasks.get(0).getScheduledEvent().getExecutionTime()).isEqualTo(scheduledZonedDateTime);
+//      ZonedDateTime scheduledZonedDateTime = ZonedDateTime.of(LocalDate.now(clock).plusDays(1),
+// LocalTime.parse(scheduledTime), clock.getZone());
+//
+// assertThat(openNextCommandTasks.get(0).getScheduledEvent().getExecutionTime()).isEqualTo(scheduledZonedDateTime);
 //    });
 //  }
 //
 //  private List<ScheduledTask> getWaitingScheduledEventsOfType(Class<? extends Message> clazz) {
 //    return scheduledTasksExecutor.getScheduledTasks().stream()
 //      .filter(scheduledTask -> !scheduledTask.getTask().isDone())
-//      .filter(scheduledTask -> scheduledTask.getScheduledEvent().getMessage().getClass().equals(clazz))
+//      .filter(scheduledTask ->
+// scheduledTask.getScheduledEvent().getMessage().getClass().equals(clazz))
 //      .collect(Collectors.toList());
 //  }
 //
@@ -129,10 +147,12 @@
 //
 //  private boolean isSlotsCreatedForRoomLessThanMaxSlots(int maxSlots, long startTime) {
 //    return messagesSink.getMessages(SlotCreatedEvent.class)
-//      .orElseThrow(() -> new IllegalArgumentException(String.format("No messages found of type %s", SlotCreatedEvent.class)))
+//      .orElseThrow(() -> new IllegalArgumentException(String.format("No messages found of type
+// %s",
+// SlotCreatedEvent.class)))
 //      .stream()
 //      .filter(slotCreatedEvent -> slotCreatedEvent.getRoomId() == roomHolder.roomCreated.getId())
 //      .count() < maxSlots || System.currentTimeMillis() > startTime + TIMEOUT;
 //  }
 //
-//}
+// }

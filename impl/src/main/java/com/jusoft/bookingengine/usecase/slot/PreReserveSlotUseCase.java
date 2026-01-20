@@ -7,9 +7,9 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class PreReserveSlotUseCase {
 
-  private final SlotManagerComponent slotManagerComponent;
+    private final SlotManagerComponent slotManagerComponent;
 
-  public void preReserveSlot(long slotId, long userId, String userType) {
-    slotManagerComponent.preReserveSlot(slotId, SlotUser.of(userId, userType));
-  }
+    public void preReserveSlot(long slotId, long userId, String userType) {
+        slotManagerComponent.preReserveSlot(slotId, SlotUser.of(userId, userType));
+    }
 }

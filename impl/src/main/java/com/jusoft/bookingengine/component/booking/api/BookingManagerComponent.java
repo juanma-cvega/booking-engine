@@ -6,13 +6,13 @@ import java.util.Set;
 
 public interface BookingManagerComponent {
 
-  BookingView book(CreateBookingCommand createBookingCommand);
+    BookingView book(CreateBookingCommand createBookingCommand);
 
-  void cancel(long userId, long bookingId);
+    void cancel(long userId, long bookingId);
 
-  BookingView find(long bookingId);
+    BookingView find(long bookingId);
 
-  List<BookingView> findAllBy(long userId);
+    List<BookingView> findAllBy(long userId);
 
-  List<BookingView> findBookingsUntilFor(ZonedDateTime endTime, Set<Long> users);
+    List<BookingView> findBookingsUntilFor(ZonedDateTime endTime, Set<Long> users);
 }

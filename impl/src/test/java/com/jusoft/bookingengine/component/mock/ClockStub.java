@@ -1,15 +1,15 @@
-//package com.jusoft.bookingengine.component.mock;
+// package com.jusoft.bookingengine.component.mock;
 //
-//import lombok.AllArgsConstructor;
-//import lombok.Setter;
+// import lombok.AllArgsConstructor;
+// import lombok.Setter;
 //
-//import java.time.Clock;
-//import java.time.Instant;
-//import java.time.ZoneId;
+// import java.time.Clock;
+// import java.time.Instant;
+// import java.time.ZoneId;
 //
-//@AllArgsConstructor
-//@Setter
-//public class ClockStub extends Clock {
+// @AllArgsConstructor
+// @Setter
+// public class ClockStub extends Clock {
 //
 //  private Clock clock;
 //
@@ -28,4 +28,4 @@
 //    return clock.instant();
 //  }
 //
-//}
+// }

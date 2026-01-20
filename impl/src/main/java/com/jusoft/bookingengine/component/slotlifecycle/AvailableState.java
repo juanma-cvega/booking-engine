@@ -7,5 +7,5 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 class AvailableState implements NextSlotState {
 
-  private final long slotId;
+    private final long slotId;
 }

@@ -10,18 +10,19 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class AddBidderToAuctionUseCase {
 
-  private final AuctionManagerComponent auctionManagerComponent;
-  private final SlotManagerComponent slotManagerComponent;
-  private final AuthorizationManagerComponent authorizationManagerComponent;
+    private final AuctionManagerComponent auctionManagerComponent;
+    private final SlotManagerComponent slotManagerComponent;
+    private final AuthorizationManagerComponent authorizationManagerComponent;
 
-  public void addBidderToAuctionFor(long userId, long slotId) {
-    SlotView slot = slotManagerComponent.find(slotId);
-    authorizationManagerComponent.authorizeBidInAuction(AuthorizeCommand.of(
-      userId,
-      slot.getRoomId(),
-      slot.getBuildingId(),
-      slot.getClubId(),
-      slot.getCreationTime()));
-    auctionManagerComponent.addBidderToAuctionFor(userId, slotId);
-  }
+    public void addBidderToAuctionFor(long userId, long slotId) {
+        SlotView slot = slotManagerComponent.find(slotId);
+        authorizationManagerComponent.authorizeBidInAuction(
+                AuthorizeCommand.of(
+                        userId,
+                        slot.getRoomId(),
+                        slot.getBuildingId(),
+                        slot.getClubId(),
+                        slot.getCreationTime()));
+        auctionManagerComponent.addBidderToAuctionFor(userId, slotId);
+    }
 }

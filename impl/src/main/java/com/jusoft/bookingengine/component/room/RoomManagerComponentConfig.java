@@ -2,42 +2,41 @@ package com.jusoft.bookingengine.component.room;
 
 import com.jusoft.bookingengine.component.room.api.RoomManagerComponent;
 import com.jusoft.bookingengine.publisher.MessagePublisher;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
 import java.time.Clock;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Supplier;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RoomManagerComponentConfig {
 
-  @Autowired
-  private MessagePublisher messagePublisher;
-  @Autowired
-  private Clock clock;
+    @Autowired private MessagePublisher messagePublisher;
 
-  @Bean
-  public RoomManagerComponent roomComponent() {
-    return new RoomManagerComponentImpl(roomRepository(), roomFactory(), roomEventFactory(), messagePublisher, clock);
-  }
+    @Autowired private Clock clock;
 
-  private RoomFactory roomFactory() {
-    return new RoomFactory(idGenerator());
-  }
+    @Bean
+    public RoomManagerComponent roomComponent() {
+        return new RoomManagerComponentImpl(
+                roomRepository(), roomFactory(), roomEventFactory(), messagePublisher, clock);
+    }
 
-  private Supplier<Long> idGenerator() {
-    AtomicLong idGenerator = new AtomicLong(1);
-    return idGenerator::getAndIncrement;
-  }
+    private RoomFactory roomFactory() {
+        return new RoomFactory(idGenerator());
+    }
 
-  private RoomMessageFactory roomEventFactory() {
-    return new RoomMessageFactory();
-  }
+    private Supplier<Long> idGenerator() {
+        AtomicLong idGenerator = new AtomicLong(1);
+        return idGenerator::getAndIncrement;
+    }
 
-  private RoomRepository roomRepository() {
-    return new RoomRepositoryInMemory(new ConcurrentHashMap<>());
-  }
+    private RoomMessageFactory roomEventFactory() {
+        return new RoomMessageFactory();
+    }
+
+    private RoomRepository roomRepository() {
+        return new RoomRepositoryInMemory(new ConcurrentHashMap<>());
+    }
 }

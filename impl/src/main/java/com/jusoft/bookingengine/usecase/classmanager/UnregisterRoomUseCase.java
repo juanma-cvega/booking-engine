@@ -8,10 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 @AllArgsConstructor
 public class UnregisterRoomUseCase {
 
-  @Autowired
-  private final ClassManagerComponent classManagerComponent;
+    @Autowired private final ClassManagerComponent classManagerComponent;
 
-  public void unregisterRoom(UnregisterRoomCommand command) {
-    classManagerComponent.unregisterRoom(command);
-  }
+    public void unregisterRoom(UnregisterRoomCommand command) {
+        classManagerComponent.unregisterRoom(command);
+    }
 }

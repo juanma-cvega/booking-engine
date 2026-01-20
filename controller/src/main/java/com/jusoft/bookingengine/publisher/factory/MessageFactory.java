@@ -5,5 +5,5 @@ import com.jusoft.bookingengine.publisher.Message;
 
 public interface MessageFactory<T extends Message, R extends InfrastructureMessage> {
 
-  R createFrom(T message);
+    R createFrom(T message);
 }

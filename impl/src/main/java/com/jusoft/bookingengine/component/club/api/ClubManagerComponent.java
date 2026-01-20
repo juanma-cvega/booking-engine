@@ -4,19 +4,19 @@ import java.util.Set;
 
 public interface ClubManagerComponent {
 
-  ClubView create(CreateClubCommand command);
+    ClubView create(CreateClubCommand command);
 
-  boolean isAvailable(long clubId);
+    boolean isAvailable(long clubId);
 
-  ClubView find(long clubId);
+    ClubView find(long clubId);
 
-  ClubView findByName(String name);
+    ClubView findByName(String name);
 
-  void acceptAccessRequest(AcceptJoinRequestCommand acceptJoinRequestCommand);
+    void acceptAccessRequest(AcceptJoinRequestCommand acceptJoinRequestCommand);
 
-  void denyAccessRequest(DenyJoinRequestCommand acceptAccessRequestCommand);
+    void denyAccessRequest(DenyJoinRequestCommand acceptAccessRequestCommand);
 
-  Set<JoinRequest> findJoinRequests(long clubId, long adminId);
+    Set<JoinRequest> findJoinRequests(long clubId, long adminId);
 
-  JoinRequest createJoinRequest(CreateJoinRequestCommand command);
+    JoinRequest createJoinRequest(CreateJoinRequestCommand command);
 }

@@ -7,10 +7,12 @@ import org.springframework.context.event.EventListener;
 @Slf4j
 class BookingCreatedEventListener {
 
-  @EventListener(BookingCreatedMessage.class)
-  public void bookingCreated(BookingCreatedMessage event) {
-    log.info("BookingCreatedEvent consumed: bookingId={}, userId={}, slotId={}",
-      event.getBookingId(), event.getUserId(), event.getUserId());
-
-  }
+    @EventListener(BookingCreatedMessage.class)
+    public void bookingCreated(BookingCreatedMessage event) {
+        log.info(
+                "BookingCreatedEvent consumed: bookingId={}, userId={}, slotId={}",
+                event.getBookingId(),
+                event.getUserId(),
+                event.getUserId());
+    }
 }

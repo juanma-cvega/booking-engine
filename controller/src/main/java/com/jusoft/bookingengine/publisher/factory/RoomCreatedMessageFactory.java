@@ -7,12 +7,12 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class RoomCreatedMessageFactory implements MessageFactory<RoomCreatedEvent, RoomCreatedMessage> {
-  @Override
-  public RoomCreatedMessage createFrom(RoomCreatedEvent message) {
-    return RoomCreatedMessage.of(
-      message.getRoomId(),
-      message.getSlotDurationInMinutes(),
-      message.getOpenTimesPerDay(),
-      message.getAvailableDays());
-  }
+    @Override
+    public RoomCreatedMessage createFrom(RoomCreatedEvent message) {
+        return RoomCreatedMessage.of(
+                message.getRoomId(),
+                message.getSlotDurationInMinutes(),
+                message.getOpenTimesPerDay(),
+                message.getAvailableDays());
+    }
 }

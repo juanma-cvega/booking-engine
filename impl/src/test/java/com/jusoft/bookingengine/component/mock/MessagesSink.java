@@ -1,14 +1,14 @@
-//package com.jusoft.bookingengine.component.mock;
+// package com.jusoft.bookingengine.component.mock;
 //
-//import com.jusoft.bookingengine.publisher.Message;
-//import lombok.extern.slf4j.Slf4j;
+// import com.jusoft.bookingengine.publisher.Message;
+// import lombok.extern.slf4j.Slf4j;
 //
-//import java.util.List;
-//import java.util.Map;
-//import java.util.Optional;
+// import java.util.List;
+// import java.util.Map;
+// import java.util.Optional;
 //
-//@Slf4j
-//public class MessagesSink {
+// @Slf4j
+// public class MessagesSink {
 //
 //  private final Map<Class<? extends Message>, List<Message>> messages;
 //
@@ -20,4 +20,4 @@
 //    return Optional.ofNullable((List<T>) this.messages.get(clazz));
 //  }
 //
-//}
+// }

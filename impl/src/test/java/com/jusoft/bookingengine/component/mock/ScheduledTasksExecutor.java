@@ -1,19 +1,19 @@
-//package com.jusoft.bookingengine.component.mock;
+// package com.jusoft.bookingengine.component.mock;
 //
-//import com.jusoft.bookingengine.component.scheduler.ScheduledTask;
-//import com.jusoft.bookingengine.component.shared.MessagePublisher;
-//import lombok.AllArgsConstructor;
-//import lombok.Getter;
-//import lombok.extern.slf4j.Slf4j;
+// import com.jusoft.bookingengine.component.scheduler.ScheduledTask;
+// import com.jusoft.bookingengine.component.shared.MessagePublisher;
+// import lombok.AllArgsConstructor;
+// import lombok.Getter;
+// import lombok.extern.slf4j.Slf4j;
 //
-//import java.time.ZonedDateTime;
-//import java.time.temporal.ChronoUnit;
-//import java.util.List;
+// import java.time.ZonedDateTime;
+// import java.time.temporal.ChronoUnit;
+// import java.util.List;
 //
-//@AllArgsConstructor
-//@Slf4j
-//@Getter
-//public class ScheduledTasksExecutor {
+// @AllArgsConstructor
+// @Slf4j
+// @Getter
+// public class ScheduledTasksExecutor {
 //
 //  private static final int NANOS_IN_MILLI = 1000;
 //
@@ -22,12 +22,15 @@
 //
 //  public void executeLateTasks(ZonedDateTime current, ZonedDateTime previous) {
 //    scheduledTasks.forEach(scheduledTask -> {
-//      long delayInSeconds = getDelay(scheduledTask.getScheduledEvent().getExecutionTime(), previous);
-//      if (isCurrentTimePassedExpectedExecutionTime(current, previous, delayInSeconds) && !scheduledTask.getTask().isDone()) {
+//      long delayInSeconds = getDelay(scheduledTask.getScheduledEvent().getExecutionTime(),
+// previous);
+//      if (isCurrentTimePassedExpectedExecutionTime(current, previous, delayInSeconds) &&
+// !scheduledTask.getTask().isDone()) {
 //        try {
 //          scheduledTask.getTask().cancel(true);
 //          messagePublisher.publish(scheduledTask.getScheduledEvent().getMessage());
-//          log.info("Scheduled task cancelled and triggered manually: {}", scheduledTask.getScheduledEvent());
+//          log.info("Scheduled task cancelled and triggered manually: {}",
+// scheduledTask.getScheduledEvent());
 //        } catch (Exception e) {
 //          log.error("Unable to executeLateTasks task", e);
 //        }
@@ -39,7 +42,10 @@
 //    return Math.abs(ChronoUnit.SECONDS.between(current, executionTime));
 //  }
 //
-//  private boolean isCurrentTimePassedExpectedExecutionTime(ZonedDateTime current, ZonedDateTime previous, long delay) {
-//    return previous.plusSeconds(delay).isEqual(current) || previous.plusSeconds(delay).isBefore(current);
+//  private boolean isCurrentTimePassedExpectedExecutionTime(ZonedDateTime current, ZonedDateTime
+// previous, long delay)
+// {
+//    return previous.plusSeconds(delay).isEqual(current) ||
+// previous.plusSeconds(delay).isBefore(current);
 //  }
-//}
+// }

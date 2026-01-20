@@ -4,5 +4,5 @@ import java.time.ZonedDateTime;
 
 public interface SlotCreationStrategy {
 
-  ZonedDateTime nextSlotCreationTimeFor(long roomId);
+    ZonedDateTime nextSlotCreationTimeFor(long roomId);
 }

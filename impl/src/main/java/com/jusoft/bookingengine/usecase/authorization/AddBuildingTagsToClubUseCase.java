@@ -7,9 +7,9 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class AddBuildingTagsToClubUseCase {
 
-  private final AuthorizationManagerComponent authorizationManagerComponent;
+    private final AuthorizationManagerComponent authorizationManagerComponent;
 
-  public void addBuildingTagsToClub(AddBuildingTagsToClubCommand command) {
-    authorizationManagerComponent.addBuildingTagsToClub(command);
-  }
+    public void addBuildingTagsToClub(AddBuildingTagsToClubCommand command) {
+        authorizationManagerComponent.addBuildingTagsToClub(command);
+    }
 }

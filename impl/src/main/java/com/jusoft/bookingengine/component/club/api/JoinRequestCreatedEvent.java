@@ -6,6 +6,6 @@ import lombok.Data;
 @Data(staticConstructor = "of")
 public class JoinRequestCreatedEvent implements Event {
 
-  private final long joinRequestId;
-  private final long clubId;
+    private final long joinRequestId;
+    private final long clubId;
 }

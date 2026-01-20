@@ -7,9 +7,9 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class FindClassUseCase {
 
-  private final ClassManagerComponent classManagerComponent;
+    private final ClassManagerComponent classManagerComponent;
 
-  public ClassView findClass(long classId) {
-    return classManagerComponent.find(classId);
-  }
+    public ClassView findClass(long classId) {
+        return classManagerComponent.find(classId);
+    }
 }

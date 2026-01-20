@@ -6,5 +6,5 @@ import lombok.Data;
 @Data(staticConstructor = "of")
 public class SlotRequiredEvent implements Event {
 
-  private final long roomId;
+    private final long roomId;
 }

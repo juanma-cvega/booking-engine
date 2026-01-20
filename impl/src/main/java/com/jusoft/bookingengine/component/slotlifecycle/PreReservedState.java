@@ -8,6 +8,6 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 class PreReservedState implements NextSlotState {
 
-  private final long slotId;
-  private final SlotUser user;
+    private final long slotId;
+    private final SlotUser user;
 }

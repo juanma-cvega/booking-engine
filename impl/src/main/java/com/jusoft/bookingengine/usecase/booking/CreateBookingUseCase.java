@@ -8,9 +8,9 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class CreateBookingUseCase {
 
-  private final BookingManagerComponent bookingManagerComponent;
+    private final BookingManagerComponent bookingManagerComponent;
 
-  public BookingView book(CreateBookingCommand createBookingCommand) {
-    return bookingManagerComponent.book(createBookingCommand);
-  }
+    public BookingView book(CreateBookingCommand createBookingCommand) {
+        return bookingManagerComponent.book(createBookingCommand);
+    }
 }

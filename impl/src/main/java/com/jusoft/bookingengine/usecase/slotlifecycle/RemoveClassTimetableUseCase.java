@@ -6,9 +6,9 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class RemoveClassTimetableUseCase {
 
-  private final SlotLifeCycleManagerComponent slotLifeCycleManagerComponent;
+    private final SlotLifeCycleManagerComponent slotLifeCycleManagerComponent;
 
-  public void removeClassTimetableFrom(long roomId, long classId) {
-    slotLifeCycleManagerComponent.removeClassTimetableFrom(roomId, classId);
-  }
+    public void removeClassTimetableFrom(long roomId, long classId) {
+        slotLifeCycleManagerComponent.removeClassTimetableFrom(roomId, classId);
+    }
 }

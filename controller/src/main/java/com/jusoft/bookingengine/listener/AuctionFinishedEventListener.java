@@ -11,12 +11,12 @@ import org.springframework.context.event.EventListener;
 @Slf4j
 class AuctionFinishedEventListener implements MessageListener {
 
-  private final FinishAuctionUseCase finishAuctionUseCase;
+    private final FinishAuctionUseCase finishAuctionUseCase;
 
-  @EventListener(AuctionFinishedMessage.class)
-  public void finishAuction(AuctionFinishedMessage event) {
-    log.info("AuctionFinishedEvent consumed: auctionId={}", event.getAuctionId());
-    finishAuctionUseCase.finishAuction(event.getAuctionId());
-    log.info("AuctionFinishedEvent processed: auctionId={}");
-  }
+    @EventListener(AuctionFinishedMessage.class)
+    public void finishAuction(AuctionFinishedMessage event) {
+        log.info("AuctionFinishedEvent consumed: auctionId={}", event.getAuctionId());
+        finishAuctionUseCase.finishAuction(event.getAuctionId());
+        log.info("AuctionFinishedEvent processed: auctionId={}");
+    }
 }

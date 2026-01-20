@@ -5,8 +5,8 @@ import lombok.Data;
 @Data(staticConstructor = "of")
 public class MemberView {
 
-  private final long id;
-  private final long userId;
-  private final long clubId;
-  private final PersonalInfo personalInfo;
+    private final long id;
+    private final long userId;
+    private final long clubId;
+    private final PersonalInfo personalInfo;
 }

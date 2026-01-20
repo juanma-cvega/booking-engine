@@ -7,12 +7,12 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class SlotCreatedMessageFactory implements MessageFactory<SlotCreatedEvent, SlotCreatedMessage> {
-  @Override
-  public SlotCreatedMessage createFrom(SlotCreatedEvent message) {
-    return SlotCreatedMessage.of(
-      message.getSlotId(),
-      message.getRoomId(),
-      message.getState(),
-      message.getOpenDate());
-  }
+    @Override
+    public SlotCreatedMessage createFrom(SlotCreatedEvent message) {
+        return SlotCreatedMessage.of(
+                message.getSlotId(),
+                message.getRoomId(),
+                message.getState(),
+                message.getOpenDate());
+    }
 }

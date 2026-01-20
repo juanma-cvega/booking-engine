@@ -6,6 +6,6 @@ import lombok.Data;
 @Data(staticConstructor = "of")
 public class AuctionUnsuccessfulEvent implements Event {
 
-  private final long auctionId;
-  private final long referenceId;
+    private final long auctionId;
+    private final long referenceId;
 }

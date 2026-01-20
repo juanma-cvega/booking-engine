@@ -1,14 +1,14 @@
-//package com.jusoft.bookingengine.component.slot;
+// package com.jusoft.bookingengine.component.slot;
 //
-//import com.jusoft.bookingengine.component.AbstractStepDefinitions;
-//import com.jusoft.bookingengine.fixture.CommonFixtures;
-//import com.jusoft.bookingengine.component.slot.api.SlotManagerComponent;
-//import com.jusoft.bookingengine.component.slot.api.SlotNotFoundException;
-//import org.springframework.beans.factory.annotation.Autowired;
+// import com.jusoft.bookingengine.component.AbstractStepDefinitions;
+// import com.jusoft.bookingengine.fixture.CommonFixtures;
+// import com.jusoft.bookingengine.component.slot.api.SlotManagerComponent;
+// import com.jusoft.bookingengine.component.slot.api.SlotNotFoundException;
+// import org.springframework.beans.factory.annotation.Autowired;
 //
-//import static org.assertj.core.api.Assertions.assertThat;
+// import static org.assertj.core.api.Assertions.assertThat;
 //
-//public class SlotManagementStepDefinitions extends AbstractStepDefinitions {
+// public class SlotManagementStepDefinitions extends AbstractStepDefinitions {
 //
 //  private static final Long ANY_SLOT_ID = 44444L;
 //
@@ -32,4 +32,4 @@
 //      exceptionThrown = exception;
 //    }
 //  }
-//}
+// }

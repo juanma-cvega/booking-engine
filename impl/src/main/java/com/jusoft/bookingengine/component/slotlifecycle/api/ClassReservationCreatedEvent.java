@@ -6,6 +6,6 @@ import lombok.Data;
 @Data(staticConstructor = "of")
 public class ClassReservationCreatedEvent implements Event {
 
-  private final long slotId;
-  private final long classId;
+    private final long slotId;
+    private final long classId;
 }

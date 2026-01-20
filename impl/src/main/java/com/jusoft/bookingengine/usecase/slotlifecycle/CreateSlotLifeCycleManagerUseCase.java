@@ -7,9 +7,11 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class CreateSlotLifeCycleManagerUseCase {
 
-  private final SlotLifeCycleManagerComponent slotLifeCycleManagerComponent;
+    private final SlotLifeCycleManagerComponent slotLifeCycleManagerComponent;
 
-  public SlotLifeCycleManagerView createSlotLifeCycleManager(CreateSlotLifeCycleManagerCommand command) {
-    return slotLifeCycleManagerComponent.createFrom(command.getRoomId(), command.getSlotsTimetable());
-  }
+    public SlotLifeCycleManagerView createSlotLifeCycleManager(
+            CreateSlotLifeCycleManagerCommand command) {
+        return slotLifeCycleManagerComponent.createFrom(
+                command.getRoomId(), command.getSlotsTimetable());
+    }
 }

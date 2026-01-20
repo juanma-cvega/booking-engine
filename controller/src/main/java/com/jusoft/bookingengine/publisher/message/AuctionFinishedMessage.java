@@ -6,6 +6,5 @@ import lombok.Data;
 @Data(staticConstructor = "of")
 public class AuctionFinishedMessage implements InfrastructureMessage {
 
-  private final long auctionId;
-
+    private final long auctionId;
 }

@@ -6,5 +6,5 @@ import lombok.Data;
 @Data(staticConstructor = "of")
 public class AuctionFinishedEvent implements Event {
 
-  private final long auctionId;
+    private final long auctionId;
 }

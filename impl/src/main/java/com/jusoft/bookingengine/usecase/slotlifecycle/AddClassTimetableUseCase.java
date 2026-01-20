@@ -7,9 +7,9 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class AddClassTimetableUseCase {
 
-  private final SlotLifeCycleManagerComponent slotLifeCycleManagerComponent;
+    private final SlotLifeCycleManagerComponent slotLifeCycleManagerComponent;
 
-  public void addClassTimetableTo(long roomId, ClassTimetable classTimetable) {
-    slotLifeCycleManagerComponent.addClassTimetableTo(roomId, classTimetable);
-  }
+    public void addClassTimetableTo(long roomId, ClassTimetable classTimetable) {
+        slotLifeCycleManagerComponent.addClassTimetableTo(roomId, classTimetable);
+    }
 }

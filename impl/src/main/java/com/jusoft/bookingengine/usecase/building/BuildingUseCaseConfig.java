@@ -9,14 +9,12 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class BuildingUseCaseConfig {
 
-  @Autowired
-  private ClubManagerComponent clubManagerComponent;
+    @Autowired private ClubManagerComponent clubManagerComponent;
 
-  @Autowired
-  private BuildingManagerComponent buildingManagerComponent;
+    @Autowired private BuildingManagerComponent buildingManagerComponent;
 
-  @Bean
-  public CreateBuildingUseCase createBuildingUseCase() {
-    return new CreateBuildingUseCase(clubManagerComponent, buildingManagerComponent);
-  }
+    @Bean
+    public CreateBuildingUseCase createBuildingUseCase() {
+        return new CreateBuildingUseCase(clubManagerComponent, buildingManagerComponent);
+    }
 }

@@ -11,31 +11,28 @@ import java.util.stream.Collectors;
 
 public class DataTableTypeConverters {
 
-  @DataTableType
-  public List<Long> userIds(DataTable dataTable) {
-    return dataTable.asList().stream()
-        .map(Long::parseLong)
-        .collect(Collectors.toList());
-  }
+    @DataTableType
+    public List<Long> userIds(DataTable dataTable) {
+        return dataTable.asList().stream().map(Long::parseLong).collect(Collectors.toList());
+    }
 
-  @DataTableType
-  public DataHolder.ReservedSlotsOfDayHolder reservedSlotsOfDay(Map<String, String> entry) {
-    return new DataHolder.ReservedSlotsOfDayHolder(
-        DayOfWeek.valueOf(entry.get("dayOfWeek").toUpperCase()),
-        entry.get("slotsStartTime"),
-        entry.get("zoneId")
-    );
-  }
+    @DataTableType
+    public DataHolder.ReservedSlotsOfDayHolder reservedSlotsOfDay(Map<String, String> entry) {
+        return new DataHolder.ReservedSlotsOfDayHolder(
+                DayOfWeek.valueOf(entry.get("dayOfWeek").toUpperCase()),
+                entry.get("slotsStartTime"),
+                entry.get("zoneId"));
+    }
 
-  @ParameterType("MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY")
-  public DayOfWeek dayOfWeek(String day) {
-    return DayOfWeek.valueOf(day);
-  }
+    @ParameterType("MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY")
+    public DayOfWeek dayOfWeek(String day) {
+        return DayOfWeek.valueOf(day);
+    }
 
-  @DataTableType
-  public List<DayOfWeek> dayOfWeek(DataTable dataTable) {
-    return dataTable.asList().stream()
-      .map(dayOfWeek -> DayOfWeek.valueOf(dayOfWeek.toUpperCase()))
-      .collect(Collectors.toList());
-  }
+    @DataTableType
+    public List<DayOfWeek> dayOfWeek(DataTable dataTable) {
+        return dataTable.asList().stream()
+                .map(dayOfWeek -> DayOfWeek.valueOf(dayOfWeek.toUpperCase()))
+                .collect(Collectors.toList());
+    }
 }

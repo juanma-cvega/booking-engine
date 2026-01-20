@@ -10,12 +10,16 @@ import org.springframework.context.event.EventListener;
 @Slf4j
 class AuctionWinnerFoundEventListener implements MessageListener {
 
-  private final PreReserveSlotUseCase preReserveSlotUseCase;
+    private final PreReserveSlotUseCase preReserveSlotUseCase;
 
-  @EventListener(AuctionWinnerFoundMessage.class)
-  public void bookSlotForAuctionWinner(AuctionWinnerFoundMessage event) {
-    log.info("AuctionWinnerFoundEvent consumed: auctionId={}, userId={}, slotId={}",
-      event.getAuctionId(), event.getAuctionWinnerId(), event.getSlotId());
-    preReserveSlotUseCase.preReserveSlot(event.getSlotId(), event.getAuctionWinnerId(), "PERSON");
-  }
+    @EventListener(AuctionWinnerFoundMessage.class)
+    public void bookSlotForAuctionWinner(AuctionWinnerFoundMessage event) {
+        log.info(
+                "AuctionWinnerFoundEvent consumed: auctionId={}, userId={}, slotId={}",
+                event.getAuctionId(),
+                event.getAuctionWinnerId(),
+                event.getSlotId());
+        preReserveSlotUseCase.preReserveSlot(
+                event.getSlotId(), event.getAuctionWinnerId(), "PERSON");
+    }
 }

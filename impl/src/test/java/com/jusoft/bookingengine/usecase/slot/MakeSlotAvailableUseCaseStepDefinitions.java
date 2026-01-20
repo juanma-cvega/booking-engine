@@ -1,5 +1,8 @@
 package com.jusoft.bookingengine.usecase.slot;
 
+import static com.jusoft.bookingengine.holder.DataHolder.slotCreated;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.jusoft.bookingengine.component.slot.api.SlotMadeAvailableEvent;
 import com.jusoft.bookingengine.component.slot.api.SlotManagerComponent;
 import com.jusoft.bookingengine.component.slot.api.SlotState;
@@ -9,29 +12,27 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static com.jusoft.bookingengine.holder.DataHolder.slotCreated;
-import static org.assertj.core.api.Assertions.assertThat;
-
 public class MakeSlotAvailableUseCaseStepDefinitions extends AbstractUseCaseStepDefinitions {
 
-  @Autowired
-  private SlotManagerComponent slotManagerComponent;
+    @Autowired private SlotManagerComponent slotManagerComponent;
 
-  @Autowired
-  private MakeSlotAvailableUseCase makeSlotAvailableUseCase;
+    @Autowired private MakeSlotAvailableUseCase makeSlotAvailableUseCase;
 
-  @When("^the slot is made available$")
-  public void the_slot_is_made_available() {
-    makeSlotAvailableUseCase.makeSlotAvailable(slotCreated.getId());
-  }
-  @Then("^the slot should be available$")
-  public void the_slot_should_be_available() {
-    SlotView slot = slotManagerComponent.find(slotCreated.getId());
-    assertThat(slot.getState()).isEqualTo(SlotState.AVAILABLE);
-  };
-  @Then("^a notification of a slot made available should be published$")
-  public void a_notification_of_a_slot_made_available_should_be_published () {
-    SlotMadeAvailableEvent event = verifyAndGetMessageOfType(SlotMadeAvailableEvent.class);
-    assertThat(event.getSlotId()).isEqualTo(slotCreated.getId());
-  }
+    @When("^the slot is made available$")
+    public void the_slot_is_made_available() {
+        makeSlotAvailableUseCase.makeSlotAvailable(slotCreated.getId());
+    }
+
+    @Then("^the slot should be available$")
+    public void the_slot_should_be_available() {
+        SlotView slot = slotManagerComponent.find(slotCreated.getId());
+        assertThat(slot.getState()).isEqualTo(SlotState.AVAILABLE);
+    }
+    ;
+
+    @Then("^a notification of a slot made available should be published$")
+    public void a_notification_of_a_slot_made_available_should_be_published() {
+        SlotMadeAvailableEvent event = verifyAndGetMessageOfType(SlotMadeAvailableEvent.class);
+        assertThat(event.getSlotId()).isEqualTo(slotCreated.getId());
+    }
 }

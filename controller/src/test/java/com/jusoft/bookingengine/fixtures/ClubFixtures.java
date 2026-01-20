@@ -5,5 +5,5 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class ClubFixtures {
 
-  public static final long CLUB_ID = 555;
+    public static final long CLUB_ID = 555;
 }

@@ -7,9 +7,9 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class DenyJoinRequestUseCase {
 
-  private final ClubManagerComponent clubManagerComponent;
+    private final ClubManagerComponent clubManagerComponent;
 
-  public void denyJoinRequest(DenyJoinRequestCommand command) {
-    clubManagerComponent.denyAccessRequest(command);
-  }
+    public void denyJoinRequest(DenyJoinRequestCommand command) {
+        clubManagerComponent.denyAccessRequest(command);
+    }
 }

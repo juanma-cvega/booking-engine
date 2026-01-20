@@ -4,11 +4,11 @@ import java.time.ZonedDateTime;
 
 public interface RoomManagerComponent {
 
-  RoomView create(CreateRoomCommand createRoomCommand, long clubId);
+    RoomView create(CreateRoomCommand createRoomCommand, long clubId);
 
-  RoomView find(long roomId);
+    RoomView find(long roomId);
 
-  NextSlotConfig findNextSlotOpenDate(ZonedDateTime lastSlotEndTime, long roomId);
+    NextSlotConfig findNextSlotOpenDate(ZonedDateTime lastSlotEndTime, long roomId);
 
-  NextSlotConfig findFirstSlotOpenDate(long roomId);
+    NextSlotConfig findFirstSlotOpenDate(long roomId);
 }

@@ -6,6 +6,6 @@ import lombok.Data;
 @Data(staticConstructor = "of")
 public class RoomUnregisteredForClassEvent implements Event {
 
-  private final long classId;
-  private final long roomId;
+    private final long classId;
+    private final long roomId;
 }

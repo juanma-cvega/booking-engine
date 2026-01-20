@@ -10,13 +10,13 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class CreateBuildingUseCase {
 
-  private final ClubManagerComponent clubManagerComponent;
-  private final BuildingManagerComponent buildingManagerComponent;
+    private final ClubManagerComponent clubManagerComponent;
+    private final BuildingManagerComponent buildingManagerComponent;
 
-  public BuildingView createBuildingFrom(CreateBuildingCommand command) {
-    if (!clubManagerComponent.isAvailable(command.getClubId())) {
-      throw new ClubNotFoundException(command.getClubId());
+    public BuildingView createBuildingFrom(CreateBuildingCommand command) {
+        if (!clubManagerComponent.isAvailable(command.getClubId())) {
+            throw new ClubNotFoundException(command.getClubId());
+        }
+        return buildingManagerComponent.create(command);
     }
-    return buildingManagerComponent.create(command);
-  }
 }

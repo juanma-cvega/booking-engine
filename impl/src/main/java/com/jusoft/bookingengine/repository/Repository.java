@@ -1,5 +1,3 @@
 package com.jusoft.bookingengine.repository;
 
-public interface Repository {
-
-}
+public interface Repository {}

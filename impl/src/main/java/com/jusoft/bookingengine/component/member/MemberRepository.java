@@ -4,8 +4,7 @@ import com.jusoft.bookingengine.repository.Repository;
 
 interface MemberRepository extends Repository {
 
-  void save(Member member);
+    void save(Member member);
 
-  boolean isMemberOf(long clubId, long userId);
-
+    boolean isMemberOf(long clubId, long userId);
 }

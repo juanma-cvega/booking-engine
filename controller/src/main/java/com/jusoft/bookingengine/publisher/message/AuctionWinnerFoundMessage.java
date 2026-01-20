@@ -6,7 +6,7 @@ import lombok.Data;
 @Data(staticConstructor = "of")
 public class AuctionWinnerFoundMessage implements InfrastructureMessage {
 
-  private final long auctionId;
-  private final long auctionWinnerId;
-  private final long slotId;
+    private final long auctionId;
+    private final long auctionWinnerId;
+    private final long slotId;
 }

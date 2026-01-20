@@ -8,9 +8,9 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class StartAuctionUseCase {
 
-  private final AuctionManagerComponent auctionManagerComponent;
+    private final AuctionManagerComponent auctionManagerComponent;
 
-  public AuctionView startAuction(StartAuctionCommand command) {
-    return auctionManagerComponent.startAuction(command);
-  }
+    public AuctionView startAuction(StartAuctionCommand command) {
+        return auctionManagerComponent.startAuction(command);
+    }
 }

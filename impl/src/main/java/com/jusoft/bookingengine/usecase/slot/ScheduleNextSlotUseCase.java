@@ -11,16 +11,21 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class ScheduleNextSlotUseCase {
 
-  private final RoomManagerComponent roomManagerComponent;
-  private final SchedulerComponent schedulerComponent;
-  private final SlotCreationStrategyRegistrar slotCreationStrategyRegistrar;
+    private final RoomManagerComponent roomManagerComponent;
+    private final SchedulerComponent schedulerComponent;
+    private final SlotCreationStrategyRegistrar slotCreationStrategyRegistrar;
 
-  //WARNING: in case a new option is added to schedule slots manually or by any other mean other than the current one,
-  //there could exist a race condition where the strategy decides to create a new slot not considering what other
-  //thread could be doing at the same time
-  public void scheduleNextSlot(long roomId) {
-    RoomView room = roomManagerComponent.find(roomId);
-    SlotCreationStrategy strategy = slotCreationStrategyRegistrar.createStrategyWith(room.getSlotCreationConfigInfo());
-    schedulerComponent.schedule(strategy.nextSlotCreationTimeFor(room.getId()), SlotRequiredEvent.of(roomId));
-  }
+    // WARNING: in case a new option is added to schedule slots manually or by any other mean other
+    // than the current
+    // one,
+    // there could exist a race condition where the strategy decides to create a new slot not
+    // considering what other
+    // thread could be doing at the same time
+    public void scheduleNextSlot(long roomId) {
+        RoomView room = roomManagerComponent.find(roomId);
+        SlotCreationStrategy strategy =
+                slotCreationStrategyRegistrar.createStrategyWith(room.getSlotCreationConfigInfo());
+        schedulerComponent.schedule(
+                strategy.nextSlotCreationTimeFor(room.getId()), SlotRequiredEvent.of(roomId));
+    }
 }

@@ -5,16 +5,16 @@ import lombok.Getter;
 @Getter
 public class ClassTimetableNotValidException extends RuntimeException {
 
-  private static final long serialVersionUID = 1443853281846806694L;
+    private static final long serialVersionUID = 1443853281846806694L;
 
-  private static final String MESSAGE = "The class timetable %s is not valid for room %s";
+    private static final String MESSAGE = "The class timetable %s is not valid for room %s";
 
-  private final long roomId;
-  private final transient ClassTimetable classTimetable;
+    private final long roomId;
+    private final transient ClassTimetable classTimetable;
 
-  public ClassTimetableNotValidException(long roomId, ClassTimetable classTimetable) {
-    super(String.format(MESSAGE, classTimetable, roomId));
-    this.roomId = roomId;
-    this.classTimetable = classTimetable;
-  }
+    public ClassTimetableNotValidException(long roomId, ClassTimetable classTimetable) {
+        super(String.format(MESSAGE, classTimetable, roomId));
+        this.roomId = roomId;
+        this.classTimetable = classTimetable;
+    }
 }

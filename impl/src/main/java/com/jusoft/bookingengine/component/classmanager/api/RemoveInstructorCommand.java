@@ -6,6 +6,6 @@ import lombok.Data;
 @Data(staticConstructor = "of")
 public class RemoveInstructorCommand implements Command {
 
-  private final long classId;
-  private final long instructorId;
+    private final long classId;
+    private final long instructorId;
 }

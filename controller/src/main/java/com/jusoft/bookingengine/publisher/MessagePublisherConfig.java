@@ -9,14 +9,12 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MessagePublisherConfig {
 
-  @Autowired
-  private ApplicationEventPublisher publisher;
+    @Autowired private ApplicationEventPublisher publisher;
 
-  @Autowired
-  private InfrastructureMessageFactory infrastructureMessageFactory;
+    @Autowired private InfrastructureMessageFactory infrastructureMessageFactory;
 
-  @Bean
-  public MessagePublisher messagePublisher() {
-    return new MessagePublisherInProcess(publisher, infrastructureMessageFactory);
-  }
+    @Bean
+    public MessagePublisher messagePublisher() {
+        return new MessagePublisherInProcess(publisher, infrastructureMessageFactory);
+    }
 }

@@ -8,9 +8,9 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class ScheduleFinishAuctionUseCase {
 
-  private final SchedulerComponent schedulerComponent;
+    private final SchedulerComponent schedulerComponent;
 
-  public void scheduleFinishAuction(long auctionId, OpenDate openDate) {
-    schedulerComponent.schedule(openDate.getEndTime(), AuctionFinishedEvent.of(auctionId));
-  }
+    public void scheduleFinishAuction(long auctionId, OpenDate openDate) {
+        schedulerComponent.schedule(openDate.getEndTime(), AuctionFinishedEvent.of(auctionId));
+    }
 }

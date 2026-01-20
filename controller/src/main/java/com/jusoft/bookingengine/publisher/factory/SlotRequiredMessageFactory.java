@@ -8,9 +8,8 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class SlotRequiredMessageFactory implements MessageFactory<SlotRequiredEvent, SlotRequiredMessage> {
 
-  @Override
-  public SlotRequiredMessage createFrom(SlotRequiredEvent message) {
-    return SlotRequiredMessage.of(
-      message.getRoomId());
-  }
+    @Override
+    public SlotRequiredMessage createFrom(SlotRequiredEvent message) {
+        return SlotRequiredMessage.of(message.getRoomId());
+    }
 }

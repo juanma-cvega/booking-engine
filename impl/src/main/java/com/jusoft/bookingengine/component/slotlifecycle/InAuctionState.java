@@ -8,7 +8,6 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 class InAuctionState implements NextSlotState {
 
-  private final long slotId;
-  private final AuctionConfigInfo auctionConfigInfo;
-
+    private final long slotId;
+    private final AuctionConfigInfo auctionConfigInfo;
 }

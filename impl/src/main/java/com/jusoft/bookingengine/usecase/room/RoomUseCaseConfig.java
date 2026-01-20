@@ -9,14 +9,12 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RoomUseCaseConfig {
 
-  @Autowired
-  private RoomManagerComponent roomManagerComponent;
+    @Autowired private RoomManagerComponent roomManagerComponent;
 
-  @Autowired
-  private BuildingManagerComponent buildingManagerComponent;
+    @Autowired private BuildingManagerComponent buildingManagerComponent;
 
-  @Bean
-  public CreateRoomUseCase createRoomUseCase() {
-    return new CreateRoomUseCase(roomManagerComponent, buildingManagerComponent);
-  }
+    @Bean
+    public CreateRoomUseCase createRoomUseCase() {
+        return new CreateRoomUseCase(roomManagerComponent, buildingManagerComponent);
+    }
 }

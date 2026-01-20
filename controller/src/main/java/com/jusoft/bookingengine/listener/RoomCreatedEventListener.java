@@ -12,12 +12,15 @@ import org.springframework.context.event.EventListener;
 @Slf4j
 class RoomCreatedEventListener implements MessageListener {
 
-  private final CreateSlotUseCase openNextSlotUseCase;
+    private final CreateSlotUseCase openNextSlotUseCase;
 
-  @EventListener(RoomCreatedMessage.class)
-  public void openFirstSlot(RoomCreatedMessage event) {
-    log.info("RoomCreatedEvent consumed: roomId={}", event.getRoomId());
-    SlotView slotCreated = openNextSlotUseCase.createSlotFor(event.getRoomId());
-    log.info("RoomCreatedEvent processed: roomId={}, slotId={} ", slotCreated.getRoomId(), slotCreated.getId());
-  }
+    @EventListener(RoomCreatedMessage.class)
+    public void openFirstSlot(RoomCreatedMessage event) {
+        log.info("RoomCreatedEvent consumed: roomId={}", event.getRoomId());
+        SlotView slotCreated = openNextSlotUseCase.createSlotFor(event.getRoomId());
+        log.info(
+                "RoomCreatedEvent processed: roomId={}, slotId={} ",
+                slotCreated.getRoomId(),
+                slotCreated.getId());
+    }
 }

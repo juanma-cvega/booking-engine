@@ -6,7 +6,7 @@ import lombok.Data;
 @Data(staticConstructor = "of")
 public class CreateClubCommand implements Command {
 
-  private final String name;
-  private final String description;
-  private final long adminId;
+    private final String name;
+    private final String description;
+    private final long adminId;
 }

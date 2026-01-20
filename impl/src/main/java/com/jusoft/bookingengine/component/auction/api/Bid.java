@@ -1,16 +1,15 @@
 package com.jusoft.bookingengine.component.auction.api;
 
+import java.time.ZonedDateTime;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
-
-import java.time.ZonedDateTime;
 
 @Data
 @EqualsAndHashCode(exclude = "creationTime")
 public class Bid {
 
-  private final long userId;
-  @NonNull
-  private final ZonedDateTime creationTime;
+    private final long userId;
+
+    @NonNull private final ZonedDateTime creationTime;
 }

@@ -6,7 +6,7 @@ import lombok.Data;
 @Data(staticConstructor = "of")
 public class DenyJoinRequestCommand implements Command {
 
-  private final long joinRequestId;
-  private final long clubId;
-  private final long adminId;
+    private final long joinRequestId;
+    private final long clubId;
+    private final long adminId;
 }

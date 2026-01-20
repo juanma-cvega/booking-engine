@@ -7,6 +7,6 @@ import lombok.Data;
 @Data(staticConstructor = "of")
 public class AuctionRequiredEvent implements Event {
 
-  private final long slotId;
-  private final AuctionConfigInfo auctionConfigInfo;
+    private final long slotId;
+    private final AuctionConfigInfo auctionConfigInfo;
 }

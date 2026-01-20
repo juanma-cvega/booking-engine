@@ -8,10 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 @AllArgsConstructor
 public class RegisterRoomUseCase {
 
-  @Autowired
-  private ClassManagerComponent classManagerComponent;
+    @Autowired private ClassManagerComponent classManagerComponent;
 
-  public void registerRoom(RegisterRoomCommand command) {
-    classManagerComponent.registerRoom(command);
-  }
+    public void registerRoom(RegisterRoomCommand command) {
+        classManagerComponent.registerRoom(command);
+    }
 }

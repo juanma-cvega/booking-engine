@@ -9,8 +9,8 @@ import lombok.Data;
 @Data
 class Building {
 
-  private final long id;
-  private final long clubId;
-  private final Address address;
-  private final String description;
+    private final long id;
+    private final long clubId;
+    private final Address address;
+    private final String description;
 }

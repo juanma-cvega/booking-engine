@@ -7,9 +7,9 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class AcceptJoinRequestUseCase {
 
-  private final ClubManagerComponent clubManagerComponent;
+    private final ClubManagerComponent clubManagerComponent;
 
-  public void acceptJoinRequest(AcceptJoinRequestCommand command) {
-    clubManagerComponent.acceptAccessRequest(command);
-  }
+    public void acceptJoinRequest(AcceptJoinRequestCommand command) {
+        clubManagerComponent.acceptAccessRequest(command);
+    }
 }

@@ -7,9 +7,9 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class ModifyAuctionConfigUseCase {
 
-  private final SlotLifeCycleManagerComponent slotLifeCycleManagerComponent;
+    private final SlotLifeCycleManagerComponent slotLifeCycleManagerComponent;
 
-  public void modifyAuctionConfigFor(long roomId, AuctionConfigInfo auctionConfigInfo) {
-    slotLifeCycleManagerComponent.modifyAuctionConfigFor(roomId, auctionConfigInfo);
-  }
+    public void modifyAuctionConfigFor(long roomId, AuctionConfigInfo auctionConfigInfo) {
+        slotLifeCycleManagerComponent.modifyAuctionConfigFor(roomId, auctionConfigInfo);
+    }
 }

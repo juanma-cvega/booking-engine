@@ -5,6 +5,6 @@ import lombok.Data;
 @Data(staticConstructor = "of")
 public class JoinRequest {
 
-  private final long id;
-  private final long userId;
+    private final long id;
+    private final long userId;
 }

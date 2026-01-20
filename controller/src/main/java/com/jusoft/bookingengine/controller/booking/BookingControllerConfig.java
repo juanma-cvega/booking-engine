@@ -9,22 +9,21 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class BookingControllerConfig {
 
-  @Autowired
-  private BookingManagerComponent bookingManagerComponent;
+    @Autowired private BookingManagerComponent bookingManagerComponent;
 
-  @Autowired
-  private SlotResourceFactory slotResourceFactory;
+    @Autowired private SlotResourceFactory slotResourceFactory;
 
-  @Bean
-  public BookingControllerRest bookingComponentRest() {
-    return new BookingControllerRest(bookingManagerComponent, bookingCommandFactory(), bookingResourceFactory());
-  }
+    @Bean
+    public BookingControllerRest bookingComponentRest() {
+        return new BookingControllerRest(
+                bookingManagerComponent, bookingCommandFactory(), bookingResourceFactory());
+    }
 
-  private BookingCommandFactory bookingCommandFactory() {
-    return new BookingCommandFactory();
-  }
+    private BookingCommandFactory bookingCommandFactory() {
+        return new BookingCommandFactory();
+    }
 
-  private BookingResourceFactory bookingResourceFactory() {
-    return new BookingResourceFactory(slotResourceFactory);
-  }
+    private BookingResourceFactory bookingResourceFactory() {
+        return new BookingResourceFactory(slotResourceFactory);
+    }
 }

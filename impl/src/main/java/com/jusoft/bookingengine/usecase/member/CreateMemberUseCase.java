@@ -8,9 +8,9 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class CreateMemberUseCase {
 
-  private final MemberManagerComponent memberManagerComponent;
+    private final MemberManagerComponent memberManagerComponent;
 
-  public MemberView addMemberToClubUseCase(CreateMemberCommand command) {
-    return memberManagerComponent.createMember(command);
-  }
+    public MemberView addMemberToClubUseCase(CreateMemberCommand command) {
+        return memberManagerComponent.createMember(command);
+    }
 }

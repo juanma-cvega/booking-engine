@@ -6,13 +6,13 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 class SlotEventFactory {
 
-  private final SlotStateFactory slotStateFactory;
+    private final SlotStateFactory slotStateFactory;
 
-  SlotCreatedEvent slotCreatedEvent(Slot newSlot) {
-    return SlotCreatedEvent.of(
-      newSlot.getId(),
-      newSlot.getRoomId(),
-      slotStateFactory.getSlotStateFor(newSlot.getState()),
-      newSlot.getOpenDate());
-  }
+    SlotCreatedEvent slotCreatedEvent(Slot newSlot) {
+        return SlotCreatedEvent.of(
+                newSlot.getId(),
+                newSlot.getRoomId(),
+                slotStateFactory.getSlotStateFor(newSlot.getState()),
+                newSlot.getOpenDate());
+    }
 }

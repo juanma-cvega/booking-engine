@@ -6,7 +6,7 @@ import lombok.Data;
 @Data(staticConstructor = "of")
 public class JoinRequestAcceptedEvent implements Event {
 
-  private final long accessRequestId;
-  private final long userId;
-  private final long clubId;
+    private final long accessRequestId;
+    private final long userId;
+    private final long clubId;
 }

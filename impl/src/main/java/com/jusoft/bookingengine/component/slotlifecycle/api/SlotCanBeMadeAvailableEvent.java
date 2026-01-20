@@ -6,6 +6,5 @@ import lombok.Data;
 @Data(staticConstructor = "of")
 public class SlotCanBeMadeAvailableEvent implements Event {
 
-  private final long slotId;
+    private final long slotId;
 }
-

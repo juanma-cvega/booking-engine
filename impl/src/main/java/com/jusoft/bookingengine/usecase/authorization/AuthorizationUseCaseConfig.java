@@ -9,44 +9,43 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class AuthorizationUseCaseConfig {
 
-  @Autowired
-  private AuthorizationManagerComponent authorizationManagerComponent;
+    @Autowired private AuthorizationManagerComponent authorizationManagerComponent;
 
-  @Autowired
-  private MemberManagerComponent memberManagerComponent;
+    @Autowired private MemberManagerComponent memberManagerComponent;
 
-  @Bean
-  public AddBuildingTagsToClubUseCase addBuildingTagsToClubUseCase() {
-    return new AddBuildingTagsToClubUseCase(authorizationManagerComponent);
-  }
+    @Bean
+    public AddBuildingTagsToClubUseCase addBuildingTagsToClubUseCase() {
+        return new AddBuildingTagsToClubUseCase(authorizationManagerComponent);
+    }
 
-  @Bean
-  public AddBuildingTagsToMemberUseCase addBuildingTagsToMemberUseCase() {
-    return new AddBuildingTagsToMemberUseCase(authorizationManagerComponent);
-  }
+    @Bean
+    public AddBuildingTagsToMemberUseCase addBuildingTagsToMemberUseCase() {
+        return new AddBuildingTagsToMemberUseCase(authorizationManagerComponent);
+    }
 
-  @Bean
-  public AddRoomTagsToClubUseCase addRoomTagsToClubUseCase() {
-    return new AddRoomTagsToClubUseCase(authorizationManagerComponent);
-  }
+    @Bean
+    public AddRoomTagsToClubUseCase addRoomTagsToClubUseCase() {
+        return new AddRoomTagsToClubUseCase(authorizationManagerComponent);
+    }
 
-  @Bean
-  public AddRoomTagsToMemberUseCase addRoomTagsToMemberUseCase() {
-    return new AddRoomTagsToMemberUseCase(authorizationManagerComponent);
-  }
+    @Bean
+    public AddRoomTagsToMemberUseCase addRoomTagsToMemberUseCase() {
+        return new AddRoomTagsToMemberUseCase(authorizationManagerComponent);
+    }
 
-  @Bean
-  public NewClubCreatedUseCase newClubCreatedUseCase() {
-    return new NewClubCreatedUseCase(authorizationManagerComponent);
-  }
+    @Bean
+    public NewClubCreatedUseCase newClubCreatedUseCase() {
+        return new NewClubCreatedUseCase(authorizationManagerComponent);
+    }
 
-  @Bean
-  public NewMemberCreatedUseCase newMemberCreatedUseCase() {
-    return new NewMemberCreatedUseCase(authorizationManagerComponent);
-  }
+    @Bean
+    public NewMemberCreatedUseCase newMemberCreatedUseCase() {
+        return new NewMemberCreatedUseCase(authorizationManagerComponent);
+    }
 
-  @Bean
-  public ReplaceSlotAuthenticationConfigForRoomUseCase replaceSlotAuthenticationConfigForRoomUseCase() {
-    return new ReplaceSlotAuthenticationConfigForRoomUseCase(authorizationManagerComponent);
-  }
+    @Bean
+    public ReplaceSlotAuthenticationConfigForRoomUseCase
+            replaceSlotAuthenticationConfigForRoomUseCase() {
+        return new ReplaceSlotAuthenticationConfigForRoomUseCase(authorizationManagerComponent);
+    }
 }

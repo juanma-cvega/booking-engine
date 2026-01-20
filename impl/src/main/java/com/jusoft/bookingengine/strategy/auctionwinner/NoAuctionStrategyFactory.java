@@ -5,8 +5,8 @@ import com.jusoft.bookingengine.strategy.auctionwinner.api.AuctionWinnerStrategy
 import com.jusoft.bookingengine.strategy.auctionwinner.api.NoAuctionConfigInfo;
 
 class NoAuctionStrategyFactory implements AuctionWinnerStrategyFactory<NoAuctionConfigInfo> {
-  @Override
-  public AuctionWinnerStrategy createInstance(NoAuctionConfigInfo config) {
-    return new NoAuctionStrategy();
-  }
+    @Override
+    public AuctionWinnerStrategy createInstance(NoAuctionConfigInfo config) {
+        return new NoAuctionStrategy();
+    }
 }

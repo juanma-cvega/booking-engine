@@ -8,8 +8,8 @@ import lombok.NonNull;
 @Data(staticConstructor = "of")
 public class AuctionStartedEvent implements Event {
 
-  private final long auctionId;
-  private final long referenceId;
-  @NonNull
-  private final OpenDate openDate;
+    private final long auctionId;
+    private final long referenceId;
+
+    @NonNull private final OpenDate openDate;
 }

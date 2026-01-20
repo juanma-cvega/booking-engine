@@ -7,9 +7,9 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class FindClubByNameUseCase {
 
-  private final ClubManagerComponent clubManagerComponent;
+    private final ClubManagerComponent clubManagerComponent;
 
-  public ClubView findByName(String name) {
-    return clubManagerComponent.findByName(name);
-  }
+    public ClubView findByName(String name) {
+        return clubManagerComponent.findByName(name);
+    }
 }

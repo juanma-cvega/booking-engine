@@ -6,6 +6,6 @@ import lombok.Data;
 @Data(staticConstructor = "of")
 public class UnregisterRoomCommand implements Command {
 
-  private final long classId;
-  private final long roomId;
+    private final long classId;
+    private final long roomId;
 }

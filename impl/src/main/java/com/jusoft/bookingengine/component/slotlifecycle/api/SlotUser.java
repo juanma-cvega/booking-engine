@@ -5,10 +5,11 @@ import lombok.Data;
 @Data(staticConstructor = "of")
 public class SlotUser {
 
-  public enum UserType {
-    PERSON, CLASS
-  }
+    public enum UserType {
+        PERSON,
+        CLASS
+    }
 
-  private final long id;
-  private final UserType userType;
+    private final long id;
+    private final UserType userType;
 }

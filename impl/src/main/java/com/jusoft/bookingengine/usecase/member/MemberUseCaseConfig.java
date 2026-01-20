@@ -8,11 +8,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MemberUseCaseConfig {
 
-  @Autowired
-  private MemberManagerComponent memberManagerComponent;
+    @Autowired private MemberManagerComponent memberManagerComponent;
 
-  @Bean
-  public CreateMemberUseCase createMemberUseCase() {
-    return new CreateMemberUseCase(memberManagerComponent);
-  }
+    @Bean
+    public CreateMemberUseCase createMemberUseCase() {
+        return new CreateMemberUseCase(memberManagerComponent);
+    }
 }

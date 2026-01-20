@@ -8,9 +8,9 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class CreateClassUseCase {
 
-  private final ClassManagerComponent classManagerComponent;
+    private final ClassManagerComponent classManagerComponent;
 
-  public ClassView createClass(CreateClassCommand command) {
-    return classManagerComponent.create(command);
-  }
+    public ClassView createClass(CreateClassCommand command) {
+        return classManagerComponent.create(command);
+    }
 }

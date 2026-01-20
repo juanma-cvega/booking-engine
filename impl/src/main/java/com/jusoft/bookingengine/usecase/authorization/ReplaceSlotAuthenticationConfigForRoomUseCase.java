@@ -7,9 +7,10 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class ReplaceSlotAuthenticationConfigForRoomUseCase {
 
-  private final AuthorizationManagerComponent authorizationManagerComponent;
+    private final AuthorizationManagerComponent authorizationManagerComponent;
 
-  public void replaceSlotAuthenticationConfigForRoom(ReplaceSlotAuthenticationConfigForRoomCommand command) {
-    authorizationManagerComponent.replaceSlotAuthenticationManagerForRoom(command);
-  }
+    public void replaceSlotAuthenticationConfigForRoom(
+            ReplaceSlotAuthenticationConfigForRoomCommand command) {
+        authorizationManagerComponent.replaceSlotAuthenticationManagerForRoom(command);
+    }
 }

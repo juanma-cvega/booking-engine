@@ -8,9 +8,9 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class CreateJoinRequestUseCase {
 
-  private final ClubManagerComponent clubManagerComponent;
+    private final ClubManagerComponent clubManagerComponent;
 
-  public JoinRequest createJoinRequest(CreateJoinRequestCommand command) {
-    return clubManagerComponent.createJoinRequest(command);
-  }
+    public JoinRequest createJoinRequest(CreateJoinRequestCommand command) {
+        return clubManagerComponent.createJoinRequest(command);
+    }
 }

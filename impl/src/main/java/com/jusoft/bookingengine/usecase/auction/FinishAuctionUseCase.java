@@ -9,12 +9,13 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class FinishAuctionUseCase {
 
-  private final AuctionManagerComponent auctionManagerComponent;
-  private final AuctionStrategyRegistrar auctionStrategyRegistrar;
+    private final AuctionManagerComponent auctionManagerComponent;
+    private final AuctionStrategyRegistrar auctionStrategyRegistrar;
 
-  public void finishAuction(long auctionId) {
-    AuctionView auction = auctionManagerComponent.find(auctionId);
-    AuctionWinnerStrategy strategy = auctionStrategyRegistrar.createStrategyWith(auction.getAuctionConfigInfo());
-    auctionManagerComponent.finishAuction(auctionId, strategy);
-  }
+    public void finishAuction(long auctionId) {
+        AuctionView auction = auctionManagerComponent.find(auctionId);
+        AuctionWinnerStrategy strategy =
+                auctionStrategyRegistrar.createStrategyWith(auction.getAuctionConfigInfo());
+        auctionManagerComponent.finishAuction(auctionId, strategy);
+    }
 }

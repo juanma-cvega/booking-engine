@@ -9,10 +9,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;
 
 @SpringBootApplication
-@Import({TimerConfig.class, SlotManagerComponentConfig.class, BookingManagerComponentConfig.class, ControllerConfig.class})
+@Import({
+    TimerConfig.class,
+    SlotManagerComponentConfig.class,
+    BookingManagerComponentConfig.class,
+    ControllerConfig.class
+})
 public class AppMain {
 
-  public static void main(String[] args) {
-    SpringApplication.run(AppMain.class);
-  }
+    public static void main(String[] args) {
+        SpringApplication.run(AppMain.class);
+    }
 }

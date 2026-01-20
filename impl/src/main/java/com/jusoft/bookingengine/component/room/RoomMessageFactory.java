@@ -7,11 +7,11 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class RoomMessageFactory {
 
-  RoomCreatedEvent roomCreatedEvent(Room room) {
-    return RoomCreatedEvent.of(
-      room.getId(),
-      room.getSlotDurationInMinutes(),
-      room.getOpenTimesPerDay(),
-      room.getAvailableDays());
-  }
+    RoomCreatedEvent roomCreatedEvent(Room room) {
+        return RoomCreatedEvent.of(
+                room.getId(),
+                room.getSlotDurationInMinutes(),
+                room.getOpenTimesPerDay(),
+                room.getAvailableDays());
+    }
 }

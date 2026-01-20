@@ -6,11 +6,11 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-class AuctionFinishedMessageFactory implements MessageFactory<AuctionFinishedEvent, AuctionFinishedMessage> {
+class AuctionFinishedMessageFactory
+        implements MessageFactory<AuctionFinishedEvent, AuctionFinishedMessage> {
 
-  @Override
-  public AuctionFinishedMessage createFrom(AuctionFinishedEvent message) {
-    return AuctionFinishedMessage.of(
-      message.getAuctionId());
-  }
+    @Override
+    public AuctionFinishedMessage createFrom(AuctionFinishedEvent message) {
+        return AuctionFinishedMessage.of(message.getAuctionId());
+    }
 }

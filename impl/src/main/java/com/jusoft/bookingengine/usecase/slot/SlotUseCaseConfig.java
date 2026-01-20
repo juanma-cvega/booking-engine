@@ -12,40 +12,39 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SlotUseCaseConfig {
 
-  @Autowired
-  private RoomManagerComponent roomManagerComponent;
-  @Autowired
-  private SlotManagerComponent slotManagerComponent;
-  @Autowired
-  private SchedulerComponent schedulerComponent;
-  @Autowired
-  private SlotCreationStrategyRegistrar slotCreationStrategyRegistrar;
-  @Autowired
-  private AuthorizationManagerComponent authorizationManagerComponent;
+    @Autowired private RoomManagerComponent roomManagerComponent;
 
-  @Bean
-  public CreateSlotUseCase openNextSlotUseCase() {
-    return new CreateSlotUseCase(roomManagerComponent, slotManagerComponent);
-  }
+    @Autowired private SlotManagerComponent slotManagerComponent;
 
-  @Bean
-  public ScheduleNextSlotUseCase scheduleNextSlotUseCase() {
-    return new ScheduleNextSlotUseCase(roomManagerComponent, schedulerComponent, slotCreationStrategyRegistrar);
-  }
+    @Autowired private SchedulerComponent schedulerComponent;
 
-  @Bean
-  public MakeSlotAvailableUseCase makeSlotAvailableUseCase() {
-    return new MakeSlotAvailableUseCase(slotManagerComponent);
-  }
+    @Autowired private SlotCreationStrategyRegistrar slotCreationStrategyRegistrar;
 
-  @Bean
-  public PreReserveSlotUseCase reserveSlotForAuctionWinnerUseCase() {
-    return new PreReserveSlotUseCase(slotManagerComponent);
-  }
+    @Autowired private AuthorizationManagerComponent authorizationManagerComponent;
 
-  @Bean
-  public ReserveSlotForPersonUseCase reserveSlotUseCase() {
-    return new ReserveSlotForPersonUseCase(authorizationManagerComponent, slotManagerComponent);
-  }
+    @Bean
+    public CreateSlotUseCase openNextSlotUseCase() {
+        return new CreateSlotUseCase(roomManagerComponent, slotManagerComponent);
+    }
 
+    @Bean
+    public ScheduleNextSlotUseCase scheduleNextSlotUseCase() {
+        return new ScheduleNextSlotUseCase(
+                roomManagerComponent, schedulerComponent, slotCreationStrategyRegistrar);
+    }
+
+    @Bean
+    public MakeSlotAvailableUseCase makeSlotAvailableUseCase() {
+        return new MakeSlotAvailableUseCase(slotManagerComponent);
+    }
+
+    @Bean
+    public PreReserveSlotUseCase reserveSlotForAuctionWinnerUseCase() {
+        return new PreReserveSlotUseCase(slotManagerComponent);
+    }
+
+    @Bean
+    public ReserveSlotForPersonUseCase reserveSlotUseCase() {
+        return new ReserveSlotForPersonUseCase(authorizationManagerComponent, slotManagerComponent);
+    }
 }

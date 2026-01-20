@@ -17,54 +17,53 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MessageListenersConfig {
 
-  @Autowired
-  private AddBidderToAuctionUseCase addBidderToAuctionUseCase;
-  @Autowired
-  private CancelBookingUseCase cancelBookingUseCase;
-  @Autowired
-  private CreateBookingUseCase createBookingUseCase;
-  @Autowired
-  private CreateRoomUseCase createRoomUseCase;
-  @Autowired
-  private FinishAuctionUseCase finishAuctionUseCase;
-  @Autowired
-  private CreateSlotUseCase openNextSlotUseCase;
-  @Autowired
-  private ScheduleNextSlotUseCase scheduleNextSlotUseCase;
-  @Autowired
-  private StartAuctionUseCase startAuctionUseCase;
-  @Autowired
-  private PreReserveSlotUseCase preReserveSlotUseCase;
-  @Autowired
-  private FindNextSlotStateUseCase findNextSlotStateUseCase;
+    @Autowired private AddBidderToAuctionUseCase addBidderToAuctionUseCase;
 
-  @Bean
-  public SlotRequiredEventListener createSlotCommandListener() {
-    return new SlotRequiredEventListener(openNextSlotUseCase);
-  }
+    @Autowired private CancelBookingUseCase cancelBookingUseCase;
 
-  @Bean
-  public SlotCreatedEventListener slotCreatedEventListener() {
-    return new SlotCreatedEventListener(scheduleNextSlotUseCase, findNextSlotStateUseCase);
-  }
+    @Autowired private CreateBookingUseCase createBookingUseCase;
 
-  @Bean
-  public RoomCreatedEventListener roomCreatedEventListener() {
-    return new RoomCreatedEventListener(openNextSlotUseCase);
-  }
+    @Autowired private CreateRoomUseCase createRoomUseCase;
 
-  @Bean
-  public AuctionFinishedEventListener auctionFinishedEventListener() {
-    return new AuctionFinishedEventListener(finishAuctionUseCase);
-  }
+    @Autowired private FinishAuctionUseCase finishAuctionUseCase;
 
-  @Bean
-  public AuctionWinnerFoundEventListener auctionWinnerFoundEventListener() {
-    return new AuctionWinnerFoundEventListener(preReserveSlotUseCase);
-  }
+    @Autowired private CreateSlotUseCase openNextSlotUseCase;
 
-  @Bean
-  public BookingCreatedEventListener bookingCreatedEventListener() {
-    return new BookingCreatedEventListener();
-  }
+    @Autowired private ScheduleNextSlotUseCase scheduleNextSlotUseCase;
+
+    @Autowired private StartAuctionUseCase startAuctionUseCase;
+
+    @Autowired private PreReserveSlotUseCase preReserveSlotUseCase;
+
+    @Autowired private FindNextSlotStateUseCase findNextSlotStateUseCase;
+
+    @Bean
+    public SlotRequiredEventListener createSlotCommandListener() {
+        return new SlotRequiredEventListener(openNextSlotUseCase);
+    }
+
+    @Bean
+    public SlotCreatedEventListener slotCreatedEventListener() {
+        return new SlotCreatedEventListener(scheduleNextSlotUseCase, findNextSlotStateUseCase);
+    }
+
+    @Bean
+    public RoomCreatedEventListener roomCreatedEventListener() {
+        return new RoomCreatedEventListener(openNextSlotUseCase);
+    }
+
+    @Bean
+    public AuctionFinishedEventListener auctionFinishedEventListener() {
+        return new AuctionFinishedEventListener(finishAuctionUseCase);
+    }
+
+    @Bean
+    public AuctionWinnerFoundEventListener auctionWinnerFoundEventListener() {
+        return new AuctionWinnerFoundEventListener(preReserveSlotUseCase);
+    }
+
+    @Bean
+    public BookingCreatedEventListener bookingCreatedEventListener() {
+        return new BookingCreatedEventListener();
+    }
 }

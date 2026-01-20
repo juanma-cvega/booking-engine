@@ -6,5 +6,5 @@ import lombok.Data;
 @Data(staticConstructor = "of")
 public class ClassRemovedEvent implements Event {
 
-  private final long classId;
+    private final long classId;
 }

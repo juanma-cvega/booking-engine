@@ -9,14 +9,14 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class CancelBookingUseCase {
 
-  private final BookingManagerComponent bookingManagerComponent;
-  private final SlotManagerComponent slotManagerComponent;
+    private final BookingManagerComponent bookingManagerComponent;
+    private final SlotManagerComponent slotManagerComponent;
 
-  public void cancel(long userId, long bookingId) {
-    BookingView booking = bookingManagerComponent.find(bookingId);
-    if (!slotManagerComponent.isSlotOpen(booking.getSlotId())) {
-      throw new SlotNotOpenException(booking.getSlotId());
+    public void cancel(long userId, long bookingId) {
+        BookingView booking = bookingManagerComponent.find(bookingId);
+        if (!slotManagerComponent.isSlotOpen(booking.slotId())) {
+            throw new SlotNotOpenException(booking.slotId());
+        }
+        bookingManagerComponent.cancel(userId, bookingId);
     }
-    bookingManagerComponent.cancel(userId, bookingId);
-  }
 }

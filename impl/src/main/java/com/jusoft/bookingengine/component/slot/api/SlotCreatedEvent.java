@@ -8,10 +8,10 @@ import lombok.NonNull;
 @Data(staticConstructor = "of")
 public class SlotCreatedEvent implements Event {
 
-  private final long slotId;
-  private final long roomId;
-  @NonNull
-  private final SlotState state;
-  @NonNull
-  private final OpenDate openDate;
+    private final long slotId;
+    private final long roomId;
+
+    @NonNull private final SlotState state;
+
+    @NonNull private final OpenDate openDate;
 }

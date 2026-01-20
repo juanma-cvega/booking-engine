@@ -7,29 +7,28 @@ import com.jusoft.bookingengine.component.room.api.RoomCreatedEvent;
 import com.jusoft.bookingengine.component.room.api.SlotRequiredEvent;
 import com.jusoft.bookingengine.component.slot.api.SlotCreatedEvent;
 import com.jusoft.bookingengine.publisher.Message;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class InfrastructureMessageFactoryConfig {
 
-  @Bean
-  public InfrastructureMessageFactory infrastructureMessageFactory() {
-    return new InfrastructureMessageFactory(createFactories());
-  }
+    @Bean
+    public InfrastructureMessageFactory infrastructureMessageFactory() {
+        return new InfrastructureMessageFactory(createFactories());
+    }
 
-  private Map<Class<? extends Message>, MessageFactory> createFactories() {
-    Map<Class<? extends Message>, MessageFactory> factories = new HashMap<>();
+    private Map<Class<? extends Message>, MessageFactory> createFactories() {
+        Map<Class<? extends Message>, MessageFactory> factories = new HashMap<>();
 
-    factories.put(AuctionFinishedEvent.class, new AuctionFinishedMessageFactory());
-    factories.put(AuctionWinnerFoundEvent.class, new AuctionWinnerFoundMessageFactory());
-    factories.put(BookingCreatedEvent.class, new BookingCreatedMessageFactory());
-    factories.put(SlotRequiredEvent.class, new SlotRequiredMessageFactory());
-    factories.put(RoomCreatedEvent.class, new RoomCreatedMessageFactory());
-    factories.put(SlotCreatedEvent.class, new SlotCreatedMessageFactory());
-    return factories;
-  }
+        factories.put(AuctionFinishedEvent.class, new AuctionFinishedMessageFactory());
+        factories.put(AuctionWinnerFoundEvent.class, new AuctionWinnerFoundMessageFactory());
+        factories.put(BookingCreatedEvent.class, new BookingCreatedMessageFactory());
+        factories.put(SlotRequiredEvent.class, new SlotRequiredMessageFactory());
+        factories.put(RoomCreatedEvent.class, new RoomCreatedMessageFactory());
+        factories.put(SlotCreatedEvent.class, new SlotCreatedMessageFactory());
+        return factories;
+    }
 }

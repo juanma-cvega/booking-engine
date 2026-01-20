@@ -12,20 +12,27 @@ import org.springframework.context.event.EventListener;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class SlotCreatedEventListener implements MessageListener {
 
-  private final ScheduleNextSlotUseCase scheduleNextSlotUseCase;
-  private final FindNextSlotStateUseCase findNextSlotStateUseCase;
+    private final ScheduleNextSlotUseCase scheduleNextSlotUseCase;
+    private final FindNextSlotStateUseCase findNextSlotStateUseCase;
 
-  @EventListener(SlotCreatedMessage.class)
-  public void scheduleNextSlot(SlotCreatedMessage event) {
-    log.info("SlotCreatedEvent consumed: slotId={}, roomId={}, openDate={}",
-      event.getSlotId(), event.getRoomId(), event.getOpenDate());
-    scheduleNextSlotUseCase.scheduleNextSlot(event.getRoomId());
-  }
+    @EventListener(SlotCreatedMessage.class)
+    public void scheduleNextSlot(SlotCreatedMessage event) {
+        log.info(
+                "SlotCreatedEvent consumed: slotId={}, roomId={}, openDate={}",
+                event.getSlotId(),
+                event.getRoomId(),
+                event.getOpenDate());
+        scheduleNextSlotUseCase.scheduleNextSlot(event.getRoomId());
+    }
 
-  @EventListener(SlotCreatedMessage.class)
-  public void startAuction(SlotCreatedMessage event) {
-    log.info("SlotCreatedEvent consumed for auction: slotId={}, roomId={}, openDate={}, endTime={}",
-      event.getSlotId(), event.getRoomId(), event.getOpenDate());
-    findNextSlotStateUseCase.findNextSlotStateUseCase(event.getSlotId(), event.getRoomId(), event.getOpenDate().getStartTime());
-  }
+    @EventListener(SlotCreatedMessage.class)
+    public void startAuction(SlotCreatedMessage event) {
+        log.info(
+                "SlotCreatedEvent consumed for auction: slotId={}, roomId={}, openDate={}, endTime={}",
+                event.getSlotId(),
+                event.getRoomId(),
+                event.getOpenDate());
+        findNextSlotStateUseCase.findNextSlotStateUseCase(
+                event.getSlotId(), event.getRoomId(), event.getOpenDate().getStartTime());
+    }
 }

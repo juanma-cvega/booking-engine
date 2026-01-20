@@ -5,24 +5,23 @@ import java.util.Optional;
 
 public interface SlotManagerComponent {
 
-  SlotView create(CreateSlotCommand createSlotCommand);
+    SlotView create(CreateSlotCommand createSlotCommand);
 
-  SlotView find(long slotId);
+    SlotView find(long slotId);
 
-  boolean isSlotOpen(long slotId);
+    boolean isSlotOpen(long slotId);
 
-  List<SlotView> findOpenSlotsFor(long roomId);
+    List<SlotView> findOpenSlotsFor(long roomId);
 
-  Optional<SlotView> findLastCreatedFor(long roomId);
+    Optional<SlotView> findLastCreatedFor(long roomId);
 
-  Optional<SlotView> findSlotInUseOrToStartFor(long roomId);
+    Optional<SlotView> findSlotInUseOrToStartFor(long roomId);
 
-  int findNumberOfSlotsOpenFor(long roomId);
+    int findNumberOfSlotsOpenFor(long roomId);
 
-  void reserveSlot(long slotId, SlotUser slotUser);
+    void reserveSlot(long slotId, SlotUser slotUser);
 
-  void preReserveSlot(long slotId, SlotUser slotUser);
+    void preReserveSlot(long slotId, SlotUser slotUser);
 
-  void makeAvailable(long slotId);
-
+    void makeAvailable(long slotId);
 }

@@ -6,9 +6,9 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class NewClubCreatedUseCase {
 
-  private final AuthorizationManagerComponent authorizationManagerComponent;
+    private final AuthorizationManagerComponent authorizationManagerComponent;
 
-  public void createClub(long clubId) {
-    authorizationManagerComponent.createClub(clubId);
-  }
+    public void createClub(long clubId) {
+        authorizationManagerComponent.createClub(clubId);
+    }
 }

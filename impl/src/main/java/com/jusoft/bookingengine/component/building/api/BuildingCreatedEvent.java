@@ -6,7 +6,7 @@ import lombok.Data;
 @Data(staticConstructor = "of")
 public class BuildingCreatedEvent implements Event {
 
-  private final long buildingId;
-  private final Address address;
-  private final String description;
+    private final long buildingId;
+    private final Address address;
+    private final String description;
 }

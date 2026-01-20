@@ -6,31 +6,30 @@ import com.jusoft.bookingengine.strategy.slotcreation.api.MaxNumberOfSlotsStrate
 import com.jusoft.bookingengine.strategy.slotcreation.api.SlotCreationConfigInfo;
 import com.jusoft.bookingengine.strategy.slotcreation.api.SlotCreationStrategyFactory;
 import com.jusoft.bookingengine.strategy.slotcreation.api.SlotCreationStrategyRegistrar;
+import java.time.Clock;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.time.Clock;
-import java.util.Map;
-
 @Configuration
 public class SlotCreationStrategyConfig {
 
-  @Autowired
-  private SlotManagerComponent slotManagerComponent;
-  @Autowired
-  private Clock clock;
+    @Autowired private SlotManagerComponent slotManagerComponent;
 
-  @Bean
-  public SlotCreationStrategyRegistrar slotCreationStrategyRegistrar() {
-    return new SlotCreationStrategyRegistrar(factories());
-  }
+    @Autowired private Clock clock;
 
-  private Map<Class<? extends SlotCreationConfigInfo>, SlotCreationStrategyFactory> factories() {
-    return ImmutableMap.of(MaxNumberOfSlotsStrategyConfigInfo.class, maxNumberOfSlotsStrategyFactory());
-  }
+    @Bean
+    public SlotCreationStrategyRegistrar slotCreationStrategyRegistrar() {
+        return new SlotCreationStrategyRegistrar(factories());
+    }
 
-  private MaxNumberOfSlotsStrategyFactory maxNumberOfSlotsStrategyFactory() {
-    return new MaxNumberOfSlotsStrategyFactory(slotManagerComponent, clock);
-  }
+    private Map<Class<? extends SlotCreationConfigInfo>, SlotCreationStrategyFactory> factories() {
+        return ImmutableMap.of(
+                MaxNumberOfSlotsStrategyConfigInfo.class, maxNumberOfSlotsStrategyFactory());
+    }
+
+    private MaxNumberOfSlotsStrategyFactory maxNumberOfSlotsStrategyFactory() {
+        return new MaxNumberOfSlotsStrategyFactory(slotManagerComponent, clock);
+    }
 }

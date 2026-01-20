@@ -1,5 +1,3 @@
 package com.jusoft.bookingengine.listener;
 
-public interface MessageListener {
-
-}
+public interface MessageListener {}

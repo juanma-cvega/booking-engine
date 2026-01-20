@@ -9,9 +9,9 @@ import lombok.NonNull;
 @Data(staticConstructor = "of")
 public class SlotCreatedMessage implements InfrastructureMessage {
 
-  private final long slotId;
-  private final long roomId;
-  private final SlotState state;
-  @NonNull
-  private final OpenDate openDate;
+    private final long slotId;
+    private final long roomId;
+    private final SlotState state;
+
+    @NonNull private final OpenDate openDate;
 }
