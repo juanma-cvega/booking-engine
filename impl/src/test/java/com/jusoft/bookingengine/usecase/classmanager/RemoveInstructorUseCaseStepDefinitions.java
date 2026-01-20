@@ -44,8 +44,8 @@ public class RemoveInstructorUseCaseStepDefinitions extends AbstractUseCaseStepD
             Long instructorId) {
         ClassInstructorRemovedEvent event =
                 verifyAndGetMessageOfType(ClassInstructorRemovedEvent.class);
-        assertThat(event.getClassId()).isEqualTo(classCreated.getId());
-        assertThat(event.getInstructorId()).isEqualTo(instructorId);
+        assertThat(event.classId()).isEqualTo(classCreated.getId());
+        assertThat(event.instructorId()).isEqualTo(instructorId);
     }
     ;
 

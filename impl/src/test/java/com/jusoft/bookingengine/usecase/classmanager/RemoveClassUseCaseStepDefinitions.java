@@ -37,7 +37,7 @@ public class RemoveClassUseCaseStepDefinitions extends AbstractUseCaseStepDefini
     @Then("^a notification of a removed class should published$")
     public void a_notification_of_a_removed_class_should_published() {
         ClassRemovedEvent event = verifyAndGetMessageOfType(ClassRemovedEvent.class);
-        assertThat(event.getClassId()).isEqualTo(classCreated.getId());
+        assertThat(event.classId()).isEqualTo(classCreated.getId());
     }
 
     @When("^the class is tried to be removed$")

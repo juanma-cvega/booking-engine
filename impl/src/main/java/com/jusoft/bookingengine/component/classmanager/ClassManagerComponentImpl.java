@@ -34,7 +34,7 @@ class ClassManagerComponentImpl implements ClassManagerComponent {
         Class classCreated = factory.createFrom(command);
         repository.save(classCreated);
         messagePublisher.publish(
-                ClassCreatedEvent.of(
+                new ClassCreatedEvent(
                         classCreated.getId(),
                         classCreated.getDescription(),
                         classCreated.getInstructorsId(),
@@ -61,7 +61,7 @@ class ClassManagerComponentImpl implements ClassManagerComponent {
         if (!isRemoved) {
             throw new ClassIsStillRegisteredInRoomsException(classId);
         }
-        messagePublisher.publish(ClassRemovedEvent.of(classId));
+        messagePublisher.publish(new ClassRemovedEvent(classId));
     }
 
     @Override
@@ -70,7 +70,7 @@ class ClassManagerComponentImpl implements ClassManagerComponent {
                 command.getClassId(),
                 classFound -> classFound.addInstructor(command.getInstructorId()));
         messagePublisher.publish(
-                ClassInstructorAddedEvent.of(command.getClassId(), command.getInstructorId()));
+                new ClassInstructorAddedEvent(command.getClassId(), command.getInstructorId()));
     }
 
     @Override
@@ -79,7 +79,7 @@ class ClassManagerComponentImpl implements ClassManagerComponent {
                 command.getClassId(),
                 classFound -> classFound.removeInstructor(command.getInstructorId()));
         messagePublisher.publish(
-                ClassInstructorRemovedEvent.of(command.getClassId(), command.getInstructorId()));
+                new ClassInstructorRemovedEvent(command.getClassId(), command.getInstructorId()));
     }
 
     @Override
@@ -87,7 +87,7 @@ class ClassManagerComponentImpl implements ClassManagerComponent {
         repository.execute(
                 command.getClassId(), classFound -> classFound.registerRoom(command.getRoomId()));
         messagePublisher.publish(
-                RoomRegisteredForClassEvent.of(command.getClassId(), command.getRoomId()));
+                new RoomRegisteredForClassEvent(command.getClassId(), command.getRoomId()));
     }
 
     @Override
@@ -95,6 +95,6 @@ class ClassManagerComponentImpl implements ClassManagerComponent {
         repository.execute(
                 command.getClassId(), classFound -> classFound.unregisterRoom(command.getRoomId()));
         messagePublisher.publish(
-                RoomUnregisteredForClassEvent.of(command.getClassId(), command.getRoomId()));
+                new RoomUnregisteredForClassEvent(command.getClassId(), command.getRoomId()));
     }
 }

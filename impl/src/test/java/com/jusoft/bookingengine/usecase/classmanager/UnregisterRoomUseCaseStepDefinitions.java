@@ -35,7 +35,7 @@ public class UnregisterRoomUseCaseStepDefinitions extends AbstractUseCaseStepDef
     public void a_notification_of_the_room_being_unregistered_from_the_class_should_be_published() {
         RoomUnregisteredForClassEvent event =
                 verifyAndGetMessageOfType(RoomUnregisteredForClassEvent.class);
-        assertThat(event.getClassId()).isEqualTo(classCreated.getId());
-        assertThat(event.getRoomId()).isEqualTo(roomCreated.getId());
+        assertThat(event.classId()).isEqualTo(classCreated.getId());
+        assertThat(event.roomId()).isEqualTo(roomCreated.getId());
     }
 }

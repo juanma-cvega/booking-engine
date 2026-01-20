@@ -73,9 +73,9 @@ public class CreateClassUseCaseStepDefinitions extends AbstractUseCaseStepDefini
     @Then("^a notification of a created class should published$")
     public void a_notification_of_a_created_class_should_published() {
         ClassCreatedEvent event = verifyAndGetMessageOfType(ClassCreatedEvent.class);
-        assertThat(event.getClassId()).isEqualTo(classCreated.getId());
-        assertThat(event.getClassType()).isEqualTo(classCreated.getClassType());
-        assertThat(event.getDescription()).isEqualTo(classCreated.getDescription());
-        assertThat(event.getInstructorsId()).isEqualTo(classCreated.getInstructorsId());
+        assertThat(event.classId()).isEqualTo(classCreated.getId());
+        assertThat(event.classType()).isEqualTo(classCreated.getClassType());
+        assertThat(event.description()).isEqualTo(classCreated.getDescription());
+        assertThat(event.instructorsId()).isEqualTo(classCreated.getInstructorsId());
     }
 }

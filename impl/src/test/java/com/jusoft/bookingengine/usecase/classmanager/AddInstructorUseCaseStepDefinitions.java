@@ -35,8 +35,8 @@ public class AddInstructorUseCaseStepDefinitions extends AbstractUseCaseStepDefi
             Long instructorId) {
         ClassInstructorAddedEvent event =
                 verifyAndGetMessageOfType(ClassInstructorAddedEvent.class);
-        assertThat(event.getClassId()).isEqualTo(classCreated.getId());
-        assertThat(event.getNewInstructorId()).isEqualTo(instructorId);
+        assertThat(event.classId()).isEqualTo(classCreated.getId());
+        assertThat(event.newInstructorId()).isEqualTo(instructorId);
     }
     ;
 }

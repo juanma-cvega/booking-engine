@@ -35,7 +35,7 @@ public class RegisterRoomUseCaseStepDefinitions extends AbstractUseCaseStepDefin
     public void a_notification_of_the_room_being_registered_should_be_published() {
         RoomRegisteredForClassEvent event =
                 verifyAndGetMessageOfType(RoomRegisteredForClassEvent.class);
-        assertThat(event.getClassId()).isEqualTo(classCreated.getId());
-        assertThat(event.getRoomId()).isEqualTo(roomCreated.getId());
+        assertThat(event.classId()).isEqualTo(classCreated.getId());
+        assertThat(event.roomId()).isEqualTo(roomCreated.getId());
     }
 }
