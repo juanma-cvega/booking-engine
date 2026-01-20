@@ -38,8 +38,8 @@ public class CreateMemberUseCaseStepDefinitions extends AbstractUseCaseStepDefin
         verify(messagePublisher).publish(messageCaptor.capture());
         assertThat(messageCaptor.getValue()).isInstanceOf(MemberCreatedEvent.class);
         MemberCreatedEvent event = (MemberCreatedEvent) messageCaptor.getValue();
-        assertThat(event.getClubId()).isEqualTo(clubCreated.getId());
-        assertThat(event.getUserId()).isEqualTo(userId);
-        assertThat(event.getMemberId()).isEqualTo(memberCreated.getId());
+        assertThat(event.clubId()).isEqualTo(clubCreated.getId());
+        assertThat(event.userId()).isEqualTo(userId);
+        assertThat(event.memberId()).isEqualTo(memberCreated.getId());
     }
 }

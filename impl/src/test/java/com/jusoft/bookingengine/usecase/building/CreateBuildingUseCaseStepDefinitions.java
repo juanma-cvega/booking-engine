@@ -50,10 +50,9 @@ public class CreateBuildingUseCaseStepDefinitions extends AbstractUseCaseStepDef
         verify(messagePublisher).publish(messageCaptor.capture());
         assertThat(messageCaptor.getValue()).isInstanceOf(BuildingCreatedEvent.class);
         BuildingCreatedEvent buildingCreatedEvent = (BuildingCreatedEvent) messageCaptor.getValue();
-        assertThat(buildingCreatedEvent.getBuildingId()).isEqualTo(buildingCreated.getId());
-        assertThat(buildingCreatedEvent.getAddress()).isEqualTo(buildingCreated.getAddress());
-        assertThat(buildingCreatedEvent.getDescription())
-                .isEqualTo(buildingCreated.getDescription());
+        assertThat(buildingCreatedEvent.buildingId()).isEqualTo(buildingCreated.getId());
+        assertThat(buildingCreatedEvent.address()).isEqualTo(buildingCreated.getAddress());
+        assertThat(buildingCreatedEvent.description()).isEqualTo(buildingCreated.getDescription());
     }
     ;
 
