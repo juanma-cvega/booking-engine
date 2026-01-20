@@ -13,7 +13,7 @@ public class AuctionFixtures {
     public static final int AUCTION_ID = 5;
 
     public static final AuctionFinishedEvent AUCTION_FINISHED_EVENT =
-            AuctionFinishedEvent.of(AUCTION_ID);
+            new AuctionFinishedEvent(AUCTION_ID);
     public static final AuctionWinnerFoundEvent AUCTION_WINNER_FOUND_EVENT =
-            AuctionWinnerFoundEvent.of(AUCTION_ID, USER_ID_1, SLOT_ID_1);
+            new AuctionWinnerFoundEvent(AUCTION_ID, USER_ID_1, SLOT_ID_1);
 }

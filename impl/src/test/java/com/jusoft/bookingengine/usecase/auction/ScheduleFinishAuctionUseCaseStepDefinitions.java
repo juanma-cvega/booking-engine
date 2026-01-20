@@ -23,7 +23,7 @@ public class ScheduleFinishAuctionUseCaseStepDefinitions extends AbstractUseCase
         assertThat(tasks).hasSize(1);
         assertThat(tasks.get(0).getExecutionTime()).isEqualTo(getDateFrom(auctionFinishedTime));
         assertThat(tasks.get(0).getScheduledEvent())
-                .isEqualTo(AuctionFinishedEvent.of(auctionCreated.getId()));
+                .isEqualTo(new AuctionFinishedEvent(auctionCreated.getId()));
         assertThat(tasks.get(0).getTask().isDone()).isFalse();
     }
 

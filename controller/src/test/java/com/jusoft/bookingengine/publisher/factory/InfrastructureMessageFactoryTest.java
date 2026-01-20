@@ -37,7 +37,7 @@ class InfrastructureMessageFactoryTest {
         assertThat(message).isInstanceOf(AuctionFinishedMessage.class);
         AuctionFinishedMessage auctionFinishedMessage = (AuctionFinishedMessage) message;
         assertThat(auctionFinishedMessage.getAuctionId())
-                .isEqualTo(AUCTION_FINISHED_EVENT.getAuctionId());
+                .isEqualTo(AUCTION_FINISHED_EVENT.auctionId());
     }
 
     @Test
@@ -49,11 +49,11 @@ class InfrastructureMessageFactoryTest {
         assertThat(message).isInstanceOf(AuctionWinnerFoundMessage.class);
         AuctionWinnerFoundMessage auctionWinnerFoundEvent = (AuctionWinnerFoundMessage) message;
         assertThat(auctionWinnerFoundEvent.getAuctionId())
-                .isEqualTo(AUCTION_WINNER_FOUND_EVENT.getAuctionId());
+                .isEqualTo(AUCTION_WINNER_FOUND_EVENT.auctionId());
         assertThat(auctionWinnerFoundEvent.getSlotId())
-                .isEqualTo(AUCTION_WINNER_FOUND_EVENT.getSlotId());
+                .isEqualTo(AUCTION_WINNER_FOUND_EVENT.slotId());
         assertThat(auctionWinnerFoundEvent.getAuctionWinnerId())
-                .isEqualTo(AUCTION_WINNER_FOUND_EVENT.getAuctionWinnerId());
+                .isEqualTo(AUCTION_WINNER_FOUND_EVENT.auctionWinnerId());
     }
 
     @Test

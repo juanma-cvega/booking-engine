@@ -12,6 +12,6 @@ class AuctionWinnerFoundMessageFactory
     @Override
     public AuctionWinnerFoundMessage createFrom(AuctionWinnerFoundEvent message) {
         return AuctionWinnerFoundMessage.of(
-                message.getAuctionId(), message.getAuctionWinnerId(), message.getSlotId());
+                message.auctionId(), message.auctionWinnerId(), message.slotId());
     }
 }

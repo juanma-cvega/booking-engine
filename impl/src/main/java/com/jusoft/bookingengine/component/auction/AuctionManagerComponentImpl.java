@@ -27,7 +27,7 @@ class AuctionManagerComponentImpl implements AuctionManagerComponent {
         Auction newAuction = auctionFactory.createFrom(command);
         auctionRepository.save(newAuction);
         messagePublisher.publish(
-                AuctionStartedEvent.of(
+                new AuctionStartedEvent(
                         newAuction.getId(), newAuction.getReferenceId(), newAuction.getOpenDate()));
         return auctionFactory.createFrom(newAuction);
     }
@@ -57,11 +57,11 @@ class AuctionManagerComponentImpl implements AuctionManagerComponent {
         if (winnerFound.isPresent()) {
             Long auctionWinner = winnerFound.get();
             messagePublisher.publish(
-                    AuctionWinnerFoundEvent.of(
+                    new AuctionWinnerFoundEvent(
                             auction.getId(), auctionWinner, auction.getReferenceId()));
         } else {
             messagePublisher.publish(
-                    AuctionUnsuccessfulEvent.of(auction.getId(), auction.getReferenceId()));
+                    new AuctionUnsuccessfulEvent(auction.getId(), auction.getReferenceId()));
         }
     }
 

@@ -66,8 +66,8 @@ public class StartAuctionUseCaseStepDefinitions extends AbstractUseCaseStepDefin
     @Then("^an auction started event should be published$")
     public void an_auction_started_event_should_be_published() {
         AuctionStartedEvent event = verifyAndGetMessageOfType(AuctionStartedEvent.class);
-        assertThat(event.getAuctionId()).isEqualTo(auctionCreated.getId());
-        assertThat(event.getOpenDate()).isEqualTo(auctionCreated.getOpenDate());
-        assertThat(event.getReferenceId()).isEqualTo(auctionCreated.getReferenceId());
+        assertThat(event.auctionId()).isEqualTo(auctionCreated.getId());
+        assertThat(event.openDate()).isEqualTo(auctionCreated.getOpenDate());
+        assertThat(event.referenceId()).isEqualTo(auctionCreated.getReferenceId());
     }
 }

@@ -11,6 +11,6 @@ class AuctionFinishedMessageFactory
 
     @Override
     public AuctionFinishedMessage createFrom(AuctionFinishedEvent message) {
-        return AuctionFinishedMessage.of(message.getAuctionId());
+        return AuctionFinishedMessage.of(message.auctionId());
     }
 }

@@ -11,6 +11,6 @@ public class ScheduleFinishAuctionUseCase {
     private final SchedulerComponent schedulerComponent;
 
     public void scheduleFinishAuction(long auctionId, OpenDate openDate) {
-        schedulerComponent.schedule(openDate.getEndTime(), AuctionFinishedEvent.of(auctionId));
+        schedulerComponent.schedule(openDate.getEndTime(), new AuctionFinishedEvent(auctionId));
     }
 }
