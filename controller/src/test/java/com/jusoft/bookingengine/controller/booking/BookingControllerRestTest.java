@@ -70,7 +70,7 @@ class BookingControllerRestTest {
 
     @Test
     public void book() throws Exception {
-        when(mockBookingCommandFactory.createFrom(ROOM_ID, SLOT_ID_1, USER_ID_1))
+        when(mockBookingCommandFactory.createFrom(SLOT_ID_1, USER_ID_1))
                 .thenReturn(CREATE_BOOKING_COMMAND);
         when(mockBookingManagerComponent.book(CREATE_BOOKING_COMMAND)).thenReturn(BOOKING_1);
         when(mockBookingResourceFactory.createFrom(BOOKING_1)).thenReturn(BOOKING_RESOURCE_1);
@@ -206,7 +206,7 @@ class BookingControllerRestTest {
         String createUrl = String.format(CREATE_BOOKING_URL_TEMPLATE, ROOM_ID, SLOT_ID_1);
         String urlTemplate =
                 new StringJoiner(FORTHSLASH).add(BOOKINGS_URL).add(createUrl).toString();
-        when(mockBookingCommandFactory.createFrom(ROOM_ID, SLOT_ID_1, USER_ID_1))
+        when(mockBookingCommandFactory.createFrom(SLOT_ID_1, USER_ID_1))
                 .thenReturn(CREATE_BOOKING_COMMAND);
         when(mockBookingManagerComponent.book(CREATE_BOOKING_COMMAND))
                 .thenThrow(
@@ -222,7 +222,7 @@ class BookingControllerRestTest {
 
     @Test
     public void slotAlreadyStarted() throws Exception {
-        when(mockBookingCommandFactory.createFrom(ROOM_ID, SLOT_ID_1, USER_ID_1))
+        when(mockBookingCommandFactory.createFrom(SLOT_ID_1, USER_ID_1))
                 .thenReturn(CREATE_BOOKING_COMMAND);
         when(mockBookingManagerComponent.book(CREATE_BOOKING_COMMAND))
                 .thenThrow(new SlotNotOpenException(SLOT_ID_1));
@@ -240,7 +240,7 @@ class BookingControllerRestTest {
 
     @Test
     public void wrongBookingUser() throws Exception {
-        when(mockBookingCommandFactory.createFrom(ROOM_ID, SLOT_ID_1, USER_ID_1))
+        when(mockBookingCommandFactory.createFrom(SLOT_ID_1, USER_ID_1))
                 .thenReturn(CREATE_BOOKING_COMMAND);
         when(mockBookingManagerComponent.book(CREATE_BOOKING_COMMAND))
                 .thenThrow(new WrongBookingUserException(USER_ID_1, USER_ID_2, BOOKING_ID_1));

@@ -57,7 +57,7 @@ class BookingControllerRest {
                 command.getUserId());
         BookingView booking =
                 bookingManagerComponent.book(
-                        bookingCommandFactory.createFrom(roomId, slotId, command.getUserId()));
+                        bookingCommandFactory.createFrom(slotId, command.getUserId()));
         BookingResource bookingResource = bookingResourceFactory.createFrom(booking);
         log.info("Create booking request finished: booking={}", bookingResource);
         return bookingResource;

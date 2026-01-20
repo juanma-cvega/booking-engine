@@ -25,7 +25,7 @@ public class FinishAuctionUseCaseStepDefinitions extends AbstractUseCaseStepDefi
     public void thenNotificationSayingSlotCanBeMadeAvailableShouldBePublished() {
         AuctionUnsuccessfulEvent command =
                 verifyAndGetMessageOfType(AuctionUnsuccessfulEvent.class);
-        assertThat(command.getReferenceId()).isEqualTo(slotCreated.getId());
+        assertThat(command.getReferenceId()).isEqualTo(slotCreated.id());
     }
 
     @Then("^a notification containing user (\\d+) as the winner should be published$")
@@ -35,7 +35,7 @@ public class FinishAuctionUseCaseStepDefinitions extends AbstractUseCaseStepDefi
         AuctionWinnerFoundEvent auctionWinnerFoundEvent =
                 (AuctionWinnerFoundEvent) messageCaptor.getValue();
         assertThat(userId).isEqualTo(auctionWinnerFoundEvent.getAuctionWinnerId());
-        assertThat(slotCreated.getId()).isEqualTo(auctionWinnerFoundEvent.getSlotId());
+        assertThat(slotCreated.id()).isEqualTo(auctionWinnerFoundEvent.getSlotId());
         assertThat(auctionCreated.getId()).isEqualTo(auctionWinnerFoundEvent.getAuctionId());
     }
 }

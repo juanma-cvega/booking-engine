@@ -19,8 +19,8 @@ public class SlotFixtures {
     public static final long SLOT_ID_1 = 2;
     public static final String PERSON_USER_TYPE = "personUserType";
     public static final String CLASS_USER_TYPE = "classUserType";
-    public static final SlotUser SLOT_USER = SlotUser.of(USER_ID_1, PERSON_USER_TYPE);
-    public static final SlotUser ANOTHER_SLOT_USER = SlotUser.of(USER_ID_1, CLASS_USER_TYPE);
+    public static final SlotUser SLOT_USER = new SlotUser(USER_ID_1, PERSON_USER_TYPE);
+    public static final SlotUser ANOTHER_SLOT_USER = new SlotUser(USER_ID_1, CLASS_USER_TYPE);
     public static final AuctionConfigInfo NO_AUCTION_CONFIG_INFO =
             NoAuctionConfigInfo.getInstance();
 }

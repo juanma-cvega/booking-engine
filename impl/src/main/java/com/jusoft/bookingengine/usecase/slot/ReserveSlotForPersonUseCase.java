@@ -20,10 +20,10 @@ public class ReserveSlotForPersonUseCase {
         authorizationManagerComponent.authorizeReserveSlot(
                 AuthorizeCommand.of(
                         userId,
-                        slot.getRoomId(),
-                        slot.getBuildingId(),
-                        slot.getClubId(),
-                        slot.getCreationTime()));
-        slotManagerComponent.reserveSlot(slotId, SlotUser.of(userId, USER_TYPE_PERSON));
+                        slot.roomId(),
+                        slot.buildingId(),
+                        slot.clubId(),
+                        slot.creationTime()));
+        slotManagerComponent.reserveSlot(slotId, new SlotUser(userId, USER_TYPE_PERSON));
     }
 }

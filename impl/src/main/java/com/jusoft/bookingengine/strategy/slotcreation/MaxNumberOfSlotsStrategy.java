@@ -22,7 +22,7 @@ class MaxNumberOfSlotsStrategy implements SlotCreationStrategy {
             creationTime =
                     slotManagerComponent
                             .findSlotInUseOrToStartFor(roomId)
-                            .map(slotView -> slotView.getOpenDate().getEndTime())
+                            .map(slotView -> slotView.openDate().getEndTime())
                             .orElseThrow(
                                     () ->
                                             new IllegalArgumentException(

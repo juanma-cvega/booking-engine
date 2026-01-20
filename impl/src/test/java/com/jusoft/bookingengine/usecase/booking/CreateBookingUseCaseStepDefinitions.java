@@ -49,7 +49,7 @@ public class CreateBookingUseCaseStepDefinitions extends AbstractUseCaseStepDefi
     }
 
     private BookingView bookSlot(Long userId) {
-        return createBookingUseCase.book(new CreateBookingCommand(userId, slotCreated.getId()));
+        return createBookingUseCase.book(new CreateBookingCommand(userId, slotCreated.id()));
     }
 
     private void storeBooking(Supplier<BookingView> supplier) {

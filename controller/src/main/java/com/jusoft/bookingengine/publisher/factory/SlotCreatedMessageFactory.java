@@ -10,9 +10,6 @@ class SlotCreatedMessageFactory implements MessageFactory<SlotCreatedEvent, Slot
     @Override
     public SlotCreatedMessage createFrom(SlotCreatedEvent message) {
         return SlotCreatedMessage.of(
-                message.getSlotId(),
-                message.getRoomId(),
-                message.getState(),
-                message.getOpenDate());
+                message.slotId(), message.roomId(), message.state(), message.openDate());
     }
 }

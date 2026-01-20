@@ -10,7 +10,6 @@ class BookingCreatedMessageFactory
         implements MessageFactory<BookingCreatedEvent, BookingCreatedMessage> {
     @Override
     public BookingCreatedMessage createFrom(BookingCreatedEvent message) {
-        return BookingCreatedMessage.of(
-                message.getBookingId(), message.getUserId(), message.getSlotId());
+        return BookingCreatedMessage.of(message.bookingId(), message.userId(), message.slotId());
     }
 }

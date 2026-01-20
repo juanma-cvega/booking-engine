@@ -1,11 +1,5 @@
 package com.jusoft.bookingengine.component.slot.api;
 
 import com.jusoft.bookingengine.publisher.Event;
-import lombok.Data;
 
-@Data(staticConstructor = "of")
-public class SlotReservedEvent implements Event {
-
-    private final long slotId;
-    private final SlotUser slotUser;
-}
+public record SlotReservedEvent(long slotId, SlotUser slotUser) implements Event {}

@@ -63,10 +63,9 @@ class InfrastructureMessageFactoryTest {
 
         assertThat(message).isInstanceOf(BookingCreatedMessage.class);
         BookingCreatedMessage bookingCreatedEvent = (BookingCreatedMessage) message;
-        assertThat(bookingCreatedEvent.getBookingId())
-                .isEqualTo(BOOKING_CREATED_EVENT.getBookingId());
-        assertThat(bookingCreatedEvent.getUserId()).isEqualTo(BOOKING_CREATED_EVENT.getUserId());
-        assertThat(bookingCreatedEvent.getSlotId()).isEqualTo(BOOKING_CREATED_EVENT.getSlotId());
+        assertThat(bookingCreatedEvent.getBookingId()).isEqualTo(BOOKING_CREATED_EVENT.bookingId());
+        assertThat(bookingCreatedEvent.getUserId()).isEqualTo(BOOKING_CREATED_EVENT.userId());
+        assertThat(bookingCreatedEvent.getSlotId()).isEqualTo(BOOKING_CREATED_EVENT.slotId());
     }
 
     @Test
@@ -100,9 +99,9 @@ class InfrastructureMessageFactoryTest {
 
         assertThat(message).isInstanceOf(SlotCreatedMessage.class);
         SlotCreatedMessage slotCreatedEvent = (SlotCreatedMessage) message;
-        assertThat(slotCreatedEvent.getRoomId()).isEqualTo(SLOT_CREATED_EVENT.getRoomId());
-        assertThat(slotCreatedEvent.getSlotId()).isEqualTo(SLOT_CREATED_EVENT.getSlotId());
-        assertThat(slotCreatedEvent.getOpenDate()).isEqualTo(SLOT_CREATED_EVENT.getOpenDate());
+        assertThat(slotCreatedEvent.getRoomId()).isEqualTo(SLOT_CREATED_EVENT.roomId());
+        assertThat(slotCreatedEvent.getSlotId()).isEqualTo(SLOT_CREATED_EVENT.slotId());
+        assertThat(slotCreatedEvent.getOpenDate()).isEqualTo(SLOT_CREATED_EVENT.openDate());
     }
 
     @Test

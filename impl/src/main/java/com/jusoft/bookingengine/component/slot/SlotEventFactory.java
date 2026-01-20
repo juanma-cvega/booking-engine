@@ -9,7 +9,7 @@ class SlotEventFactory {
     private final SlotStateFactory slotStateFactory;
 
     SlotCreatedEvent slotCreatedEvent(Slot newSlot) {
-        return SlotCreatedEvent.of(
+        return new SlotCreatedEvent(
                 newSlot.getId(),
                 newSlot.getRoomId(),
                 slotStateFactory.getSlotStateFor(newSlot.getState()),

@@ -2,15 +2,11 @@ package com.jusoft.bookingengine.component.slot.api;
 
 import com.jusoft.bookingengine.component.timer.OpenDate;
 import com.jusoft.bookingengine.publisher.Command;
-import lombok.Data;
-import lombok.NonNull;
+import java.util.Objects;
 
-@Data(staticConstructor = "of")
-public class CreateSlotCommand implements Command {
-
-    private final long roomId;
-    private final long buildingId;
-    private final long clubId;
-
-    @NonNull private final OpenDate openDate;
+public record CreateSlotCommand(long roomId, long buildingId, long clubId, OpenDate openDate)
+        implements Command {
+    public CreateSlotCommand {
+        Objects.requireNonNull(openDate, "openDate must not be null");
+    }
 }

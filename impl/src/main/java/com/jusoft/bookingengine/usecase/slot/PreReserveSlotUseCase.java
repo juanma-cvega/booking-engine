@@ -10,6 +10,6 @@ public class PreReserveSlotUseCase {
     private final SlotManagerComponent slotManagerComponent;
 
     public void preReserveSlot(long slotId, long userId, String userType) {
-        slotManagerComponent.preReserveSlot(slotId, SlotUser.of(userId, userType));
+        slotManagerComponent.preReserveSlot(slotId, new SlotUser(userId, userType));
     }
 }

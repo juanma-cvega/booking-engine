@@ -19,10 +19,10 @@ public class AddBidderToAuctionUseCase {
         authorizationManagerComponent.authorizeBidInAuction(
                 AuthorizeCommand.of(
                         userId,
-                        slot.getRoomId(),
-                        slot.getBuildingId(),
-                        slot.getClubId(),
-                        slot.getCreationTime()));
+                        slot.roomId(),
+                        slot.buildingId(),
+                        slot.clubId(),
+                        slot.creationTime()));
         auctionManagerComponent.addBidderToAuctionFor(userId, slotId);
     }
 }

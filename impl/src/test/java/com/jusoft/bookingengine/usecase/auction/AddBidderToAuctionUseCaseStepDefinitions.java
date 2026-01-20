@@ -36,7 +36,7 @@ public class AddBidderToAuctionUseCaseStepDefinitions extends AbstractUseCaseSte
     @When("^user (.*) tries to bid on the auction$")
     public void user_tries_to_bid_on_the_auction(Long userId) {
         storeException(
-                () -> addBidderToAuctionUseCase.addBidderToAuctionFor(userId, slotCreated.getId()));
+                () -> addBidderToAuctionUseCase.addBidderToAuctionFor(userId, slotCreated.id()));
     }
 
     @Then("^the auction should contain the user (\\d+) bid created at (.*)$")

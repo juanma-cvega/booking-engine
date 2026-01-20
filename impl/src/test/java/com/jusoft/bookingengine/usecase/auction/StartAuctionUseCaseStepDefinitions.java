@@ -34,7 +34,7 @@ public class StartAuctionUseCaseStepDefinitions extends AbstractUseCaseStepDefin
         auctionCreated =
                 startAuctionUseCase.startAuction(
                         StartAuctionCommand.of(
-                                slotCreated.getId(),
+                                slotCreated.id(),
                                 LessBookingsWithinPeriodConfigInfo.of(auctionDuration, daysRange)));
     }
 
@@ -52,8 +52,7 @@ public class StartAuctionUseCaseStepDefinitions extends AbstractUseCaseStepDefin
     @Then("^the auction shouldn't exist$")
     public void the_auction_should_not_exist() {
         assertThat(auctionCreated).isNull();
-        assertThatThrownBy(
-                        () -> auctionManagerComponent.addBidderToAuctionFor(slotCreated.getId(), 0))
+        assertThatThrownBy(() -> auctionManagerComponent.addBidderToAuctionFor(slotCreated.id(), 0))
                 .isInstanceOf(AuctionNotFoundException.class);
     }
 

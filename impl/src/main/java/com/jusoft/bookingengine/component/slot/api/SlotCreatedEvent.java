@@ -2,16 +2,12 @@ package com.jusoft.bookingengine.component.slot.api;
 
 import com.jusoft.bookingengine.component.timer.OpenDate;
 import com.jusoft.bookingengine.publisher.Event;
-import lombok.Data;
-import lombok.NonNull;
+import java.util.Objects;
 
-@Data(staticConstructor = "of")
-public class SlotCreatedEvent implements Event {
-
-    private final long slotId;
-    private final long roomId;
-
-    @NonNull private final SlotState state;
-
-    @NonNull private final OpenDate openDate;
+public record SlotCreatedEvent(long slotId, long roomId, SlotState state, OpenDate openDate)
+        implements Event {
+    public SlotCreatedEvent {
+        Objects.requireNonNull(state, "state must not be null");
+        Objects.requireNonNull(openDate, "openDate must not be null");
+    }
 }

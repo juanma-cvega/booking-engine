@@ -69,28 +69,28 @@ public class CreateSlotUseCaseStepDefinitions extends AbstractUseCaseStepDefinit
     }
 
     private void verifySlotCreatedStored(ZonedDateTime startDate, ZonedDateTime endDate) {
-        SlotView slotStored = slotManagerComponent.find(slotCreated.getId());
-        assertThat(slotCreated.getId()).isEqualTo(slotStored.getId());
-        assertThat(slotCreated.getRoomId()).isEqualTo(slotStored.getRoomId());
-        assertThat(slotCreated.getOpenDate().getStartTime())
+        SlotView slotStored = slotManagerComponent.find(slotCreated.id());
+        assertThat(slotCreated.id()).isEqualTo(slotStored.id());
+        assertThat(slotCreated.roomId()).isEqualTo(slotStored.roomId());
+        assertThat(slotCreated.openDate().getStartTime())
                 .isEqualTo(startDate)
-                .isEqualTo(slotStored.getOpenDate().getStartTime());
-        assertThat(slotCreated.getOpenDate().getEndTime())
+                .isEqualTo(slotStored.openDate().getStartTime());
+        assertThat(slotCreated.openDate().getEndTime())
                 .isEqualTo(endDate)
-                .isEqualTo(slotStored.getOpenDate().getEndTime());
+                .isEqualTo(slotStored.openDate().getEndTime());
     }
 
     private void verifySlotCreatedEvent(ZonedDateTime startDate, ZonedDateTime endDate) {
         verify(messagePublisher).publish(messageCaptor.capture());
         assertThat(messageCaptor.getValue()).isInstanceOf(SlotCreatedEvent.class);
         SlotCreatedEvent slotCreatedEvent = (SlotCreatedEvent) messageCaptor.getValue();
-        assertThat(slotCreated.getId()).isEqualTo(slotCreatedEvent.getSlotId());
-        assertThat(slotCreated.getRoomId()).isEqualTo(slotCreatedEvent.getRoomId());
-        assertThat(slotCreated.getOpenDate().getStartTime())
+        assertThat(slotCreated.id()).isEqualTo(slotCreatedEvent.slotId());
+        assertThat(slotCreated.roomId()).isEqualTo(slotCreatedEvent.roomId());
+        assertThat(slotCreated.openDate().getStartTime())
                 .isEqualTo(startDate)
-                .isEqualTo(slotCreatedEvent.getOpenDate().getStartTime());
-        assertThat(slotCreated.getOpenDate().getEndTime())
+                .isEqualTo(slotCreatedEvent.openDate().getStartTime());
+        assertThat(slotCreated.openDate().getEndTime())
                 .isEqualTo(endDate)
-                .isEqualTo(slotCreatedEvent.getOpenDate().getEndTime());
+                .isEqualTo(slotCreatedEvent.openDate().getEndTime());
     }
 }

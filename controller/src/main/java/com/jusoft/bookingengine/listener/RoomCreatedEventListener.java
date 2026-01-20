@@ -20,7 +20,7 @@ class RoomCreatedEventListener implements MessageListener {
         SlotView slotCreated = openNextSlotUseCase.createSlotFor(event.getRoomId());
         log.info(
                 "RoomCreatedEvent processed: roomId={}, slotId={} ",
-                slotCreated.getRoomId(),
-                slotCreated.getId());
+                slotCreated.roomId(),
+                slotCreated.id());
     }
 }

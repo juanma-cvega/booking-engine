@@ -20,15 +20,15 @@ class SlotFactory {
     Slot createFrom(CreateSlotCommand request) {
         return new Slot(
                 idGenerator.get(),
-                request.getRoomId(),
-                request.getBuildingId(),
-                request.getClubId(),
+                request.roomId(),
+                request.buildingId(),
+                request.clubId(),
                 ZonedDateTime.now(clock),
-                request.getOpenDate());
+                request.openDate());
     }
 
     SlotView createFrom(Slot slot) {
-        return SlotView.of(
+        return new SlotView(
                 slot.getId(),
                 slot.getRoomId(),
                 slot.getBuildingId(),

@@ -2,20 +2,19 @@ package com.jusoft.bookingengine.component.slot.api;
 
 import com.jusoft.bookingengine.component.timer.OpenDate;
 import java.time.ZonedDateTime;
-import lombok.Data;
-import lombok.NonNull;
+import java.util.Objects;
 
-@Data(staticConstructor = "of")
-public class SlotView {
-
-    private final long id;
-    private final long roomId;
-    private final long buildingId;
-    private final long clubId;
-
-    @NonNull private final SlotState state;
-
-    @NonNull private final ZonedDateTime creationTime;
-
-    @NonNull private final OpenDate openDate;
+public record SlotView(
+        long id,
+        long roomId,
+        long buildingId,
+        long clubId,
+        SlotState state,
+        ZonedDateTime creationTime,
+        OpenDate openDate) {
+    public SlotView {
+        Objects.requireNonNull(state, "state must not be null");
+        Objects.requireNonNull(creationTime, "creationTime must not be null");
+        Objects.requireNonNull(openDate, "openDate must not be null");
+    }
 }

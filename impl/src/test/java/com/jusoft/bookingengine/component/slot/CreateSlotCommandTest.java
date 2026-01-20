@@ -12,7 +12,7 @@ class CreateSlotCommandTest {
 
     @Test
     public void null_open_date_fails_constructor() {
-        assertThatThrownBy(() -> CreateSlotCommand.of(ROOM_ID, BUILDING_ID, CLUB_ID, null))
+        assertThatThrownBy(() -> new CreateSlotCommand(ROOM_ID, BUILDING_ID, CLUB_ID, null))
                 .isInstanceOf(NullPointerException.class);
     }
 }

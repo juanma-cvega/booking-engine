@@ -20,19 +20,19 @@ public class MakeSlotAvailableUseCaseStepDefinitions extends AbstractUseCaseStep
 
     @When("^the slot is made available$")
     public void the_slot_is_made_available() {
-        makeSlotAvailableUseCase.makeSlotAvailable(slotCreated.getId());
+        makeSlotAvailableUseCase.makeSlotAvailable(slotCreated.id());
     }
 
     @Then("^the slot should be available$")
     public void the_slot_should_be_available() {
-        SlotView slot = slotManagerComponent.find(slotCreated.getId());
-        assertThat(slot.getState()).isEqualTo(SlotState.AVAILABLE);
+        SlotView slot = slotManagerComponent.find(slotCreated.id());
+        assertThat(slot.state()).isEqualTo(SlotState.AVAILABLE);
     }
     ;
 
     @Then("^a notification of a slot made available should be published$")
     public void a_notification_of_a_slot_made_available_should_be_published() {
         SlotMadeAvailableEvent event = verifyAndGetMessageOfType(SlotMadeAvailableEvent.class);
-        assertThat(event.getSlotId()).isEqualTo(slotCreated.getId());
+        assertThat(event.slotId()).isEqualTo(slotCreated.id());
     }
 }

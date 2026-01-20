@@ -20,9 +20,9 @@ class SlotRequiredEventListener implements MessageListener {
         SlotView slotCreated = createSlotUseCase.createSlotFor(command.getRoomId());
         log.info(
                 "OpenNextSlotCommand processed. Slot created: slotId={}, roomId={}, startDate={}, endDate={}",
-                slotCreated.getId(),
-                slotCreated.getRoomId(),
-                slotCreated.getOpenDate().getStartTime(),
-                slotCreated.getOpenDate().getEndTime());
+                slotCreated.id(),
+                slotCreated.roomId(),
+                slotCreated.openDate().getStartTime(),
+                slotCreated.openDate().getEndTime());
     }
 }

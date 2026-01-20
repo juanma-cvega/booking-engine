@@ -18,6 +18,6 @@ class Booking {
     private final long slotId;
 
     boolean isOwner(Long requestUserId) {
-        return Long.compare(requestUserId, userId) == 0;
+        return requestUserId == userId;
     }
 }

@@ -104,7 +104,7 @@ public class CreateRoomUseCaseStepDefinitions extends AbstractUseCaseStepDefinit
     public void the_first_slot_should_start_at(String startTime) {
         SlotView slot = slotManagerComponent.findOpenSlotsFor(roomCreated.getId()).get(0);
         LocalTime time = LocalTime.parse(startTime);
-        assertThat(slot.getOpenDate().getStartTime().toLocalTime()).isBetween(time, time);
+        assertThat(slot.openDate().getStartTime().toLocalTime()).isBetween(time, time);
     }
 
     @Then("^the last slot should start at (.*)$")
@@ -112,7 +112,7 @@ public class CreateRoomUseCaseStepDefinitions extends AbstractUseCaseStepDefinit
         SlotView slot =
                 Iterables.getLast(slotManagerComponent.findOpenSlotsFor(roomCreated.getId()));
         LocalTime time = LocalTime.parse(startTime);
-        assertThat(slot.getOpenDate().getStartTime().toLocalTime()).isBetween(time, time);
+        assertThat(slot.openDate().getStartTime().toLocalTime()).isBetween(time, time);
     }
 
     @Then("^the last slot should start the day after$")
@@ -120,7 +120,7 @@ public class CreateRoomUseCaseStepDefinitions extends AbstractUseCaseStepDefinit
         SlotView slot =
                 Iterables.getLast(slotManagerComponent.findOpenSlotsFor(roomCreated.getId()));
         LocalDate date = LocalDate.now(clock).plusDays(1);
-        assertThat(slot.getOpenDate().getStartTime().toLocalDate())
+        assertThat(slot.openDate().getStartTime().toLocalDate())
                 .isAfterOrEqualTo(date)
                 .isBeforeOrEqualTo(date);
     }
@@ -130,7 +130,7 @@ public class CreateRoomUseCaseStepDefinitions extends AbstractUseCaseStepDefinit
     public void the_first_slot_should_start_the_day_after() {
         SlotView slot = slotManagerComponent.findOpenSlotsFor(roomCreated.getId()).get(0);
         LocalDate date = LocalDate.now(clock).plusDays(1);
-        assertThat(slot.getOpenDate().getStartTime().toLocalDate())
+        assertThat(slot.openDate().getStartTime().toLocalDate())
                 .isAfterOrEqualTo(date)
                 .isBeforeOrEqualTo(date);
     }

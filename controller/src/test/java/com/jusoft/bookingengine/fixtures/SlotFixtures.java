@@ -25,13 +25,13 @@ public class SlotFixtures {
     public static final String PERSON_USER_TYPE = "personUserType";
     public static final String CLASS_USER_TYPE = "classUserType";
     public static final SlotUser SLOT_USER =
-            SlotUser.of(CommonFixtures.USER_ID_1, PERSON_USER_TYPE);
+            new SlotUser(CommonFixtures.USER_ID_1, PERSON_USER_TYPE);
     public static final SlotUser ANOTHER_SLOT_USER =
-            SlotUser.of(CommonFixtures.USER_ID_1, CLASS_USER_TYPE);
+            new SlotUser(CommonFixtures.USER_ID_1, CLASS_USER_TYPE);
 
     public static final SlotResource SLOT_RESOURCE_1 =
             new SlotResource(SLOT_ID_1, ROOM_ID, START_TIME, END_TIME);
 
     public static final SlotCreatedEvent SLOT_CREATED_EVENT =
-            SlotCreatedEvent.of(SLOT_ID_1, ROOM_ID, SLOT_STATE, OPEN_DATE);
+            new SlotCreatedEvent(SLOT_ID_1, ROOM_ID, SLOT_STATE, OPEN_DATE);
 }

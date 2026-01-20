@@ -56,19 +56,19 @@ class SlotManagerComponentImpl implements SlotManagerComponent {
     @Override
     public void reserveSlot(long slotId, SlotUser slotUser) {
         slotRepository.execute(slotId, slotFound -> slotFound.reserve(clock, slotUser));
-        messagePublisher.publish(SlotReservedEvent.of(slotId, slotUser));
+        messagePublisher.publish(new SlotReservedEvent(slotId, slotUser));
     }
 
     @Override
     public void preReserveSlot(long slotId, SlotUser slotUser) {
         slotRepository.execute(slotId, slotFound -> slotFound.preReserve(clock, slotUser));
-        messagePublisher.publish(SlotPreReservedEvent.of(slotId, slotUser));
+        messagePublisher.publish(new SlotPreReservedEvent(slotId, slotUser));
     }
 
     @Override
     public void makeAvailable(long slotId) {
         Slot slotModified = slotRepository.execute(slotId, Slot::makeAvailable);
-        messagePublisher.publish(SlotMadeAvailableEvent.of(slotModified.getId()));
+        messagePublisher.publish(new SlotMadeAvailableEvent(slotModified.getId()));
     }
 
     @Override
