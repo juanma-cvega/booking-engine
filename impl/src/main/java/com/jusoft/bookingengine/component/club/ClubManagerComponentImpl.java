@@ -31,7 +31,7 @@ class ClubManagerComponentImpl implements ClubManagerComponent {
     public ClubView create(CreateClubCommand command) {
         Club newClub = clubFactory.createFrom(command);
         repository.save(newClub);
-        messagePublisher.publish(ClubCreatedEvent.of(newClub.getId()));
+        messagePublisher.publish(new ClubCreatedEvent(newClub.getId()));
         return clubFactory.createFrom(newClub);
     }
 
@@ -59,7 +59,7 @@ class ClubManagerComponentImpl implements ClubManagerComponent {
                         club -> club.acceptAccessRequest(command),
                         () -> new ClubNotFoundException(command.getClubId()));
         messagePublisher.publish(
-                JoinRequestAcceptedEvent.of(
+                new JoinRequestAcceptedEvent(
                         command.getJoinRequestId(), joinRequest.getUserId(), command.getClubId()));
     }
 
@@ -71,7 +71,7 @@ class ClubManagerComponentImpl implements ClubManagerComponent {
                         club -> club.denyAccessRequest(command),
                         () -> new ClubNotFoundException(command.getClubId()));
         messagePublisher.publish(
-                JoinRequestDeniedEvent.of(
+                new JoinRequestDeniedEvent(
                         command.getJoinRequestId(), joinRequest.getUserId(), command.getClubId()));
     }
 
@@ -95,7 +95,7 @@ class ClubManagerComponentImpl implements ClubManagerComponent {
                 },
                 () -> new ClubNotFoundException(command.getClubId()));
         messagePublisher.publish(
-                JoinRequestCreatedEvent.of(joinRequest.getId(), command.getClubId()));
+                new JoinRequestCreatedEvent(joinRequest.getId(), command.getClubId()));
         return joinRequest;
     }
 

@@ -77,9 +77,9 @@ public class DenyJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStepDe
     @Then("^a notification of a join request denied for user (\\d+) should be published$")
     public void a_notification_of_a_join_request_denied_for_user_should_be_published(Long userId) {
         JoinRequestDeniedEvent event = verifyAndGetMessageOfType(JoinRequestDeniedEvent.class);
-        assertThat(event.getClubId()).isEqualTo(clubCreated.getId());
-        assertThat(event.getAccessRequestId()).isEqualTo(joinRequestCreated.getId());
-        assertThat(event.getUserId()).isEqualTo(userId);
+        assertThat(event.clubId()).isEqualTo(clubCreated.getId());
+        assertThat(event.accessRequestId()).isEqualTo(joinRequestCreated.getId());
+        assertThat(event.userId()).isEqualTo(userId);
         assertThat(joinRequestCreated.getUserId()).isEqualTo(userId);
     }
 

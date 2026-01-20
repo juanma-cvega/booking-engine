@@ -67,6 +67,6 @@ public class CreateClubUseCaseStepDefinitions extends AbstractUseCaseStepDefinit
         verify(messagePublisher).publish(messageCaptor.capture());
         assertThat(messageCaptor.getValue()).isInstanceOf(ClubCreatedEvent.class);
         ClubCreatedEvent clubCreatedEvent = (ClubCreatedEvent) messageCaptor.getValue();
-        assertThat(clubCreatedEvent.getClubId()).isEqualTo(clubCreated.getId());
+        assertThat(clubCreatedEvent.clubId()).isEqualTo(clubCreated.getId());
     }
 }

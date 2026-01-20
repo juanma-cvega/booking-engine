@@ -86,9 +86,9 @@ public class AcceptJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStep
     public void a_notification_of_a_join_request_accepted_for_user_should_be_published(
             Long userId) {
         JoinRequestAcceptedEvent event = verifyAndGetMessageOfType(JoinRequestAcceptedEvent.class);
-        assertThat(event.getClubId()).isEqualTo(clubCreated.getId());
-        assertThat(event.getAccessRequestId()).isEqualTo(joinRequestCreated.getId());
-        assertThat(event.getUserId()).isEqualTo(userId);
+        assertThat(event.clubId()).isEqualTo(clubCreated.getId());
+        assertThat(event.accessRequestId()).isEqualTo(joinRequestCreated.getId());
+        assertThat(event.userId()).isEqualTo(userId);
         assertThat(joinRequestCreated.getUserId()).isEqualTo(userId);
     }
 
