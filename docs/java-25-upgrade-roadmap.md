@@ -7,7 +7,7 @@
 | Phase | Status | Progress |
 |-------|--------|----------|
 | Phase 1: Java 17 + Spring Boot 3 | ✅ **COMPLETED** | 100% |
-| Phase 2: Java 17 Features | 🔄 **IN PROGRESS** | 20% (Records done) |
+| Phase 2: Java 17 Features | 🔄 **IN PROGRESS** | 60% (Records migration) |
 | Phase 3: Java 21 Upgrade | ✅ **COMPLETED** | 100% |
 | Phase 4: Java 21 Features | ⏭️ **TO BE DONE** | 0% |
 | Phase 5: Java 25 Upgrade | ⏭️ **TO BE DONE** | 0% |
@@ -18,10 +18,11 @@
 - Spring Boot 3.3.0 with Jakarta EE
 - All dependencies updated for Java 21
 - 30 API event DTOs migrated to records
+- 13 View classes migrated to records (all components)
 - All 207 tests passing
 
 ### 🔄 Next Steps (Priority Order)
-1. **Complete Phase 2**: Migrate remaining DTOs (View, Command, Request classes) to records
+1. **Complete Phase 2**: Migrate remaining DTOs (Command, Request classes) to records
 2. **Phase 2.2**: Convert `SlotState` hierarchy to sealed classes
 3. **Phase 2.3**: Apply pattern matching for instanceof
 4. **Phase 4.1**: Adopt pattern matching for switch (Java 21)
@@ -312,11 +313,27 @@ mvn clean test
   - `SlotRequiresAuctionEvent`
   - `SlotRequiresPreReservationEvent`
 
+#### View Classes (13 classes across 7 components):
+- ✅ **Room component** (commit: `4a85f0c`)
+  - `RoomView` - with defensive copying for lists
+- ✅ **Building component** (commit: `ebd0d8d`)
+  - `BuildingView` - simple record with null validation
+- ✅ **Club component** (commit: `0241704`)
+  - `ClubView` - with defensive copying for set
+- ✅ **Member component** (commit: `7d78f8f`)
+  - `MemberView` - simple record
+- ✅ **ClassManager component** (commit: `e8d7dbd`)
+  - `ClassView` - with defensive copying for lists
+- ✅ **Auction component** (commit: `7c6b706`)
+  - `AuctionView` - with defensive copying for set
+- ✅ **Authorization component** (commit: `547fb92`)
+  - `ClubView`, `MemberView`, `ClubBuildingView`, `MemberBuildingView`, `ClubRoomView`, `MemberRoomView`
+  - All with defensive copying for maps and lists
+  - Additional constructors for convenience (no static factory methods)
+
 **Remaining Candidates** (classes in `api` packages):
-- [ ] `BookingView`
-- [ ] `ClubView`
-- [ ] `RoomView`
-- [ ] `SlotView`
+- [ ] `BookingView` (already a record)
+- [ ] `SlotView` (already a record)
 - [ ] All `*Command` classes
 - [ ] All `*Request` classes
 
@@ -336,14 +353,19 @@ public record AuctionFinishedEvent(long auctionId) implements Event {}
 - Replaced `.of()` static factory methods with `new` record constructors
 - Replaced `getFieldName()` methods with `fieldName()` record accessors
 - Removed Lombok `@Data` annotations
+- Implemented defensive copying with `List.copyOf()`, `Set.copyOf()`, `Map.copyOf()`
+- Added null validation in compact constructors
+- Used additional constructors instead of static factory methods for convenience
 - All 207 tests passing after migration
 
 **Benefits Achieved**:
-- Less boilerplate (no Lombok needed for event DTOs)
+- Less boilerplate (no Lombok needed for DTOs)
 - Immutability guaranteed by compiler
 - Pattern matching support (Java 21+)
 - Better IDE support
 - Cleaner, more maintainable code
+- Type-safe defensive copying for collections
+- Consistent API across all View classes
 
 ---
 
