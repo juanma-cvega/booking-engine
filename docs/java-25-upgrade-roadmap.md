@@ -7,7 +7,7 @@
 | Phase | Status | Progress |
 |-------|--------|----------|
 | Phase 1: Java 17 + Spring Boot 3 | ✅ **COMPLETED** | 100% |
-| Phase 2: Java 17 Features | 🔄 **IN PROGRESS** | 60% (Records migration) |
+| Phase 2: Java 17 Features | ✅ **COMPLETED** | 100% (All DTOs migrated to records) |
 | Phase 3: Java 21 Upgrade | ✅ **COMPLETED** | 100% |
 | Phase 4: Java 21 Features | ⏭️ **TO BE DONE** | 0% |
 | Phase 5: Java 25 Upgrade | ⏭️ **TO BE DONE** | 0% |
@@ -19,15 +19,17 @@
 - All dependencies updated for Java 21
 - 30 API event DTOs migrated to records
 - 13 View classes migrated to records (all components)
+- 20 Command classes migrated to records (all components)
+- 1 Request class migrated to record (JoinRequest)
+- **Total: 64 classes migrated to Java records**
 - All 207 tests passing
 
 ### 🔄 Next Steps (Priority Order)
-1. **Complete Phase 2**: Migrate remaining DTOs (Command, Request classes) to records
-2. **Phase 2.2**: Convert `SlotState` hierarchy to sealed classes
-3. **Phase 2.3**: Apply pattern matching for instanceof
-4. **Phase 4.1**: Adopt pattern matching for switch (Java 21)
-5. **Phase 4.2**: Use record patterns with migrated records
-6. **Phase 4.3**: Enable virtual threads for performance
+1. **Phase 2.2**: Convert `SlotState` hierarchy to sealed classes
+2. **Phase 2.3**: Apply pattern matching for instanceof
+3. **Phase 4.1**: Adopt pattern matching for switch (Java 21)
+4. **Phase 4.2**: Use record patterns with migrated records
+5. **Phase 4.3**: Enable virtual threads for performance
 
 ---
 
@@ -331,11 +333,33 @@ mvn clean test
   - All with defensive copying for maps and lists
   - Additional constructors for convenience (no static factory methods)
 
-**Remaining Candidates** (classes in `api` packages):
-- [ ] `BookingView` (already a record)
-- [ ] `SlotView` (already a record)
-- [ ] All `*Command` classes
-- [ ] All `*Request` classes
+#### Command Classes (20 classes across 7 components):
+- ✅ **Club component** (commit: `22958ae`)
+  - `CreateClubCommand`, `AcceptJoinRequestCommand`, `CreateJoinRequestCommand`, `DenyJoinRequestCommand`
+- ✅ **Building component** (commit: `ad794b6`)
+  - `CreateBuildingCommand`
+- ✅ **Member component** (commit: `487b411`)
+  - `CreateMemberCommand`
+- ✅ **Room component** (commit: `1812b18`)
+  - `CreateRoomCommand` - with defensive copying for lists
+- ✅ **Auction component** (commit: `babdce6`)
+  - `StartAuctionCommand`
+- ✅ **ClassManager component** (commit: `c9d4214`)
+  - `CreateClassCommand`, `AddInstructorCommand`, `RemoveInstructorCommand`, `RegisterRoomCommand`, `UnregisterRoomCommand`
+- ✅ **Authorization component** (commit: `8d5c797`)
+  - `AuthorizeCommand`, `AddBuildingTagsToClubCommand`, `AddBuildingTagsToMemberCommand`
+  - `AddRoomTagsToClubCommand`, `AddRoomTagsToMemberCommand`
+  - `ChangeAccessToAuctionsCommand`, `ReplaceSlotAuthenticationConfigForRoomCommand`
+  - All with defensive copying for tags lists and null validation
+
+**Already Records** (3 classes):
+- ✅ `CreateSlotCommand` (Slot component)
+- ✅ `CreateBookingCommand` (Booking component)
+- ✅ `CreateSlotLifeCycleManagerCommand` (SlotLifecycle component)
+
+#### Request Classes (1 class):
+- ✅ **Club component** (commit: `b1c1414`)
+  - `JoinRequest` - simple record with id and userId
 
 **Example Migration**:
 ```java
@@ -352,20 +376,24 @@ public record AuctionFinishedEvent(long auctionId) implements Event {}
 **Migration Changes**:
 - Replaced `.of()` static factory methods with `new` record constructors
 - Replaced `getFieldName()` methods with `fieldName()` record accessors
+- Updated method references (`JoinRequest::getId` → `JoinRequest::id`)
 - Removed Lombok `@Data` annotations
 - Implemented defensive copying with `List.copyOf()`, `Set.copyOf()`, `Map.copyOf()`
-- Added null validation in compact constructors
+- Added null validation in compact constructors using `Objects.requireNonNull()`
 - Used additional constructors instead of static factory methods for convenience
+- Updated all production and test code usages
 - All 207 tests passing after migration
 
 **Benefits Achieved**:
+- **64 classes** migrated to modern Java records (30 Events + 13 Views + 20 Commands + 1 Request)
 - Less boilerplate (no Lombok needed for DTOs)
 - Immutability guaranteed by compiler
 - Pattern matching support (Java 21+)
-- Better IDE support
+- Better IDE support and autocomplete
 - Cleaner, more maintainable code
 - Type-safe defensive copying for collections
-- Consistent API across all View classes
+- Consistent API across all DTO classes
+- Reduced cognitive load with simpler syntax
 
 ---
 
