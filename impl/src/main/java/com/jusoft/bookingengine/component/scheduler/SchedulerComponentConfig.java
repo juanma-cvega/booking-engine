@@ -31,7 +31,7 @@ public class SchedulerComponentConfig {
     }
 
     private Executor executor() {
-        return Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+        return Executors.newVirtualThreadPerTaskExecutor();
     }
 
     private ScheduledExecutorService scheduledExecutorService() {
