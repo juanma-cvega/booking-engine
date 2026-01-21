@@ -14,8 +14,8 @@ class MemberFactory {
     public Member createFrom(CreateMemberCommand command) {
         return new Member(
                 idSupplier.get(),
-                command.getUserId(),
-                command.getClubId(),
+                command.userId(),
+                command.clubId(),
                 null); // TODO add personal info somehow. Is personal info shared from the users
         // profile??
     }

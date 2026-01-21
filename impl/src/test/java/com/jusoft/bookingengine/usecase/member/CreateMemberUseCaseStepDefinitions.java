@@ -23,7 +23,7 @@ public class CreateMemberUseCaseStepDefinitions extends AbstractUseCaseStepDefin
     public void the_accepted_join_request_for_user_is_processed(Long userId) {
         memberCreated =
                 createMemberUseCase.addMemberToClubUseCase(
-                        CreateMemberCommand.of(userId, clubCreated.id()));
+                        new CreateMemberCommand(userId, clubCreated.id()));
     }
 
     @Then("^the user (\\d+) should be a member of club$")
