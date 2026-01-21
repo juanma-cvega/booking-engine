@@ -920,7 +920,29 @@ String message = STR."User \{userId} booked slot \{slotId} at \{bookingTime}";
 
 ---
 
-### 5.5 Adopt Java 25 Features
+### 5.5 Code Formatting (Spotless Alternative)
+
+**Issue**: Spotless/google-java-format may not support Java 25 immediately after release.
+
+**Recommended Alternative**: Consider switching to **git-code-format-maven-plugin**
+- **Repository**: https://github.com/Cosium/git-code-format-maven-plugin
+- **Advantage**: Works as a pre-commit hook to automatically format code before pushing
+- **Benefit**: Ensures code is always formatted without blocking CI/CD pipeline
+- **Setup**: Installs Git hooks automatically during Maven build
+
+**Tasks**:
+- [ ] Evaluate git-code-format-maven-plugin as Spotless replacement
+- [ ] Configure as pre-commit hook for automatic formatting
+- [ ] Test with Java 25 compatibility
+- [ ] Update CI/CD pipeline if needed
+
+**Temporary Workaround** (if staying with Spotless):
+- Use `-Dspotless.check.skip=true` flag when running Maven commands
+- Wait for google-java-format to add Java 25 support
+
+---
+
+### 5.6 Adopt Java 25 Features
 
 **Note**: Java 25 features depend on what's included in the release. Check JEP (JDK Enhancement Proposals) for details.
 
