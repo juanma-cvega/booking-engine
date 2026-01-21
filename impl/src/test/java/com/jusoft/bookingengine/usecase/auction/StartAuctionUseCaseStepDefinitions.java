@@ -33,7 +33,7 @@ public class StartAuctionUseCaseStepDefinitions extends AbstractUseCaseStepDefin
                     Integer auctionDuration, Integer daysRange) {
         auctionCreated =
                 startAuctionUseCase.startAuction(
-                        StartAuctionCommand.of(
+                        new StartAuctionCommand(
                                 slotCreated.id(),
                                 LessBookingsWithinPeriodConfigInfo.of(auctionDuration, daysRange)));
     }

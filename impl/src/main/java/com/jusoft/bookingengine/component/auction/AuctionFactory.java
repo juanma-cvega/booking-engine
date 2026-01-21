@@ -17,9 +17,9 @@ class AuctionFactory {
     public Auction createFrom(StartAuctionCommand command) {
         return new Auction(
                 idSupplier.get(),
-                command.getReferenceId(),
+                command.referenceId(),
                 ZonedDateTime.now(clock),
-                command.getAuctionConfigInfo());
+                command.auctionConfigInfo());
     }
 
     public AuctionView createFrom(Auction auction) {
