@@ -70,7 +70,7 @@ class Club {
         }
         JoinRequest joinRequest =
                 joinRequests.stream()
-                        .filter(request -> request.getId() == accessRequestId)
+                        .filter(request -> request.id() == accessRequestId)
                         .findFirst()
                         .orElseThrow(() -> new JoinRequestNotFoundException(accessRequestId, id));
         joinRequests.remove(joinRequest);

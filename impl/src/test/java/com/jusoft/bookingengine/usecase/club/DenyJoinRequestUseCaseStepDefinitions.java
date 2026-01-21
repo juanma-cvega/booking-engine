@@ -31,7 +31,7 @@ public class DenyJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStepDe
     public void admin_denies_the_join_request_created_by_user(Long adminId, Long userId) {
         JoinRequest joinRequestForUser =
                 joinRequestsCreated.stream()
-                        .filter(joinRequest -> joinRequest.getUserId() == userId)
+                        .filter(joinRequest -> joinRequest.userId() == userId)
                         .findFirst()
                         .orElseThrow(
                                 () ->
@@ -40,14 +40,14 @@ public class DenyJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStepDe
                                                         "Unable to find join request for user %s",
                                                         userId)));
         denyJoinRequestUseCase.denyJoinRequest(
-                new DenyJoinRequestCommand(joinRequestForUser.getId(), clubCreated.id(), adminId));
+                new DenyJoinRequestCommand(joinRequestForUser.id(), clubCreated.id(), adminId));
     }
 
     @When("^user (\\d+) denies the join request created by user (\\d+)$")
     public void user_denies_the_join_request_created_by_user(Long notAdminId, Long userId) {
         JoinRequest joinRequestForUser =
                 joinRequestsCreated.stream()
-                        .filter(joinRequest -> joinRequest.getUserId() == userId)
+                        .filter(joinRequest -> joinRequest.userId() == userId)
                         .findFirst()
                         .orElseThrow(
                                 () ->
@@ -59,7 +59,7 @@ public class DenyJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStepDe
                 () ->
                         denyJoinRequestUseCase.denyJoinRequest(
                                 new DenyJoinRequestCommand(
-                                        joinRequestForUser.getId(), clubCreated.id(), notAdminId)));
+                                        joinRequestForUser.id(), clubCreated.id(), notAdminId)));
     }
 
     @When("^admin (\\d+) denies the non existing join request (\\d+)$")
@@ -75,9 +75,9 @@ public class DenyJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStepDe
     public void a_notification_of_a_join_request_denied_for_user_should_be_published(Long userId) {
         JoinRequestDeniedEvent event = verifyAndGetMessageOfType(JoinRequestDeniedEvent.class);
         assertThat(event.clubId()).isEqualTo(clubCreated.id());
-        assertThat(event.accessRequestId()).isEqualTo(joinRequestCreated.getId());
+        assertThat(event.accessRequestId()).isEqualTo(joinRequestCreated.id());
         assertThat(event.userId()).isEqualTo(userId);
-        assertThat(joinRequestCreated.getUserId()).isEqualTo(userId);
+        assertThat(joinRequestCreated.userId()).isEqualTo(userId);
     }
 
     @Then("^the user (.*) should be notified he has no rights to deny join requests$")
@@ -91,7 +91,7 @@ public class DenyJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStepDe
     public void the_club_should_have_the_join_request_for_user(Long userId) {
         assertThat(
                         clubManagerComponent.findJoinRequests(clubCreated.id(), clubAdmin).stream()
-                                .anyMatch(joinRequest -> joinRequest.getUserId() == userId))
+                                .anyMatch(joinRequest -> joinRequest.userId() == userId))
                 .isTrue();
     }
 

@@ -60,7 +60,7 @@ class ClubManagerComponentImpl implements ClubManagerComponent {
                         () -> new ClubNotFoundException(command.clubId()));
         messagePublisher.publish(
                 new JoinRequestAcceptedEvent(
-                        command.joinRequestId(), joinRequest.getUserId(), command.clubId()));
+                        command.joinRequestId(), joinRequest.userId(), command.clubId()));
     }
 
     @Override
@@ -72,7 +72,7 @@ class ClubManagerComponentImpl implements ClubManagerComponent {
                         () -> new ClubNotFoundException(command.clubId()));
         messagePublisher.publish(
                 new JoinRequestDeniedEvent(
-                        command.joinRequestId(), joinRequest.getUserId(), command.clubId()));
+                        command.joinRequestId(), joinRequest.userId(), command.clubId()));
     }
 
     @Override
@@ -94,8 +94,7 @@ class ClubManagerComponentImpl implements ClubManagerComponent {
                     return club;
                 },
                 () -> new ClubNotFoundException(command.clubId()));
-        messagePublisher.publish(
-                new JoinRequestCreatedEvent(joinRequest.getId(), command.clubId()));
+        messagePublisher.publish(new JoinRequestCreatedEvent(joinRequest.id(), command.clubId()));
         return joinRequest;
     }
 

@@ -53,7 +53,7 @@ public class CreateJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStep
         assertThat(messageCaptor.getValue()).isInstanceOf(JoinRequestCreatedEvent.class);
         JoinRequestCreatedEvent event = (JoinRequestCreatedEvent) messageCaptor.getValue();
         assertThat(event.clubId()).isEqualTo(clubCreated.id());
-        assertThat(event.joinRequestId()).isEqualTo(joinRequestCreated.getId());
+        assertThat(event.joinRequestId()).isEqualTo(joinRequestCreated.id());
     }
 
     @Then("^(\\d+) notifications of join requests created should be published$")
@@ -68,6 +68,6 @@ public class CreateJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStep
         assertThat(events)
                 .extracting("joinRequestId")
                 .hasSameElementsAs(
-                        joinRequestsCreated.stream().map(JoinRequest::getId).collect(toSet()));
+                        joinRequestsCreated.stream().map(JoinRequest::id).collect(toSet()));
     }
 }

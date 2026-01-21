@@ -11,6 +11,6 @@ class JoinRequestFactory {
     private final Supplier<Long> idSupplier;
 
     JoinRequest createFrom(long userId) {
-        return JoinRequest.of(idSupplier.get(), userId);
+        return new JoinRequest(idSupplier.get(), userId);
     }
 }

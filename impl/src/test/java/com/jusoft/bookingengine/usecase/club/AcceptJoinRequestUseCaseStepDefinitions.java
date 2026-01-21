@@ -33,22 +33,21 @@ public class AcceptJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStep
     public void admin_accepts_the_join_request_created_by_user(Long adminId, Long userId) {
         JoinRequest joinRequestFromUser =
                 joinRequestsCreated.stream()
-                        .filter(joinRequest -> joinRequest.getUserId() == userId)
+                        .filter(joinRequest -> joinRequest.userId() == userId)
                         .findFirst()
                         .orElseThrow(
                                 () ->
                                         new IllegalArgumentException(
                                                 "User does not have a join request created"));
         acceptJoinRequestUseCase.acceptJoinRequest(
-                new AcceptJoinRequestCommand(
-                        joinRequestFromUser.getId(), clubCreated.id(), adminId));
+                new AcceptJoinRequestCommand(joinRequestFromUser.id(), clubCreated.id(), adminId));
     }
 
     @When("^user (\\d+) accepts the join request created by user (\\d+)$")
     public void user_accepts_the_join_request_created_by_user(Long notAdminId, Long userId) {
         JoinRequest joinRequestForUser =
                 joinRequestsCreated.stream()
-                        .filter(joinRequest -> joinRequest.getUserId() == userId)
+                        .filter(joinRequest -> joinRequest.userId() == userId)
                         .findFirst()
                         .orElseThrow(
                                 () ->
@@ -60,7 +59,7 @@ public class AcceptJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStep
                 () ->
                         acceptJoinRequestUseCase.acceptJoinRequest(
                                 new AcceptJoinRequestCommand(
-                                        joinRequestForUser.getId(), clubCreated.id(), notAdminId)));
+                                        joinRequestForUser.id(), clubCreated.id(), notAdminId)));
     }
 
     @When("^admin (\\d+) accepts the non existing join request (.*)$")
@@ -76,7 +75,7 @@ public class AcceptJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStep
     public void the_club_should_not_have_the_join_request_for_user_anymore(Long userId) {
         Set<JoinRequest> joinRequests =
                 clubManagerComponent.findJoinRequests(clubAdmin, clubCreated.id());
-        assertThat(joinRequests.stream().anyMatch(joinRequest -> joinRequest.getUserId() == userId))
+        assertThat(joinRequests.stream().anyMatch(joinRequest -> joinRequest.userId() == userId))
                 .isFalse();
     }
 
@@ -85,9 +84,9 @@ public class AcceptJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStep
             Long userId) {
         JoinRequestAcceptedEvent event = verifyAndGetMessageOfType(JoinRequestAcceptedEvent.class);
         assertThat(event.clubId()).isEqualTo(clubCreated.id());
-        assertThat(event.accessRequestId()).isEqualTo(joinRequestCreated.getId());
+        assertThat(event.accessRequestId()).isEqualTo(joinRequestCreated.id());
         assertThat(event.userId()).isEqualTo(userId);
-        assertThat(joinRequestCreated.getUserId()).isEqualTo(userId);
+        assertThat(joinRequestCreated.userId()).isEqualTo(userId);
     }
 
     @Then("^the user (.*) should be notified he has no rights to accept join requests$")
