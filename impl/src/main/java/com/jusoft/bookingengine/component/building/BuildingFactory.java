@@ -20,7 +20,7 @@ class BuildingFactory {
     }
 
     public BuildingView createFrom(Building building) {
-        return BuildingView.of(
+        return new BuildingView(
                 building.getId(),
                 building.getClubId(),
                 building.getAddress(),

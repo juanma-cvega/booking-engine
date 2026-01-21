@@ -39,10 +39,10 @@ public class CreateBuildingUseCaseStepDefinitions extends AbstractUseCaseStepDef
 
     @Then("^the building should be stored$")
     public void the_building_should_be_stored() {
-        BuildingView buildingView = buildingManagerComponent.find(buildingCreated.getId());
-        assertThat(buildingView.getAddress()).isEqualTo(buildingCreated.getAddress());
-        assertThat(buildingView.getClubId()).isEqualTo(buildingCreated.getClubId());
-        assertThat(buildingView.getDescription()).isEqualTo(buildingCreated.getDescription());
+        BuildingView buildingView = buildingManagerComponent.find(buildingCreated.id());
+        assertThat(buildingView.address()).isEqualTo(buildingCreated.address());
+        assertThat(buildingView.clubId()).isEqualTo(buildingCreated.clubId());
+        assertThat(buildingView.description()).isEqualTo(buildingCreated.description());
     }
 
     @Then("^a notification of a created building should be published$")
@@ -50,9 +50,9 @@ public class CreateBuildingUseCaseStepDefinitions extends AbstractUseCaseStepDef
         verify(messagePublisher).publish(messageCaptor.capture());
         assertThat(messageCaptor.getValue()).isInstanceOf(BuildingCreatedEvent.class);
         BuildingCreatedEvent buildingCreatedEvent = (BuildingCreatedEvent) messageCaptor.getValue();
-        assertThat(buildingCreatedEvent.buildingId()).isEqualTo(buildingCreated.getId());
-        assertThat(buildingCreatedEvent.address()).isEqualTo(buildingCreated.getAddress());
-        assertThat(buildingCreatedEvent.description()).isEqualTo(buildingCreated.getDescription());
+        assertThat(buildingCreatedEvent.buildingId()).isEqualTo(buildingCreated.id());
+        assertThat(buildingCreatedEvent.address()).isEqualTo(buildingCreated.address());
+        assertThat(buildingCreatedEvent.description()).isEqualTo(buildingCreated.description());
     }
     ;
 

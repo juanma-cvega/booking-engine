@@ -25,7 +25,7 @@ public class FindClassesByBuildingUseCaseStepDefinitions extends AbstractUseCase
     public void the_list_of_classes_for_the_created_building_is_looked_up(
             Integer createdBuildingIndex) {
         BuildingView building = buildingsCreated.get(createdBuildingIndex - 1);
-        classesForBuilding = findClassesByBuildingUseCase.findClassesBy(building.getId());
+        classesForBuilding = findClassesByBuildingUseCase.findClassesBy(building.id());
     }
 
     @Then("^all created classes should be found$")

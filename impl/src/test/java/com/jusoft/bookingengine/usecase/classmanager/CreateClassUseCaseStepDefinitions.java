@@ -32,7 +32,7 @@ public class CreateClassUseCaseStepDefinitions extends AbstractUseCaseStepDefini
         classCreated =
                 createClassUseCase.createClass(
                         CREATE_CLASS_COMMAND_SUPPLIER.apply(
-                                buildingCreated.getId(), singletonList(INSTRUCTOR_ID)));
+                                buildingCreated.id(), singletonList(INSTRUCTOR_ID)));
         classesCreated.add(classCreated);
     }
 
@@ -41,7 +41,7 @@ public class CreateClassUseCaseStepDefinitions extends AbstractUseCaseStepDefini
         classCreated =
                 createClassUseCase.createClass(
                         CREATE_CLASS_COMMAND_SUPPLIER.apply(
-                                buildingCreated.getId(), singletonList(instructorId)));
+                                buildingCreated.id(), singletonList(instructorId)));
         classesCreated.add(classCreated);
     }
 
@@ -51,7 +51,7 @@ public class CreateClassUseCaseStepDefinitions extends AbstractUseCaseStepDefini
         classCreated =
                 createClassUseCase.createClass(
                         CREATE_CLASS_COMMAND_SUPPLIER.apply(
-                                building.getId(), singletonList(INSTRUCTOR_ID)));
+                                building.id(), singletonList(INSTRUCTOR_ID)));
         classesCreated.add(classCreated);
     }
 

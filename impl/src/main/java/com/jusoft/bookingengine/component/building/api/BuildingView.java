@@ -1,15 +1,9 @@
 package com.jusoft.bookingengine.component.building.api;
 
-import lombok.Data;
-import lombok.NonNull;
+import java.util.Objects;
 
-@Data(staticConstructor = "of")
-public class BuildingView {
-
-    private final long id;
-    private final long clubId;
-
-    @NonNull private final Address address;
-
-    private final String description;
+public record BuildingView(long id, long clubId, Address address, String description) {
+    public BuildingView {
+        Objects.requireNonNull(address, "address must not be null");
+    }
 }

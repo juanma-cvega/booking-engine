@@ -47,7 +47,7 @@ public class ReserveSlotUseCaseStepDefinitions extends AbstractUseCaseStepDefini
         authorizationManagerComponent.addRoomTagsToClub(
                 AddRoomTagsToClubCommand.of(
                         clubCreated.getId(),
-                        buildingCreated.getId(),
+                        buildingCreated.id(),
                         roomCreated.id(),
                         SlotStatus.NORMAL,
                         ImmutableList.of(Tag.of(TAG_ONLY_IN_CLUB))));

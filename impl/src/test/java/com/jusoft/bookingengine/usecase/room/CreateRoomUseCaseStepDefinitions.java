@@ -38,8 +38,7 @@ public class CreateRoomUseCaseStepDefinitions extends AbstractUseCaseStepDefinit
 
     @When("^a room is created$")
     public void a_room_is_created() {
-        roomCreated =
-                createRoomUseCase.createRoom(CREATE_ROOM_COMMAND.apply(buildingCreated.getId()));
+        roomCreated = createRoomUseCase.createRoom(CREATE_ROOM_COMMAND.apply(buildingCreated.id()));
     }
 
     @Then("^the room should be stored")
@@ -89,7 +88,7 @@ public class CreateRoomUseCaseStepDefinitions extends AbstractUseCaseStepDefinit
 
     @When("^the room is created with that configuration$")
     public void the_room_is_created_with_that_configuration() {
-        roomCreated = createRoomUseCase.createRoom(roomBuilder.build(buildingCreated.getId()));
+        roomCreated = createRoomUseCase.createRoom(roomBuilder.build(buildingCreated.id()));
     }
 
     @Then("^(.*) slots should have been created$")
