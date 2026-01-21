@@ -31,8 +31,7 @@ public class CreateBuildingUseCaseStepDefinitions extends AbstractUseCaseStepDef
     public void a_building_is_created() {
         buildingCreated =
                 createBuildingUseCase.createBuildingFrom(
-                        CreateBuildingCommand.of(
-                                clubCreated.getId(), ADDRESS, BUILDING_DESCRIPTION));
+                        CreateBuildingCommand.of(clubCreated.id(), ADDRESS, BUILDING_DESCRIPTION));
         buildingsCreated.add(buildingCreated);
     }
     ;

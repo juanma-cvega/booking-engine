@@ -22,7 +22,7 @@ public class FindJoinRequestsUseCaseStepDefinitions extends AbstractUseCaseStepD
 
     @When("^admin (\\d+) looks for all join requests created")
     public void admin_looks_for_all_join_requests_created(Long adminId) {
-        joinRequestsFound = findJoinRequestsUseCase.findJoinRequests(adminId, clubCreated.getId());
+        joinRequestsFound = findJoinRequestsUseCase.findJoinRequests(adminId, clubCreated.id());
     }
 
     @When("^user (\\d+) looks for all join requests created")
@@ -31,7 +31,7 @@ public class FindJoinRequestsUseCaseStepDefinitions extends AbstractUseCaseStepD
                 () ->
                         joinRequestsFound =
                                 findJoinRequestsUseCase.findJoinRequests(
-                                        clubCreated.getId(), adminId));
+                                        clubCreated.id(), adminId));
     }
 
     @Then(

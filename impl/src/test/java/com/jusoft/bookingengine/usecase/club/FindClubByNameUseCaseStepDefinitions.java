@@ -25,7 +25,7 @@ public class FindClubByNameUseCaseStepDefinitions extends AbstractUseCaseStepDef
 
     @Then("^the user should find the club$")
     public void the_user_should_find_the_club() {
-        assertThat(clubFound.getId()).isEqualTo(clubCreated.getId());
-        assertThat(clubFound.getDescription()).isEqualTo(clubCreated.getDescription());
+        assertThat(clubFound.id()).isEqualTo(clubCreated.id());
+        assertThat(clubFound.description()).isEqualTo(clubCreated.description());
     }
 }

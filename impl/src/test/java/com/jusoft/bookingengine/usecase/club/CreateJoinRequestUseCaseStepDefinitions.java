@@ -33,7 +33,7 @@ public class CreateJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStep
     public void user_issues_a_join_request(Long userId) {
         joinRequestCreated =
                 createJoinRequestUseCase.createJoinRequest(
-                        CreateJoinRequestCommand.of(clubCreated.getId(), userId));
+                        CreateJoinRequestCommand.of(clubCreated.id(), userId));
         joinRequestsCreated.add(joinRequestCreated);
     }
 
@@ -42,7 +42,7 @@ public class CreateJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStep
         List<Long> userIds =
                 userIdsDataTable.row(0).stream().map(Long::parseLong).collect(Collectors.toList());
         Set<JoinRequest> joinRequests =
-                clubManagerComponent.findJoinRequests(clubCreated.getId(), clubAdmin);
+                clubManagerComponent.findJoinRequests(clubCreated.id(), clubAdmin);
         assertThat(joinRequests).hasSize(userIds.size());
         assertThat(joinRequests).extracting("userId").hasSameElementsAs(userIds);
     }
@@ -52,7 +52,7 @@ public class CreateJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStep
         verify(messagePublisher).publish(messageCaptor.capture());
         assertThat(messageCaptor.getValue()).isInstanceOf(JoinRequestCreatedEvent.class);
         JoinRequestCreatedEvent event = (JoinRequestCreatedEvent) messageCaptor.getValue();
-        assertThat(event.clubId()).isEqualTo(clubCreated.getId());
+        assertThat(event.clubId()).isEqualTo(clubCreated.id());
         assertThat(event.joinRequestId()).isEqualTo(joinRequestCreated.getId());
     }
 
@@ -64,7 +64,7 @@ public class CreateJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStep
         List<Message> events = messageCaptor.getAllValues();
         assertThat(events).extracting("class").containsOnly(JoinRequestCreatedEvent.class);
         assertThat(events).hasSize(notificationsCreated);
-        assertThat(events).extracting("clubId").containsOnly(clubCreated.getId());
+        assertThat(events).extracting("clubId").containsOnly(clubCreated.id());
         assertThat(events)
                 .extracting("joinRequestId")
                 .hasSameElementsAs(

@@ -20,6 +20,6 @@ class ClubFactory {
     }
 
     public ClubView createFrom(Club club) {
-        return ClubView.of(club.getId(), club.getName(), club.getDescription(), club.getAdmins());
+        return new ClubView(club.getId(), club.getName(), club.getDescription(), club.getAdmins());
     }
 }

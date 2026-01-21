@@ -53,7 +53,7 @@ public class AuthorizationManagerComponentAuthorizeStepDefinitions
 
     @Given("^the club created is managed by the authorization manager$")
     public void the_club_created_is_managed_by_the_authorization_manager() {
-        authorizationManagerComponent.createClub(clubCreated.getId());
+        authorizationManagerComponent.createClub(clubCreated.id());
     }
 
     @Then(

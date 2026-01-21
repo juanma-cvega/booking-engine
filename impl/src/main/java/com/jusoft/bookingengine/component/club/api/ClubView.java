@@ -1,13 +1,13 @@
 package com.jusoft.bookingengine.component.club.api;
 
+import java.util.Objects;
 import java.util.Set;
-import lombok.Data;
 
-@Data(staticConstructor = "of")
-public class ClubView {
-
-    private final long id;
-    private final String name;
-    private final String description;
-    private final Set<Long> admins;
+public record ClubView(long id, String name, String description, Set<Long> admins) {
+    public ClubView {
+        Objects.requireNonNull(name, "name must not be null");
+        Objects.requireNonNull(description, "description must not be null");
+        Objects.requireNonNull(admins, "admins must not be null");
+        admins = Set.copyOf(admins);
+    }
 }

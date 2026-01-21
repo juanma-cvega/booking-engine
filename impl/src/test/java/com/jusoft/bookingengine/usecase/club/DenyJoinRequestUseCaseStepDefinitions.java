@@ -40,8 +40,7 @@ public class DenyJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStepDe
                                                         "Unable to find join request for user %s",
                                                         userId)));
         denyJoinRequestUseCase.denyJoinRequest(
-                DenyJoinRequestCommand.of(
-                        joinRequestForUser.getId(), clubCreated.getId(), adminId));
+                DenyJoinRequestCommand.of(joinRequestForUser.getId(), clubCreated.id(), adminId));
     }
 
     @When("^user (\\d+) denies the join request created by user (\\d+)$")
@@ -60,9 +59,7 @@ public class DenyJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStepDe
                 () ->
                         denyJoinRequestUseCase.denyJoinRequest(
                                 DenyJoinRequestCommand.of(
-                                        joinRequestForUser.getId(),
-                                        clubCreated.getId(),
-                                        notAdminId)));
+                                        joinRequestForUser.getId(), clubCreated.id(), notAdminId)));
     }
 
     @When("^admin (\\d+) denies the non existing join request (\\d+)$")
@@ -71,13 +68,13 @@ public class DenyJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStepDe
                 () ->
                         denyJoinRequestUseCase.denyJoinRequest(
                                 DenyJoinRequestCommand.of(
-                                        joinRequestId, clubCreated.getId(), adminId)));
+                                        joinRequestId, clubCreated.id(), adminId)));
     }
 
     @Then("^a notification of a join request denied for user (\\d+) should be published$")
     public void a_notification_of_a_join_request_denied_for_user_should_be_published(Long userId) {
         JoinRequestDeniedEvent event = verifyAndGetMessageOfType(JoinRequestDeniedEvent.class);
-        assertThat(event.clubId()).isEqualTo(clubCreated.getId());
+        assertThat(event.clubId()).isEqualTo(clubCreated.id());
         assertThat(event.accessRequestId()).isEqualTo(joinRequestCreated.getId());
         assertThat(event.userId()).isEqualTo(userId);
         assertThat(joinRequestCreated.getUserId()).isEqualTo(userId);
@@ -93,9 +90,7 @@ public class DenyJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStepDe
     @Then("^the club should have the join request for user (\\d+)$")
     public void the_club_should_have_the_join_request_for_user(Long userId) {
         assertThat(
-                        clubManagerComponent
-                                .findJoinRequests(clubCreated.getId(), clubAdmin)
-                                .stream()
+                        clubManagerComponent.findJoinRequests(clubCreated.id(), clubAdmin).stream()
                                 .anyMatch(joinRequest -> joinRequest.getUserId() == userId))
                 .isTrue();
     }

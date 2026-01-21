@@ -23,12 +23,12 @@ public class CreateMemberUseCaseStepDefinitions extends AbstractUseCaseStepDefin
     public void the_accepted_join_request_for_user_is_processed(Long userId) {
         memberCreated =
                 createMemberUseCase.addMemberToClubUseCase(
-                        CreateMemberCommand.of(userId, clubCreated.getId()));
+                        CreateMemberCommand.of(userId, clubCreated.id()));
     }
 
     @Then("^the user (\\d+) should be a member of club$")
     public void the_user_should_be_a_member_of_club(Long userId) {
-        assertThat(memberManagerComponent.isMemberOf(clubCreated.getId(), userId)).isTrue();
+        assertThat(memberManagerComponent.isMemberOf(clubCreated.id(), userId)).isTrue();
     }
 
     @Then(
@@ -38,7 +38,7 @@ public class CreateMemberUseCaseStepDefinitions extends AbstractUseCaseStepDefin
         verify(messagePublisher).publish(messageCaptor.capture());
         assertThat(messageCaptor.getValue()).isInstanceOf(MemberCreatedEvent.class);
         MemberCreatedEvent event = (MemberCreatedEvent) messageCaptor.getValue();
-        assertThat(event.clubId()).isEqualTo(clubCreated.getId());
+        assertThat(event.clubId()).isEqualTo(clubCreated.id());
         assertThat(event.userId()).isEqualTo(userId);
         assertThat(event.memberId()).isEqualTo(memberCreated.getId());
     }

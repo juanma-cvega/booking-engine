@@ -57,9 +57,9 @@ public class CreateClubUseCaseStepDefinitions extends AbstractUseCaseStepDefinit
 
     @Then("^the club should be stored with user (.*) as admin$")
     public void the_club_should_be_stored_with_user_as_admin(Long userId) {
-        ClubView clubFound = clubManagerComponent.find(clubCreated.getId());
-        assertThat(clubFound.getDescription()).isEqualTo(clubCreated.getDescription());
-        assertThat(clubFound.getAdmins()).containsExactly(userId);
+        ClubView clubFound = clubManagerComponent.find(clubCreated.id());
+        assertThat(clubFound.description()).isEqualTo(clubCreated.description());
+        assertThat(clubFound.admins()).containsExactly(userId);
     }
 
     @Then("^a notification of a created club should be published$")
@@ -67,6 +67,6 @@ public class CreateClubUseCaseStepDefinitions extends AbstractUseCaseStepDefinit
         verify(messagePublisher).publish(messageCaptor.capture());
         assertThat(messageCaptor.getValue()).isInstanceOf(ClubCreatedEvent.class);
         ClubCreatedEvent clubCreatedEvent = (ClubCreatedEvent) messageCaptor.getValue();
-        assertThat(clubCreatedEvent.clubId()).isEqualTo(clubCreated.getId());
+        assertThat(clubCreatedEvent.clubId()).isEqualTo(clubCreated.id());
     }
 }

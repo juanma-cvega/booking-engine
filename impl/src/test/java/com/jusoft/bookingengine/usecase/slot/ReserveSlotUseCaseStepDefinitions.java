@@ -46,7 +46,7 @@ public class ReserveSlotUseCaseStepDefinitions extends AbstractUseCaseStepDefini
     public void the_room_created_requires_authorization_to_use_it() {
         authorizationManagerComponent.addRoomTagsToClub(
                 AddRoomTagsToClubCommand.of(
-                        clubCreated.getId(),
+                        clubCreated.id(),
                         buildingCreated.id(),
                         roomCreated.id(),
                         SlotStatus.NORMAL,
@@ -59,7 +59,7 @@ public class ReserveSlotUseCaseStepDefinitions extends AbstractUseCaseStepDefini
         assertThat(exceptionThrown).isInstanceOf(UserNotMemberException.class);
         UserNotMemberException exception = (UserNotMemberException) exceptionThrown;
         assertThat(exception.getUserId()).isEqualTo(userId);
-        assertThat(exception.getClubId()).isEqualTo(clubCreated.getId());
+        assertThat(exception.getClubId()).isEqualTo(clubCreated.id());
     }
     ;
 
