@@ -21,7 +21,7 @@ class MemberFactory {
     }
 
     public MemberView createFrom(Member member) {
-        return MemberView.of(
+        return new MemberView(
                 member.getId(),
                 member.getUserId(),
                 member.getClubId(),
