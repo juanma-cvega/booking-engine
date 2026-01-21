@@ -24,13 +24,13 @@ public class CreateSlotUseCaseStepDefinitions extends AbstractUseCaseStepDefinit
 
     @When("^a slot is created$")
     public void a_slot_is_created() {
-        slotCreated = createSlotUseCase.createSlotFor(roomCreated.getId());
+        slotCreated = createSlotUseCase.createSlotFor(roomCreated.id());
     }
 
     @When("^(.*) slots are created")
     public void slots_are_created(Integer slotsToCreate) {
         IntStream.range(0, slotsToCreate)
-                .forEach((index) -> createSlotUseCase.createSlotFor(roomCreated.getId()));
+                .forEach((index) -> createSlotUseCase.createSlotFor(roomCreated.id()));
     }
 
     @Then(

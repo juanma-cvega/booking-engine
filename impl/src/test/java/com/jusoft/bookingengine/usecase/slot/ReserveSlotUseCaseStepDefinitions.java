@@ -39,7 +39,7 @@ public class ReserveSlotUseCaseStepDefinitions extends AbstractUseCaseStepDefini
 
     @Given("^user (\\d+) is the member (.*) of the club created$")
     public void user_is_the_member_of_the_club_created(Long userId, Long memberId) {
-        authorizationManagerComponent.createMember(memberId, userId, roomCreated.getClubId());
+        authorizationManagerComponent.createMember(memberId, userId, roomCreated.clubId());
     }
 
     @Given("^the room created requires authorization to use it$")
@@ -48,7 +48,7 @@ public class ReserveSlotUseCaseStepDefinitions extends AbstractUseCaseStepDefini
                 AddRoomTagsToClubCommand.of(
                         clubCreated.getId(),
                         buildingCreated.getId(),
-                        roomCreated.getId(),
+                        roomCreated.id(),
                         SlotStatus.NORMAL,
                         ImmutableList.of(Tag.of(TAG_ONLY_IN_CLUB))));
     }
@@ -116,9 +116,9 @@ public class ReserveSlotUseCaseStepDefinitions extends AbstractUseCaseStepDefini
         assertThat(exceptionThrown).isInstanceOf(UnauthorizedReservationException.class);
         UnauthorizedReservationException exception =
                 (UnauthorizedReservationException) exceptionThrown;
-        assertThat(exception.getBuildingId()).isEqualTo(roomCreated.getBuildingId());
-        assertThat(exception.getClubId()).isEqualTo(roomCreated.getClubId());
-        assertThat(exception.getRoomId()).isEqualTo(roomCreated.getId());
+        assertThat(exception.getBuildingId()).isEqualTo(roomCreated.buildingId());
+        assertThat(exception.getClubId()).isEqualTo(roomCreated.clubId());
+        assertThat(exception.getRoomId()).isEqualTo(roomCreated.id());
         assertThat(exception.getUserId()).isEqualTo(userId);
     }
 }

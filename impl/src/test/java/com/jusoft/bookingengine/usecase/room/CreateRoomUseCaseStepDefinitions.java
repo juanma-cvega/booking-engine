@@ -44,15 +44,14 @@ public class CreateRoomUseCaseStepDefinitions extends AbstractUseCaseStepDefinit
 
     @Then("^the room should be stored")
     public void the_room_should_be_stored() {
-        RoomView roomView = roomManagerComponent.find(roomCreated.getId());
-        assertThat(roomView.getId()).isEqualTo(roomCreated.getId());
-        assertThat(roomView.getBuildingId()).isEqualTo(roomCreated.getBuildingId());
-        assertThat(roomView.getSlotDurationInMinutes())
-                .isEqualTo(roomCreated.getSlotDurationInMinutes());
-        assertThat(roomView.getSlotCreationConfigInfo())
-                .isEqualTo(roomCreated.getSlotCreationConfigInfo());
-        assertThat(roomView.getAvailableDays()).isEqualTo(roomCreated.getAvailableDays());
-        assertThat(roomView.getOpenTimesPerDay()).isEqualTo(roomCreated.getOpenTimesPerDay());
+        RoomView roomView = roomManagerComponent.find(roomCreated.id());
+        assertThat(roomView.id()).isEqualTo(roomCreated.id());
+        assertThat(roomView.buildingId()).isEqualTo(roomCreated.buildingId());
+        assertThat(roomView.slotDurationInMinutes()).isEqualTo(roomCreated.slotDurationInMinutes());
+        assertThat(roomView.slotCreationConfigInfo())
+                .isEqualTo(roomCreated.slotCreationConfigInfo());
+        assertThat(roomView.availableDays()).isEqualTo(roomCreated.availableDays());
+        assertThat(roomView.openTimesPerDay()).isEqualTo(roomCreated.openTimesPerDay());
     }
 
     @Then("^a notification of a created room should be published$")
@@ -60,11 +59,11 @@ public class CreateRoomUseCaseStepDefinitions extends AbstractUseCaseStepDefinit
         verify(messagePublisher).publish(messageCaptor.capture());
         assertThat(messageCaptor.getValue()).isInstanceOf(RoomCreatedEvent.class);
         RoomCreatedEvent roomCreatedEvent = (RoomCreatedEvent) messageCaptor.getValue();
-        assertThat(roomCreatedEvent.roomId()).isEqualTo(roomCreated.getId());
+        assertThat(roomCreatedEvent.roomId()).isEqualTo(roomCreated.id());
         assertThat(roomCreatedEvent.slotDurationInMinutes())
-                .isEqualTo(roomCreated.getSlotDurationInMinutes());
-        assertThat(roomCreatedEvent.availableDays()).isEqualTo(roomCreated.getAvailableDays());
-        assertThat(roomCreatedEvent.openTimesPerDay()).isEqualTo(roomCreated.getOpenTimesPerDay());
+                .isEqualTo(roomCreated.slotDurationInMinutes());
+        assertThat(roomCreatedEvent.availableDays()).isEqualTo(roomCreated.availableDays());
+        assertThat(roomCreatedEvent.openTimesPerDay()).isEqualTo(roomCreated.openTimesPerDay());
     }
     ;
 
@@ -95,29 +94,27 @@ public class CreateRoomUseCaseStepDefinitions extends AbstractUseCaseStepDefinit
 
     @Then("^(.*) slots should have been created$")
     public void slots_should_have_been_created(Integer slotsToBeCreated) {
-        assertThat(slotManagerComponent.findOpenSlotsFor(roomCreated.getId()))
+        assertThat(slotManagerComponent.findOpenSlotsFor(roomCreated.id()))
                 .hasSize(slotsToBeCreated);
     }
 
     @Then("^the first slot should start at (.*)$")
     public void the_first_slot_should_start_at(String startTime) {
-        SlotView slot = slotManagerComponent.findOpenSlotsFor(roomCreated.getId()).get(0);
+        SlotView slot = slotManagerComponent.findOpenSlotsFor(roomCreated.id()).get(0);
         LocalTime time = LocalTime.parse(startTime);
         assertThat(slot.openDate().getStartTime().toLocalTime()).isBetween(time, time);
     }
 
     @Then("^the last slot should start at (.*)$")
     public void the_last_slot_should_start_at(String startTime) {
-        SlotView slot =
-                Iterables.getLast(slotManagerComponent.findOpenSlotsFor(roomCreated.getId()));
+        SlotView slot = Iterables.getLast(slotManagerComponent.findOpenSlotsFor(roomCreated.id()));
         LocalTime time = LocalTime.parse(startTime);
         assertThat(slot.openDate().getStartTime().toLocalTime()).isBetween(time, time);
     }
 
     @Then("^the last slot should start the day after$")
     public void the_last_slot_should_start_the_day_after() {
-        SlotView slot =
-                Iterables.getLast(slotManagerComponent.findOpenSlotsFor(roomCreated.getId()));
+        SlotView slot = Iterables.getLast(slotManagerComponent.findOpenSlotsFor(roomCreated.id()));
         LocalDate date = LocalDate.now(clock).plusDays(1);
         assertThat(slot.openDate().getStartTime().toLocalDate())
                 .isAfterOrEqualTo(date)
@@ -127,7 +124,7 @@ public class CreateRoomUseCaseStepDefinitions extends AbstractUseCaseStepDefinit
 
     @Then("^the first slot should start the day after$")
     public void the_first_slot_should_start_the_day_after() {
-        SlotView slot = slotManagerComponent.findOpenSlotsFor(roomCreated.getId()).get(0);
+        SlotView slot = slotManagerComponent.findOpenSlotsFor(roomCreated.id()).get(0);
         LocalDate date = LocalDate.now(clock).plusDays(1);
         assertThat(slot.openDate().getStartTime().toLocalDate())
                 .isAfterOrEqualTo(date)

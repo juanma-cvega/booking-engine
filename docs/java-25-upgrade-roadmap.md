@@ -1,5 +1,35 @@
 # Java 25 Upgrade Roadmap
 
+## 📊 Current Progress (January 2026)
+
+**Current State**: ✅ Java 21 LTS with Spring Boot 3.3.0
+
+| Phase | Status | Progress |
+|-------|--------|----------|
+| Phase 1: Java 17 + Spring Boot 3 | ✅ **COMPLETED** | 100% |
+| Phase 2: Java 17 Features | 🔄 **IN PROGRESS** | 20% (Records done) |
+| Phase 3: Java 21 Upgrade | ✅ **COMPLETED** | 100% |
+| Phase 4: Java 21 Features | ⏭️ **TO BE DONE** | 0% |
+| Phase 5: Java 25 Upgrade | ⏭️ **TO BE DONE** | 0% |
+| Phase 6: Final Validation | ⏭️ **TO BE DONE** | 0% |
+
+### ✅ Completed
+- Java 21 runtime configured
+- Spring Boot 3.3.0 with Jakarta EE
+- All dependencies updated for Java 21
+- 30 API event DTOs migrated to records
+- All 207 tests passing
+
+### 🔄 Next Steps (Priority Order)
+1. **Complete Phase 2**: Migrate remaining DTOs (View, Command, Request classes) to records
+2. **Phase 2.2**: Convert `SlotState` hierarchy to sealed classes
+3. **Phase 2.3**: Apply pattern matching for instanceof
+4. **Phase 4.1**: Adopt pattern matching for switch (Java 21)
+5. **Phase 4.2**: Use record patterns with migrated records
+6. **Phase 4.3**: Enable virtual threads for performance
+
+---
+
 ## Executive Summary
 
 This document outlines the roadmap for upgrading the Booking Engine from **Java 11** to **Java 25**. This is a major upgrade spanning 14 Java versions and 4 major releases (11 → 17 → 21 → 25), requiring careful dependency management and code modernization.
@@ -23,13 +53,17 @@ Jumping directly from Java 11 to 25 is risky because:
 
 ## Current State Analysis
 
-### Current Configuration
-- **Java Version**: 11 (openjdk64-11.0.26)
-- **Spring Boot**: 2.7.14 (EOL November 2023)
-- **Spring Framework**: 5.3.31
-- **JUnit**: 5.10.1 (recently upgraded)
-- **Cucumber**: 7.15.0 (recently upgraded)
-- **Mockito**: 5.3.1
+### Current Configuration (as of January 2026)
+- **Java Version**: ✅ 21 (LTS)
+- **Spring Boot**: ✅ 3.3.0
+- **Spring Framework**: ✅ 6.1.8
+- **JUnit**: ✅ 5.10.2
+- **Cucumber**: ✅ 7.15.0
+- **Mockito**: ✅ 5.11.0
+- **Lombok**: ✅ 1.18.32
+- **Guava**: ✅ 33.1.0-jre
+- **Jackson**: ✅ 2.17.0
+- **Hibernate Validator**: ✅ 8.0.1.Final
 
 ### Key Constraints
 - Spring Boot 2.x requires Java 11-17 (does not support Java 21+)
@@ -39,9 +73,11 @@ Jumping directly from Java 11 to 25 is risky because:
 
 ---
 
-## Phase 1: Upgrade to Java 17 LTS + Spring Boot 3 (Week 1-2)
+## Phase 1: Upgrade to Java 17 LTS + Spring Boot 3 (Week 1-2) ✅ **COMPLETED**
 
 **Goal**: Establish Java 17 and Spring Boot 3 as stable baseline
+
+**Status**: All tasks completed. System now running Java 21 and Spring Boot 3.3.0.
 
 **Understanding the Dependency**:
 - Spring Boot 2.7.x supports Java 11-17 (but is EOL since November 2023)
@@ -60,15 +96,15 @@ Jumping directly from Java 11 to 25 is risky because:
 3. Then: Upgrade Spring Boot 2.7 → 3.x
 4. Validate again
 
-### 1.1 Step 1: Update Java to 17
+### 1.1 Step 1: Update Java to 17 ✅
 
 **Tasks**:
-- [ ] Update `.java-version` to `17`
+- [x] Update `.java-version` to `17` (now at `21`)
 ```bash
 echo "17" > .java-version
 ```
 
-- [ ] Update `pom.xml` Java version properties:
+- [x] Update `pom.xml` Java version properties:
 ```xml
 <properties>
     <java-source>17</java-source>
@@ -77,7 +113,7 @@ echo "17" > .java-version
 </properties>
 ```
 
-- [ ] Remove deprecated compiler flags:
+- [x] Remove deprecated compiler flags:
 ```xml
 <!-- Remove from maven-surefire-plugin if present -->
 <argLine>--illegal-access=permit</argLine>
@@ -92,7 +128,7 @@ mvn clean test
 
 ---
 
-### 1.2 Step 2: Update Spring Boot to 3.2.x
+### 1.2 Step 2: Update Spring Boot to 3.2.x ✅
 
 **Prerequisites**: Java 17 must be installed (from Step 1)
 
@@ -102,24 +138,24 @@ mvn clean test
 
 **Tasks**:
 
-- [ ] Update Spring Boot version in `pom.xml`:
+- [x] Update Spring Boot version in `pom.xml` (now at 3.3.0):
 ```xml
 <spring-boot.version>3.2.2</spring-boot.version>
 <spring.version>6.1.3</spring.version>
 ```
 
-- [ ] Update Hibernate Validator:
+- [x] Update Hibernate Validator:
 ```xml
 <hibernate-validator.version>8.0.1.Final</hibernate-validator.version>
 ```
 
-- [ ] Update Tomcat (included in Spring Boot 3):
+- [x] Update Tomcat (included in Spring Boot 3):
 ```xml
 <!-- Tomcat 10.x comes with Spring Boot 3 -->
 <tomcat.version>10.1.18</tomcat.version>
 ```
 
-- [ ] Replace all `javax.*` imports with `jakarta.*`:
+- [x] Replace all `javax.*` imports with `jakarta.*`:
 ```bash
 # Automated replacement (review carefully!)
 find . -name "*.java" -type f -exec sed -i '' 's/import javax\./import jakarta./g' {} \;
@@ -142,79 +178,79 @@ import jakarta.servlet.*;
 
 ---
 
-### 1.3 Update Testing Dependencies
+### 1.3 Update Testing Dependencies ✅
 
 **Tasks**:
 
-- [ ] Update JUnit (already on 5.10.1, verify compatibility):
+- [x] Update JUnit (already on 5.10.1, verify compatibility):
 ```xml
 <junit.version>5.10.2</junit.version>
 <junit-platform.version>1.10.2</junit-platform.version>
 ```
 
-- [ ] Update Mockito:
+- [x] Update Mockito:
 ```xml
 <mockito.version>5.10.0</mockito.version>
 ```
 
-- [ ] Update AssertJ:
+- [x] Update AssertJ:
 ```xml
 <assertj.version>3.25.3</assertj.version>
 ```
 
-- [ ] Update Cucumber (already on 7.15.0, verify):
+- [x] Update Cucumber (already on 7.15.0, verify):
 ```xml
 <cucumber.version>7.15.0</cucumber.version>
 ```
 
-- [ ] Verify all tests pass:
+- [x] Verify all tests pass:
 ```bash
 mvn clean test
 ```
 
 ---
 
-### 1.4 Update Other Dependencies
+### 1.4 Update Other Dependencies ✅
 
 **Tasks**:
 
-- [ ] Update Lombok (Java 17 support):
+- [x] Update Lombok (Java 17 support):
 ```xml
 <lombok.version>1.18.30</lombok.version>
 ```
 
-- [ ] Update Guava:
+- [x] Update Guava:
 ```xml
 <guava.version>33.0.0-jre</guava.version>
 ```
 
-- [ ] Update Jackson:
+- [x] Update Jackson:
 ```xml
 <jackson.version>2.16.1</jackson.version>
 ```
 
-- [ ] Update SLF4J and Logback:
+- [x] Update SLF4J and Logback:
 ```xml
 <slf4j.version>2.0.12</slf4j.version>
 <logback.version>1.4.14</logback.version>
 ```
 
-- [ ] Update Commons Lang3:
+- [x] Update Commons Lang3:
 ```xml
 <commons-lang3.version>3.14.0</commons-lang3.version>
 ```
 
 ---
 
-### 1.5 Validation Checkpoint
+### 1.5 Validation Checkpoint ✅
 
 **Tasks**:
-- [ ] Run full build: `mvn clean install`
-- [ ] Run all tests: `mvn clean test`
-- [ ] Verify application starts: `mvn spring-boot:run`
-- [ ] Manual smoke testing of key features
-- [ ] Check for deprecation warnings in logs
-- [ ] Review and fix any compilation warnings
+- [x] Run full build: `mvn clean install`
+- [x] Run all tests: `mvn clean test`
+- [x] Verify application starts: `mvn spring-boot:run`
+- [x] Manual smoke testing of key features
+- [x] Check for deprecation warnings in logs
+- [x] Review and fix any compilation warnings
 
 **Success Criteria**:
 - ✅ All 207 tests passing
@@ -224,9 +260,11 @@ mvn clean test
 
 ---
 
-## Phase 2: Adopt Java 17 Language Features (Week 2)
+## Phase 2: Adopt Java 17 Language Features (Week 2) 🔄 **IN PROGRESS**
 
 **Goal**: Modernize codebase with Java 17 features
+
+**Status**: Event DTOs migrated to records (✅). Remaining tasks: View/Command classes, sealed classes, pattern matching, text blocks, switch expressions.
 
 ### 2.1 Replace DTOs with Records
 
@@ -309,9 +347,11 @@ public record AuctionFinishedEvent(long auctionId) implements Event {}
 
 ---
 
-### 2.2 Use Sealed Classes for State Hierarchies
+### 2.2 Use Sealed Classes for State Hierarchies ⏭️ **TO BE DONE**
 
 **Rationale**: Sealed classes make type hierarchies explicit and enable exhaustive pattern matching
+
+**Priority**: High - Enables better pattern matching and compiler verification
 
 **Candidates**:
 - `SlotState` hierarchy (CreatedSlotState, AvailableSlotState, PreReservedState, ReservedState)
@@ -351,9 +391,11 @@ final class ReservedState implements SlotState { }
 
 ---
 
-### 2.3 Pattern Matching for instanceof
+### 2.3 Pattern Matching for instanceof ⏭️ **TO BE DONE**
 
 **Rationale**: Cleaner code, eliminates explicit casts
+
+**Priority**: Medium - Code quality improvement
 
 **Example Migration**:
 ```java
@@ -376,9 +418,11 @@ if (exception instanceof SlotAlreadyReservedException e) {
 
 ---
 
-### 2.4 Text Blocks for Multi-line Strings
+### 2.4 Text Blocks for Multi-line Strings ⏭️ **TO BE DONE**
 
 **Rationale**: Better readability for error messages, JSON, SQL, etc.
+
+**Priority**: Low - Cosmetic improvement
 
 **Example Migration**:
 ```java
@@ -404,9 +448,11 @@ String errorMessage = """
 
 ---
 
-### 2.5 Switch Expressions
+### 2.5 Switch Expressions ⏭️ **TO BE DONE**
 
 **Rationale**: More concise and safer than switch statements
+
+**Priority**: Medium - Code quality improvement
 
 **Example Migration**:
 ```java
@@ -441,57 +487,59 @@ String status = switch (state) {
 
 ---
 
-## Phase 3: Upgrade to Java 21 LTS (Week 3-4)
+## Phase 3: Upgrade to Java 21 LTS (Week 3-4) ✅ **COMPLETED**
 
 **Goal**: Move to latest LTS version with advanced features
 
-### 3.1 Update Java Runtime
+**Status**: All tasks completed. System running Java 21 with Spring Boot 3.3.0.
+
+### 3.1 Update Java Runtime ✅
 
 **Tasks**:
-- [ ] Update `.java-version` to `21`
-- [ ] Update `pom.xml`:
+- [x] Update `.java-version` to `21`
+- [x] Update `pom.xml`:
 ```xml
 <java-source>21</java-source>
 <java-target>21</java-target>
 <java.version>21</java.version>
 ```
 
-- [ ] Verify build: `mvn clean compile test`
+- [x] Verify build: `mvn clean compile test`
 
 ---
 
-### 3.2 Update Spring Boot to 3.3.x
+### 3.2 Update Spring Boot to 3.3.x ✅
 
 **Rationale**: Spring Boot 3.3+ has optimizations for Java 21
 
 **Tasks**:
-- [ ] Update Spring Boot:
+- [x] Update Spring Boot:
 ```xml
 <spring-boot.version>3.3.0</spring-boot.version>
 <spring.version>6.1.8</spring.version>
 ```
 
-- [ ] Run tests: `mvn clean test`
+- [x] Run tests: `mvn clean test`
 
 ---
 
-### 3.3 Update Dependencies for Java 21
+### 3.3 Update Dependencies for Java 21 ✅
 
 **Tasks**:
 
-- [ ] Update Lombok:
+- [x] Update Lombok:
 ```xml
 <lombok.version>1.18.32</lombok.version>
 ```
 
-- [ ] Update testing libraries:
+- [x] Update testing libraries:
 ```xml
 <junit.version>5.10.2</junit.version>
 <mockito.version>5.11.0</mockito.version>
 <assertj.version>3.25.3</assertj.version>
 ```
 
-- [ ] Update other dependencies:
+- [x] Update other dependencies:
 ```xml
 <guava.version>33.1.0-jre</guava.version>
 <jackson.version>2.17.0</jackson.version>
@@ -499,13 +547,17 @@ String status = switch (state) {
 
 ---
 
-## Phase 4: Adopt Java 21 Language Features (Week 4-5)
+## Phase 4: Adopt Java 21 Language Features (Week 4-5) ⏭️ **TO BE DONE**
 
 **Goal**: Leverage Java 21's powerful new features
 
-### 4.1 Pattern Matching for Switch
+**Status**: Ready to start. Java 21 runtime is in place.
+
+### 4.1 Pattern Matching for Switch ⏭️ **TO BE DONE**
 
 **Rationale**: Combine type checking and extraction in switch expressions
+
+**Priority**: High - Powerful feature for state handling
 
 **Example**:
 ```java
@@ -543,9 +595,11 @@ String description = switch (state) {
 
 ---
 
-### 4.2 Record Patterns
+### 4.2 Record Patterns ⏭️ **TO BE DONE**
 
 **Rationale**: Destructure records directly in patterns
+
+**Priority**: High - Works well with migrated event records
 
 **Example**:
 ```java
@@ -577,9 +631,11 @@ String result = switch (event) {
 
 ---
 
-### 4.3 Virtual Threads (Project Loom)
+### 4.3 Virtual Threads (Project Loom) ⏭️ **TO BE DONE**
 
 **Rationale**: Massive scalability for I/O-bound operations
+
+**Priority**: High - Significant performance improvement
 
 **Configuration**:
 ```yaml
@@ -623,9 +679,11 @@ public class VirtualThreadConfig {
 
 ---
 
-### 4.4 Sequenced Collections
+### 4.4 Sequenced Collections ⏭️ **TO BE DONE**
 
 **Rationale**: Unified API for collections with defined order
+
+**Priority**: Medium - Code quality improvement
 
 **New Methods**:
 ```java
@@ -663,9 +721,11 @@ if (!slots.isEmpty()) {
 
 ---
 
-### 4.5 String Templates (Preview in Java 21)
+### 4.5 String Templates (Preview in Java 21) ⏭️ **TO BE DONE**
 
 **Note**: This is a preview feature in Java 21, finalized in later versions
+
+**Priority**: Low - Preview feature, consider waiting
 
 **Enable preview features**:
 ```xml

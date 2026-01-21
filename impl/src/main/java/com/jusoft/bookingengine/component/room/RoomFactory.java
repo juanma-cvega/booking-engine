@@ -23,7 +23,7 @@ class RoomFactory {
     }
 
     RoomView createFrom(Room room) {
-        return RoomView.of(
+        return new RoomView(
                 room.getId(),
                 room.getClubId(),
                 room.getBuildingId(),

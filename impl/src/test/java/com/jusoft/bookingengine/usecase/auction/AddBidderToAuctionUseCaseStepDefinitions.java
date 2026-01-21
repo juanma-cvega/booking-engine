@@ -59,7 +59,7 @@ public class AddBidderToAuctionUseCaseStepDefinitions extends AbstractUseCaseSte
     public void member_can_bid_in_auctions(Long memberId) {
         authorizationManagerComponent.addAccessToAuctions(
                 ChangeAccessToAuctionsCommand.of(
-                        memberId, buildingCreated.getId(), roomCreated.getId()));
+                        memberId, buildingCreated.getId(), roomCreated.id()));
     }
 
     @Then(
@@ -69,9 +69,9 @@ public class AddBidderToAuctionUseCaseStepDefinitions extends AbstractUseCaseSte
                     Long userId) {
         assertThat(exceptionThrown).isInstanceOf(UnauthorizedBidException.class);
         UnauthorizedBidException exception = (UnauthorizedBidException) exceptionThrown;
-        assertThat(exception.getBuildingId()).isEqualTo(roomCreated.getBuildingId());
-        assertThat(exception.getClubId()).isEqualTo(roomCreated.getClubId());
-        assertThat(exception.getRoomId()).isEqualTo(roomCreated.getId());
+        assertThat(exception.getBuildingId()).isEqualTo(roomCreated.buildingId());
+        assertThat(exception.getClubId()).isEqualTo(roomCreated.clubId());
+        assertThat(exception.getRoomId()).isEqualTo(roomCreated.id());
         assertThat(exception.getUserId()).isEqualTo(userId);
     }
 
@@ -79,6 +79,6 @@ public class AddBidderToAuctionUseCaseStepDefinitions extends AbstractUseCaseSte
     public void member_is_not_authorized_to_bid_in_auctions_for_the_room(Long memberId) {
         authorizationManagerComponent.removeAccessToAuctions(
                 ChangeAccessToAuctionsCommand.of(
-                        memberId, roomCreated.getBuildingId(), roomCreated.getId()));
+                        memberId, roomCreated.buildingId(), roomCreated.id()));
     }
 }

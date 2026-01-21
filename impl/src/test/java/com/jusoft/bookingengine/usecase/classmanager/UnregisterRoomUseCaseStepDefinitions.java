@@ -22,13 +22,13 @@ public class UnregisterRoomUseCaseStepDefinitions extends AbstractUseCaseStepDef
     @When("^the room is unregistered from the class$")
     public void the_room_is_unregistered_from_the_class() {
         unregisterRoomUseCase.unregisterRoom(
-                UnregisterRoomCommand.of(classCreated.getId(), roomCreated.getId()));
+                UnregisterRoomCommand.of(classCreated.getId(), roomCreated.id()));
     }
 
     @Then("^the class should not have the room registered$")
     public void the_class_should_not_have_the_room_registered() {
         ClassView classFound = classManagerComponent.find(classCreated.getId());
-        assertThat(classFound.getRoomsRegistered()).doesNotContain(roomCreated.getId());
+        assertThat(classFound.getRoomsRegistered()).doesNotContain(roomCreated.id());
     }
 
     @Then("^a notification of the room being unregistered from the class should be published$")
@@ -36,6 +36,6 @@ public class UnregisterRoomUseCaseStepDefinitions extends AbstractUseCaseStepDef
         RoomUnregisteredForClassEvent event =
                 verifyAndGetMessageOfType(RoomUnregisteredForClassEvent.class);
         assertThat(event.classId()).isEqualTo(classCreated.getId());
-        assertThat(event.roomId()).isEqualTo(roomCreated.getId());
+        assertThat(event.roomId()).isEqualTo(roomCreated.id());
     }
 }

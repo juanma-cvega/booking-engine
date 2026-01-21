@@ -24,8 +24,8 @@ public class ScheduleNextSlotUseCase {
     public void scheduleNextSlot(long roomId) {
         RoomView room = roomManagerComponent.find(roomId);
         SlotCreationStrategy strategy =
-                slotCreationStrategyRegistrar.createStrategyWith(room.getSlotCreationConfigInfo());
+                slotCreationStrategyRegistrar.createStrategyWith(room.slotCreationConfigInfo());
         schedulerComponent.schedule(
-                strategy.nextSlotCreationTimeFor(room.getId()), new SlotRequiredEvent(roomId));
+                strategy.nextSlotCreationTimeFor(room.id()), new SlotRequiredEvent(roomId));
     }
 }

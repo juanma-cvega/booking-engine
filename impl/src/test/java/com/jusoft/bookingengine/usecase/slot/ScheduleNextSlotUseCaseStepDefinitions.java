@@ -21,7 +21,7 @@ public class ScheduleNextSlotUseCaseStepDefinitions extends AbstractUseCaseStepD
 
     @When("^a slot is scheduled$")
     public void a_slot_is_scheduled() throws Throwable {
-        scheduleNextSlotUseCase.scheduleNextSlot(roomCreated.getId());
+        scheduleNextSlotUseCase.scheduleNextSlot(roomCreated.id());
     }
 
     @Then("^a command to open the next slot for the room should be published immediately$")
@@ -31,7 +31,7 @@ public class ScheduleNextSlotUseCaseStepDefinitions extends AbstractUseCaseStepD
                         () -> {
                             SlotRequiredEvent event =
                                     verifyAndGetMessageOfType(SlotRequiredEvent.class);
-                            assertThat(event.roomId()).isEqualTo(roomCreated.getId());
+                            assertThat(event.roomId()).isEqualTo(roomCreated.id());
                         });
     }
 
@@ -42,7 +42,7 @@ public class ScheduleNextSlotUseCaseStepDefinitions extends AbstractUseCaseStepD
         assertThat(tasks).hasSize(1);
         assertThat(tasks.get(0).getExecutionTime()).isEqualTo(getDateFrom(localTime));
         assertThat(tasks.get(0).getScheduledEvent())
-                .isEqualTo(new SlotRequiredEvent(roomCreated.getId()));
+                .isEqualTo(new SlotRequiredEvent(roomCreated.id()));
         assertThat(tasks.get(0).getTask().isDone()).isFalse();
     }
 }
