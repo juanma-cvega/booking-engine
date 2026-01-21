@@ -15,11 +15,11 @@ class RoomFactory {
         return new Room(
                 idGenerator.get(),
                 clubId,
-                createRoomCommand.getBuildingId(),
-                createRoomCommand.getSlotCreationConfigInfo(),
-                createRoomCommand.getSlotDurationInMinutes(),
-                createRoomCommand.getOpenTimePerDay(),
-                createRoomCommand.getAvailableDays());
+                createRoomCommand.buildingId(),
+                createRoomCommand.slotCreationConfigInfo(),
+                createRoomCommand.slotDurationInMinutes(),
+                createRoomCommand.openTimePerDay(),
+                createRoomCommand.availableDays());
     }
 
     RoomView createFrom(Room room) {

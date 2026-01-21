@@ -4,28 +4,21 @@ import com.jusoft.bookingengine.component.timer.OpenTime;
 import com.jusoft.bookingengine.publisher.Command;
 import com.jusoft.bookingengine.strategy.slotcreation.api.SlotCreationConfigInfo;
 import java.time.DayOfWeek;
-import java.util.ArrayList;
 import java.util.List;
-import lombok.Data;
-import lombok.NonNull;
+import java.util.Objects;
 
-@Data(staticConstructor = "of")
-public class CreateRoomCommand implements Command {
-    private final long buildingId;
-
-    @NonNull private final SlotCreationConfigInfo slotCreationConfigInfo;
-
-    private final int slotDurationInMinutes;
-
-    @NonNull private final List<OpenTime> openTimePerDay;
-
-    @NonNull private final List<DayOfWeek> availableDays;
-
-    public List<OpenTime> getOpenTimePerDay() {
-        return new ArrayList<>(openTimePerDay);
-    }
-
-    public List<DayOfWeek> getAvailableDays() {
-        return new ArrayList<>(availableDays);
+public record CreateRoomCommand(
+        long buildingId,
+        SlotCreationConfigInfo slotCreationConfigInfo,
+        int slotDurationInMinutes,
+        List<OpenTime> openTimePerDay,
+        List<DayOfWeek> availableDays)
+        implements Command {
+    public CreateRoomCommand {
+        Objects.requireNonNull(slotCreationConfigInfo, "slotCreationConfigInfo must not be null");
+        Objects.requireNonNull(openTimePerDay, "openTimePerDay must not be null");
+        Objects.requireNonNull(availableDays, "availableDays must not be null");
+        openTimePerDay = List.copyOf(openTimePerDay);
+        availableDays = List.copyOf(availableDays);
     }
 }

@@ -16,7 +16,7 @@ class CreateClubRoomCommandTest {
     public void null_slots_creation_strategy_config_info_should_fail_constructor() {
         assertThatThrownBy(
                         () ->
-                                CreateRoomCommand.of(
+                                new CreateRoomCommand(
                                         BUILDING_ID,
                                         MAX_NUMBER_OF_SLOTS_STRATEGY_CONFIG_INFO,
                                         SLOT_DURATION_IN_MINUTES,
@@ -29,7 +29,7 @@ class CreateClubRoomCommandTest {
     public void null_open_times_should_fail_constructor() {
         assertThatThrownBy(
                         () ->
-                                CreateRoomCommand.of(
+                                new CreateRoomCommand(
                                         BUILDING_ID,
                                         MAX_NUMBER_OF_SLOTS_STRATEGY_CONFIG_INFO,
                                         SLOT_DURATION_IN_MINUTES,
@@ -42,7 +42,7 @@ class CreateClubRoomCommandTest {
     public void null_available_days_should_fail_constructor() {
         assertThatThrownBy(
                         () ->
-                                CreateRoomCommand.of(
+                                new CreateRoomCommand(
                                         BUILDING_ID,
                                         MAX_NUMBER_OF_SLOTS_STRATEGY_CONFIG_INFO,
                                         SLOT_DURATION_IN_MINUTES,

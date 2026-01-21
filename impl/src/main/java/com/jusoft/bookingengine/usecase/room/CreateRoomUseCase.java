@@ -14,7 +14,7 @@ public class CreateRoomUseCase {
     private final BuildingManagerComponent buildingManagerComponent;
 
     public RoomView createRoom(CreateRoomCommand createRoomCommand) {
-        BuildingView building = buildingManagerComponent.find(createRoomCommand.getBuildingId());
+        BuildingView building = buildingManagerComponent.find(createRoomCommand.buildingId());
         return roomManagerComponent.create(createRoomCommand, building.clubId());
     }
 }

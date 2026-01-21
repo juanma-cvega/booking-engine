@@ -110,7 +110,7 @@ public class DataHolder {
         public List<DayOfWeek> availableDays = new ArrayList<>();
 
         public CreateRoomCommand build(long buildingId) {
-            return CreateRoomCommand.of(
+            return new CreateRoomCommand(
                     buildingId,
                     slotCreationConfigInfo == null
                             ? MAX_NUMBER_OF_SLOTS_STRATEGY_CONFIG_INFO
