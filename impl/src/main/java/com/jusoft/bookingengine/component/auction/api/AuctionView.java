@@ -2,37 +2,19 @@ package com.jusoft.bookingengine.component.auction.api;
 
 import com.jusoft.bookingengine.component.timer.OpenDate;
 import com.jusoft.bookingengine.strategy.auctionwinner.api.AuctionConfigInfo;
-import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NonNull;
 
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Data
-public class AuctionView {
-
-    private final long id;
-    private final long referenceId;
-
-    @NonNull private final OpenDate openDate;
-
-    @NonNull private final AuctionConfigInfo auctionConfigInfo;
-
-    @NonNull private final Set<Bid> bidders;
-
-    public static AuctionView of(
-            long id,
-            long referenceId,
-            OpenDate openDate,
-            AuctionConfigInfo auctionConfigInfo,
-            Set<Bid> bidders) {
-        return new AuctionView(
-                id, referenceId, openDate, auctionConfigInfo, new HashSet<>(bidders));
-    }
-
-    public Set<Bid> getBidders() {
-        return new HashSet<>(bidders);
+public record AuctionView(
+        long id,
+        long referenceId,
+        OpenDate openDate,
+        AuctionConfigInfo auctionConfigInfo,
+        Set<Bid> bidders) {
+    public AuctionView {
+        Objects.requireNonNull(openDate, "openDate must not be null");
+        Objects.requireNonNull(auctionConfigInfo, "auctionConfigInfo must not be null");
+        Objects.requireNonNull(bidders, "bidders must not be null");
+        bidders = Set.copyOf(bidders);
     }
 }

@@ -15,7 +15,7 @@ public class FinishAuctionUseCase {
     public void finishAuction(long auctionId) {
         AuctionView auction = auctionManagerComponent.find(auctionId);
         AuctionWinnerStrategy strategy =
-                auctionStrategyRegistrar.createStrategyWith(auction.getAuctionConfigInfo());
+                auctionStrategyRegistrar.createStrategyWith(auction.auctionConfigInfo());
         auctionManagerComponent.finishAuction(auctionId, strategy);
     }
 }

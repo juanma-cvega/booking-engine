@@ -18,7 +18,7 @@ public class FinishAuctionUseCaseStepDefinitions extends AbstractUseCaseStepDefi
 
     @When("^the auction time is finished$")
     public void whenAuctionTimeIsFinished() {
-        finishAuctionUseCase.finishAuction(auctionCreated.getId());
+        finishAuctionUseCase.finishAuction(auctionCreated.id());
     }
 
     @Then("^a notification saying the slot can be made available should be published$")
@@ -36,6 +36,6 @@ public class FinishAuctionUseCaseStepDefinitions extends AbstractUseCaseStepDefi
                 (AuctionWinnerFoundEvent) messageCaptor.getValue();
         assertThat(userId).isEqualTo(auctionWinnerFoundEvent.auctionWinnerId());
         assertThat(slotCreated.id()).isEqualTo(auctionWinnerFoundEvent.slotId());
-        assertThat(auctionCreated.getId()).isEqualTo(auctionWinnerFoundEvent.auctionId());
+        assertThat(auctionCreated.id()).isEqualTo(auctionWinnerFoundEvent.auctionId());
     }
 }

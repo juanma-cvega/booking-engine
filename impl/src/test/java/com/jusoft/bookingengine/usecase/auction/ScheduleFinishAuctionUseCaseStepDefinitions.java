@@ -23,13 +23,13 @@ public class ScheduleFinishAuctionUseCaseStepDefinitions extends AbstractUseCase
         assertThat(tasks).hasSize(1);
         assertThat(tasks.get(0).getExecutionTime()).isEqualTo(getDateFrom(auctionFinishedTime));
         assertThat(tasks.get(0).getScheduledEvent())
-                .isEqualTo(new AuctionFinishedEvent(auctionCreated.getId()));
+                .isEqualTo(new AuctionFinishedEvent(auctionCreated.id()));
         assertThat(tasks.get(0).getTask().isDone()).isFalse();
     }
 
     @When("^the auction is scheduled to finish$")
     public void the_auction_is_scheduled_to_finish() {
         scheduleFinishAuctionUseCase.scheduleFinishAuction(
-                auctionCreated.getId(), auctionCreated.getOpenDate());
+                auctionCreated.id(), auctionCreated.openDate());
     }
 }

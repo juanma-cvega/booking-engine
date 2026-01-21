@@ -40,13 +40,13 @@ public class StartAuctionUseCaseStepDefinitions extends AbstractUseCaseStepDefin
 
     @Then("^the auction should be stored$")
     public void the_auction_should_be_store() {
-        AuctionView auction = auctionManagerComponent.find(DataHolder.auctionCreated.getId());
-        assertThat(auction.getBidders()).hasSameElementsAs(DataHolder.auctionCreated.getBidders());
-        assertThat(auction.getOpenDate().getEndTime())
-                .isEqualTo(DataHolder.auctionCreated.getOpenDate().getEndTime());
-        assertThat(auction.getReferenceId()).isEqualTo(DataHolder.auctionCreated.getReferenceId());
-        assertThat(auction.getOpenDate().getStartTime())
-                .isEqualTo(DataHolder.auctionCreated.getOpenDate().getStartTime());
+        AuctionView auction = auctionManagerComponent.find(DataHolder.auctionCreated.id());
+        assertThat(auction.bidders()).hasSameElementsAs(DataHolder.auctionCreated.bidders());
+        assertThat(auction.openDate().getEndTime())
+                .isEqualTo(DataHolder.auctionCreated.openDate().getEndTime());
+        assertThat(auction.referenceId()).isEqualTo(DataHolder.auctionCreated.referenceId());
+        assertThat(auction.openDate().getStartTime())
+                .isEqualTo(DataHolder.auctionCreated.openDate().getStartTime());
     }
 
     @Then("^the auction shouldn't exist$")
@@ -66,8 +66,8 @@ public class StartAuctionUseCaseStepDefinitions extends AbstractUseCaseStepDefin
     @Then("^an auction started event should be published$")
     public void an_auction_started_event_should_be_published() {
         AuctionStartedEvent event = verifyAndGetMessageOfType(AuctionStartedEvent.class);
-        assertThat(event.auctionId()).isEqualTo(auctionCreated.getId());
-        assertThat(event.openDate()).isEqualTo(auctionCreated.getOpenDate());
-        assertThat(event.referenceId()).isEqualTo(auctionCreated.getReferenceId());
+        assertThat(event.auctionId()).isEqualTo(auctionCreated.id());
+        assertThat(event.openDate()).isEqualTo(auctionCreated.openDate());
+        assertThat(event.referenceId()).isEqualTo(auctionCreated.referenceId());
     }
 }

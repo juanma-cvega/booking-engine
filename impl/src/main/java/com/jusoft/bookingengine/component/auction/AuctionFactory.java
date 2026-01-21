@@ -23,7 +23,7 @@ class AuctionFactory {
     }
 
     public AuctionView createFrom(Auction auction) {
-        return AuctionView.of(
+        return new AuctionView(
                 auction.getId(),
                 auction.getReferenceId(),
                 auction.getOpenDate(),

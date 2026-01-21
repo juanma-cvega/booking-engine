@@ -30,7 +30,7 @@ public class AddBidderToAuctionUseCaseStepDefinitions extends AbstractUseCaseSte
 
     @When("^user (.*) bids on the auction$")
     public void user_bids_on_the_auction(Long userId) {
-        addBidderToAuctionUseCase.addBidderToAuctionFor(userId, auctionCreated.getReferenceId());
+        addBidderToAuctionUseCase.addBidderToAuctionFor(userId, auctionCreated.referenceId());
     }
 
     @When("^user (.*) tries to bid on the auction$")
@@ -42,16 +42,16 @@ public class AddBidderToAuctionUseCaseStepDefinitions extends AbstractUseCaseSte
     @Then("^the auction should contain the user (\\d+) bid created at (.*)$")
     public void the_auction_should_contain_the_user_bid_created_at(
             Integer userId, String creationTime) {
-        AuctionView auction = auctionManagerComponent.find(auctionCreated.getId());
-        assertThat(auction.getBidders()).contains(new Bid(userId, getDateFrom(creationTime)));
+        AuctionView auction = auctionManagerComponent.find(auctionCreated.id());
+        assertThat(auction.bidders()).contains(new Bid(userId, getDateFrom(creationTime)));
     }
 
     @Then("^the user should be notified the auction is finished$")
     public void the_user_should_be_notified_the_auction_is_finished() {
         assertThat(exceptionThrown).isInstanceOf(AuctionFinishedException.class);
         AuctionFinishedException exception = (AuctionFinishedException) exceptionThrown;
-        assertThat(exception.getAuctionId()).isEqualTo(auctionCreated.getId());
-        assertThat(exception.getSlotId()).isEqualTo(auctionCreated.getReferenceId());
+        assertThat(exception.getAuctionId()).isEqualTo(auctionCreated.id());
+        assertThat(exception.getSlotId()).isEqualTo(auctionCreated.referenceId());
     }
     ;
 
