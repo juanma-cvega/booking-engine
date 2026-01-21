@@ -147,7 +147,7 @@ class SlotTest {
         Slot slotModified =
                 slot.preReserve(
                         Clock.fixed(START_TIME.toInstant(), START_TIME.getZone()), SLOT_USER);
-        assertThat(slotModified.getState()).isEqualTo(PreReservedState.of(SLOT_USER));
+        assertThat(slotModified.getState()).isEqualTo(new PreReservedState(SLOT_USER));
     }
 
     @Test
@@ -177,7 +177,7 @@ class SlotTest {
                         CLUB_ID,
                         START_TIME,
                         OPEN_DATE,
-                        PreReservedState.of(SLOT_USER));
+                        new PreReservedState(SLOT_USER));
         assertThatThrownBy(
                         () ->
                                 slot.reserve(
@@ -200,7 +200,7 @@ class SlotTest {
                         CLUB_ID,
                         START_TIME,
                         OPEN_DATE,
-                        PreReservedState.of(SLOT_USER));
+                        new PreReservedState(SLOT_USER));
         Slot newSlot =
                 slot.preReserve(
                         Clock.fixed(START_TIME.toInstant(), START_TIME.getZone()), SLOT_USER);
@@ -218,7 +218,7 @@ class SlotTest {
                         CLUB_ID,
                         START_TIME,
                         OPEN_DATE,
-                        PreReservedState.of(SLOT_USER));
+                        new PreReservedState(SLOT_USER));
         assertThatThrownBy(
                         () ->
                                 slot.preReserve(
@@ -320,7 +320,7 @@ class SlotTest {
                         CLUB_ID,
                         START_TIME,
                         OPEN_DATE,
-                        PreReservedState.of(SLOT_USER));
+                        new PreReservedState(SLOT_USER));
         assertThatThrownBy(
                         () ->
                                 slot.reserve(
@@ -343,7 +343,7 @@ class SlotTest {
                         CLUB_ID,
                         START_TIME,
                         OPEN_DATE,
-                        PreReservedState.of(SLOT_USER));
+                        new PreReservedState(SLOT_USER));
         Slot slotModified = slot.makeAvailable();
         assertThat(slotModified.getState()).isEqualTo(AvailableSlotState.getInstance());
     }
@@ -384,7 +384,7 @@ class SlotTest {
         Slot slotModified =
                 slot.preReserve(
                         Clock.fixed(START_TIME.toInstant(), START_TIME.getZone()), SLOT_USER);
-        assertThat(slotModified.getState()).isEqualTo(PreReservedState.of(SLOT_USER));
+        assertThat(slotModified.getState()).isEqualTo(new PreReservedState(SLOT_USER));
     }
 
     @Test

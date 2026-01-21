@@ -24,7 +24,7 @@ class AvailableSlotState implements SlotState {
     @Override
     public SlotState preReserve(Slot slot, Clock clock, SlotUser slotUser) {
         checkIfOpen(slot, clock);
-        return PreReservedState.of(slotUser);
+        return new PreReservedState(slotUser);
     }
 
     private void checkIfOpen(Slot slot, Clock clock) {

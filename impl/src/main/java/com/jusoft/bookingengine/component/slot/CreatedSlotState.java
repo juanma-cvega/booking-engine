@@ -27,7 +27,7 @@ public class CreatedSlotState implements SlotState {
         if (!slot.isOpen(clock)) {
             throw new SlotNotOpenException(slot.getId());
         }
-        return PreReservedState.of(slotUser);
+        return new PreReservedState(slotUser);
     }
 
     static SlotState getInstance() {

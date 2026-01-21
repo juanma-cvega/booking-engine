@@ -1,3 +1,3 @@
 package com.jusoft.bookingengine.component.slotlifecycle;
 
-interface NextSlotState {}
+sealed interface NextSlotState permits AvailableState, InAuctionState, PreReservedState {}

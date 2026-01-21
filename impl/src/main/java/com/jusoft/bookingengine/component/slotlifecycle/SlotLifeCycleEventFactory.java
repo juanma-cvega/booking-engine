@@ -12,105 +12,21 @@ import com.jusoft.bookingengine.component.slotlifecycle.api.SlotUser;
 import com.jusoft.bookingengine.component.slotlifecycle.api.SlotUser.UserType;
 import com.jusoft.bookingengine.publisher.Event;
 import java.util.stream.Stream;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 
 class SlotLifeCycleEventFactory {
 
     <T extends NextSlotState> Event getEventFrom(T nextSlotState) {
-        return EventType.valueOf(nextSlotState).createEventFrom(nextSlotState);
+        return switch (nextSlotState) {
+            case InAuctionState s ->
+                    new SlotRequiresAuctionEvent(s.slotId(), s.auctionConfigInfo());
+            case PreReservedState s -> new SlotRequiresPreReservationEvent(s.slotId(), s.user());
+            case AvailableState s -> new SlotCanBeMadeAvailableEvent(s.slotId());
+        };
     }
 
     Event getEventFrom(long slotId, SlotUser slotUser) {
         return ReservationEventType.valueOf(slotUser.getUserType())
                 .createEventFrom(slotId, slotUser);
-    }
-
-    private enum EventType {
-        IN_AUCTION(InAuctionSlotStateFactory.INSTANCE),
-        PRE_RESERVED(PreReservedSlotStateFactory.INSTANCE),
-        AVAILABLE(AvailableSlotStateFactory.INSTANCE);
-
-        private final SlotStateFactory factory;
-
-        EventType(SlotStateFactory factory) {
-            this.factory = factory;
-        }
-
-        @SuppressWarnings("unchecked")
-        <T extends NextSlotState> Event createEventFrom(T slotState) {
-            return factory.getEventFrom(slotState);
-        }
-
-        static <T extends NextSlotState> EventType valueOf(T nextSlotState) {
-            return Stream.of(values())
-                    .filter(
-                            eventType ->
-                                    eventType.factory.getState().equals(nextSlotState.getClass()))
-                    .findFirst()
-                    .orElseThrow(() -> new IllegalArgumentException("State not supported"));
-        }
-    }
-
-    private interface SlotStateFactory<T extends Event, U extends NextSlotState> {
-
-        T getEventFrom(U nextSlotState);
-
-        Class<U> getState();
-    }
-
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    private static class InAuctionSlotStateFactory
-            implements SlotStateFactory<SlotRequiresAuctionEvent, InAuctionState> {
-
-        private static final InAuctionSlotStateFactory INSTANCE = new InAuctionSlotStateFactory();
-
-        @Override
-        public SlotRequiresAuctionEvent getEventFrom(InAuctionState nextSlotState) {
-            return new SlotRequiresAuctionEvent(
-                    nextSlotState.getSlotId(), nextSlotState.getAuctionConfigInfo());
-        }
-
-        @Override
-        public Class<InAuctionState> getState() {
-            return InAuctionState.class;
-        }
-    }
-
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    private static class PreReservedSlotStateFactory
-            implements SlotStateFactory<SlotRequiresPreReservationEvent, PreReservedState> {
-
-        private static final PreReservedSlotStateFactory INSTANCE =
-                new PreReservedSlotStateFactory();
-
-        @Override
-        public SlotRequiresPreReservationEvent getEventFrom(PreReservedState nextSlotState) {
-            return new SlotRequiresPreReservationEvent(
-                    nextSlotState.getSlotId(), nextSlotState.getUser());
-        }
-
-        @Override
-        public Class<PreReservedState> getState() {
-            return PreReservedState.class;
-        }
-    }
-
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    private static class AvailableSlotStateFactory
-            implements SlotStateFactory<SlotCanBeMadeAvailableEvent, AvailableState> {
-
-        private static final AvailableSlotStateFactory INSTANCE = new AvailableSlotStateFactory();
-
-        @Override
-        public SlotCanBeMadeAvailableEvent getEventFrom(AvailableState nextSlotState) {
-            return new SlotCanBeMadeAvailableEvent(nextSlotState.getSlotId());
-        }
-
-        @Override
-        public Class<AvailableState> getState() {
-            return AvailableState.class;
-        }
     }
 
     private enum ReservationEventType {

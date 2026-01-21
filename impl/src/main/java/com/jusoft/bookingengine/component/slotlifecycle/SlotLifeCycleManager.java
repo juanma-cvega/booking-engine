@@ -77,7 +77,7 @@ class SlotLifeCycleManager {
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .findFirst()
-                .orElse(AvailableState.of(slotId));
+                .orElse(new AvailableState(slotId));
     }
 
     private Supplier<Optional<NextSlotState>> isReservedForClassState(
@@ -88,7 +88,7 @@ class SlotLifeCycleManager {
                         .findFirst()
                         .map(
                                 classFound ->
-                                        PreReservedState.of(
+                                        new PreReservedState(
                                                 slotId,
                                                 SlotUser.of(classFound.getClassId(), CLASS)));
     }
@@ -103,7 +103,7 @@ class SlotLifeCycleManager {
                         .findFirst()
                         .map(
                                 preReservation ->
-                                        PreReservedState.of(
+                                        new PreReservedState(
                                                 slotId,
                                                 SlotUser.of(preReservation.getUserId(), PERSON)));
     }
@@ -111,7 +111,7 @@ class SlotLifeCycleManager {
     private Supplier<Optional<NextSlotState>> isInAuctionState(long slotId) {
         return () ->
                 auctionConfigInfo.getAuctionDuration() > 0
-                        ? Optional.of(InAuctionState.of(slotId, auctionConfigInfo))
+                        ? Optional.of(new InAuctionState(slotId, auctionConfigInfo))
                         : Optional.empty();
     }
 

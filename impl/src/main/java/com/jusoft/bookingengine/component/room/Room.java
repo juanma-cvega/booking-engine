@@ -43,7 +43,8 @@ class Room {
         Validate.notNull(slotCreationConfigInfo);
         Validate.notEmpty(openTimesPerDay);
         Validate.notEmpty(availableDays);
-        openTimesPerDay.sort(
+        List<OpenTime> sortedOpenTimes = new ArrayList<>(openTimesPerDay);
+        sortedOpenTimes.sort(
                 Comparator.comparing(
                         OpenTime::getStartTime)); // Needed to ensure soonest open time is checked
         // first
@@ -52,7 +53,7 @@ class Room {
         this.buildingId = buildingId;
         this.slotCreationConfigInfo = slotCreationConfigInfo;
         this.slotDurationInMinutes = slotDurationInMinutes;
-        this.openTimesPerDay = new ArrayList<>(openTimesPerDay);
+        this.openTimesPerDay = sortedOpenTimes;
         this.availableDays = new ArrayList<>(availableDays);
         validateOpenTimesDurationAreMultiplesOfSlotDuration(openTimesPerDay, slotDurationInMinutes);
     }
