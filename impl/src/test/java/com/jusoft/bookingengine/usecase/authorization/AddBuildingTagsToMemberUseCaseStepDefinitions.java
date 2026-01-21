@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.jusoft.bookingengine.component.authorization.api.AddBuildingTagsToMemberCommand;
 import com.jusoft.bookingengine.component.authorization.api.AuthorizationManagerComponent;
-import com.jusoft.bookingengine.component.authorization.api.MemberBuildingView;
 import com.jusoft.bookingengine.component.authorization.api.MemberNotFoundException;
 import com.jusoft.bookingengine.component.authorization.api.MemberView;
 import com.jusoft.bookingengine.component.authorization.api.Tag;
@@ -38,8 +37,8 @@ public class AddBuildingTagsToMemberUseCaseStepDefinitions extends AbstractUseCa
         Optional<MemberView> member = authorizationManagerComponent.findMemberBy(memberId);
         assertThat(member).isPresent();
         assertThat(member.get().buildings()).isNotEmpty();
-        assertThat(member.get().buildings().get(buildingId))
-                .isEqualTo(new MemberBuildingView(buildingId));
+        assertThat(member.get().buildings()).containsKey(buildingId);
+        assertThat(member.get().buildings().get(buildingId).id()).isEqualTo(buildingId);
     }
 
     @Then("^building (\\d+) of member (\\d+) should have tags? in its list of tags$")

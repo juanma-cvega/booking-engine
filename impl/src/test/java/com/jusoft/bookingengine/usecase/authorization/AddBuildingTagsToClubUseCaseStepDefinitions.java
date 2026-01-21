@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.jusoft.bookingengine.component.authorization.api.AddBuildingTagsToClubCommand;
 import com.jusoft.bookingengine.component.authorization.api.AuthorizationManagerComponent;
-import com.jusoft.bookingengine.component.authorization.api.ClubBuildingView;
 import com.jusoft.bookingengine.component.authorization.api.ClubNotFoundException;
 import com.jusoft.bookingengine.component.authorization.api.ClubView;
 import com.jusoft.bookingengine.component.authorization.api.Tag;
@@ -38,8 +37,8 @@ public class AddBuildingTagsToClubUseCaseStepDefinitions extends AbstractUseCase
         Optional<ClubView> club = authorizationManagerComponent.findClubBy(clubId);
         assertThat(club).isPresent();
         assertThat(club.get().buildings()).isNotEmpty();
-        assertThat(club.get().buildings().get(buildingId))
-                .isEqualTo(new ClubBuildingView(buildingId));
+        assertThat(club.get().buildings()).containsKey(buildingId);
+        assertThat(club.get().buildings().get(buildingId).id()).isEqualTo(buildingId);
     }
 
     @Then("^building (\\d+) of club (\\d+) should have tags? in its list of tags$")
