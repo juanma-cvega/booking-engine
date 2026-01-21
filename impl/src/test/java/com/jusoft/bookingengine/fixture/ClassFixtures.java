@@ -13,6 +13,6 @@ public class ClassFixtures {
     public static final BiFunction<Long, List<Long>, CreateClassCommand>
             CREATE_CLASS_COMMAND_SUPPLIER =
                     (buildingId, instructorsId) ->
-                            CreateClassCommand.of(
+                            new CreateClassCommand(
                                     buildingId, CLASS_DESCRIPTION, CLASS_TYPE, instructorsId);
 }

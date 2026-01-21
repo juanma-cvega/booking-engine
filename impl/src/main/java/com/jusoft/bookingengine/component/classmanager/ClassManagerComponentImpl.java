@@ -67,34 +67,33 @@ class ClassManagerComponentImpl implements ClassManagerComponent {
     @Override
     public void addInstructor(AddInstructorCommand command) {
         repository.execute(
-                command.getClassId(),
-                classFound -> classFound.addInstructor(command.getInstructorId()));
+                command.classId(), classFound -> classFound.addInstructor(command.instructorId()));
         messagePublisher.publish(
-                new ClassInstructorAddedEvent(command.getClassId(), command.getInstructorId()));
+                new ClassInstructorAddedEvent(command.classId(), command.instructorId()));
     }
 
     @Override
     public void removeInstructor(RemoveInstructorCommand command) {
         repository.execute(
-                command.getClassId(),
-                classFound -> classFound.removeInstructor(command.getInstructorId()));
+                command.classId(),
+                classFound -> classFound.removeInstructor(command.instructorId()));
         messagePublisher.publish(
-                new ClassInstructorRemovedEvent(command.getClassId(), command.getInstructorId()));
+                new ClassInstructorRemovedEvent(command.classId(), command.instructorId()));
     }
 
     @Override
     public void registerRoom(RegisterRoomCommand command) {
         repository.execute(
-                command.getClassId(), classFound -> classFound.registerRoom(command.getRoomId()));
+                command.classId(), classFound -> classFound.registerRoom(command.roomId()));
         messagePublisher.publish(
-                new RoomRegisteredForClassEvent(command.getClassId(), command.getRoomId()));
+                new RoomRegisteredForClassEvent(command.classId(), command.roomId()));
     }
 
     @Override
     public void unregisterRoom(UnregisterRoomCommand command) {
         repository.execute(
-                command.getClassId(), classFound -> classFound.unregisterRoom(command.getRoomId()));
+                command.classId(), classFound -> classFound.unregisterRoom(command.roomId()));
         messagePublisher.publish(
-                new RoomUnregisteredForClassEvent(command.getClassId(), command.getRoomId()));
+                new RoomUnregisteredForClassEvent(command.classId(), command.roomId()));
     }
 }

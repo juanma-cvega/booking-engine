@@ -22,7 +22,7 @@ public class UnregisterRoomUseCaseStepDefinitions extends AbstractUseCaseStepDef
     @When("^the room is unregistered from the class$")
     public void the_room_is_unregistered_from_the_class() {
         unregisterRoomUseCase.unregisterRoom(
-                UnregisterRoomCommand.of(classCreated.id(), roomCreated.id()));
+                new UnregisterRoomCommand(classCreated.id(), roomCreated.id()));
     }
 
     @Then("^the class should not have the room registered$")

@@ -22,7 +22,7 @@ public class RegisterRoomUseCaseStepDefinitions extends AbstractUseCaseStepDefin
     @When("^the room is registered to give the class$")
     public void the_room_is_registered_to_give_the_class() {
         registerRoomUseCase.registerRoom(
-                RegisterRoomCommand.of(classCreated.id(), roomCreated.id()));
+                new RegisterRoomCommand(classCreated.id(), roomCreated.id()));
     }
 
     @Then("^the class should have the room registered$")

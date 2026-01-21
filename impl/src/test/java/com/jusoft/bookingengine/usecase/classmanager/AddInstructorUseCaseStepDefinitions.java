@@ -21,7 +21,7 @@ public class AddInstructorUseCaseStepDefinitions extends AbstractUseCaseStepDefi
     @When("^instructor (\\d+) is added to the class$")
     public void instructor_is_added_to_the_class(Long instructorId) {
         addInstructorUseCase.addInstructor(
-                AddInstructorCommand.of(classCreated.id(), instructorId));
+                new AddInstructorCommand(classCreated.id(), instructorId));
     }
 
     @Then("^the class should have instructor (\\d+) as an available instructor$")

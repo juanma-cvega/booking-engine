@@ -2,17 +2,14 @@ package com.jusoft.bookingengine.component.classmanager.api;
 
 import com.jusoft.bookingengine.publisher.Command;
 import java.util.List;
-import lombok.Data;
-import lombok.NonNull;
+import java.util.Objects;
 
-@Data(staticConstructor = "of")
-public class CreateClassCommand implements Command {
-
-    private final long buildingId;
-
-    @NonNull private final String description;
-
-    @NonNull private final String type;
-
-    private final List<Long> instructorsId;
+public record CreateClassCommand(
+        long buildingId, String description, String type, List<Long> instructorsId)
+        implements Command {
+    public CreateClassCommand {
+        Objects.requireNonNull(description, "description must not be null");
+        Objects.requireNonNull(type, "type must not be null");
+        instructorsId = instructorsId == null ? List.of() : List.copyOf(instructorsId);
+    }
 }

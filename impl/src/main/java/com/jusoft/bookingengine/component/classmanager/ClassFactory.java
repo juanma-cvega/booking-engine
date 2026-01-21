@@ -14,10 +14,10 @@ class ClassFactory {
     Class createFrom(CreateClassCommand command) {
         return new Class(
                 idSupplier.get(),
-                command.getBuildingId(),
-                command.getDescription(),
-                command.getInstructorsId(),
-                command.getType());
+                command.buildingId(),
+                command.description(),
+                command.instructorsId(),
+                command.type());
     }
 
     ClassView createFrom(Class classSource) {

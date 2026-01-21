@@ -22,7 +22,7 @@ public class RemoveInstructorUseCaseStepDefinitions extends AbstractUseCaseStepD
     @When("^instructor (\\d+) is removed from the class$")
     public void instructor_is_removed_from_the_class(Long instructorId) {
         removeInstructorUseCase.removeInstructor(
-                RemoveInstructorCommand.of(classCreated.id(), instructorId));
+                new RemoveInstructorCommand(classCreated.id(), instructorId));
     }
 
     @Then("^the class should not have instructor (\\d+) as an available instructor$")
@@ -36,7 +36,7 @@ public class RemoveInstructorUseCaseStepDefinitions extends AbstractUseCaseStepD
         storeException(
                 () ->
                         removeInstructorUseCase.removeInstructor(
-                                RemoveInstructorCommand.of(classCreated.id(), instructorId)));
+                                new RemoveInstructorCommand(classCreated.id(), instructorId)));
     }
 
     @Then("^a notification of the removed instructor (\\d+) from the class should published$")

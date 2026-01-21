@@ -172,7 +172,7 @@ public class DataHolder {
         public List<Long> roomRegistered = new ArrayList<>();
 
         public CreateClassCommand build(long buildingId, List<Long> instructors) {
-            return CreateClassCommand.of(
+            return new CreateClassCommand(
                     buildingId,
                     description == null ? CLASS_DESCRIPTION : description,
                     type == null ? CLASS_TYPE : type,
