@@ -17,10 +17,11 @@ class SlotLifeCycleEventFactory {
 
     <T extends NextSlotState> Event getEventFrom(T nextSlotState) {
         return switch (nextSlotState) {
-            case InAuctionState s ->
-                    new SlotRequiresAuctionEvent(s.slotId(), s.auctionConfigInfo());
-            case PreReservedState s -> new SlotRequiresPreReservationEvent(s.slotId(), s.user());
-            case AvailableState s -> new SlotCanBeMadeAvailableEvent(s.slotId());
+            case InAuctionState(var slotId, var auctionConfigInfo) ->
+                    new SlotRequiresAuctionEvent(slotId, auctionConfigInfo);
+            case PreReservedState(var slotId, var user) ->
+                    new SlotRequiresPreReservationEvent(slotId, user);
+            case AvailableState(var slotId) -> new SlotCanBeMadeAvailableEvent(slotId);
         };
     }
 
