@@ -855,10 +855,11 @@ String message = STR."User \{userId} booked slot \{slotId} at \{bookingTime}";
 ### 5.1 Important Considerations
 
 **Java 25 Status**:
-- **Release Date**: March 2025
-- **Support**: **LTS (Long-Term Support)** - Supported until at least 2027
+- **Release Date**: ✅ Released (September 2025)
+- **Current Version**: 25.0.1 (January 2026)
+- **Support**: **LTS (Long-Term Support)** - Supported until at least 2029
 - **LTS Cadence**: Java now releases LTS versions every 2 years (17, 21, 25, 27...)
-- **Recommendation**: Safe for production use as an LTS release
+- **Recommendation**: ✅ Production-ready and stable for enterprise use
 
 **Note**: Java 25 LTS provides long-term stability and support, making it suitable for production systems
 
@@ -944,19 +945,97 @@ String message = STR."User \{userId} booked slot \{slotId} at \{bookingTime}";
 
 ### 5.6 Adopt Java 25 Features
 
-**Note**: Java 25 features depend on what's included in the release. Check JEP (JDK Enhancement Proposals) for details.
+**Status**: ✅ Java 25 released with finalized features
 
-**Potential Features** (based on roadmap):
-- String Templates (finalized)
-- Unnamed Patterns and Variables (finalized)
-- Scoped Values (finalized)
-- Structured Concurrency (preview/finalized)
+#### **New Language Features in Java 25:**
+
+**1. Flexible Constructor Bodies (JEP 482)** - High Priority
+- **What**: Statements before `super()` or `this()` calls in constructors
+- **Use Case**: Validate arguments or prepare data before calling parent constructor
+- **Example**:
+  ```java
+  public record BookingView(long id, long userId, long slotId) {
+      public BookingView {
+          // Can now add validation before compact constructor body
+          if (id <= 0) throw new IllegalArgumentException("Invalid id");
+          if (userId <= 0) throw new IllegalArgumentException("Invalid userId");
+      }
+  }
+  ```
+
+**2. Primitive Types in Patterns (JEP 455)** - Medium Priority
+- **What**: Pattern matching with primitive types
+- **Use Case**: Cleaner type checking and casting for primitives
+- **Example**:
+  ```java
+  Object obj = 42L;
+  if (obj instanceof long l) {
+      // Use l directly as long
+      processLong(l);
+  }
+  ```
+
+**3. Module Import Declarations (JEP 476)** - Low Priority
+- **What**: Import all public types from a module
+- **Use Case**: Simplify imports for heavily-used modules
+- **Note**: Consider carefully - can reduce code clarity
+
+**4. Stream Gatherers (JEP 473)** - High Priority
+- **What**: Custom intermediate stream operations
+- **Use Case**: Complex stream transformations beyond map/filter/reduce
+- **Example**:
+  ```java
+  // Custom windowing, batching, or stateful operations
+  List<Booking> bookings = stream
+      .gather(Gatherers.windowFixed(10)) // Batch into groups of 10
+      .toList();
+  ```
+
+**5. Scoped Values (JEP 481)** - Medium Priority
+- **What**: Better alternative to ThreadLocal for virtual threads
+- **Use Case**: Share immutable data across method calls without parameters
+- **Benefit**: Works efficiently with virtual threads (unlike ThreadLocal)
+- **Example**:
+  ```java
+  private static final ScopedValue<User> CURRENT_USER = ScopedValue.newInstance();
+  
+  ScopedValue.where(CURRENT_USER, user)
+      .run(() -> processBooking());
+  ```
+
+**6. Structured Concurrency (JEP 480)** - High Priority
+- **What**: Treat multiple tasks as a single unit of work
+- **Use Case**: Coordinate multiple concurrent operations with proper error handling
+- **Example**:
+  ```java
+  try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
+      Future<Club> club = scope.fork(() -> findClub(clubId));
+      Future<Member> member = scope.fork(() -> findMember(memberId));
+      
+      scope.join();           // Wait for all tasks
+      scope.throwIfFailed();  // Propagate errors
+      
+      return new Authorization(club.resultNow(), member.resultNow());
+  }
+  ```
 
 **Tasks**:
-- [ ] Review Java 25 release notes
-- [ ] Identify applicable features for the codebase
-- [ ] Create proof-of-concept for new features
-- [ ] Gradually adopt where beneficial
+- [ ] **Phase 5.6.1**: Review Java 25 release notes and JEPs
+- [ ] **Phase 5.6.2**: Identify opportunities for Flexible Constructor Bodies in records
+- [ ] **Phase 5.6.3**: Evaluate Stream Gatherers for complex collection operations
+- [ ] **Phase 5.6.4**: Replace ThreadLocal with Scoped Values (virtual thread optimization)
+- [ ] **Phase 5.6.5**: Implement Structured Concurrency for multi-task operations
+- [ ] **Phase 5.6.6**: Consider Primitive Patterns where type checking is needed
+- [ ] **Phase 5.6.7**: Test all new features with existing codebase
+- [ ] **Phase 5.6.8**: Document adopted features in codebase
+
+**Priority Recommendations**:
+1. **High**: Structured Concurrency (improves concurrent operations)
+2. **High**: Stream Gatherers (cleaner collection processing)
+3. **High**: Flexible Constructor Bodies (better record validation)
+4. **Medium**: Scoped Values (virtual thread optimization)
+5. **Medium**: Primitive Patterns (code clarity)
+6. **Low**: Module Imports (use sparingly)
 
 ---
 
@@ -1041,9 +1120,17 @@ String message = STR."User \{userId} booked slot \{slotId} at \{bookingTime}";
 - ✅ Stricter null handling in some APIs
 
 ### Java 21 → 25
-- ⚠️ Check release notes (Java 25 not yet released)
-- ⚠️ Potential removal of preview features from earlier versions
-- ⚠️ API changes in incubator modules
+- ✅ **Stable Release**: Java 25.0.1 available (January 2026)
+- ✅ **Key Changes**:
+  - Flexible Constructor Bodies (JEP 482) - Finalized
+  - Primitive Types in Patterns (JEP 455) - Finalized
+  - Module Import Declarations (JEP 476) - Finalized
+  - Stream Gatherers (JEP 473) - Finalized
+  - Scoped Values (JEP 481) - Finalized
+  - Structured Concurrency (JEP 480) - Finalized
+  - Class-File API (JEP 484) - Finalized
+- ⚠️ **Breaking Changes**: Minimal - mostly preview feature removals
+- ⚠️ **Deprecated APIs**: Check release notes for specific removals
 
 ---
 
