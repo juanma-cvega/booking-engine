@@ -667,39 +667,55 @@ String description = switch (state) {
 
 ---
 
-### 4.2 Record Patterns ⏭️ **TO BE DONE**
+### 4.2 Record Patterns ✅ **COMPLETED**
 
 **Rationale**: Destructure records directly in patterns
 
 **Priority**: High - Works well with migrated event records
 
-**Example**:
+**Status**: ✅ **COMPLETED** (January 2026) - Commit `aa8cfbd`
+
+**Implementation**:
+
+Applied record patterns in `SlotLifeCycleEventFactory` to destructure sealed records:
+
 ```java
-// Before (Java 17)
-if (booking instanceof BookingView view) {
-    long userId = view.userId();
-    long slotId = view.slotId();
-    processBooking(userId, slotId);
+// Before (Pattern matching without destructuring)
+<T extends NextSlotState> Event getEventFrom(T nextSlotState) {
+    return switch (nextSlotState) {
+        case InAuctionState s -> new SlotRequiresAuctionEvent(s.slotId(), s.auctionConfigInfo());
+        case PreReservedState s -> new SlotRequiresPreReservationEvent(s.slotId(), s.user());
+        case AvailableState s -> new SlotCanBeMadeAvailableEvent(s.slotId());
+    };
 }
 
-// After (Java 21)
-if (booking instanceof BookingView(var id, var userId, var time, var slotId)) {
-    processBooking(userId, slotId);
+// After (Record patterns with destructuring)
+<T extends NextSlotState> Event getEventFrom(T nextSlotState) {
+    return switch (nextSlotState) {
+        case InAuctionState(var slotId, var auctionConfigInfo) ->
+            new SlotRequiresAuctionEvent(slotId, auctionConfigInfo);
+        case PreReservedState(var slotId, var user) ->
+            new SlotRequiresPreReservationEvent(slotId, user);
+        case AvailableState(var slotId) -> new SlotCanBeMadeAvailableEvent(slotId);
+    };
 }
-
-// Or in switch
-String result = switch (event) {
-    case BookingCreatedEvent(var bookingId, var userId, var slotId) ->
-        "User %d booked slot %d".formatted(userId, slotId);
-    case BookingCancelledEvent(var bookingId, var reason) ->
-        "Booking %d cancelled: %s".formatted(bookingId, reason);
-};
 ```
 
-**Tasks**:
-- [ ] Identify record destructuring opportunities
-- [ ] Refactor to record patterns
-- [ ] Use in switch expressions where applicable
+**Benefits Achieved**:
+- ✅ Eliminates intermediate variable bindings (`s.slotId()` → `slotId`)
+- ✅ More concise and declarative code
+- ✅ Combines type checking and field extraction in one step
+- ✅ Works seamlessly with sealed types for exhaustiveness checking
+- ✅ `var` works for both primitives and objects
+
+**Analysis**:
+- Limited applicability in this codebase (clean single-line accessor usage)
+- Best suited for switch expressions with sealed types (already implemented)
+- Most command/event handling already uses clean patterns
+
+**Testing**:
+- ✅ All 191 tests passing
+- ✅ No regressions introduced
 
 ---
 
@@ -761,45 +777,43 @@ String result = switch (event) {
 
 ---
 
-### 4.4 Sequenced Collections ⏭️ **TO BE DONE**
+### 4.4 Sequenced Collections ✅ **COMPLETED**
 
 **Rationale**: Unified API for collections with defined order
 
 **Priority**: Medium - Code quality improvement
 
-**New Methods**:
-```java
-// Java 21 adds to List, Set, Map
-list.getFirst();
-list.getLast();
-list.addFirst(element);
-list.addLast(element);
-list.removeFirst();
-list.removeLast();
-list.reversed(); // Returns reversed view
-```
+**Status**: ✅ **COMPLETED** (January 2026) - Commit `aa8cfbd`
 
-**Example Migration**:
+**Implementation**:
+
+Replaced `.get(0)` with `.getFirst()` in `Room.java`:
+
 ```java
-// Before (Java 17)
-List<Slot> slots = findSlots();
-if (!slots.isEmpty()) {
-    Slot first = slots.get(0);
-    Slot last = slots.get(slots.size() - 1);
+// Before
+if (closestOpenTime == null) {
+    closestOpenTime = openTimesPerDay.get(0);
 }
 
-// After (Java 21)
-List<Slot> slots = findSlots();
-if (!slots.isEmpty()) {
-    Slot first = slots.getFirst();
-    Slot last = slots.getLast();
+// After
+if (closestOpenTime == null) {
+    closestOpenTime = openTimesPerDay.getFirst();
 }
 ```
 
-**Tasks**:
-- [ ] Find `list.get(0)` patterns → `list.getFirst()`
-- [ ] Find `list.get(list.size() - 1)` → `list.getLast()`
-- [ ] Use `reversed()` instead of manual reversal
+**Analysis**:
+- ✅ Found 1 occurrence of `.get(0)` pattern
+- ✅ No occurrences of `.get(size - 1)` pattern
+- ✅ No manual list reversal patterns found
+
+**Benefits Achieved**:
+- ✅ More expressive and intention-revealing code
+- ✅ Clearer semantics ("get first" vs "get at index 0")
+- ✅ Consistent with modern Java collections API
+
+**Testing**:
+- ✅ All 191 tests passing
+- ✅ No regressions introduced
 
 ---
 
