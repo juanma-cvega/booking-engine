@@ -13,10 +13,7 @@ class BuildingFactory {
 
     Building createFrom(CreateBuildingCommand command) {
         return new Building(
-                idSupplier.get(),
-                command.getClubId(),
-                command.getAddress(),
-                command.getDescription());
+                idSupplier.get(), command.clubId(), command.address(), command.description());
     }
 
     public BuildingView createFrom(Building building) {

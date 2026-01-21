@@ -31,7 +31,7 @@ public class CreateBuildingUseCaseStepDefinitions extends AbstractUseCaseStepDef
     public void a_building_is_created() {
         buildingCreated =
                 createBuildingUseCase.createBuildingFrom(
-                        CreateBuildingCommand.of(clubCreated.id(), ADDRESS, BUILDING_DESCRIPTION));
+                        new CreateBuildingCommand(clubCreated.id(), ADDRESS, BUILDING_DESCRIPTION));
         buildingsCreated.add(buildingCreated);
     }
     ;
@@ -60,7 +60,7 @@ public class CreateBuildingUseCaseStepDefinitions extends AbstractUseCaseStepDef
         storeException(
                 () ->
                         createBuildingUseCase.createBuildingFrom(
-                                CreateBuildingCommand.of(
+                                new CreateBuildingCommand(
                                         NON_EXISTING_CLUB_ID, ADDRESS, BUILDING_DESCRIPTION)));
     }
 

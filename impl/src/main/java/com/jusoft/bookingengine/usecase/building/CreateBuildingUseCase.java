@@ -14,8 +14,8 @@ public class CreateBuildingUseCase {
     private final BuildingManagerComponent buildingManagerComponent;
 
     public BuildingView createBuildingFrom(CreateBuildingCommand command) {
-        if (!clubManagerComponent.isAvailable(command.getClubId())) {
-            throw new ClubNotFoundException(command.getClubId());
+        if (!clubManagerComponent.isAvailable(command.clubId())) {
+            throw new ClubNotFoundException(command.clubId());
         }
         return buildingManagerComponent.create(command);
     }
