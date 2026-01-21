@@ -21,7 +21,7 @@ class ClassFactory {
     }
 
     ClassView createFrom(Class classSource) {
-        return ClassView.of(
+        return new ClassView(
                 classSource.getId(),
                 classSource.getBuildingId(),
                 classSource.getDescription(),

@@ -22,13 +22,13 @@ public class RemoveInstructorUseCaseStepDefinitions extends AbstractUseCaseStepD
     @When("^instructor (\\d+) is removed from the class$")
     public void instructor_is_removed_from_the_class(Long instructorId) {
         removeInstructorUseCase.removeInstructor(
-                RemoveInstructorCommand.of(classCreated.getId(), instructorId));
+                RemoveInstructorCommand.of(classCreated.id(), instructorId));
     }
 
     @Then("^the class should not have instructor (\\d+) as an available instructor$")
     public void the_class_should_not_have_instructor_as_an_available_instructor(Long instructorId) {
-        ClassView classFound = classManagerComponent.find(classCreated.getId());
-        assertThat(classFound.getInstructorsId()).doesNotContain(instructorId);
+        ClassView classFound = classManagerComponent.find(classCreated.id());
+        assertThat(classFound.instructorsId()).doesNotContain(instructorId);
     }
 
     @When("^instructor (\\d+) is tried to be removed from the class$")
@@ -36,7 +36,7 @@ public class RemoveInstructorUseCaseStepDefinitions extends AbstractUseCaseStepD
         storeException(
                 () ->
                         removeInstructorUseCase.removeInstructor(
-                                RemoveInstructorCommand.of(classCreated.getId(), instructorId)));
+                                RemoveInstructorCommand.of(classCreated.id(), instructorId)));
     }
 
     @Then("^a notification of the removed instructor (\\d+) from the class should published$")
@@ -44,7 +44,7 @@ public class RemoveInstructorUseCaseStepDefinitions extends AbstractUseCaseStepD
             Long instructorId) {
         ClassInstructorRemovedEvent event =
                 verifyAndGetMessageOfType(ClassInstructorRemovedEvent.class);
-        assertThat(event.classId()).isEqualTo(classCreated.getId());
+        assertThat(event.classId()).isEqualTo(classCreated.id());
         assertThat(event.instructorId()).isEqualTo(instructorId);
     }
     ;
@@ -56,7 +56,7 @@ public class RemoveInstructorUseCaseStepDefinitions extends AbstractUseCaseStepD
                     Long instructorId) {
         ClassListOfInstructorsCannotBeEmptyException exception =
                 verifyAndGetExceptionThrown(ClassListOfInstructorsCannotBeEmptyException.class);
-        assertThat(exception.getClassId()).isEqualTo(classCreated.getId());
+        assertThat(exception.getClassId()).isEqualTo(classCreated.id());
         assertThat(exception.getInstructorId()).isEqualTo(instructorId);
     }
     ;

@@ -22,20 +22,20 @@ public class RegisterRoomUseCaseStepDefinitions extends AbstractUseCaseStepDefin
     @When("^the room is registered to give the class$")
     public void the_room_is_registered_to_give_the_class() {
         registerRoomUseCase.registerRoom(
-                RegisterRoomCommand.of(classCreated.getId(), roomCreated.id()));
+                RegisterRoomCommand.of(classCreated.id(), roomCreated.id()));
     }
 
     @Then("^the class should have the room registered$")
     public void the_class_should_have_the_room_registered() {
-        ClassView classFound = classManagerComponent.find(classCreated.getId());
-        assertThat(classFound.getRoomsRegistered()).contains(roomCreated.id());
+        ClassView classFound = classManagerComponent.find(classCreated.id());
+        assertThat(classFound.roomsRegistered()).contains(roomCreated.id());
     }
 
     @Then("^a notification of the room being registered in the class should be published$")
     public void a_notification_of_the_room_being_registered_should_be_published() {
         RoomRegisteredForClassEvent event =
                 verifyAndGetMessageOfType(RoomRegisteredForClassEvent.class);
-        assertThat(event.classId()).isEqualTo(classCreated.getId());
+        assertThat(event.classId()).isEqualTo(classCreated.id());
         assertThat(event.roomId()).isEqualTo(roomCreated.id());
     }
 }

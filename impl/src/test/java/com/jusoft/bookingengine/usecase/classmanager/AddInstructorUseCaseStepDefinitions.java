@@ -21,13 +21,13 @@ public class AddInstructorUseCaseStepDefinitions extends AbstractUseCaseStepDefi
     @When("^instructor (\\d+) is added to the class$")
     public void instructor_is_added_to_the_class(Long instructorId) {
         addInstructorUseCase.addInstructor(
-                AddInstructorCommand.of(classCreated.getId(), instructorId));
+                AddInstructorCommand.of(classCreated.id(), instructorId));
     }
 
     @Then("^the class should have instructor (\\d+) as an available instructor$")
     public void the_class_should_have_instructor_as_an_available_instructor(Long instructorId) {
-        ClassView classFound = classManagerComponent.find(classCreated.getId());
-        assertThat(classFound.getInstructorsId()).contains(instructorId);
+        ClassView classFound = classManagerComponent.find(classCreated.id());
+        assertThat(classFound.instructorsId()).contains(instructorId);
     }
 
     @Then("^a notification of the newly added instructor (\\d+) to the class should published$")
@@ -35,7 +35,7 @@ public class AddInstructorUseCaseStepDefinitions extends AbstractUseCaseStepDefi
             Long instructorId) {
         ClassInstructorAddedEvent event =
                 verifyAndGetMessageOfType(ClassInstructorAddedEvent.class);
-        assertThat(event.classId()).isEqualTo(classCreated.getId());
+        assertThat(event.classId()).isEqualTo(classCreated.id());
         assertThat(event.newInstructorId()).isEqualTo(instructorId);
     }
     ;

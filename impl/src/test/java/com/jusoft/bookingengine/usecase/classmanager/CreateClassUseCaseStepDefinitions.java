@@ -57,25 +57,25 @@ public class CreateClassUseCaseStepDefinitions extends AbstractUseCaseStepDefini
 
     @Then("^a class should be created$")
     public void a_class_should_be_created() {
-        ClassView classFound = classManagerComponent.find(classCreated.getId());
-        assertThat(classFound.getClassType())
+        ClassView classFound = classManagerComponent.find(classCreated.id());
+        assertThat(classFound.classType())
                 .isEqualTo(CLASS_TYPE)
-                .isEqualTo(classCreated.getClassType());
-        assertThat(classFound.getDescription())
+                .isEqualTo(classCreated.classType());
+        assertThat(classFound.description())
                 .isEqualTo(CLASS_DESCRIPTION)
-                .isEqualTo(classCreated.getDescription());
-        assertThat(classFound.getInstructorsId())
+                .isEqualTo(classCreated.description());
+        assertThat(classFound.instructorsId())
                 .containsExactlyInAnyOrder(INSTRUCTOR_ID)
-                .hasSameElementsAs(classCreated.getInstructorsId());
-        assertThat(classFound.getRoomsRegistered()).isEmpty();
+                .hasSameElementsAs(classCreated.instructorsId());
+        assertThat(classFound.roomsRegistered()).isEmpty();
     }
 
     @Then("^a notification of a created class should published$")
     public void a_notification_of_a_created_class_should_published() {
         ClassCreatedEvent event = verifyAndGetMessageOfType(ClassCreatedEvent.class);
-        assertThat(event.classId()).isEqualTo(classCreated.getId());
-        assertThat(event.classType()).isEqualTo(classCreated.getClassType());
-        assertThat(event.description()).isEqualTo(classCreated.getDescription());
-        assertThat(event.instructorsId()).isEqualTo(classCreated.getInstructorsId());
+        assertThat(event.classId()).isEqualTo(classCreated.id());
+        assertThat(event.classType()).isEqualTo(classCreated.classType());
+        assertThat(event.description()).isEqualTo(classCreated.description());
+        assertThat(event.instructorsId()).isEqualTo(classCreated.instructorsId());
     }
 }
