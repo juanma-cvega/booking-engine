@@ -163,7 +163,7 @@ class Room {
         // In case current time is after the room is closed for the rest of the day, choose open of
         // the next day
         if (closestOpenTime == null) {
-            closestOpenTime = openTimesPerDay.get(0);
+            closestOpenTime = openTimesPerDay.getFirst();
         }
         return closestOpenTime;
     }
