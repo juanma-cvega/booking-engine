@@ -26,7 +26,7 @@ public class NewClubCreatedUseCaseStepDefinitions extends AbstractUseCaseStepDef
             Long clubId) {
         Optional<ClubView> clubFound = authorizationManagerComponent.findClubBy(clubId);
         assertThat(clubFound).isPresent();
-        assertThat(clubFound.get().getId()).isEqualTo(clubId);
-        assertThat(clubFound.get().getBuildings()).isEmpty();
+        assertThat(clubFound.get().id()).isEqualTo(clubId);
+        assertThat(clubFound.get().buildings()).isEmpty();
     }
 }

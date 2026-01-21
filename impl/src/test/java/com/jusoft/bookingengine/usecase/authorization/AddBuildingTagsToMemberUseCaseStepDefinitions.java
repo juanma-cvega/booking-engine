@@ -37,9 +37,9 @@ public class AddBuildingTagsToMemberUseCaseStepDefinitions extends AbstractUseCa
             Long memberId, Long buildingId) {
         Optional<MemberView> member = authorizationManagerComponent.findMemberBy(memberId);
         assertThat(member).isPresent();
-        assertThat(member.get().getBuildings()).isNotEmpty();
-        assertThat(member.get().getBuildings().get(buildingId))
-                .isEqualTo(MemberBuildingView.of(buildingId));
+        assertThat(member.get().buildings()).isNotEmpty();
+        assertThat(member.get().buildings().get(buildingId))
+                .isEqualTo(new MemberBuildingView(buildingId));
     }
 
     @Then("^building (\\d+) of member (\\d+) should have tags? in its list of tags$")
@@ -48,8 +48,7 @@ public class AddBuildingTagsToMemberUseCaseStepDefinitions extends AbstractUseCa
         List<Tag> tags = tagsDataTable.row(0).stream().map(Tag::of).collect(Collectors.toList());
         Optional<MemberView> member = authorizationManagerComponent.findMemberBy(memberId);
         assertThat(member).isPresent();
-        assertThat(member.get().getBuildings().get(buildingId).getTags())
-                .containsExactlyElementsOf(tags);
+        assertThat(member.get().buildings().get(buildingId).tags()).containsExactlyElementsOf(tags);
     }
 
     @When("^member (.*) is tried to be added tag to building (\\d+)$")

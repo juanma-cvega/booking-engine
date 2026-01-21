@@ -12,25 +12,25 @@ import lombok.AllArgsConstructor;
 class MemberFactory {
 
     MemberView createFrom(Member member) {
-        return MemberView.of(
+        return new MemberView(
                 member.getId(),
                 member.getUserId(),
                 member.getClubId(),
                 member.getBuildings().values().stream()
                         .map(this::createBuildingHolderFrom)
-                        .collect(toMap(MemberBuildingView::getId, building -> building)));
+                        .collect(toMap(MemberBuildingView::id, building -> building)));
     }
 
     private MemberBuildingView createBuildingHolderFrom(MemberBuildingAccessConfig building) {
-        return MemberBuildingView.of(
+        return new MemberBuildingView(
                 building.getId(),
                 building.getRooms().values().stream()
                         .map(this::createRoomHolderFrom)
-                        .collect(toMap(MemberRoomView::getId, room -> room)),
+                        .collect(toMap(MemberRoomView::id, room -> room)),
                 building.getTags());
     }
 
     private MemberRoomView createRoomHolderFrom(MemberRoomAccessConfig room) {
-        return MemberRoomView.of(room.getId(), room.getTagsBySlotStatus());
+        return new MemberRoomView(room.getId(), room.getTagsBySlotStatus());
     }
 }

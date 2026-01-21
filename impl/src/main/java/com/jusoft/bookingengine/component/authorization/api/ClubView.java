@@ -1,15 +1,11 @@
 package com.jusoft.bookingengine.component.authorization.api;
 
 import java.util.Map;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NonNull;
+import java.util.Objects;
 
-@Data(staticConstructor = "of")
-@EqualsAndHashCode(of = "id")
-public class ClubView {
-
-    private final long id;
-
-    @NonNull private final Map<Long, ClubBuildingView> buildings;
+public record ClubView(long id, Map<Long, ClubBuildingView> buildings) {
+    public ClubView {
+        Objects.requireNonNull(buildings, "buildings must not be null");
+        buildings = Map.copyOf(buildings);
+    }
 }

@@ -29,7 +29,7 @@ public class NewMemberCreatedUseCaseStepDefinitions extends AbstractUseCaseStepD
             Long memberId) {
         Optional<MemberView> member = authorizationManagerComponent.findMemberBy(memberId);
         assertThat(member).isPresent();
-        assertThat(member.get().getId()).isEqualTo(memberId);
-        assertThat(member.get().getBuildings()).isEmpty();
+        assertThat(member.get().id()).isEqualTo(memberId);
+        assertThat(member.get().buildings()).isEmpty();
     }
 }

@@ -1,24 +1,19 @@
 package com.jusoft.bookingengine.component.authorization.api;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NonNull;
+import java.util.Objects;
 
-@Data(staticConstructor = "of")
-@EqualsAndHashCode(of = "id")
-public class MemberBuildingView {
+public record MemberBuildingView(long id, Map<Long, MemberRoomView> rooms, List<Tag> tags) {
+    public MemberBuildingView {
+        Objects.requireNonNull(rooms, "rooms must not be null");
+        Objects.requireNonNull(tags, "tags must not be null");
+        rooms = Map.copyOf(rooms);
+        tags = List.copyOf(tags);
+    }
 
-    private final long id;
-
-    @NonNull private final Map<Long, MemberRoomView> rooms;
-
-    @NonNull private final List<Tag> tags;
-
-    public static MemberBuildingView of(long buildingId) {
-        return MemberBuildingView.of(buildingId, new HashMap<>(), new ArrayList<>());
+    public MemberBuildingView(long buildingId) {
+        this(buildingId, new HashMap<>(), List.of());
     }
 }

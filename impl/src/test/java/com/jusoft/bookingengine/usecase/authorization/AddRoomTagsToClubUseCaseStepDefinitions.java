@@ -35,7 +35,7 @@ public class AddRoomTagsToClubUseCaseStepDefinitions extends AbstractUseCaseStep
             Long clubId, Long roomId, Long buildingId) {
         Optional<ClubView> club = authorizationManagerComponent.findClubBy(clubId);
         assertThat(club).isPresent();
-        assertThat(club.get().getBuildings().get(buildingId).getRooms().get(roomId)).isNotNull();
+        assertThat(club.get().buildings().get(buildingId).rooms().get(roomId)).isNotNull();
     }
 
     @Then(
@@ -45,14 +45,7 @@ public class AddRoomTagsToClubUseCaseStepDefinitions extends AbstractUseCaseStep
         List<Tag> tags = tagsDataTable.row(0).stream().map(Tag::of).collect(Collectors.toList());
         Optional<ClubView> club = authorizationManagerComponent.findClubBy(clubId);
         assertThat(club).isPresent();
-        assertThat(
-                        club.get()
-                                .getBuildings()
-                                .get(buildingId)
-                                .getRooms()
-                                .get(roomId)
-                                .getTags()
-                                .get(status))
+        assertThat(club.get().buildings().get(buildingId).rooms().get(roomId).tags().get(status))
                 .containsExactlyElementsOf(tags);
     }
 

@@ -2,15 +2,11 @@ package com.jusoft.bookingengine.component.authorization.api;
 
 import java.util.List;
 import java.util.Map;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NonNull;
+import java.util.Objects;
 
-@Data(staticConstructor = "of")
-@EqualsAndHashCode(of = "id")
-public class MemberRoomView {
-
-    private final long id;
-
-    @NonNull private final Map<SlotStatus, List<Tag>> tags;
+public record MemberRoomView(long id, Map<SlotStatus, List<Tag>> tags) {
+    public MemberRoomView {
+        Objects.requireNonNull(tags, "tags must not be null");
+        tags = Map.copyOf(tags);
+    }
 }

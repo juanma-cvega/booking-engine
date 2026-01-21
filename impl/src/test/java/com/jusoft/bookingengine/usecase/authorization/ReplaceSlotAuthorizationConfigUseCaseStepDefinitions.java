@@ -43,11 +43,11 @@ public class ReplaceSlotAuthorizationConfigUseCaseStepDefinitions
         assertThat(club).isPresent();
         SlotAuthorizationConfig config =
                 club.get()
-                        .getBuildings()
+                        .buildings()
                         .get(buildingId)
-                        .getRooms()
+                        .rooms()
                         .get(roomId)
-                        .getSlotAuthorizationConfig();
+                        .slotAuthorizationConfig();
         assertThat(config.getAmount()).isEqualTo(amount);
         assertThat(config.getTemporalUnit()).isEqualTo(unit);
     }

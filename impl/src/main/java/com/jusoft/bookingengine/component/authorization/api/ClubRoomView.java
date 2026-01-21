@@ -2,17 +2,13 @@ package com.jusoft.bookingengine.component.authorization.api;
 
 import java.util.List;
 import java.util.Map;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NonNull;
+import java.util.Objects;
 
-@Data(staticConstructor = "of")
-@EqualsAndHashCode(of = "id")
-public class ClubRoomView {
-
-    private final long id;
-
-    @NonNull private final Map<SlotStatus, List<Tag>> tags;
-
-    @NonNull private final SlotAuthorizationConfig slotAuthorizationConfig;
+public record ClubRoomView(
+        long id, Map<SlotStatus, List<Tag>> tags, SlotAuthorizationConfig slotAuthorizationConfig) {
+    public ClubRoomView {
+        Objects.requireNonNull(tags, "tags must not be null");
+        Objects.requireNonNull(slotAuthorizationConfig, "slotAuthorizationConfig must not be null");
+        tags = Map.copyOf(tags);
+    }
 }

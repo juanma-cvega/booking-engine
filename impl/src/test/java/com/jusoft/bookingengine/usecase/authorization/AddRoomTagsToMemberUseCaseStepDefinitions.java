@@ -39,7 +39,7 @@ public class AddRoomTagsToMemberUseCaseStepDefinitions extends AbstractUseCaseSt
             Long memberId, Long roomId, Long buildingId) {
         Optional<MemberView> member = authorizationManagerComponent.findMemberBy(memberId);
         assertThat(member).isPresent();
-        assertThat(member.get().getBuildings().get(buildingId).getRooms().get(roomId)).isNotNull();
+        assertThat(member.get().buildings().get(buildingId).rooms().get(roomId)).isNotNull();
     }
 
     @Then(
@@ -53,14 +53,7 @@ public class AddRoomTagsToMemberUseCaseStepDefinitions extends AbstractUseCaseSt
         List<Tag> tags = tagsDataTable.row(0).stream().map(Tag::of).collect(Collectors.toList());
         Optional<MemberView> member = authorizationManagerComponent.findMemberBy(memberId);
         assertThat(member).isPresent();
-        assertThat(
-                        member.get()
-                                .getBuildings()
-                                .get(buildingId)
-                                .getRooms()
-                                .get(roomId)
-                                .getTags()
-                                .get(status))
+        assertThat(member.get().buildings().get(buildingId).rooms().get(roomId).tags().get(status))
                 .containsExactlyElementsOf(tags);
     }
 

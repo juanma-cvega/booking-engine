@@ -12,24 +12,24 @@ import lombok.AllArgsConstructor;
 class ClubFactory {
 
     ClubView createFrom(Club club) {
-        return ClubView.of(
+        return new ClubView(
                 club.getId(),
                 club.getBuildings().values().stream()
                         .map(this::createBuildingFrom)
-                        .collect(toMap(ClubBuildingView::getId, building -> building)));
+                        .collect(toMap(ClubBuildingView::id, building -> building)));
     }
 
     private ClubBuildingView createBuildingFrom(ClubBuildingAccessConfig clubBuildingAccessConfig) {
-        return ClubBuildingView.of(
+        return new ClubBuildingView(
                 clubBuildingAccessConfig.getId(),
                 clubBuildingAccessConfig.getRooms().values().stream()
                         .map(this::createRoomFrom)
-                        .collect(toMap(ClubRoomView::getId, room -> room)),
+                        .collect(toMap(ClubRoomView::id, room -> room)),
                 clubBuildingAccessConfig.getTags());
     }
 
     private ClubRoomView createRoomFrom(ClubRoomAccessConfig clubRoomAccessConfig) {
-        return ClubRoomView.of(
+        return new ClubRoomView(
                 clubRoomAccessConfig.getId(),
                 clubRoomAccessConfig.getTagsBySlotStatus(),
                 clubRoomAccessConfig.getSlotAuthorizationConfig());

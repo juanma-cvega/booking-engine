@@ -37,9 +37,9 @@ public class AddBuildingTagsToClubUseCaseStepDefinitions extends AbstractUseCase
             Long clubId, Long buildingId) {
         Optional<ClubView> club = authorizationManagerComponent.findClubBy(clubId);
         assertThat(club).isPresent();
-        assertThat(club.get().getBuildings()).isNotEmpty();
-        assertThat(club.get().getBuildings().get(buildingId))
-                .isEqualTo(ClubBuildingView.of(buildingId));
+        assertThat(club.get().buildings()).isNotEmpty();
+        assertThat(club.get().buildings().get(buildingId))
+                .isEqualTo(new ClubBuildingView(buildingId));
     }
 
     @Then("^building (\\d+) of club (\\d+) should have tags? in its list of tags$")
@@ -48,8 +48,7 @@ public class AddBuildingTagsToClubUseCaseStepDefinitions extends AbstractUseCase
         List<Tag> tags = tagsDataTable.row(0).stream().map(Tag::of).collect(Collectors.toList());
         Optional<ClubView> club = authorizationManagerComponent.findClubBy(clubId);
         assertThat(club).isPresent();
-        assertThat(club.get().getBuildings().get(buildingId).getTags())
-                .containsExactlyElementsOf(tags);
+        assertThat(club.get().buildings().get(buildingId).tags()).containsExactlyElementsOf(tags);
     }
 
     @When("^club (.*) is tried to be added tag to building (\\d+)$")
