@@ -58,7 +58,8 @@ public class AddBidderToAuctionUseCaseStepDefinitions extends AbstractUseCaseSte
     @Given("^member (\\d+) can bid in auctions$")
     public void member_can_bid_in_auctions(Long memberId) {
         authorizationManagerComponent.addAccessToAuctions(
-                ChangeAccessToAuctionsCommand.of(memberId, buildingCreated.id(), roomCreated.id()));
+                new ChangeAccessToAuctionsCommand(
+                        memberId, buildingCreated.id(), roomCreated.id()));
     }
 
     @Then(
@@ -77,7 +78,7 @@ public class AddBidderToAuctionUseCaseStepDefinitions extends AbstractUseCaseSte
     @Given("^member (.*) is not authorized to bid in auctions for the room$")
     public void member_is_not_authorized_to_bid_in_auctions_for_the_room(Long memberId) {
         authorizationManagerComponent.removeAccessToAuctions(
-                ChangeAccessToAuctionsCommand.of(
+                new ChangeAccessToAuctionsCommand(
                         memberId, roomCreated.buildingId(), roomCreated.id()));
     }
 }

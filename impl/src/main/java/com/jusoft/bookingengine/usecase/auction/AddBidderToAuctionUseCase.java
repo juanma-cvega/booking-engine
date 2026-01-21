@@ -17,7 +17,7 @@ public class AddBidderToAuctionUseCase {
     public void addBidderToAuctionFor(long userId, long slotId) {
         SlotView slot = slotManagerComponent.find(slotId);
         authorizationManagerComponent.authorizeBidInAuction(
-                AuthorizeCommand.of(
+                new AuthorizeCommand(
                         userId,
                         slot.roomId(),
                         slot.buildingId(),

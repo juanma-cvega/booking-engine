@@ -36,7 +36,7 @@ public class AuthorizationManagerComponentAuthorizeStepDefinitions
         storeException(
                 () ->
                         authorizationManagerComponent.authorizeReserveSlot(
-                                AuthorizeCommand.of(
+                                new AuthorizeCommand(
                                         userId, roomId, buildingId, clubId, slotCreationDateTime)));
     }
 

@@ -31,7 +31,7 @@ public class AddRoomTagsToMemberUseCaseStepDefinitions extends AbstractUseCaseSt
             DataTable tagsDataTable) {
         List<Tag> tags = tagsDataTable.row(0).stream().map(Tag::of).collect(Collectors.toList());
         addRoomTagsToMemberUseCase.addRoomTagsToMember(
-                AddRoomTagsToMemberCommand.of(memberId, buildingId, roomId, status, tags));
+                new AddRoomTagsToMemberCommand(memberId, buildingId, roomId, status, tags));
     }
 
     @Then("^member (.*) should have room (\\d+) in building (\\d+) added to its list of buildings$")
@@ -69,7 +69,7 @@ public class AddRoomTagsToMemberUseCaseStepDefinitions extends AbstractUseCaseSt
         storeException(
                 () ->
                         addRoomTagsToMemberUseCase.addRoomTagsToMember(
-                                AddRoomTagsToMemberCommand.of(
+                                new AddRoomTagsToMemberCommand(
                                         memberId, buildingId, roomId, status, tags)));
     }
 }

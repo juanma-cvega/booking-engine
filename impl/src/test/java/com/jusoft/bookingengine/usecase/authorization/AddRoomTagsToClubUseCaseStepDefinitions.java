@@ -27,7 +27,7 @@ public class AddRoomTagsToClubUseCaseStepDefinitions extends AbstractUseCaseStep
             Long clubId, SlotStatus status, Long roomId, Long buildingId, DataTable tagsDataTable) {
         List<Tag> tags = tagsDataTable.row(0).stream().map(Tag::of).collect(Collectors.toList());
         addRoomTagsToClubUseCase.addRoomTagsToClub(
-                AddRoomTagsToClubCommand.of(clubId, buildingId, roomId, status, tags));
+                new AddRoomTagsToClubCommand(clubId, buildingId, roomId, status, tags));
     }
 
     @Then("^club (\\d+) should have room (\\d+) in building (\\d+) added to its list of buildings$")
@@ -56,7 +56,7 @@ public class AddRoomTagsToClubUseCaseStepDefinitions extends AbstractUseCaseStep
         storeException(
                 () ->
                         addRoomTagsToClubUseCase.addRoomTagsToClub(
-                                AddRoomTagsToClubCommand.of(
+                                new AddRoomTagsToClubCommand(
                                         clubId, buildingId, roomId, status, tags)));
     }
 }

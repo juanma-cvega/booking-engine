@@ -2,16 +2,12 @@ package com.jusoft.bookingengine.component.authorization.api;
 
 import com.jusoft.bookingengine.publisher.Command;
 import java.time.ZonedDateTime;
-import lombok.Data;
-import lombok.NonNull;
+import java.util.Objects;
 
-@Data(staticConstructor = "of")
-public class AuthorizeCommand implements Command {
-
-    private final long userId;
-    private final long roomId;
-    private final long buildingId;
-    private final long clubId;
-
-    @NonNull private final ZonedDateTime slotCreationTime;
+public record AuthorizeCommand(
+        long userId, long roomId, long buildingId, long clubId, ZonedDateTime slotCreationTime)
+        implements Command {
+    public AuthorizeCommand {
+        Objects.requireNonNull(slotCreationTime, "slotCreationTime must not be null");
+    }
 }

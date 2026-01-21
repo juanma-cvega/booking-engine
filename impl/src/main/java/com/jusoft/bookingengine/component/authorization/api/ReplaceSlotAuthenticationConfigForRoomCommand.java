@@ -1,15 +1,13 @@
 package com.jusoft.bookingengine.component.authorization.api;
 
 import com.jusoft.bookingengine.publisher.Command;
-import lombok.Data;
-import lombok.NonNull;
+import java.util.Objects;
 
-@Data(staticConstructor = "of")
-public class ReplaceSlotAuthenticationConfigForRoomCommand implements Command {
-
-    private final long clubId;
-    private final long buildingId;
-    private final long roomId;
-
-    @NonNull private final SlotAuthorizationConfig slotAuthenticationConfig;
+public record ReplaceSlotAuthenticationConfigForRoomCommand(
+        long clubId, long buildingId, long roomId, SlotAuthorizationConfig slotAuthenticationConfig)
+        implements Command {
+    public ReplaceSlotAuthenticationConfigForRoomCommand {
+        Objects.requireNonNull(
+                slotAuthenticationConfig, "slotAuthenticationConfig must not be null");
+    }
 }

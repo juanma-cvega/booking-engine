@@ -46,8 +46,8 @@ class Member {
     }
 
     public Member addTagsToRoom(AddRoomTagsToMemberCommand command) {
-        findOrCreateBuilding(command.getBuildingId())
-                .addTagsToRoom(command.getRoomId(), command.getStatus(), command.getTags());
+        findOrCreateBuilding(command.buildingId())
+                .addTagsToRoom(command.roomId(), command.status(), command.tags());
         return new Member(id, userId, clubId, buildings);
     }
 

@@ -2,17 +2,14 @@ package com.jusoft.bookingengine.component.authorization.api;
 
 import com.jusoft.bookingengine.publisher.Command;
 import java.util.List;
-import lombok.Data;
-import lombok.NonNull;
+import java.util.Objects;
 
-@Data(staticConstructor = "of")
-public class AddRoomTagsToClubCommand implements Command {
-
-    private final long clubId;
-    private final long buildingId;
-    private final long roomId;
-
-    @NonNull private final SlotStatus status;
-
-    @NonNull private final List<Tag> tags;
+public record AddRoomTagsToClubCommand(
+        long clubId, long buildingId, long roomId, SlotStatus status, List<Tag> tags)
+        implements Command {
+    public AddRoomTagsToClubCommand {
+        Objects.requireNonNull(status, "status must not be null");
+        Objects.requireNonNull(tags, "tags must not be null");
+        tags = List.copyOf(tags);
+    }
 }

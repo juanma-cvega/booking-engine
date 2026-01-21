@@ -56,7 +56,7 @@ public class ReplaceSlotAuthorizationConfigUseCaseStepDefinitions
             Long clubId, Long amount, ChronoUnit unit, Long roomId, Long buildingId) {
         SlotAuthorizationConfig slotAuthorizationConfig = SlotAuthorizationConfig.of(amount, unit);
         useCase.replaceSlotAuthenticationConfigForRoom(
-                ReplaceSlotAuthenticationConfigForRoomCommand.of(
+                new ReplaceSlotAuthenticationConfigForRoomCommand(
                         clubId, buildingId, roomId, slotAuthorizationConfig));
     }
 }

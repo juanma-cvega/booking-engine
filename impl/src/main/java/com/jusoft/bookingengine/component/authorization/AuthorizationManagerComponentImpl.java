@@ -33,40 +33,34 @@ public class AuthorizationManagerComponentImpl implements AuthorizationManagerCo
 
     @Override
     public void authorizeReserveSlot(AuthorizeCommand command) {
-        Member memberFound = findMemberOrFail(command.getUserId(), command.getClubId());
+        Member memberFound = findMemberOrFail(command.userId(), command.clubId());
         isAuthorized(command, memberFound);
     }
 
     @Override
     public void authorizeBidInAuction(AuthorizeCommand command) {
-        Member memberFound = findMemberOrFail(command.getUserId(), command.getClubId());
+        Member memberFound = findMemberOrFail(command.userId(), command.clubId());
         isAuthorized(command, memberFound);
-        if (!memberFound.canBidIn(command.getBuildingId(), command.getRoomId())) {
+        if (!memberFound.canBidIn(command.buildingId(), command.roomId())) {
             throw new UnauthorizedBidException(
-                    command.getUserId(),
-                    command.getClubId(),
-                    command.getBuildingId(),
-                    command.getRoomId());
+                    command.userId(), command.clubId(), command.buildingId(), command.roomId());
         }
     }
 
     private void isAuthorized(AuthorizeCommand command, Member memberFound) {
-        Club clubFound = findClubOrFail(command.getClubId());
+        Club clubFound = findClubOrFail(command.clubId());
         SlotStatus slotStatus =
                 clubFound.getSlotTypeFor(
-                        command.getBuildingId(),
-                        command.getRoomId(),
-                        command.getSlotCreationTime(),
-                        clock);
+                        command.buildingId(), command.roomId(), command.slotCreationTime(), clock);
         List<Tag> memberTags =
-                memberFound.getTagsFor(command.getBuildingId(), command.getRoomId(), slotStatus);
+                memberFound.getTagsFor(command.buildingId(), command.roomId(), slotStatus);
         if (!clubFound.isAuthorizedFor(
-                command.getBuildingId(), command.getRoomId(), memberTags, slotStatus)) {
+                command.buildingId(), command.roomId(), memberTags, slotStatus)) {
             throw new UnauthorizedReservationException(
-                    command.getUserId(),
-                    command.getClubId(),
-                    command.getBuildingId(),
-                    command.getRoomId(),
+                    command.userId(),
+                    command.clubId(),
+                    command.buildingId(),
+                    command.roomId(),
                     slotStatus);
         }
     }
@@ -84,61 +78,58 @@ public class AuthorizationManagerComponentImpl implements AuthorizationManagerCo
     @Override
     public void addBuildingTagsToClub(AddBuildingTagsToClubCommand command) {
         clubRepository.execute(
-                command.getClubId(),
-                club -> club.addTagsToBuilding(command.getBuildingId(), command.getTags()),
-                () -> new ClubNotFoundException(command.getClubId()));
+                command.clubId(),
+                club -> club.addTagsToBuilding(command.buildingId(), command.tags()),
+                () -> new ClubNotFoundException(command.clubId()));
     }
 
     @Override
     public void addBuildingTagsToMember(AddBuildingTagsToMemberCommand command) {
         memberRepository.execute(
-                command.getMemberId(),
-                member -> member.addTagsToBuilding(command.getBuildingId(), command.getTags()),
-                () -> new MemberNotFoundException(command.getMemberId()));
+                command.memberId(),
+                member -> member.addTagsToBuilding(command.buildingId(), command.tags()),
+                () -> new MemberNotFoundException(command.memberId()));
     }
 
     @Override
     public void addRoomTagsToClub(AddRoomTagsToClubCommand command) {
         clubRepository.execute(
-                command.getClubId(),
+                command.clubId(),
                 club -> club.addTagsToRoom(command),
-                () -> new ClubNotFoundException(command.getClubId()));
+                () -> new ClubNotFoundException(command.clubId()));
     }
 
     @Override
     public void addAccessToAuctions(ChangeAccessToAuctionsCommand command) {
         memberRepository.execute(
-                command.getMemberId(),
-                member ->
-                        member.addAccessToAuctionsFor(command.getBuildingId(), command.getRoomId()),
-                () -> new MemberNotFoundException(command.getMemberId()));
+                command.memberId(),
+                member -> member.addAccessToAuctionsFor(command.buildingId(), command.roomId()),
+                () -> new MemberNotFoundException(command.memberId()));
     }
 
     @Override
     public void removeAccessToAuctions(ChangeAccessToAuctionsCommand command) {
         memberRepository.execute(
-                command.getMemberId(),
-                member ->
-                        member.removeAccessToAuctionsFor(
-                                command.getBuildingId(), command.getRoomId()),
-                () -> new MemberNotFoundException(command.getMemberId()));
+                command.memberId(),
+                member -> member.removeAccessToAuctionsFor(command.buildingId(), command.roomId()),
+                () -> new MemberNotFoundException(command.memberId()));
     }
 
     @Override
     public void replaceSlotAuthenticationManagerForRoom(
             ReplaceSlotAuthenticationConfigForRoomCommand command) {
         clubRepository.execute(
-                command.getClubId(),
+                command.clubId(),
                 club -> club.replaceSlotAuthorizationConfigForRoom(command),
-                () -> new ClubNotFoundException(command.getClubId()));
+                () -> new ClubNotFoundException(command.clubId()));
     }
 
     @Override
     public void addRoomTagsToMember(AddRoomTagsToMemberCommand command) {
         memberRepository.execute(
-                command.getMemberId(),
+                command.memberId(),
                 member -> member.addTagsToRoom(command),
-                () -> new MemberNotFoundException(command.getMemberId()));
+                () -> new MemberNotFoundException(command.memberId()));
     }
 
     @Override

@@ -48,8 +48,8 @@ class Club {
     }
 
     public Club addTagsToRoom(AddRoomTagsToClubCommand command) {
-        findOrCreateBuilding(command.getBuildingId())
-                .addTagsToRoom(command.getRoomId(), command.getStatus(), command.getTags());
+        findOrCreateBuilding(command.buildingId())
+                .addTagsToRoom(command.roomId(), command.status(), command.tags());
         return new Club(id, buildings);
     }
 
@@ -59,9 +59,9 @@ class Club {
 
     public Club replaceSlotAuthorizationConfigForRoom(
             ReplaceSlotAuthenticationConfigForRoomCommand command) {
-        findOrCreateBuilding(command.getBuildingId())
+        findOrCreateBuilding(command.buildingId())
                 .replaceSlotAuthorizationConfigToRoom(
-                        command.getRoomId(), command.getSlotAuthenticationConfig());
+                        command.roomId(), command.slotAuthenticationConfig());
         return new Club(id, buildings);
     }
 

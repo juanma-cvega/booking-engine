@@ -29,7 +29,7 @@ public class AddBuildingTagsToClubUseCaseStepDefinitions extends AbstractUseCase
             Long clubId, Long buildingId, DataTable tagsDataTable) {
         List<Tag> tags = tagsDataTable.row(0).stream().map(Tag::of).collect(Collectors.toList());
         addBuildingTagsToClubUseCase.addBuildingTagsToClub(
-                AddBuildingTagsToClubCommand.of(clubId, buildingId, tags));
+                new AddBuildingTagsToClubCommand(clubId, buildingId, tags));
     }
 
     @Then("^club (\\d+) should have building (.*) added to its list of buildings$")
@@ -58,7 +58,7 @@ public class AddBuildingTagsToClubUseCaseStepDefinitions extends AbstractUseCase
         storeException(
                 () ->
                         addBuildingTagsToClubUseCase.addBuildingTagsToClub(
-                                AddBuildingTagsToClubCommand.of(clubId, buildingId, tags)));
+                                new AddBuildingTagsToClubCommand(clubId, buildingId, tags)));
     }
 
     @Then("^the admin should get a notification the club (.*) does not exist$")

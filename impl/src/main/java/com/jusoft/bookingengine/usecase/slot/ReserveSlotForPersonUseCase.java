@@ -18,7 +18,7 @@ public class ReserveSlotForPersonUseCase {
     public void reserveSlotForPerson(long slotId, long userId) {
         SlotView slot = slotManagerComponent.find(slotId);
         authorizationManagerComponent.authorizeReserveSlot(
-                AuthorizeCommand.of(
+                new AuthorizeCommand(
                         userId,
                         slot.roomId(),
                         slot.buildingId(),

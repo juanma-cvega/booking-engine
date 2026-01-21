@@ -45,7 +45,7 @@ public class ReserveSlotUseCaseStepDefinitions extends AbstractUseCaseStepDefini
     @Given("^the room created requires authorization to use it$")
     public void the_room_created_requires_authorization_to_use_it() {
         authorizationManagerComponent.addRoomTagsToClub(
-                AddRoomTagsToClubCommand.of(
+                new AddRoomTagsToClubCommand(
                         clubCreated.id(),
                         buildingCreated.id(),
                         roomCreated.id(),

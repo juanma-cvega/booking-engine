@@ -29,7 +29,7 @@ public class AddBuildingTagsToMemberUseCaseStepDefinitions extends AbstractUseCa
             Long memberId, Long buildingId, DataTable tagsDataTable) {
         List<Tag> tags = tagsDataTable.row(0).stream().map(Tag::of).collect(Collectors.toList());
         addBuildingTagsToMemberUseCase.addBuildingTagsToMember(
-                AddBuildingTagsToMemberCommand.of(memberId, buildingId, tags));
+                new AddBuildingTagsToMemberCommand(memberId, buildingId, tags));
     }
 
     @Then("^member (.*) should have building (\\d+) added to its list of buildings$")
@@ -58,7 +58,7 @@ public class AddBuildingTagsToMemberUseCaseStepDefinitions extends AbstractUseCa
         storeException(
                 () ->
                         addBuildingTagsToMemberUseCase.addBuildingTagsToMember(
-                                AddBuildingTagsToMemberCommand.of(memberId, buildingId, tags)));
+                                new AddBuildingTagsToMemberCommand(memberId, buildingId, tags)));
     }
 
     @Then("^the admin should get a notification the member (.*) does not exist$")
