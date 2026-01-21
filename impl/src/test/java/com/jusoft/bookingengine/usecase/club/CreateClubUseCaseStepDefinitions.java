@@ -27,7 +27,7 @@ public class CreateClubUseCaseStepDefinitions extends AbstractUseCaseStepDefinit
     public void a_club_is_created$() {
         clubCreated =
                 createClubUseCase.createClubFrom(
-                        CreateClubCommand.of(CLUB_NAME, CLUB_DESCRIPTION, USER_ID_1));
+                        new CreateClubCommand(CLUB_NAME, CLUB_DESCRIPTION, USER_ID_1));
         clubAdmin = USER_ID_1;
     }
 
@@ -35,7 +35,7 @@ public class CreateClubUseCaseStepDefinitions extends AbstractUseCaseStepDefinit
     public void a_club_is_created_by_user(Long userId) {
         clubCreated =
                 createClubUseCase.createClubFrom(
-                        CreateClubCommand.of(CLUB_NAME, CLUB_DESCRIPTION, userId));
+                        new CreateClubCommand(CLUB_NAME, CLUB_DESCRIPTION, userId));
         clubAdmin = userId;
     }
 
@@ -43,7 +43,7 @@ public class CreateClubUseCaseStepDefinitions extends AbstractUseCaseStepDefinit
     public void a_club_is_created_with_name(String clubName) {
         clubCreated =
                 createClubUseCase.createClubFrom(
-                        CreateClubCommand.of(clubName, CLUB_DESCRIPTION, USER_ID_1));
+                        new CreateClubCommand(clubName, CLUB_DESCRIPTION, USER_ID_1));
         clubAdmin = USER_ID_1;
     }
 
@@ -51,7 +51,7 @@ public class CreateClubUseCaseStepDefinitions extends AbstractUseCaseStepDefinit
     public void a_club_with_name_is_created_by_user(String clubName, Long userId) {
         clubCreated =
                 createClubUseCase.createClubFrom(
-                        CreateClubCommand.of(clubName, CLUB_DESCRIPTION, userId));
+                        new CreateClubCommand(clubName, CLUB_DESCRIPTION, userId));
         clubAdmin = userId;
     }
 

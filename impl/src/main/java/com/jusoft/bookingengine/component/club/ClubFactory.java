@@ -12,11 +12,7 @@ class ClubFactory {
     private final Supplier<Long> idSupplier;
 
     Club createFrom(CreateClubCommand command) {
-        return new Club(
-                idSupplier.get(),
-                command.getName(),
-                command.getDescription(),
-                command.getAdminId());
+        return new Club(idSupplier.get(), command.name(), command.description(), command.adminId());
     }
 
     public ClubView createFrom(Club club) {

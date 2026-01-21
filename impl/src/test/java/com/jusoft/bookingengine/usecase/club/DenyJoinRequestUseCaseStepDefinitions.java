@@ -40,7 +40,7 @@ public class DenyJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStepDe
                                                         "Unable to find join request for user %s",
                                                         userId)));
         denyJoinRequestUseCase.denyJoinRequest(
-                DenyJoinRequestCommand.of(joinRequestForUser.getId(), clubCreated.id(), adminId));
+                new DenyJoinRequestCommand(joinRequestForUser.getId(), clubCreated.id(), adminId));
     }
 
     @When("^user (\\d+) denies the join request created by user (\\d+)$")
@@ -58,7 +58,7 @@ public class DenyJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStepDe
         storeException(
                 () ->
                         denyJoinRequestUseCase.denyJoinRequest(
-                                DenyJoinRequestCommand.of(
+                                new DenyJoinRequestCommand(
                                         joinRequestForUser.getId(), clubCreated.id(), notAdminId)));
     }
 
@@ -67,7 +67,7 @@ public class DenyJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStepDe
         storeException(
                 () ->
                         denyJoinRequestUseCase.denyJoinRequest(
-                                DenyJoinRequestCommand.of(
+                                new DenyJoinRequestCommand(
                                         joinRequestId, clubCreated.id(), adminId)));
     }
 

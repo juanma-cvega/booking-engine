@@ -56,12 +56,12 @@ class Club {
 
     JoinRequest acceptAccessRequest(AcceptJoinRequestCommand acceptJoinRequestCommand) {
         return removeAccessRequestIfAllowed(
-                acceptJoinRequestCommand.getAdminId(), acceptJoinRequestCommand.getJoinRequestId());
+                acceptJoinRequestCommand.adminId(), acceptJoinRequestCommand.joinRequestId());
     }
 
     JoinRequest denyAccessRequest(DenyJoinRequestCommand denyJoinRequestCommand) {
         return removeAccessRequestIfAllowed(
-                denyJoinRequestCommand.getAdminId(), denyJoinRequestCommand.getJoinRequestId());
+                denyJoinRequestCommand.adminId(), denyJoinRequestCommand.joinRequestId());
     }
 
     private JoinRequest removeAccessRequestIfAllowed(long userId, long accessRequestId) {

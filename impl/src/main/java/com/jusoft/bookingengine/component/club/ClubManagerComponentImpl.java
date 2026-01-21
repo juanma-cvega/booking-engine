@@ -55,24 +55,24 @@ class ClubManagerComponentImpl implements ClubManagerComponent {
     public void acceptAccessRequest(AcceptJoinRequestCommand command) {
         JoinRequest joinRequest =
                 repository.removeJoinRequest(
-                        command.getClubId(),
+                        command.clubId(),
                         club -> club.acceptAccessRequest(command),
-                        () -> new ClubNotFoundException(command.getClubId()));
+                        () -> new ClubNotFoundException(command.clubId()));
         messagePublisher.publish(
                 new JoinRequestAcceptedEvent(
-                        command.getJoinRequestId(), joinRequest.getUserId(), command.getClubId()));
+                        command.joinRequestId(), joinRequest.getUserId(), command.clubId()));
     }
 
     @Override
     public void denyAccessRequest(DenyJoinRequestCommand command) {
         JoinRequest joinRequest =
                 repository.removeJoinRequest(
-                        command.getClubId(),
+                        command.clubId(),
                         club -> club.denyAccessRequest(command),
-                        () -> new ClubNotFoundException(command.getClubId()));
+                        () -> new ClubNotFoundException(command.clubId()));
         messagePublisher.publish(
                 new JoinRequestDeniedEvent(
-                        command.getJoinRequestId(), joinRequest.getUserId(), command.getClubId()));
+                        command.joinRequestId(), joinRequest.getUserId(), command.clubId()));
     }
 
     @Override
@@ -86,16 +86,16 @@ class ClubManagerComponentImpl implements ClubManagerComponent {
 
     @Override
     public JoinRequest createJoinRequest(CreateJoinRequestCommand command) {
-        JoinRequest joinRequest = joinRequestFactory.createFrom(command.getUserId());
+        JoinRequest joinRequest = joinRequestFactory.createFrom(command.userId());
         repository.addJoinRequest(
-                command.getClubId(),
+                command.clubId(),
                 club -> {
                     club.addJoinRequest(joinRequest);
                     return club;
                 },
-                () -> new ClubNotFoundException(command.getClubId()));
+                () -> new ClubNotFoundException(command.clubId()));
         messagePublisher.publish(
-                new JoinRequestCreatedEvent(joinRequest.getId(), command.getClubId()));
+                new JoinRequestCreatedEvent(joinRequest.getId(), command.clubId()));
         return joinRequest;
     }
 

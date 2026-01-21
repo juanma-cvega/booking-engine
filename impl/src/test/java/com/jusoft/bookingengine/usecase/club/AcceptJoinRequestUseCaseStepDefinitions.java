@@ -40,7 +40,7 @@ public class AcceptJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStep
                                         new IllegalArgumentException(
                                                 "User does not have a join request created"));
         acceptJoinRequestUseCase.acceptJoinRequest(
-                AcceptJoinRequestCommand.of(
+                new AcceptJoinRequestCommand(
                         joinRequestFromUser.getId(), clubCreated.id(), adminId));
     }
 
@@ -59,7 +59,7 @@ public class AcceptJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStep
         storeException(
                 () ->
                         acceptJoinRequestUseCase.acceptJoinRequest(
-                                AcceptJoinRequestCommand.of(
+                                new AcceptJoinRequestCommand(
                                         joinRequestForUser.getId(), clubCreated.id(), notAdminId)));
     }
 
@@ -68,7 +68,7 @@ public class AcceptJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStep
         storeException(
                 () ->
                         acceptJoinRequestUseCase.acceptJoinRequest(
-                                AcceptJoinRequestCommand.of(
+                                new AcceptJoinRequestCommand(
                                         joinRequestId, clubCreated.id(), adminId)));
     }
 

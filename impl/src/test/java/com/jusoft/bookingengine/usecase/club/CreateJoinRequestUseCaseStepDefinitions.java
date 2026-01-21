@@ -33,7 +33,7 @@ public class CreateJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStep
     public void user_issues_a_join_request(Long userId) {
         joinRequestCreated =
                 createJoinRequestUseCase.createJoinRequest(
-                        CreateJoinRequestCommand.of(clubCreated.id(), userId));
+                        new CreateJoinRequestCommand(clubCreated.id(), userId));
         joinRequestsCreated.add(joinRequestCreated);
     }
 

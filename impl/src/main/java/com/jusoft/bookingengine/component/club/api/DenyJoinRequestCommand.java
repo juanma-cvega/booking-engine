@@ -1,12 +1,6 @@
 package com.jusoft.bookingengine.component.club.api;
 
 import com.jusoft.bookingengine.publisher.Command;
-import lombok.Data;
 
-@Data(staticConstructor = "of")
-public class DenyJoinRequestCommand implements Command {
-
-    private final long joinRequestId;
-    private final long clubId;
-    private final long adminId;
-}
+public record DenyJoinRequestCommand(long joinRequestId, long clubId, long adminId)
+        implements Command {}
