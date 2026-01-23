@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 class SlotTest {
 
     @Test
-    public void slot_without_creation_time_fails_creation() {
+    void slot_without_creation_time_fails_creation() {
         assertThatThrownBy(
                         () ->
                                 new Slot(
@@ -39,7 +39,7 @@ class SlotTest {
     }
 
     @Test
-    public void slot_without_open_date_fails_creation() {
+    void slot_without_open_date_fails_creation() {
         assertThatThrownBy(
                         () ->
                                 new Slot(
@@ -54,7 +54,7 @@ class SlotTest {
     }
 
     @Test
-    public void slot_without_state_fails_creation() {
+    void slot_without_state_fails_creation() {
         assertThatThrownBy(
                         () ->
                                 new Slot(
@@ -69,7 +69,7 @@ class SlotTest {
     }
 
     @Test
-    public void given_slot_current_time_is_within_start_and_end_time_is_open_should_return_true() {
+    void given_slot_current_time_is_within_start_and_end_time_is_open_should_return_true() {
         Slot slot =
                 new Slot(
                         SLOT_ID_1,
@@ -83,7 +83,7 @@ class SlotTest {
     }
 
     @Test
-    public void given_slot_current_time_is_before_start_time_is_open_should_return_false() {
+    void given_slot_current_time_is_before_start_time_is_open_should_return_false() {
         Slot slot =
                 new Slot(
                         SLOT_ID_1,
@@ -102,7 +102,7 @@ class SlotTest {
     }
 
     @Test
-    public void given_slot_current_time_is_equal_to_end_time_is_open_should_return_false() {
+    void given_slot_current_time_is_equal_to_end_time_is_open_should_return_false() {
         Slot slot =
                 new Slot(
                         SLOT_ID_1,

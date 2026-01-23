@@ -45,7 +45,7 @@ class RoomTest {
             Arrays.asList(SECOND_OPEN_TIME, THIRD_OPEN_TIME, FIRST_OPEN);
 
     @Test
-    public void room_with_empty_open_times_should_fail_creation() {
+    void room_with_empty_open_times_should_fail_creation() {
         assertThatThrownBy(
                         () ->
                                 new Room(
@@ -60,7 +60,7 @@ class RoomTest {
     }
 
     @Test
-    public void room_with_null_open_times_should_fail_creation() {
+    void room_with_null_open_times_should_fail_creation() {
         assertThatThrownBy(
                         () ->
                                 new Room(
@@ -75,7 +75,7 @@ class RoomTest {
     }
 
     @Test
-    public void room_with_empty_available_days_should_fail_creation() {
+    void room_with_empty_available_days_should_fail_creation() {
         assertThatThrownBy(
                         () ->
                                 new Room(
@@ -90,7 +90,7 @@ class RoomTest {
     }
 
     @Test
-    public void room_with_null_available_days_should_fail_creation() {
+    void room_with_null_available_days_should_fail_creation() {
         assertThatThrownBy(
                         () ->
                                 new Room(
@@ -105,7 +105,7 @@ class RoomTest {
     }
 
     @Test
-    public void room_with_open_times_not_multiple_of_slot_duration_should_fail_creation() {
+    void room_with_open_times_not_multiple_of_slot_duration_should_fail_creation() {
         assertThatThrownBy(
                         () ->
                                 new Room(
@@ -120,7 +120,7 @@ class RoomTest {
     }
 
     @Test
-    public void room_with_null_slot_creation_strategy_config_info_should_fail_creation() {
+    void room_with_null_slot_creation_strategy_config_info_should_fail_creation() {
         assertThatThrownBy(
                         () ->
                                 new Room(
@@ -135,7 +135,7 @@ class RoomTest {
     }
 
     @Test
-    public void room_open_times_are_sorted() {
+    void room_open_times_are_sorted() {
         Room room =
                 new Room(
                         ROOM_ID,

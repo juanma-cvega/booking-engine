@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 class CreateClubRoomCommandTest {
 
     @Test
-    public void null_slots_creation_strategy_config_info_should_fail_constructor() {
+    void null_slots_creation_strategy_config_info_should_fail_constructor() {
         assertThatThrownBy(
                         () ->
                                 new CreateRoomCommand(
@@ -26,7 +26,7 @@ class CreateClubRoomCommandTest {
     }
 
     @Test
-    public void null_open_times_should_fail_constructor() {
+    void null_open_times_should_fail_constructor() {
         assertThatThrownBy(
                         () ->
                                 new CreateRoomCommand(
@@ -39,7 +39,7 @@ class CreateClubRoomCommandTest {
     }
 
     @Test
-    public void null_available_days_should_fail_constructor() {
+    void null_available_days_should_fail_constructor() {
         assertThatThrownBy(
                         () ->
                                 new CreateRoomCommand(

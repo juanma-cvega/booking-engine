@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 class CreateSlotCommandTest {
 
     @Test
-    public void null_open_date_fails_constructor() {
+    void null_open_date_fails_constructor() {
         assertThatThrownBy(() -> new CreateSlotCommand(ROOM_ID, BUILDING_ID, CLUB_ID, null))
                 .isInstanceOf(NullPointerException.class);
     }
