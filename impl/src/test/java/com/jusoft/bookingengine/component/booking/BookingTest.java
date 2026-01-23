@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 class BookingTest {
 
     @Test
-    public void booking_without_booking_time_fails_creation() {
+    void booking_without_booking_time_fails_creation() {
         assertThatThrownBy(() -> new Booking(BOOKING_ID, USER_ID_1, null, SLOT_ID_1))
                 .isInstanceOf(NullPointerException.class);
     }

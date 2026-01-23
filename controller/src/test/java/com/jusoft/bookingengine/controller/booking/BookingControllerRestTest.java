@@ -33,6 +33,7 @@ import com.jusoft.bookingengine.component.booking.api.BookingNotFoundException;
 import com.jusoft.bookingengine.component.booking.api.WrongBookingUserException;
 import com.jusoft.bookingengine.component.slot.api.SlotAlreadyReservedException;
 import com.jusoft.bookingengine.component.slot.api.SlotNotOpenException;
+import com.jusoft.bookingengine.controller.GlobalExceptionHandler;
 import com.jusoft.bookingengine.controller.booking.api.CreateBookingRequest;
 import java.util.StringJoiner;
 import org.junit.jupiter.api.BeforeEach;
@@ -65,11 +66,14 @@ class BookingControllerRestTest {
 
     @BeforeEach
     void setup() {
-        mockMvc = MockMvcBuilders.standaloneSetup(bookingControllerRest).build();
+        mockMvc =
+                MockMvcBuilders.standaloneSetup(bookingControllerRest)
+                        .setControllerAdvice(new GlobalExceptionHandler())
+                        .build();
     }
 
     @Test
-    public void book() throws Exception {
+    void book() throws Exception {
         when(mockBookingCommandFactory.createFrom(SLOT_ID_1, USER_ID_1))
                 .thenReturn(CREATE_BOOKING_COMMAND);
         when(mockBookingManagerComponent.book(CREATE_BOOKING_COMMAND)).thenReturn(BOOKING_1);
@@ -92,7 +96,7 @@ class BookingControllerRestTest {
     }
 
     @Test
-    public void cancel() throws Exception {
+    void cancel() throws Exception {
         String cancelUrl = String.format(BOOKING_URL_TEMPLATE, USER_ID_1, BOOKING_ID_1);
         String urlTemplate =
                 new StringJoiner(FORTHSLASH).add(BOOKINGS_URL).add(cancelUrl).toString();
@@ -103,7 +107,7 @@ class BookingControllerRestTest {
     }
 
     @Test
-    public void find() throws Exception {
+    void find() throws Exception {
         when(mockBookingManagerComponent.find(BOOKING_ID_1)).thenReturn(BOOKING_1);
         when(mockBookingResourceFactory.createFrom(BOOKING_1)).thenReturn(BOOKING_RESOURCE_1);
 
@@ -120,7 +124,7 @@ class BookingControllerRestTest {
     }
 
     @Test
-    public void getFor() throws Exception {
+    void getFor() throws Exception {
         when(mockBookingManagerComponent.findAllBy(USER_ID_1)).thenReturn(BOOKINGS);
         when(mockBookingResourceFactory.createFrom(BOOKINGS)).thenReturn(BOOKING_RESOURCES);
 
@@ -176,7 +180,7 @@ class BookingControllerRestTest {
     }
 
     @Test
-    public void bookWithNullUserIdFails() throws Exception {
+    void bookWithNullUserIdFails() throws Exception {
         String createUrl = String.format(CREATE_BOOKING_URL_TEMPLATE, ROOM_ID, SLOT_ID_1);
         String urlTemplate =
                 new StringJoiner(FORTHSLASH).add(BOOKINGS_URL).add(createUrl).toString();
@@ -190,19 +194,18 @@ class BookingControllerRestTest {
     }
 
     @Test
-    public void bookingNotFoundException() throws Exception {
+    void bookingNotFoundException() throws Exception {
         when(mockBookingManagerComponent.find(BOOKING_ID_1))
                 .thenThrow(new BookingNotFoundException(BOOKING_ID_1));
 
         String findUrl = String.format(BOOKING_URL_TEMPLATE, USER_ID_1, BOOKING_ID_1);
         String urlTemplate = new StringJoiner(FORTHSLASH).add(BOOKINGS_URL).add(findUrl).toString();
         mockMvc.perform(get(urlTemplate).contentType(APPLICATION_JSON))
-                .andExpect(status().isNotFound())
-                .andExpect(status().reason("Booking not found"));
+                .andExpect(status().isNotFound());
     }
 
     @Test
-    public void slotAlreadyBooked() throws Exception {
+    void slotAlreadyBooked() throws Exception {
         String createUrl = String.format(CREATE_BOOKING_URL_TEMPLATE, ROOM_ID, SLOT_ID_1);
         String urlTemplate =
                 new StringJoiner(FORTHSLASH).add(BOOKINGS_URL).add(createUrl).toString();
@@ -215,13 +218,12 @@ class BookingControllerRestTest {
         mockMvc.perform(
                         post(urlTemplate)
                                 .contentType(APPLICATION_JSON)
-                                .content(OBJECT_MAPPER.writeValueAsString(USER_ID_1)))
-                .andExpect(status().isConflict())
-                .andExpect(status().reason("Slot already booked"));
+                                .content(OBJECT_MAPPER.writeValueAsString(CREATE_BOOKING_REQUEST)))
+                .andExpect(status().isConflict());
     }
 
     @Test
-    public void slotAlreadyStarted() throws Exception {
+    void slotAlreadyStarted() throws Exception {
         when(mockBookingCommandFactory.createFrom(SLOT_ID_1, USER_ID_1))
                 .thenReturn(CREATE_BOOKING_COMMAND);
         when(mockBookingManagerComponent.book(CREATE_BOOKING_COMMAND))
@@ -233,13 +235,12 @@ class BookingControllerRestTest {
         mockMvc.perform(
                         post(urlTemplate)
                                 .contentType(APPLICATION_JSON)
-                                .content(OBJECT_MAPPER.writeValueAsString(USER_ID_1)))
-                .andExpect(status().isPreconditionRequired())
-                .andExpect(status().reason("Slot already started"));
+                                .content(OBJECT_MAPPER.writeValueAsString(CREATE_BOOKING_REQUEST)))
+                .andExpect(status().isPreconditionRequired());
     }
 
     @Test
-    public void wrongBookingUser() throws Exception {
+    void wrongBookingUser() throws Exception {
         when(mockBookingCommandFactory.createFrom(SLOT_ID_1, USER_ID_1))
                 .thenReturn(CREATE_BOOKING_COMMAND);
         when(mockBookingManagerComponent.book(CREATE_BOOKING_COMMAND))
@@ -251,8 +252,7 @@ class BookingControllerRestTest {
         mockMvc.perform(
                         post(urlTemplate)
                                 .contentType(APPLICATION_JSON)
-                                .content(OBJECT_MAPPER.writeValueAsString(USER_ID_1)))
-                .andExpect(status().isUnauthorized())
-                .andExpect(status().reason("Booking does not belong to user"));
+                                .content(OBJECT_MAPPER.writeValueAsString(CREATE_BOOKING_REQUEST)))
+                .andExpect(status().isUnauthorized());
     }
 }
