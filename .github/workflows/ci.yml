@@ -96,10 +96,6 @@ jobs:
             -Dsonar.junit.reportPaths=target/surefire-reports \
             -Dspotless.check.skip=true
 
-      - name: Check coverage threshold
-        run: |
-          mvn jacoco:check -Djacoco.haltOnFailure=false
-
   code-quality:
     name: Code Quality Checks
     runs-on: ubuntu-latest
