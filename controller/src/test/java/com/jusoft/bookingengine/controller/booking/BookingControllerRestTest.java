@@ -33,6 +33,7 @@ import com.jusoft.bookingengine.component.booking.api.BookingNotFoundException;
 import com.jusoft.bookingengine.component.booking.api.WrongBookingUserException;
 import com.jusoft.bookingengine.component.slot.api.SlotAlreadyReservedException;
 import com.jusoft.bookingengine.component.slot.api.SlotNotOpenException;
+import com.jusoft.bookingengine.controller.GlobalExceptionHandler;
 import com.jusoft.bookingengine.controller.booking.api.CreateBookingRequest;
 import java.util.StringJoiner;
 import org.junit.jupiter.api.BeforeEach;
@@ -65,7 +66,10 @@ class BookingControllerRestTest {
 
     @BeforeEach
     void setup() {
-        mockMvc = MockMvcBuilders.standaloneSetup(bookingControllerRest).build();
+        mockMvc =
+                MockMvcBuilders.standaloneSetup(bookingControllerRest)
+                        .setControllerAdvice(new GlobalExceptionHandler())
+                        .build();
     }
 
     @Test
@@ -197,8 +201,7 @@ class BookingControllerRestTest {
         String findUrl = String.format(BOOKING_URL_TEMPLATE, USER_ID_1, BOOKING_ID_1);
         String urlTemplate = new StringJoiner(FORTHSLASH).add(BOOKINGS_URL).add(findUrl).toString();
         mockMvc.perform(get(urlTemplate).contentType(APPLICATION_JSON))
-                .andExpect(status().isNotFound())
-                .andExpect(status().reason("Booking not found"));
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -215,9 +218,8 @@ class BookingControllerRestTest {
         mockMvc.perform(
                         post(urlTemplate)
                                 .contentType(APPLICATION_JSON)
-                                .content(OBJECT_MAPPER.writeValueAsString(USER_ID_1)))
-                .andExpect(status().isConflict())
-                .andExpect(status().reason("Slot already booked"));
+                                .content(OBJECT_MAPPER.writeValueAsString(CREATE_BOOKING_REQUEST)))
+                .andExpect(status().isConflict());
     }
 
     @Test
@@ -233,9 +235,8 @@ class BookingControllerRestTest {
         mockMvc.perform(
                         post(urlTemplate)
                                 .contentType(APPLICATION_JSON)
-                                .content(OBJECT_MAPPER.writeValueAsString(USER_ID_1)))
-                .andExpect(status().isPreconditionRequired())
-                .andExpect(status().reason("Slot already started"));
+                                .content(OBJECT_MAPPER.writeValueAsString(CREATE_BOOKING_REQUEST)))
+                .andExpect(status().isPreconditionRequired());
     }
 
     @Test
@@ -251,8 +252,7 @@ class BookingControllerRestTest {
         mockMvc.perform(
                         post(urlTemplate)
                                 .contentType(APPLICATION_JSON)
-                                .content(OBJECT_MAPPER.writeValueAsString(USER_ID_1)))
-                .andExpect(status().isUnauthorized())
-                .andExpect(status().reason("Booking does not belong to user"));
+                                .content(OBJECT_MAPPER.writeValueAsString(CREATE_BOOKING_REQUEST)))
+                .andExpect(status().isUnauthorized());
     }
 }

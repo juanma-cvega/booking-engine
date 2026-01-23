@@ -1,7 +1,7 @@
 package com.jusoft.bookingengine.util;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.experimental.UtilityClass;
+import tools.jackson.databind.ObjectMapper;
 
 @UtilityClass
 public class HelpUtils {
