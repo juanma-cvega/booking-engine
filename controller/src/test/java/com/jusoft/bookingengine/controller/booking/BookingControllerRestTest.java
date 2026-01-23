@@ -87,12 +87,12 @@ class BookingControllerRestTest {
                                 .contentType(APPLICATION_JSON)
                                 .content(OBJECT_MAPPER.writeValueAsString(CREATE_BOOKING_REQUEST)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.bookingId", is(Long.valueOf(BOOKING_ID_1).intValue())))
-                .andExpect(jsonPath("$.bookingTime", is(Long.valueOf(BOOKING_TIME).intValue())))
-                .andExpect(jsonPath("$.slot.slotId", is(Long.valueOf(SLOT_ID_1).intValue())))
-                .andExpect(jsonPath("$.slot.roomId", is(Long.valueOf(ROOM_ID).intValue())))
-                .andExpect(jsonPath("$.slot.startDate", is(Long.valueOf(START_TIME).intValue())))
-                .andExpect(jsonPath("$.slot.endDate", is(Long.valueOf(END_TIME).intValue())));
+                .andExpect(jsonPath("$.bookingId", is((int) BOOKING_ID_1)))
+                .andExpect(jsonPath("$.bookingTime", is((int) BOOKING_TIME)))
+                .andExpect(jsonPath("$.slot.slotId", is((int) SLOT_ID_1)))
+                .andExpect(jsonPath("$.slot.roomId", is((int) ROOM_ID)))
+                .andExpect(jsonPath("$.slot.startDate", is((int) START_TIME)))
+                .andExpect(jsonPath("$.slot.endDate", is((int) END_TIME)));
     }
 
     @Test
@@ -115,12 +115,12 @@ class BookingControllerRestTest {
         String urlTemplate = new StringJoiner(FORTHSLASH).add(BOOKINGS_URL).add(findUrl).toString();
         mockMvc.perform(get(urlTemplate).contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.bookingId", is(Long.valueOf(BOOKING_ID_1).intValue())))
-                .andExpect(jsonPath("$.bookingTime", is(Long.valueOf(BOOKING_TIME).intValue())))
-                .andExpect(jsonPath("$.slot.slotId", is(Long.valueOf(SLOT_ID_1).intValue())))
-                .andExpect(jsonPath("$.slot.roomId", is(Long.valueOf(ROOM_ID).intValue())))
-                .andExpect(jsonPath("$.slot.startDate", is(Long.valueOf(START_TIME).intValue())))
-                .andExpect(jsonPath("$.slot.endDate", is(Long.valueOf(END_TIME).intValue())));
+                .andExpect(jsonPath("$.bookingId", is((int) BOOKING_ID_1)))
+                .andExpect(jsonPath("$.bookingTime", is((int) BOOKING_TIME)))
+                .andExpect(jsonPath("$.slot.slotId", is((int) SLOT_ID_1)))
+                .andExpect(jsonPath("$.slot.roomId", is((int) ROOM_ID)))
+                .andExpect(jsonPath("$.slot.startDate", is((int) START_TIME)))
+                .andExpect(jsonPath("$.slot.endDate", is((int) END_TIME)));
     }
 
     @Test
@@ -133,50 +133,18 @@ class BookingControllerRestTest {
                 new StringJoiner(FORTHSLASH).add(BOOKINGS_URL).add(cancelUrl).toString();
         mockMvc.perform(get(urlTemplate).contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(
-                        jsonPath(
-                                "$.bookings[0].bookingId",
-                                is(Long.valueOf(BOOKING_ID_1).intValue())))
-                .andExpect(
-                        jsonPath(
-                                "$.bookings[0].bookingTime",
-                                is(Long.valueOf(BOOKING_TIME).intValue())))
-                .andExpect(
-                        jsonPath(
-                                "$.bookings[0].slot.slotId",
-                                is(Long.valueOf(SLOT_ID_1).intValue())))
-                .andExpect(
-                        jsonPath("$.bookings[0].slot.roomId", is(Long.valueOf(ROOM_ID).intValue())))
-                .andExpect(
-                        jsonPath(
-                                "$.bookings[0].slot.startDate",
-                                is(Long.valueOf(START_TIME).intValue())))
-                .andExpect(
-                        jsonPath(
-                                "$.bookings[0].slot.endDate",
-                                is(Long.valueOf(END_TIME).intValue())))
-                .andExpect(
-                        jsonPath(
-                                "$.bookings[1].bookingId",
-                                is(Long.valueOf(BOOKING_ID_2).intValue())))
-                .andExpect(
-                        jsonPath(
-                                "$.bookings[1].bookingTime",
-                                is(Long.valueOf(BOOKING_TIME).intValue())))
-                .andExpect(
-                        jsonPath(
-                                "$.bookings[1].slot.slotId",
-                                is(Long.valueOf(SLOT_ID_1).intValue())))
-                .andExpect(
-                        jsonPath("$.bookings[1].slot.roomId", is(Long.valueOf(ROOM_ID).intValue())))
-                .andExpect(
-                        jsonPath(
-                                "$.bookings[1].slot.startDate",
-                                is(Long.valueOf(START_TIME).intValue())))
-                .andExpect(
-                        jsonPath(
-                                "$.bookings[1].slot.endDate",
-                                is(Long.valueOf(END_TIME).intValue())));
+                .andExpect(jsonPath("$.bookings[0].bookingId", is((int) BOOKING_ID_1)))
+                .andExpect(jsonPath("$.bookings[0].bookingTime", is((int) BOOKING_TIME)))
+                .andExpect(jsonPath("$.bookings[0].slot.slotId", is((int) SLOT_ID_1)))
+                .andExpect(jsonPath("$.bookings[0].slot.roomId", is((int) ROOM_ID)))
+                .andExpect(jsonPath("$.bookings[0].slot.startDate", is((int) START_TIME)))
+                .andExpect(jsonPath("$.bookings[0].slot.endDate", is((int) END_TIME)))
+                .andExpect(jsonPath("$.bookings[1].bookingId", is((int) BOOKING_ID_2)))
+                .andExpect(jsonPath("$.bookings[1].bookingTime", is((int) BOOKING_TIME)))
+                .andExpect(jsonPath("$.bookings[1].slot.slotId", is((int) SLOT_ID_1)))
+                .andExpect(jsonPath("$.bookings[1].slot.roomId", is((int) ROOM_ID)))
+                .andExpect(jsonPath("$.bookings[1].slot.startDate", is((int) START_TIME)))
+                .andExpect(jsonPath("$.bookings[1].slot.endDate", is((int) END_TIME)));
     }
 
     @Test
