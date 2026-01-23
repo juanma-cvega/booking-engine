@@ -1,12 +1,15 @@
 package com.jusoft.bookingengine;
 
-import io.cucumber.junit.Cucumber;
-import io.cucumber.junit.CucumberOptions;
-import org.junit.runner.RunWith;
+import io.cucumber.junit.platform.engine.Constants;
+import org.junit.platform.suite.api.ConfigurationParameter;
+import org.junit.platform.suite.api.IncludeEngines;
+import org.junit.platform.suite.api.Suite;
 
-@CucumberOptions(
-        features = "src/test/resources",
-        glue = {"com.jusoft.bookingengine.usecase", "com.jusoft.bookingengine.config"},
-        plugin = {"pretty"})
-@RunWith(Cucumber.class)
+@Suite
+@IncludeEngines("cucumber")
+@ConfigurationParameter(key = Constants.FEATURES_PROPERTY_NAME, value = "src/test/resources")
+@ConfigurationParameter(
+        key = Constants.GLUE_PROPERTY_NAME,
+        value = "com.jusoft.bookingengine.usecase,com.jusoft.bookingengine.config")
+@ConfigurationParameter(key = Constants.PLUGIN_PROPERTY_NAME, value = "pretty")
 class UseCaseCTest {}
