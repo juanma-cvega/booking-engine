@@ -1,0 +1,96 @@
+#!/bin/sh
+#
+# Git pre-commit hook to:
+# 1. Enforce code formatting with Spotless
+# 2. Auto-update context.md with commit changes
+#
+
+# Update context.md with staged changes
+CONTEXT_FILE=".cascade/context.md"
+if [ -f "$CONTEXT_FILE" ]; then
+    echo "Updating context.md with commit changes..."
+    
+    # Get the commit message from COMMIT_EDITMSG if it exists, otherwise use a placeholder
+    COMMIT_MSG_FILE=".git/COMMIT_EDITMSG"
+    if [ -f "$COMMIT_MSG_FILE" ]; then
+        COMMIT_SUBJECT=$(head -n 1 "$COMMIT_MSG_FILE")
+    else
+        COMMIT_SUBJECT="[Pending commit]"
+    fi
+    
+    # Get list of staged files
+    STAGED_FILES=$(git diff --cached --name-only | head -10)
+    
+    # Get current date
+    CURRENT_DATE=$(date +"%b %d, %Y")
+    
+    # Create a temporary entry
+    TEMP_ENTRY="## Recent Changes ($CURRENT_DATE)
+
+### Latest Commit: $COMMIT_SUBJECT
+Staged files:
+$(echo "$STAGED_FILES" | sed 's/^/- /')
+
+---
+
+"
+    
+    # Insert the entry after the "## Recent Changes" section or at the beginning
+    if grep -q "## Recent Changes" "$CONTEXT_FILE"; then
+        # Insert after the Recent Changes header
+        awk -v entry="$TEMP_ENTRY" '
+            /## Recent Changes/ {
+                print
+                print ""
+                print entry
+                next
+            }
+            {print}
+        ' "$CONTEXT_FILE" > "$CONTEXT_FILE.tmp"
+        mv "$CONTEXT_FILE.tmp" "$CONTEXT_FILE"
+    else
+        # Add a Recent Changes section at the top after the overview
+        awk -v entry="$TEMP_ENTRY" '
+            /## Java Migration History/ {
+                print "## Recent Changes"
+                print ""
+                print entry
+                print
+            }
+            {print}
+        ' "$CONTEXT_FILE" > "$CONTEXT_FILE.tmp"
+        mv "$CONTEXT_FILE.tmp" "$CONTEXT_FILE"
+    fi
+    
+    # Stage the updated context file
+    git add "$CONTEXT_FILE"
+    echo "✅ Context file updated and staged"
+fi
+
+echo "Running Spotless format check..."
+
+# Set JAVA_HOME to Java 25 (with fallback to Java 21)
+export JAVA_HOME=$(/usr/libexec/java_home -v 25 2>/dev/null || /usr/libexec/java_home -v 21)
+
+# Run spotless check
+mvn spotless:check -q
+
+# Capture exit code
+SPOTLESS_EXIT_CODE=$?
+
+if [ $SPOTLESS_EXIT_CODE -ne 0 ]; then
+    echo ""
+    echo "❌ Code formatting check failed!"
+    echo ""
+    echo "Your code is not properly formatted according to Google Java Format."
+    echo ""
+    echo "To fix formatting issues, run:"
+    echo "  mvn spotless:apply"
+    echo ""
+    echo "Then stage your changes and commit again."
+    echo ""
+    exit 1
+fi
+
+echo "✅ Code formatting check passed!"
+exit 0
