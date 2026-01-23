@@ -39,7 +39,7 @@
     <java.version>25</java.version>
     <failsafe-maven-plugin.version>3.1.2</failsafe-maven-plugin.version>
     <commons-collections4.version>4.4</commons-collections4.version>
-    <guava.version>33.1.0-jre</guava.version>
+    <guava.version>33.5.0-jre</guava.version>
     <jackson.version>2.17.0</jackson.version>
     <cucumber.version>7.15.0</cucumber.version>
     <junit-platform.version>1.10.1</junit-platform.version>
