@@ -32,7 +32,29 @@ fi
 
 echo "✅ Code formatting check passed!"
 
-# Update context.md with staged changes (only after formatting passes)
+echo "Running tests..."
+
+# Run tests
+mvn test -q
+
+# Capture exit code
+TEST_EXIT_CODE=$?
+
+if [ $TEST_EXIT_CODE -ne 0 ]; then
+    echo ""
+    echo "❌ Tests failed!"
+    echo ""
+    echo "Please fix the failing tests before committing."
+    echo ""
+    echo "To see detailed test output, run:"
+    echo "  mvn test"
+    echo ""
+    exit 1
+fi
+
+echo "✅ All tests passed!"
+
+# Update context.md with staged changes (only after formatting and tests pass)
 CONTEXT_FILE=".cascade/context.md"
 if [ -f "$CONTEXT_FILE" ]; then
     echo "Updating context.md with commit changes..."
