@@ -30,7 +30,7 @@ class InfrastructureMessageFactoryTest {
     @Autowired private InfrastructureMessageFactory infrastructureMessageFactory;
 
     @Test
-    public void create_from_auction_finished_event_should_create_an_auction_finished_message() {
+    void create_from_auction_finished_event_should_create_an_auction_finished_message() {
         InfrastructureMessage message =
                 infrastructureMessageFactory.createFrom(AUCTION_FINISHED_EVENT);
 
@@ -57,7 +57,7 @@ class InfrastructureMessageFactoryTest {
     }
 
     @Test
-    public void create_from_booking_created_event_should_create_a_booking_created_message() {
+    void create_from_booking_created_event_should_create_a_booking_created_message() {
         InfrastructureMessage message =
                 infrastructureMessageFactory.createFrom(BOOKING_CREATED_EVENT);
 
@@ -69,7 +69,7 @@ class InfrastructureMessageFactoryTest {
     }
 
     @Test
-    public void create_from_slot_required_event_should_create_a_slot_required_message() {
+    void create_from_slot_required_event_should_create_a_slot_required_message() {
         InfrastructureMessage message =
                 infrastructureMessageFactory.createFrom(SLOT_REQUIRED_EVENT);
 
@@ -79,7 +79,7 @@ class InfrastructureMessageFactoryTest {
     }
 
     @Test
-    public void create_from_room_created_event_should_create_a_room_created_message() {
+    void create_from_room_created_event_should_create_a_room_created_message() {
         InfrastructureMessage message = infrastructureMessageFactory.createFrom(ROOM_CREATED_EVENT);
 
         assertThat(message).isInstanceOf(RoomCreatedMessage.class);
@@ -94,7 +94,7 @@ class InfrastructureMessageFactoryTest {
     }
 
     @Test
-    public void create_from_slot_created_event_should_create_a_slot_created_message() {
+    void create_from_slot_created_event_should_create_a_slot_created_message() {
         InfrastructureMessage message = infrastructureMessageFactory.createFrom(SLOT_CREATED_EVENT);
 
         assertThat(message).isInstanceOf(SlotCreatedMessage.class);
@@ -105,7 +105,7 @@ class InfrastructureMessageFactoryTest {
     }
 
     @Test
-    public void create_from_unknown_type_should_fail() {
+    void create_from_unknown_type_should_fail() {
         assertThatThrownBy(() -> infrastructureMessageFactory.createFrom(new UnknownMessage()))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Factory not found for message");

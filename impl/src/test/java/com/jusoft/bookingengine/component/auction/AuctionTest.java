@@ -21,7 +21,7 @@ class AuctionTest {
             Clock.fixed(ZonedDateTime.now().toInstant(), ZoneId.systemDefault());
 
     @Test
-    public void create_auction_with_bidders_should_contain_the_bidders_passed() {
+    void create_auction_with_bidders_should_contain_the_bidders_passed() {
         Bid bid = new Bid(USER_ID_1, ZonedDateTime.now(clock));
         Set<Bid> bidders = Sets.newHashSet(bid);
         Auction auction =

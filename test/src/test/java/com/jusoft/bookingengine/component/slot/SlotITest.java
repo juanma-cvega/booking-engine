@@ -31,7 +31,7 @@ class SlotITest {
     }
 
     @Test
-    public void get() {
+    void get() {
         // @formatter:off
         int slotId = createSlot();
 
@@ -46,7 +46,7 @@ class SlotITest {
     }
 
     @Test
-    public void create() {
+    void create() {
         // @formatter:off
         given().body(CREATE_SLOT_REQUEST)
                 .contentType(ContentType.JSON)
@@ -63,7 +63,7 @@ class SlotITest {
     }
 
     @Test
-    public void find() {
+    void find() {
         // @formatter:off
         int slotId = createSlot();
 

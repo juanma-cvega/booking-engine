@@ -37,7 +37,7 @@ class LockingTemplateTest {
     private final ExecutorService executor = Executors.newFixedThreadPool(3);
 
     @Test
-    public void test_constructor_is_private() throws NoSuchMethodException {
+    void test_constructor_is_private() throws NoSuchMethodException {
         Constructor<LockingTemplate> constructor = LockingTemplate.class.getDeclaredConstructor();
         assertThat(Modifier.isPrivate(constructor.getModifiers())).isTrue();
         constructor.setAccessible(true);
@@ -45,7 +45,7 @@ class LockingTemplateTest {
     }
 
     @Test
-    public void runnable_with_lock_should_make_second_thread_wait_for_first_thread_to_finish()
+    void runnable_with_lock_should_make_second_thread_wait_for_first_thread_to_finish()
             throws ExecutionException, InterruptedException {
         AtomicLong testObject = new AtomicLong(INITIAL_VALUE);
         TestRunnable slowTaskSupplier = new TestRunnable(testObject, SLOW_TASK_VALUE, SLOW_TASK);
@@ -69,7 +69,7 @@ class LockingTemplateTest {
     }
 
     @Test
-    public void runnable_without_lock_should_let_both_threads_run_the_code_at_same_time()
+    void runnable_without_lock_should_let_both_threads_run_the_code_at_same_time()
             throws ExecutionException, InterruptedException {
         AtomicLong testObject = new AtomicLong(INITIAL_VALUE);
         TestRunnable slowTaskSupplier = new TestRunnable(testObject, SLOW_TASK_VALUE, SLOW_TASK);
@@ -88,7 +88,7 @@ class LockingTemplateTest {
     }
 
     @Test
-    public void supplier_with_lock_should_make_second_thread_wait_for_first_thread_to_finish()
+    void supplier_with_lock_should_make_second_thread_wait_for_first_thread_to_finish()
             throws ExecutionException, InterruptedException {
         AtomicLong testObject = new AtomicLong(INITIAL_VALUE);
         TestSupplier slowTaskSupplier = new TestSupplier(testObject, SLOW_TASK_VALUE, SLOW_TASK);
@@ -114,7 +114,7 @@ class LockingTemplateTest {
     }
 
     @Test
-    public void supplier_with_lock_throws_exception_should_release_lock_after_failing()
+    void supplier_with_lock_throws_exception_should_release_lock_after_failing()
             throws InterruptedException {
         executor.submit(
                 () ->
@@ -127,7 +127,7 @@ class LockingTemplateTest {
     }
 
     @Test
-    public void supplier_without_lock_runnable_should_let_both_threads_run_the_code_at_same_time()
+    void supplier_without_lock_runnable_should_let_both_threads_run_the_code_at_same_time()
             throws ExecutionException, InterruptedException {
         AtomicLong testObject = new AtomicLong(0);
         TestCallable testCallable = new TestCallable(testObject, SLOW_TASK_VALUE, SLOW_TASK);

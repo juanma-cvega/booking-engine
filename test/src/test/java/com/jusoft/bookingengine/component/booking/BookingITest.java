@@ -36,7 +36,7 @@ class BookingITest {
     }
 
     @Test
-    public void book() {
+    void book() {
         // @formatter:off
         int slotId = createSlot();
         given().contentType(ContentType.JSON)
@@ -57,7 +57,7 @@ class BookingITest {
     }
 
     @Test
-    public void cancel() {
+    void cancel() {
         int slotId = createSlot();
         int bookingId = createBooking(slotId);
 
@@ -72,7 +72,7 @@ class BookingITest {
     }
 
     @Test
-    public void find() {
+    void find() {
         // @formatter:off
         int slotId = createSlot();
         int bookingId = createBooking(slotId);
@@ -89,7 +89,7 @@ class BookingITest {
     }
 
     @Test
-    public void getFor() {
+    void getFor() {
         // @formatter:off
         int slotId = createSlot();
         int bookingId = createBooking(slotId);
