@@ -94,7 +94,8 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           mvn sonar:sonar \
-            -Dsonar.projectKey=booking-engine \
+            -Dsonar.projectKey=juanma-cvega_booking-engine \
+            -Dsonar.projectName="Booking Engine" \
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.organization=juan-manuel-carnicero-vega \
             -Dsonar.token=${{ secrets.SONAR_TOKEN }} \
