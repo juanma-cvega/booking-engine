@@ -96,7 +96,7 @@ jobs:
             -Dsonar.projectKey=juanma-cvega_booking-engine \
             -Dsonar.projectName="Booking Engine" \
             -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.organization=juanma-cvega-github \
+            -Dsonar.organization=juanma-cvega \
             -Dsonar.token=${{ secrets.SONAR_TOKEN }} \
             -Dsonar.java.coveragePlugin=jacoco \
             -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml \

@@ -5,6 +5,14 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: docs: update context.md with comprehensive git history from last 2 weeks
+**Date:** Jan 24, 2026
+
+**Staged files:**
+- .github/workflows/ci.yml
+
+---
+
 ### Latest Commit: fix: resolve awk multi-line string issue in pre-commit hook
 **Date:** Jan 24, 2026
 
