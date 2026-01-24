@@ -1,0 +1,65 @@
+#!/bin/sh
+#
+# Git post-commit hook to update context.md with the actual commit information
+#
+
+# Prevent recursion when amending
+if [ -n "$GIT_CONTEXT_UPDATE_IN_PROGRESS" ]; then
+    exit 0
+fi
+
+CONTEXT_FILE=".cascade/context.md"
+
+if [ -f "$CONTEXT_FILE" ]; then
+    echo "Updating context.md with actual commit information..."
+    
+    # Get the actual commit information
+    COMMIT_HASH=$(git rev-parse HEAD)
+    COMMIT_SUBJECT=$(git log -1 --pretty=format:"%s")
+    COMMIT_FILES=$(git diff-tree --no-commit-id --name-only -r HEAD | head -10)
+    CURRENT_DATE=$(date +"%b %d, %Y")
+    
+    # Create a temporary file with the new entry
+    TEMP_FILE=$(mktemp)
+    cat > "$TEMP_FILE" << EOF
+
+### Latest Commit: $COMMIT_SUBJECT
+**Date:** $CURRENT_DATE
+**Commit:** ${COMMIT_HASH:0:7}
+
+**Changed files:**
+$(echo "$COMMIT_FILES" | sed 's/^/- /')
+
+---
+EOF
+    
+    # Insert the entry after the "## Recent Changes" section or at the beginning
+    if grep -q "## Recent Changes" "$CONTEXT_FILE"; then
+        # Insert after the Recent Changes header
+        awk -v tmpfile="$TEMP_FILE" '
+            /## Recent Changes/ {
+                print
+                system("cat " tmpfile)
+                next
+            }
+            {print}
+        ' "$CONTEXT_FILE" > "$CONTEXT_FILE.tmp"
+        mv "$CONTEXT_FILE.tmp" "$CONTEXT_FILE"
+    else
+        # If file is empty or no Recent Changes section, create one
+        {
+            echo "## Recent Changes"
+            cat "$TEMP_FILE"
+            cat "$CONTEXT_FILE"
+        } > "$CONTEXT_FILE.tmp"
+        mv "$CONTEXT_FILE.tmp" "$CONTEXT_FILE"
+    fi
+    
+    rm -f "$TEMP_FILE"
+    
+    # Add and amend the commit to include the updated context file
+    git add "$CONTEXT_FILE"
+    GIT_CONTEXT_UPDATE_IN_PROGRESS=1 git commit --amend --no-edit --no-verify
+    
+    echo "✅ Context file updated and included in commit"
+fi

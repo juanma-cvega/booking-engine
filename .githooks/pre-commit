@@ -54,65 +54,6 @@ fi
 
 echo "✅ All tests passed!"
 
-# Update context.md with staged changes (only after formatting and tests pass)
-CONTEXT_FILE=".cascade/context.md"
-if [ -f "$CONTEXT_FILE" ]; then
-    echo "Updating context.md with commit changes..."
-    
-    # Get the commit message from COMMIT_EDITMSG if it exists, otherwise use a placeholder
-    COMMIT_MSG_FILE=".git/COMMIT_EDITMSG"
-    if [ -f "$COMMIT_MSG_FILE" ]; then
-        COMMIT_SUBJECT=$(head -n 1 "$COMMIT_MSG_FILE")
-    else
-        COMMIT_SUBJECT="[Pending commit]"
-    fi
-    
-    # Get list of staged files
-    STAGED_FILES=$(git diff --cached --name-only | head -10)
-    
-    # Get current date
-    CURRENT_DATE=$(date +"%b %d, %Y")
-    
-    # Create a temporary file with the new entry
-    TEMP_FILE=$(mktemp)
-    cat > "$TEMP_FILE" << EOF
-
-### Latest Commit: $COMMIT_SUBJECT
-**Date:** $CURRENT_DATE
-
-**Staged files:**
-$(echo "$STAGED_FILES" | sed 's/^/- /')
-
----
-EOF
-    
-    # Insert the entry after the "## Recent Changes" section or at the beginning
-    if grep -q "## Recent Changes" "$CONTEXT_FILE"; then
-        # Insert after the Recent Changes header
-        awk -v tmpfile="$TEMP_FILE" '
-            /## Recent Changes/ {
-                print
-                system("cat " tmpfile)
-                next
-            }
-            {print}
-        ' "$CONTEXT_FILE" > "$CONTEXT_FILE.tmp"
-        mv "$CONTEXT_FILE.tmp" "$CONTEXT_FILE"
-    else
-        # If file is empty or no Recent Changes section, create one
-        {
-            echo "## Recent Changes"
-            cat "$TEMP_FILE"
-            cat "$CONTEXT_FILE"
-        } > "$CONTEXT_FILE.tmp"
-        mv "$CONTEXT_FILE.tmp" "$CONTEXT_FILE"
-    fi
-    
-    rm -f "$TEMP_FILE"
-    
-    # Stage the updated context file
-    git add "$CONTEXT_FILE"
-    echo "✅ Context file updated and staged"
-fi
+# Note: context.md is updated by the post-commit hook with actual commit information
 
 exit 0

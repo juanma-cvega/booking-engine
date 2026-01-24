@@ -5,6 +5,16 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: fix: move context.md update to post-commit hook for accurate commit messages
+**Date:** Jan 24, 2026
+**Commit:** 9a934e1
+
+**Changed files:**
+- .githooks/post-commit
+- .githooks/pre-commit
+
+---
+
 ### Latest Commit: Fix sonarqube organization name
 **Date:** Jan 24, 2026
 
