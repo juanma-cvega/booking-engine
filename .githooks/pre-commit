@@ -73,43 +73,42 @@ if [ -f "$CONTEXT_FILE" ]; then
     # Get current date
     CURRENT_DATE=$(date +"%b %d, %Y")
     
-    # Create a temporary entry
-    TEMP_ENTRY="## Recent Changes ($CURRENT_DATE)
+    # Create a temporary file with the new entry
+    TEMP_FILE=$(mktemp)
+    cat > "$TEMP_FILE" << EOF
 
 ### Latest Commit: $COMMIT_SUBJECT
-Staged files:
+**Date:** $CURRENT_DATE
+
+**Staged files:**
 $(echo "$STAGED_FILES" | sed 's/^/- /')
 
 ---
-
-"
+EOF
     
     # Insert the entry after the "## Recent Changes" section or at the beginning
     if grep -q "## Recent Changes" "$CONTEXT_FILE"; then
         # Insert after the Recent Changes header
-        awk -v entry="$TEMP_ENTRY" '
+        awk -v tmpfile="$TEMP_FILE" '
             /## Recent Changes/ {
                 print
-                print ""
-                print entry
+                system("cat " tmpfile)
                 next
             }
             {print}
         ' "$CONTEXT_FILE" > "$CONTEXT_FILE.tmp"
         mv "$CONTEXT_FILE.tmp" "$CONTEXT_FILE"
     else
-        # Add a Recent Changes section at the top after the overview
-        awk -v entry="$TEMP_ENTRY" '
-            /## Java Migration History/ {
-                print "## Recent Changes"
-                print ""
-                print entry
-                print
-            }
-            {print}
-        ' "$CONTEXT_FILE" > "$CONTEXT_FILE.tmp"
+        # If file is empty or no Recent Changes section, create one
+        {
+            echo "## Recent Changes"
+            cat "$TEMP_FILE"
+            cat "$CONTEXT_FILE"
+        } > "$CONTEXT_FILE.tmp"
         mv "$CONTEXT_FILE.tmp" "$CONTEXT_FILE"
     fi
+    
+    rm -f "$TEMP_FILE"
     
     # Stage the updated context file
     git add "$CONTEXT_FILE"
