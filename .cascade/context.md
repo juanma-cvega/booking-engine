@@ -5,6 +5,17 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: Fix sonarqube organization name
+**Date:** Jan 24, 2026
+
+**Staged files:**
+- .github/workflows/ci.yml
+- .mvn/maven.config
+- pom.xml
+- sonar-project.properties
+
+---
+
 ### Latest Commit: docs: update context.md with comprehensive git history from last 2 weeks
 **Date:** Jan 24, 2026
 
