@@ -5,6 +5,15 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: ci: add sonar.java.binaries property to fix SonarQube caching warning
+**Date:** Jan 27, 2026
+**Commit:** 8c32ca4
+
+**Changed files:**
+- sonar-project.properties
+
+---
+
 ### Latest Commit: test: fix cucumber.features property warning in UseCaseCTest
 **Date:** Jan 27, 2026
 **Commit:** 0385af2
