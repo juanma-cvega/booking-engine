@@ -5,6 +5,15 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: fix: downgrade Hibernate Validator to 8.0.2 and add missing dependencies
+**Date:** Jan 27, 2026
+**Commit:** 5af4768
+
+**Changed files:**
+- pom.xml
+
+---
+
 ### Latest Commit: ci: add sonar.java.binaries property to fix SonarQube caching warning
 **Date:** Jan 27, 2026
 **Commit:** 8c32ca4
