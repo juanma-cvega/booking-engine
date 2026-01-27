@@ -5,6 +5,15 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: Remove unused parameter
+**Date:** Jan 27, 2026
+**Commit:** 0b50e81
+
+**Changed files:**
+- controller/pom.xml
+
+---
+
 ### Latest Commit: fix: downgrade Hibernate Validator to 8.0.2 and add missing dependencies
 **Date:** Jan 27, 2026
 **Commit:** 5af4768
