@@ -5,6 +5,15 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: ci: remove dependency download step that fails on multi-module projects
+**Date:** Jan 27, 2026
+**Commit:** ed104ec
+
+**Changed files:**
+- .github/workflows/ci.yml
+
+---
+
 ### Latest Commit: fix: move context.md update to post-commit hook for accurate commit messages
 **Date:** Jan 24, 2026
 **Commit:** 9a934e1

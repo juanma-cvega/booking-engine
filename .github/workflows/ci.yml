@@ -55,9 +55,6 @@ jobs:
           echo "Cache hit: ${{ steps.maven-cache.outputs.cache-hit }}"
           echo "Maven repository size: $(du -sh ~/.m2/repository 2>/dev/null || echo 'not found')"
 
-      - name: Download all plugin dependencies
-        run: mvn dependency:resolve dependency:resolve-plugins sonar:help -Dspotless.check.skip=true
-
       - name: Build project
         run: mvn clean compile -Dspotless.check.skip=true
 
