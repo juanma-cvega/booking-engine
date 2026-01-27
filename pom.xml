@@ -47,7 +47,10 @@
     <jacoco-maven-plugin.version>0.8.14</jacoco-maven-plugin.version>
     <spotless-maven-plugin.version>3.2.0</spotless-maven-plugin.version>
     <byte-buddy.version>1.18.4</byte-buddy.version>
-    <sonar-maven-plugin.version>4.0.0.4121</sonar-maven-plugin.version>
+    <sonar-maven-plugin.version>5.5.0.6356</sonar-maven-plugin.version>
+    <sonar.projectKey>booking-engine</sonar.projectKey>
+    <sonar.organization>juanma-cvega</sonar.organization>
+    <sonar.host.url>https://sonarcloud.io</sonar.host.url>
   </properties>
 
   <dependencyManagement>

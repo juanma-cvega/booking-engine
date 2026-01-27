@@ -5,6 +5,44 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: ci: remove dependency download step that fails on multi-module projects
+**Date:** Jan 27, 2026
+**Commit:** ed104ec
+
+**Changed files:**
+- .github/workflows/ci.yml
+
+---
+
+### Latest Commit: fix: move context.md update to post-commit hook for accurate commit messages
+**Date:** Jan 24, 2026
+**Commit:** 9a934e1
+
+**Changed files:**
+- .githooks/post-commit
+- .githooks/pre-commit
+
+---
+
+### Latest Commit: Fix sonarqube organization name
+**Date:** Jan 24, 2026
+
+**Staged files:**
+- .github/workflows/ci.yml
+- .mvn/maven.config
+- pom.xml
+- sonar-project.properties
+
+---
+
+### Latest Commit: docs: update context.md with comprehensive git history from last 2 weeks
+**Date:** Jan 24, 2026
+
+**Staged files:**
+- .github/workflows/ci.yml
+
+---
+
 ### Latest Commit: fix: resolve awk multi-line string issue in pre-commit hook
 **Date:** Jan 24, 2026
 
