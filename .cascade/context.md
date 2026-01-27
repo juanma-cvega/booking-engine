@@ -5,6 +5,15 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: test: fix cucumber.features property warning in UseCaseCTest
+**Date:** Jan 27, 2026
+**Commit:** 0385af2
+
+**Changed files:**
+- impl/src/test/java/com/jusoft/bookingengine/UseCaseCTest.java
+
+---
+
 ### Latest Commit: test: fix Cucumber test discovery warnings
 **Date:** Jan 27, 2026
 **Commit:** 940616c
