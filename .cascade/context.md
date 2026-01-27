@@ -5,6 +5,15 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: test: fix Cucumber test discovery warnings
+**Date:** Jan 27, 2026
+**Commit:** 940616c
+
+**Changed files:**
+- impl/src/test/java/com/jusoft/bookingengine/CucumberTest.java
+
+---
+
 ### Latest Commit: ci: remove dependency download step that fails on multi-module projects
 **Date:** Jan 27, 2026
 **Commit:** ed104ec
