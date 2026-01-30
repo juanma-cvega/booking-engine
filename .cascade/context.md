@@ -5,6 +5,15 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: Use fixed version of test reporter action
+**Date:** Jan 30, 2026
+**Commit:** e97c9d4
+
+**Changed files:**
+- .github/workflows/ci.yml
+
+---
+
 ### Latest Commit: Remove unused parameter
 **Date:** Jan 27, 2026
 **Commit:** 0b50e81
