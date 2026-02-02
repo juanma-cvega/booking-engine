@@ -21,7 +21,7 @@
     <lombok.version>1.18.42</lombok.version>
     <maven-compiler-plugin>25</maven-compiler-plugin>
     <spring.version>7.0.3</spring.version>
-    <tomcat.version>11.0.15</tomcat.version>
+    <tomcat.version>11.0.18</tomcat.version>
     <maven-compiler-plugin.version>3.14.1</maven-compiler-plugin.version>
     <tomcat7-maven-plugin.version>2.2</tomcat7-maven-plugin.version>
     <spring-boot.version>4.0.2</spring-boot.version>
