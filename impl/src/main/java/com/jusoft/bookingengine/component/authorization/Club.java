@@ -32,6 +32,8 @@ class Club {
         return new Club(clubId, new HashMap<>());
     }
 
+    // TODO ClubBuildingAccessConfig is mutable through the domain methods. Returning buildings
+    // allows modifying the domain outside this class.
     public Map<Long, ClubBuildingAccessConfig> getBuildings() {
         return new HashMap<>(buildings);
     }

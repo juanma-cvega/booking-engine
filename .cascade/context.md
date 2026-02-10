@@ -5,6 +5,16 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: Update cucumber
+**Date:** Feb 10, 2026
+**Commit:** c465af9
+
+**Changed files:**
+- impl/src/main/java/com/jusoft/bookingengine/component/authorization/Club.java
+- pom.xml
+
+---
+
 ### Latest Commit: Update hibernate validator version
 **Date:** Feb 10, 2026
 **Commit:** aee406e
