@@ -5,6 +5,16 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: Use new hibernate-validator group ID
+**Date:** Feb 10, 2026
+**Commit:** 7654163
+
+**Changed files:**
+- controller/pom.xml
+- pom.xml
+
+---
+
 ### Latest Commit: Add Sonar properties to sonar-project.properties file
 **Date:** Feb 10, 2026
 **Commit:** 6d335c5
