@@ -1,0 +1,10 @@
+# This file defines code owners for the booking-engine repository.
+# These owners will be automatically requested for review on PRs
+# that modify matching files.
+#
+# To enforce this, enable branch protection on `master` with:
+#   - "Require a pull request before merging"
+#   - "Require review from Code Owners"
+
+# Global owner — all files require review from @juanma-cvega
+* @juanma-cvega

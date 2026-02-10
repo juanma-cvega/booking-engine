@@ -5,6 +5,15 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: Add CODEOWNERS file
+**Date:** Feb 10, 2026
+**Commit:** cd74aba
+
+**Changed files:**
+- .github/CODEOWNERS
+
+---
+
 ### Latest Commit: Use new hibernate-validator group ID
 **Date:** Feb 10, 2026
 **Commit:** 7654163
