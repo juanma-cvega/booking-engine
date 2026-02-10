@@ -5,6 +5,15 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: Add Sonar properties to sonar-project.properties file
+**Date:** Feb 10, 2026
+**Commit:** 6d335c5
+
+**Changed files:**
+- sonar-project.properties
+
+---
+
 ### Latest Commit: ci: use SONAR_TOKEN env var instead of command line expansion
 **Date:** Jan 30, 2026
 **Commit:** 6fbbabf
