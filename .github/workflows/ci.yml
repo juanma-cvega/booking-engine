@@ -59,7 +59,7 @@ jobs:
         run: mvn clean compile -Dspotless.check.skip=true
 
       - name: Run tests with coverage
-        run: mvn verify -Dspotless.check.skip=true
+        run: mvn install -Dspotless.check.skip=true
 
       - name: Generate JaCoCo report
         run: mvn jacoco:report
