@@ -5,6 +5,24 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: feat:Add Claude.md and COMPONENT.md to every component
+**Date:** Jun 05, 2026
+**Commit:** fa446c4
+
+**Changed files:**
+- .claude/commands/develop-use-case.md
+- .gitignore
+- CLAUDE.md
+- impl/src/main/java/com/jusoft/bookingengine/component/auction/COMPONENT.md
+- impl/src/main/java/com/jusoft/bookingengine/component/authorization/COMPONENT.md
+- impl/src/main/java/com/jusoft/bookingengine/component/booking/COMPONENT.md
+- impl/src/main/java/com/jusoft/bookingengine/component/building/COMPONENT.md
+- impl/src/main/java/com/jusoft/bookingengine/component/classmanager/COMPONENT.md
+- impl/src/main/java/com/jusoft/bookingengine/component/club/COMPONENT.md
+- impl/src/main/java/com/jusoft/bookingengine/component/member/COMPONENT.md
+
+---
+
 ### Latest Commit: Update cucumber
 **Date:** Feb 10, 2026
 **Commit:** c465af9
