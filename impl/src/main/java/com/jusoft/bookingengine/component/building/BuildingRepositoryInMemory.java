@@ -6,7 +6,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-public class BuildingRepositoryInMemory implements BuildingRepository {
+class BuildingRepositoryInMemory implements BuildingRepository {
 
     private final Map<Long, Building> store;
 

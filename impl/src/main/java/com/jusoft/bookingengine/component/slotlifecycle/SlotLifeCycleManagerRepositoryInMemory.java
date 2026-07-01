@@ -14,7 +14,7 @@ import java.util.function.UnaryOperator;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class SlotLifeCycleManagerRepositoryInMemory implements SlotLifeCycleManagerRepository {
+class SlotLifeCycleManagerRepositoryInMemory implements SlotLifeCycleManagerRepository {
 
     private final Map<Long, SlotLifeCycleManager> store;
     private final Lock lock;

@@ -11,9 +11,9 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class MemberManagerComponentImpl implements MemberManagerComponent {
 
-    private MemberFactory memberFactory;
-    private MemberRepository repository;
-    private MessagePublisher messagePublisher;
+    private final MemberFactory memberFactory;
+    private final MemberRepository repository;
+    private final MessagePublisher messagePublisher;
 
     @Override
     public MemberView createMember(CreateMemberCommand command) {

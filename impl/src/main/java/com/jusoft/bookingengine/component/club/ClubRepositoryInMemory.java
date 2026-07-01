@@ -13,7 +13,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-public class ClubRepositoryInMemory implements ClubRepository {
+class ClubRepositoryInMemory implements ClubRepository {
 
     private final Map<Long, Club> store;
     private final Lock lock;

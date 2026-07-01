@@ -23,7 +23,7 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class AuthorizationManagerComponentImpl implements AuthorizationManagerComponent {
+class AuthorizationManagerComponentImpl implements AuthorizationManagerComponent {
 
     private final ClubRepository clubRepository;
     private final MemberRepository memberRepository;

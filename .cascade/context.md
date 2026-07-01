@@ -5,6 +5,24 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: feat: Add ArchUnit library to create a test that enforces ADRs
+**Date:** Jul 01, 2026
+**Commit:** 1ac2f58
+
+**Changed files:**
+- impl/pom.xml
+- impl/src/main/java/com/jusoft/bookingengine/component/authorization/AuthorizationManagerComponentImpl.java
+- impl/src/main/java/com/jusoft/bookingengine/component/authorization/ClubRepositoryInMemory.java
+- impl/src/main/java/com/jusoft/bookingengine/component/authorization/MemberRepositoryInMemory.java
+- impl/src/main/java/com/jusoft/bookingengine/component/building/BuildingRepositoryInMemory.java
+- impl/src/main/java/com/jusoft/bookingengine/component/club/ClubRepositoryInMemory.java
+- impl/src/main/java/com/jusoft/bookingengine/component/member/MemberManagerComponentImpl.java
+- impl/src/main/java/com/jusoft/bookingengine/component/slotlifecycle/SlotLifeCycleManagerRepositoryInMemory.java
+- impl/src/main/java/com/jusoft/bookingengine/usecase/classmanager/RegisterRoomUseCase.java
+- impl/src/main/java/com/jusoft/bookingengine/usecase/classmanager/UnregisterRoomUseCase.java
+
+---
+
 ### Latest Commit: feat:Add Claude.md and COMPONENT.md to every component
 **Date:** Jun 05, 2026
 **Commit:** fa446c4

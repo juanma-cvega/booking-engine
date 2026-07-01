@@ -51,6 +51,7 @@
     <sonar.projectKey>booking-engine</sonar.projectKey>
     <sonar.organization>juanma-cvega</sonar.organization>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+    <archunit.version>1.4.2</archunit.version>
   </properties>
 
   <dependencyManagement>
@@ -192,6 +193,13 @@
         <groupId>org.apache.tomcat</groupId>
         <artifactId>tomcat-juli</artifactId>
         <version>${tomcat.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.tngtech.archunit</groupId>
+        <artifactId>archunit</artifactId>
+        <version>${archunit.version}</version>
+        <scope>test</scope>
       </dependency>
 
     </dependencies>

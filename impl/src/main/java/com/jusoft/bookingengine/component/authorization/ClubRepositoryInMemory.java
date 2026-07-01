@@ -10,7 +10,7 @@ import java.util.function.UnaryOperator;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class ClubRepositoryInMemory implements ClubRepository {
+class ClubRepositoryInMemory implements ClubRepository {
 
     private final Map<Long, Club> store;
     private final Lock lock;
