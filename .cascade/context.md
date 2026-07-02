@@ -5,6 +5,15 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: docs: require Taiga-sourced stories, TDD test-validation checkpoint, and ADR compliance
+**Date:** Jul 02, 2026
+**Commit:** 9118123
+
+**Changed files:**
+- CLAUDE.md
+
+---
+
 ### Latest Commit: feat: Add ArchUnit library to create a test that enforces ADRs
 **Date:** Jul 01, 2026
 **Commit:** 1ac2f58

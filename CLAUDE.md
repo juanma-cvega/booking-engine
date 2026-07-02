@@ -1,5 +1,54 @@
 # Booking Engine — Claude Instructions
 
+## Source of Work — Taiga (mandatory)
+
+All new work originates from a user story in the Taiga project **`booking-engine`**. Do not start
+coding from an informal request; first find — or create — the story that authorises the work.
+
+- **Every change maps to a user story** — a feature, bug fix, or behaviour-changing refactor alike.
+- **Creating and updating stories goes through the `manage-backlog-item` skill**, never through
+  direct backend calls. The skill is backend-agnostic and defaults to **Taiga** as its backend. If
+  no suitable story exists, invoke it to author one *before* development starts.
+- **The ticket tracks the work.** Use `manage-backlog-item` to move the story to *In Progress* when
+  work starts, and to update or close it (with the commit / PR reference) once the work is done.
+
+Reading and selecting stories uses the configured **Taiga MCP server** directly (there is no Taiga
+CLI); its tools are not always pre-loaded — discover them at the start of a session with
+`ToolSearch` (query `taiga`) and use them to list and read stories (`list_projects`,
+`get_current_sprint`, `list_epics`, `list_user_stories`, `list_tasks`). If the backend is
+unreachable, stop and say so; do not invent work.
+
+### Selecting the story to work on
+1. **If a sprint (milestone) is active** — list the stories in the active sprint and present them
+   for selection.
+2. **If no sprint is active** — list the epics first and select one, then list that epic's stories
+   and select the one to work on.
+3. Present the candidates and let the user choose; never silently pick. Once chosen, read the story
+   in full (description + acceptance criteria) — those acceptance criteria are the source for the
+   failing tests required by the TDD workflow below.
+
+### Committing story work
+Commits must carry the story's information and a machine-readable reference back to Taiga. Use
+Conventional Commits with a body summarising the story and trailers identifying it:
+
+```
+feat(booking): allow a member to cancel a reservation
+
+From Taiga US #42 "Cancel a booking": a member can cancel their own
+booking while the slot is still open.
+
+Taiga-US: #42
+Taiga-URL: <story permalink from the MCP>
+Co-authored-by: Claude <claude@anthropic.com>
+```
+
+- `#42` is the story's Taiga reference number; `Taiga-URL` is the story permalink returned by the
+  MCP (do not hand-construct it — different instances use different hosts).
+- Scope the subject to the component/area touched (`booking`, `slot`, `auction`, …).
+- One story may span several commits; every commit that implements story work carries the trailers.
+
+---
+
 ## TDD Approach (mandatory for all code changes)
 
 No implementation without a failing test first. This applies to every code change:
@@ -12,12 +61,28 @@ The test form depends on the change:
 - **Refactor that changes behaviour** — same as above: demonstrate the expected behaviour
   with a failing test, then implement.
 
-The sequence is always the same: failing test → minimum implementation → green.
+### The cycle — red → green → refactor, with a user checkpoint on the tests
+1. **Red — write the tests first, then stop.** Turn the story's acceptance criteria into failing
+   tests (feature scenarios / step definitions). Run them, show them failing, and present them —
+   the tests are the first deliverable. Write **no** production code yet.
+2. **Checkpoint — the user validates the tests.** The tests are the specification for the change;
+   the user must confirm they capture the story before any implementation begins. Do not proceed
+   without explicit approval.
+3. **Green — minimum implementation.** Write the least code that makes the validated tests pass —
+   nothing the tests do not demand (see Hard Constraints).
+4. **Refactor — improve under green.** Tidy the code with the tests staying green, honouring the
+   ADRs.
+
 Never write implementation speculatively and fit tests to it afterwards.
 
 ---
 
 ## Architecture Rules
+
+All development must comply with the Architecture Decision Records in `docs/design-decisions.md`
+(ADR-001 … ADR-009). The sections below summarise them; that document is the source of truth. A
+subset is enforced mechanically by the ArchUnit suite in `impl` (`ArchitectureRulesTest`) — keep it
+green.
 
 ### Component structure (ADR-006)
 Every component lives under `component/<name>/`:
@@ -119,4 +184,6 @@ Never present code for review that fails `spotless:check`.
 - Do not skip the use case layer (listeners/controllers → use cases → components).
 - Do not write comments that explain *what* the code does — only *why* when the reason
   is non-obvious.
+- Do not write production code before the story's tests exist, fail, and have been validated by
+  the user.
 - Do not proceed past a checkpoint without explicit approval.
