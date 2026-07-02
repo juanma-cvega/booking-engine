@@ -5,6 +5,17 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: feat: add Taiga story-workflow commands (manage-backlog-item, start-story)
+**Date:** Jul 02, 2026
+**Commit:** 0fb8766
+
+**Changed files:**
+- .claude/commands/manage-backlog-item.md
+- .claude/commands/start-story.md
+- CLAUDE.md
+
+---
+
 ### Latest Commit: docs: require Taiga-sourced stories, TDD test-validation checkpoint, and ADR compliance
 **Date:** Jul 02, 2026
 **Commit:** 9118123

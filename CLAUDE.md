@@ -2,21 +2,21 @@
 
 ## Source of Work — Taiga (mandatory)
 
-All new work originates from a user story in the Taiga project **`booking-engine`**. Do not start
-coding from an informal request; first find — or create — the story that authorises the work.
+All new work originates from a user story in the Taiga project **Booking engine**
+(slug `juanmacvega-booking-service`). Do not start coding from an informal request; first find —
+or create — the story that authorises the work.
 
 - **Every change maps to a user story** — a feature, bug fix, or behaviour-changing refactor alike.
-- **Creating and updating stories goes through the `manage-backlog-item` skill**, never through
-  direct backend calls. The skill is backend-agnostic and defaults to **Taiga** as its backend. If
-  no suitable story exists, invoke it to author one *before* development starts.
-- **The ticket tracks the work.** Use `manage-backlog-item` to move the story to *In Progress* when
-  work starts, and to update or close it (with the commit / PR reference) once the work is done.
+- **All board access — finding, creating, transitioning, and closing stories — goes through the
+  `manage-backlog-item` skill**, never through direct backend calls. The skill is backend-agnostic
+  and defaults to **Taiga** as its backend. If no suitable story exists, use it to author one
+  *before* development starts. If the backend is unreachable, stop and say so; do not invent work.
+- **The ticket tracks the work.** The story moves to *In Progress* when work starts and is
+  updated/closed (with the commit / PR reference) once the work is done — all via the skill.
 
-Reading and selecting stories uses the configured **Taiga MCP server** directly (there is no Taiga
-CLI); its tools are not always pre-loaded — discover them at the start of a session with
-`ToolSearch` (query `taiga`) and use them to list and read stories (`list_projects`,
-`get_current_sprint`, `list_epics`, `list_user_stories`, `list_tasks`). If the backend is
-unreachable, stop and say so; do not invent work.
+To work a story end to end, use **`/start-story`**: it orchestrates the sequence — select (or
+create) → mark in progress → build test-first → commit → close — delegating board operations to
+`/manage-backlog-item` and the test-first build to `/develop-use-case`.
 
 ### Selecting the story to work on
 1. **If a sprint (milestone) is active** — list the stories in the active sprint and present them
