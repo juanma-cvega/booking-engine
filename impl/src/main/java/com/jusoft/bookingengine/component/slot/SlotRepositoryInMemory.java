@@ -4,6 +4,7 @@ import static com.jusoft.bookingengine.util.LockingTemplate.withLock;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 
+import com.jusoft.bookingengine.component.slot.api.SlotAlreadyExistsException;
 import com.jusoft.bookingengine.component.slot.api.SlotNotFoundException;
 import java.time.Clock;
 import java.time.ZonedDateTime;
@@ -31,7 +32,14 @@ class SlotRepositoryInMemory implements SlotRepository {
 
     @Override
     public void save(Slot newSlot) {
-        store.put(newSlot.getId(), newSlot);
+        withLock(
+                lock,
+                () -> {
+                    if (store.containsKey(newSlot.getId())) {
+                        throw new SlotAlreadyExistsException(newSlot.getId());
+                    }
+                    store.put(newSlot.getId(), newSlot);
+                });
     }
 
     @Override

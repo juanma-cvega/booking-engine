@@ -24,6 +24,12 @@ The internal `SlotState` interface is package-private. The public `api.SlotState
 | `SlotPreReservedEvent` | Slot pre-reserved (by class or auction) |
 | `SlotMadeAvailableEvent` | Slot released back to available |
 
+## Repository concurrency contract
+- All mutations of an existing slot go through `execute(id, UnaryOperator<Slot>)`, which performs its read-modify-write atomically under the component's single `ReentrantLock` (ADR-009, ADR-004).
+- `save(Slot)` is **insert-only**: it stores a brand-new slot under the same lock and throws `SlotAlreadyExistsException` if the id already exists. Never use `save` to persist a mutation of an existing slot — use `execute`.
+- Because `save` and `execute` share the same lock, they are mutually serialized: no create can interleave with and clobber an in-flight modification.
+- The `ReentrantLock` and the backing `ConcurrentHashMap` are complementary, not redundant. The lock serializes the compound read-modify-write mutations (`execute`, and the guarded `save`); the `ConcurrentHashMap` keeps the lock-free query methods (`find`, `getLastCreatedFor`, `findSlotInUseOrToStartFor`, `findOpenSlotsByRoom`) safe against a concurrent write. Those queries do not take the lock, so the store must remain a `ConcurrentHashMap`.
+
 ## Dependencies
 - `timer.OpenDate` — used in `CreateSlotCommand` and `SlotView`
 - `MessagePublisher` — event bus

@@ -5,6 +5,18 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: fix(slot): guard slot repository save under the same lock as execute
+**Date:** Jul 03, 2026
+**Commit:** e55f1c3
+
+**Changed files:**
+- impl/src/main/java/com/jusoft/bookingengine/component/slot/COMPONENT.md
+- impl/src/main/java/com/jusoft/bookingengine/component/slot/SlotRepositoryInMemory.java
+- impl/src/main/java/com/jusoft/bookingengine/component/slot/api/SlotAlreadyExistsException.java
+- impl/src/test/java/com/jusoft/bookingengine/component/slot/SlotRepositoryInMemoryTest.java
+
+---
+
 ### Latest Commit: feat: add subagent pipeline to the start-story orchestrator
 **Date:** Jul 03, 2026
 **Commit:** f44c5bd
