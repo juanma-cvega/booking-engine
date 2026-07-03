@@ -5,6 +5,22 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: feat: add subagent pipeline to the start-story orchestrator
+**Date:** Jul 03, 2026
+**Commit:** f44c5bd
+
+**Changed files:**
+- .claude/agents/architecture-reviewer.md
+- .claude/agents/implementer.md
+- .claude/agents/planner.md
+- .claude/agents/security-reviewer.md
+- .claude/agents/semantics-reviewer.md
+- .claude/agents/test-author.md
+- .claude/agents/test-reviewer.md
+- .claude/commands/start-story.md
+
+---
+
 ### Latest Commit: feat: add Taiga story-workflow commands (manage-backlog-item, start-story)
 **Date:** Jul 02, 2026
 **Commit:** 0fb8766
