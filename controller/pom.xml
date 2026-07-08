@@ -72,6 +72,11 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>com.tngtech.archunit</groupId>
+      <artifactId>archunit</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>org.apache.tomcat</groupId>
       <artifactId>tomcat-juli</artifactId>
     </dependency>

@@ -181,7 +181,7 @@ The overhead is acceptable during domain modeling phase and teaches the team to 
 
 ## ADR-005: Delayed REST Controller Implementation
 
-**Status**: Active
+**Status**: Superseded by ADR-010 — controller implementation is now underway; ADR-010 governs the rules for that layer. The domain-first sequencing this ADR argued for remains the reason the project waited this long.
 
 **Context**:
 The system needs a delivery mechanism, but the domain model is still evolving.
@@ -434,6 +434,102 @@ This pattern provides maximum flexibility for future infrastructure choices with
 - Effective Java (3rd Edition), Item 44: "Favor the use of standard functional interfaces"
 - Hazelcast IMDG Reference Manual: EntryProcessor pattern
 - Apache Ignite Documentation: Compute Grid
+
+---
+
+## ADR-010: Controllers and Consumers as Thin Adapters Over Use Cases
+
+**Status**: Active
+
+**Context**:
+ADR-002 established the use-case layer as the application boundary, and ADR-005 deliberately
+delayed building the controller module until the domain stabilized. The domain and use-case
+layers are now built and BDD-verified across every component, and controller/consumer work is
+starting. The one existing production controller, `BookingControllerRest`, calls
+`BookingManagerComponent` directly instead of `CreateBookingUseCase`/`CancelBookingUseCase`/
+`GetBookingsUseCase`, and its `@Configuration` class wires the component bean straight into the
+controller's constructor — the exact bypass ADR-002 was written to prevent. This went uncaught
+because `ArchitectureRulesTest` (in `impl`) only imports classes reachable from `impl`'s own test
+classpath; the separate `controller` Maven module is invisible to it.
+
+**Decision**:
+Every class in the `controller` Maven module — REST controllers under `controller/`, event
+listeners/consumers under `listener/`, and their supporting factories — may depend on a
+component only through:
+1. A `usecase/*` class, as the single collaborator that performs the operation being fronted.
+2. `component/*/api/` types (commands, views, events, exceptions) purely as data shapes flowing
+   to and from that use case call.
+
+No class in the controller module — including `@Configuration` classes — may depend on a
+`component/*/api/*ManagerComponent` interface directly. `@Configuration` classes wire the
+already-configured use case bean (declared in `impl`'s own `usecase/<component>/*UseCaseConfig`)
+into the controller/listener constructor; they do not reach past it to the component.
+
+A REST controller or listener has no business logic of its own: it translates a request/event
+into a use case call and a result back into a response/published message. Error translation is
+centralized in one `@RestControllerAdvice` (`GlobalExceptionHandler`) mapping domain exceptions
+to HTTP status, not scattered per controller.
+
+**Rationale**:
+This is ADR-002's Dependency Rule applied specifically to the delivery mechanism, closing the gap
+that let `BookingControllerRest` reach past its use cases unnoticed:
+
+> "Use cases orchestrate the flow of data to and from the entities... Controllers remain
+> unchanged; only DI configuration changes." (ADR-002)
+
+**Benefits**:
+- **Prevents exactly the bug found**: a controller cannot accidentally skip authorization, state
+  transitions, or other logic a use case enforces, because it never has a reference to the
+  component that would let it.
+- **One error-mapping surface**: adding a new domain exception means adding one handler method in
+  one place, with one test proving the status code — not hunting for every controller that might
+  throw it.
+- **Deployment flexibility preserved**: ADR-002's future (swapping an in-process use case
+  collaborator for a remote one) stays available precisely because controllers never bind to a
+  component directly.
+
+**Enforcement**:
+Because `impl`'s `ArchitectureRulesTest` cannot see this module, a second ArchUnit suite,
+`ControllerArchitectureRulesTest`, lives in `controller/src/test/java/.../architecture/` and
+checks classes imported from the controller module's own test classpath (which transitively
+includes `impl`'s compiled classes, so dependency edges between the two are visible). It enforces
+the no-`*ManagerComponent`-dependency rule above, the single-error-handler rule, and re-applies
+ADR-003's manual-DI rules (no `@ComponentScan`, no stereotype auto-detection, no field injection
+outside `@Configuration`) since those are equally untested in this module today.
+
+**Considered alternative — hiding components at the module level (not adopted now)**:
+A stronger version of this rule would make `component/*/api/*ManagerComponent` interfaces
+genuinely *invisible* to the controller module at compile time, rather than merely flagged by a
+test. Two ways to get there, both rejected for now:
+- **Java Platform Module System (JPMS)**: `module-info.java` per module, `exports`-ing only
+  `usecase` and the `api` DTOs to `controller`, not the `*ManagerComponent` interfaces. This is
+  the only mechanism that gives a real compile error instead of a test failure. It's an
+  all-or-nothing migration across every module and every dependency's module-path compatibility —
+  a large, one-way infrastructure investment, which is exactly what ADR-001/ADR-005 argue against
+  taking on before it's earned.
+- **Splitting `impl` into a use-case-only module vs. a domain module**: doesn't fully close the
+  gap even if attempted, because use case method signatures legitimately return/accept component
+  `api/` types (`CreateBookingUseCase.book(CreateBookingCommand): BookingView`) — the controller
+  needs `BookingView` to build its response. Those DTOs would still be transitively visible on
+  the controller's classpath wherever the use case lives, so only the `*ManagerComponent`
+  interface itself would need hiding — and Maven has no mechanism to expose some types in a
+  package to one dependent while hiding another in the same package from it.
+
+Given that, ArchUnit — already this project's enforcement tool for every other ADR — is the
+pragmatic mechanism today. Revisit JPMS or a real module split if this monolith is actually being
+decomposed toward services, per ADR-002's stated future, not before.
+
+**Trade-offs**:
+- Enforced at test time, not compile time: the rule only bites when the test suite runs, and a
+  class can still be written to violate it before that happens.
+- A second ArchUnit suite duplicates a little of the first's setup (the `JavaClasses` import,
+  ADR-003 checks) because the two modules are genuinely separate compilation units.
+
+**References**:
+- Clean Architecture, Chapter 22: "The Clean Architecture"
+- Clean Architecture, Chapter 23: "Presenters and Humble Objects"
+- Clean Architecture, Chapter 17: "Boundaries: Drawing Lines"
+- Domain-Driven Design (Eric Evans), Chapter 14: "Maintaining Model Integrity" (Anticorruption Layer)
 
 ---
 
