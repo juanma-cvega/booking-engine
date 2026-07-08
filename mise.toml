@@ -1,3 +1,32 @@
 [tools]
 java = "25"
-maven = "latest"
+maven = "3.9.16"
+pre-commit = "4.6.0"
+
+[tasks.test]
+description = "Run the full Maven test suite"
+run = "mvn test"
+
+[tasks."spotless:check"]
+description = "Verify code formatting (Google Java Format via Spotless)"
+run = "mvn spotless:check"
+
+[tasks."spotless:apply"]
+description = "Auto-fix code formatting (Google Java Format via Spotless)"
+run = "mvn spotless:apply"
+
+[tasks."pre-commit:install"]
+description = "Install the pre-commit and post-commit git hooks"
+run = "pre-commit install -t pre-commit -t post-commit"
+
+[tasks."pre-commit:run"]
+description = "Run all pre-commit hooks against all files"
+run = "pre-commit run --all-files"
+
+[tasks."pre-commit:validate"]
+description = "Validate .pre-commit-config.yaml"
+run = "pre-commit validate-config"
+
+[tasks."pre-commit:autoupdate"]
+description = "Update pre-commit hook repo versions"
+run = "pre-commit autoupdate"

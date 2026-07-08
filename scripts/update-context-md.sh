@@ -1,6 +1,8 @@
 #!/bin/sh
 #
-# Git post-commit hook to update context.md with the actual commit information
+# Post-commit hook (run via the pre-commit framework) to update docs/context.md with the
+# actual commit information. Tool-agnostic: this file is a plain project log, not tied to
+# any specific editor/AI-assistant integration.
 #
 
 # Prevent recursion when amending
@@ -8,7 +10,7 @@ if [ -n "$GIT_CONTEXT_UPDATE_IN_PROGRESS" ]; then
     exit 0
 fi
 
-CONTEXT_FILE=".cascade/context.md"
+CONTEXT_FILE="docs/context.md"
 
 if [ -f "$CONTEXT_FILE" ]; then
     echo "Updating context.md with actual commit information..."

@@ -1,0 +1,27 @@
+repos:
+  - repo: local
+    hooks:
+      - id: spotless-check
+        name: Spotless format check
+        description: Verify code formatting (Google Java Format via Spotless)
+        entry: mvn spotless:check
+        language: system
+        pass_filenames: false
+        types: [java]
+
+      - id: maven-test
+        name: Maven test suite
+        description: Run the full Maven test suite
+        entry: mvn test
+        language: system
+        pass_filenames: false
+        types: [java]
+
+      - id: update-context-md
+        name: Update context.md with commit info
+        description: Appends the latest commit's info to docs/context.md
+        entry: scripts/update-context-md.sh
+        language: script
+        pass_filenames: false
+        always_run: true
+        stages: [post-commit]

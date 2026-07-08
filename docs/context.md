@@ -5,6 +5,57 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: build(tooling): migrate git hooks to the pre-commit framework
+**Date:** Jul 08, 2026
+**Commit:** 91b3992
+
+**Changed files:**
+- .cascade/context.md
+- .claude/settings.json
+- .githooks/README.md
+- .githooks/post-commit
+- .githooks/pre-commit
+- .githooks/setup.sh
+- .pre-commit-config.yaml
+- docs/context.md
+- mise.toml
+- scripts/update-context-md.sh
+
+---
+
+### Latest Commit: fix(auction): anchor current-time step overrides to the domain clock
+**Date:** Jul 08, 2026
+**Commit:** 6206867
+
+**Changed files:**
+- impl/src/test/java/com/jusoft/bookingengine/usecase/SharedStepDefinitions.java
+
+---
+
+### Latest Commit: docs(architecture): add ADR-010 and enforce it for the controller module
+**Date:** Jul 08, 2026
+**Commit:** daf3696
+
+**Changed files:**
+- .claude/commands/develop-controller.md
+- controller/pom.xml
+- controller/src/test/java/com/jusoft/bookingengine/architecture/ControllerArchitectureRulesTest.java
+- docs/design-decisions.md
+
+---
+
+### Latest Commit: docs(architecture): add ADR-010 and enforce it for the controller module
+**Date:** Jul 08, 2026
+**Commit:** 6b98026
+
+**Changed files:**
+- .claude/commands/develop-controller.md
+- controller/pom.xml
+- controller/src/test/java/com/jusoft/bookingengine/architecture/ControllerArchitectureRulesTest.java
+- docs/design-decisions.md
+
+---
+
 ### Latest Commit: fix(slot): guard slot repository save under the same lock as execute
 **Date:** Jul 03, 2026
 **Commit:** e55f1c3
