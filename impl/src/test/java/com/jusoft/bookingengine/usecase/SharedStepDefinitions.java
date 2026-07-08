@@ -37,7 +37,7 @@ public class SharedStepDefinitions extends AbstractUseCaseStepDefinitions {
 
     private Clock getFixedClockAtTime(String localTime) {
         ZonedDateTime currentDateTime =
-                ZonedDateTime.of(LocalDate.now(), LocalTime.parse(localTime), clock.getZone());
+                ZonedDateTime.of(LocalDate.now(clock), LocalTime.parse(localTime), clock.getZone());
         return Clock.fixed(currentDateTime.toInstant(), currentDateTime.getZone());
     }
 
