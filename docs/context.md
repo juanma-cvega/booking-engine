@@ -5,6 +5,19 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: feat(tooling): add parallel-stories orchestrator for concurrent story work
+**Date:** Jul 09, 2026
+**Commit:** 3055eb1
+
+**Changed files:**
+- .claude/commands/develop-story-e2e.md
+- .claude/commands/parallel-stories.md
+- .claude/commands/start-story.md
+- .claude/settings.json
+- .gitignore
+
+---
+
 ### Latest Commit: build(tooling): migrate git hooks to the pre-commit framework
 **Date:** Jul 08, 2026
 **Commit:** 91b3992

@@ -61,7 +61,16 @@
       "Bash(./mvnw test *)",
       "Bash(./mvnw compile *)",
       "Bash(./mvnw verify *)",
-      "Bash(./mvnw spotless:check *)"
+      "Bash(./mvnw spotless:check *)",
+      "mcp__taiga-mcp__list_projects",
+      "mcp__taiga-mcp__list_epics",
+      "mcp__taiga-mcp__list_user_stories",
+      "mcp__taiga-mcp__list_tasks",
+      "mcp__taiga-mcp__get_story",
+      "mcp__taiga-mcp__get_story_by_ref",
+      "mcp__taiga-mcp__get_epic",
+      "mcp__taiga-mcp__get_epic_by_ref",
+      "mcp__taiga-mcp__get_current_sprint"
     ],
     "deny": [
       "Bash(rm *)",
