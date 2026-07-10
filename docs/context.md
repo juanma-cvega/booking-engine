@@ -5,6 +5,15 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: fix: remove sonar from maven configuration
+**Date:** Jul 10, 2026
+**Commit:** 92d27a0
+
+**Changed files:**
+- pom.xml
+
+---
+
 ### Latest Commit: fix: sonar scanner configuration
 **Date:** Jul 10, 2026
 **Commit:** babfb73

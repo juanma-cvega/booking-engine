@@ -47,7 +47,6 @@
     <jacoco-maven-plugin.version>0.8.14</jacoco-maven-plugin.version>
     <spotless-maven-plugin.version>3.2.1</spotless-maven-plugin.version>
     <byte-buddy.version>1.18.11</byte-buddy.version>
-    <sonar-maven-plugin.version>5.5.0.6356</sonar-maven-plugin.version>
     <properties-maven-plugin.version>1.2.1</properties-maven-plugin.version>
     <archunit.version>1.4.2</archunit.version>
   </properties>
@@ -351,29 +350,6 @@
             <phase>compile</phase>
           </execution>
         </executions>
-      </plugin>
-        <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>properties-maven-plugin</artifactId>
-            <version>${properties-maven-plugin.version}</version>
-            <executions>
-                <execution>
-                    <phase>initialize</phase>
-                    <goals>
-                        <goal>read-project-properties</goal>
-                    </goals>
-                    <configuration>
-                        <files>
-                            <file>${maven.multiModuleProjectDirectory}/sonar-project.properties</file>
-                        </files>
-                    </configuration>
-                </execution>
-            </executions>
-        </plugin>
-      <plugin>
-        <groupId>org.sonarsource.scanner.maven</groupId>
-        <artifactId>sonar-maven-plugin</artifactId>
-        <version>${sonar-maven-plugin.version}</version>
       </plugin>
     </plugins>
   </build>
