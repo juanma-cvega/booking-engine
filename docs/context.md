@@ -5,6 +5,15 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: fix: add empty file so that the folder test/src/main/java exists for sonar analysis
+**Date:** Jul 10, 2026
+**Commit:** 9d093d3
+
+**Changed files:**
+- test/src/main/java/empty
+
+---
+
 ### Latest Commit: fix: use sonar GitHub action instead of the maven plugin to better use sonar-project.properties file
 **Date:** Jul 10, 2026
 **Commit:** 3529665
