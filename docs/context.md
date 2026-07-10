@@ -5,6 +5,15 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: fix: sonar maven goal not reading sonar-project.properties in the workflow
+**Date:** Jul 10, 2026
+**Commit:** 4426462
+
+**Changed files:**
+- .github/workflows/ci.yml
+
+---
+
 ### Latest Commit: Use properties-maven-plugin to load the sonar-project.properties file
 **Date:** Jul 10, 2026
 **Commit:** 2c23f11
