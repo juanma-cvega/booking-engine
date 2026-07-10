@@ -7,4 +7,5 @@ target
 **/.classpath
 **/.DS_Store
 .worktrees/
-.envrc
+.env
+.scannerwork

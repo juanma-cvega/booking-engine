@@ -34,4 +34,4 @@ run = "pre-commit autoupdate"
 
 [tasks."sonar"]
 description = "Run a sonar scanner analysis"
-run = "sonar-scanner"
+run = "sonar-scanner -Dspotless.check.skip=true"

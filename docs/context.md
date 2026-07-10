@@ -5,6 +5,17 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: fix: sonar scanner configuration
+**Date:** Jul 10, 2026
+**Commit:** babfb73
+
+**Changed files:**
+- .gitignore
+- mise.toml
+- sonar-project.properties
+
+---
+
 ### Latest Commit: fix: add empty file so that the folder test/src/main/java exists for sonar analysis
 **Date:** Jul 10, 2026
 **Commit:** 9d093d3
