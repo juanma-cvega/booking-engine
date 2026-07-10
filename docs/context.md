@@ -142,6 +142,39 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 **Changed files:**
 - .github/workflows/claude.yml
+### Latest Commit: feat(club): expose club creation and membership through REST controllers
+**Date:** Jul 16, 2026
+**Commit:** d8f8ec8
+
+**Changed files:**
+- controller/src/main/java/com/jusoft/bookingengine/controller/ControllerConfig.java
+- controller/src/main/java/com/jusoft/bookingengine/controller/GlobalExceptionHandler.java
+- controller/src/main/java/com/jusoft/bookingengine/controller/club/ClubCommandFactory.java
+- controller/src/main/java/com/jusoft/bookingengine/controller/club/ClubControllerConfig.java
+- controller/src/main/java/com/jusoft/bookingengine/controller/club/ClubControllerRest.java
+- controller/src/main/java/com/jusoft/bookingengine/controller/club/ClubResourceFactory.java
+- controller/src/main/java/com/jusoft/bookingengine/controller/club/api/ClubResource.java
+- controller/src/main/java/com/jusoft/bookingengine/controller/club/api/CreateClubRequest.java
+- controller/src/main/java/com/jusoft/bookingengine/controller/club/api/CreateJoinRequestRequest.java
+- controller/src/main/java/com/jusoft/bookingengine/controller/club/api/JoinRequestResource.java
+
+---
+
+### Latest Commit: feat(club): expose club creation and membership through REST controllers
+**Date:** Jul 16, 2026
+**Commit:** 6bc403e
+
+**Changed files:**
+- controller/src/main/java/com/jusoft/bookingengine/controller/ControllerConfig.java
+- controller/src/main/java/com/jusoft/bookingengine/controller/GlobalExceptionHandler.java
+- controller/src/main/java/com/jusoft/bookingengine/controller/club/ClubCommandFactory.java
+- controller/src/main/java/com/jusoft/bookingengine/controller/club/ClubControllerConfig.java
+- controller/src/main/java/com/jusoft/bookingengine/controller/club/ClubControllerRest.java
+- controller/src/main/java/com/jusoft/bookingengine/controller/club/ClubResourceFactory.java
+- controller/src/main/java/com/jusoft/bookingengine/controller/club/api/ClubResource.java
+- controller/src/main/java/com/jusoft/bookingengine/controller/club/api/CreateClubRequest.java
+- controller/src/main/java/com/jusoft/bookingengine/controller/club/api/CreateJoinRequestRequest.java
+- controller/src/main/java/com/jusoft/bookingengine/controller/club/api/JoinRequestResource.java
 
 ---
 

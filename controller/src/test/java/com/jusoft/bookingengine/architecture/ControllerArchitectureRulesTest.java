@@ -61,6 +61,23 @@ class ControllerArchitectureRulesTest {
         rule.check(ALL_CLASSES);
     }
 
+    // Scoped variant of the disabled rule above: new club controllers must comply with
+    // ADR-010 even while the legacy BookingControllerRest violation is fixed separately.
+    @Test
+    void club_controllers_do_not_depend_on_manager_components() {
+        ArchRule rule =
+                noClasses()
+                        .that()
+                        .resideInAPackage("..controller.club..")
+                        .should()
+                        .dependOnClassesThat(nameMatching(".*ManagerComponent"))
+                        .as(
+                                "ADR-010: club controllers call use cases, never"
+                                        + " *ManagerComponent interfaces directly")
+                        .allowEmptyShould(true);
+        rule.check(ALL_CLASSES);
+    }
+
     // ── ADR-003: manual dependency injection ──────────────────────────────
 
     @Test
