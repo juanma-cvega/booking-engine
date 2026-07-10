@@ -2,6 +2,7 @@
 java = "25"
 maven = "3.9.16"
 pre-commit = "4.6.0"
+sonar-scanner-cli = "8.1.0"
 
 [tasks.test]
 description = "Run the full Maven test suite"
@@ -30,3 +31,7 @@ run = "pre-commit validate-config"
 [tasks."pre-commit:autoupdate"]
 description = "Update pre-commit hook repo versions"
 run = "pre-commit autoupdate"
+
+[tasks."sonar"]
+description = "Run a sonar scanner analysis"
+run = "sonar-scanner"
