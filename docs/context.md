@@ -142,6 +142,35 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 **Changed files:**
 - .github/workflows/claude.yml
+### Latest Commit: feat(slot): expose slot creation through a REST controller
+**Date:** Jul 16, 2026
+**Commit:** ca057ff
+
+**Changed files:**
+- controller/src/main/java/com/jusoft/bookingengine/controller/ControllerConfig.java
+- controller/src/main/java/com/jusoft/bookingengine/controller/GlobalExceptionHandler.java
+- controller/src/main/java/com/jusoft/bookingengine/controller/slot/SlotControllerConfig.java
+- controller/src/main/java/com/jusoft/bookingengine/controller/slot/SlotControllerRest.java
+- controller/src/main/java/com/jusoft/bookingengine/controller/slot/api/CreateSlotRequest.java
+- controller/src/test/java/com/jusoft/bookingengine/controller/slot/SlotControllerRestTest.java
+- controller/src/test/java/com/jusoft/bookingengine/fixtures/SlotFixtures.java
+- docs/context.md
+
+---
+
+### Latest Commit: feat(slot): expose slot creation through a REST controller
+**Date:** Jul 16, 2026
+**Commit:** 15f78c3
+
+**Changed files:**
+- controller/src/main/java/com/jusoft/bookingengine/controller/ControllerConfig.java
+- controller/src/main/java/com/jusoft/bookingengine/controller/GlobalExceptionHandler.java
+- controller/src/main/java/com/jusoft/bookingengine/controller/slot/SlotControllerConfig.java
+- controller/src/main/java/com/jusoft/bookingengine/controller/slot/SlotControllerRest.java
+- controller/src/main/java/com/jusoft/bookingengine/controller/slot/api/CreateSlotRequest.java
+- controller/src/test/java/com/jusoft/bookingengine/controller/slot/SlotControllerRestTest.java
+- controller/src/test/java/com/jusoft/bookingengine/fixtures/SlotFixtures.java
+- docs/context.md
 
 ---
 
