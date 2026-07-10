@@ -5,6 +5,15 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: Update sonar-project.properties exclusions configuration
+**Date:** Jul 10, 2026
+**Commit:** 9804452
+
+**Changed files:**
+- sonar-project.properties
+
+---
+
 ### Latest Commit: feat(tooling): add parallel-stories orchestrator for concurrent story work
 **Date:** Jul 09, 2026
 **Commit:** 3055eb1
