@@ -1,9 +1,9 @@
 # Parallel Stories
 
 Work several **independent** Taiga stories at once — one git worktree and one background worker per
-story — and integrate them serially through pull requests into `master`. Built for batches of
-same-shaped work (e.g. one controller per existing use case) where the only expected overlap is the
-shared `@Configuration` wiring.
+story — and integrate them serially through pull requests into `master`. Any set of stories
+qualifies as long as their **focus doesn't overlap** — same-shaped batches (e.g. one controller per
+existing use case) are the sweet spot, but not a requirement.
 
 This command owns the **orchestration**: story selection, worktree lifecycle, checkpoint brokering,
 board updates, PRs, and serial integration. Workers own the code. Board operations go through
@@ -29,20 +29,45 @@ Stop and report if any check fails.
 
 ---
 
-## Step 1 — Select the parallel set
+## Step 1 — Establish what work to parallelise
 
-Use `/manage-backlog-item`'s *Find stories* operation (active sprint, or epics → stories).
-Identify the candidates that can run in parallel — same kind of work, each scoped to a different
-component/use case — and present them. **The user picks the set; never silently pick.**
+If the user has not already said what they are looking for, **ask before searching**. Two valid
+answers:
 
-Read each chosen story in full. Flag any pair whose scopes overlap beyond shared configuration —
-overlapping stories must run serially or be re-cut, not parallelised.
+- **Pointed** — the user names work they know exists on the board (an epic, specific story refs, a
+  theme like "the controller stories"). Scope the search to that, wherever it lives — sprint,
+  epic, or backlog.
+- **Exploratory** — the user asks for an analysis: read the open stories in the current sprint
+  (or the backlog if none is active or the user says so) and propose parallelizable sets based on
+  their descriptions.
+
+---
+
+## Step 2 — Select the parallel set
+
+Use `/manage-backlog-item`'s *Find stories* operation, scoped per Step 1. If the target work is
+not in the active sprint, widen to the epics/backlog and say so.
+
+Identify the candidates that can run in parallel — stories whose **focus doesn't overlap**: any
+kind of work qualifies as long as no two stories change the same behaviour or the same area of the
+code. Present them. **The user picks the set; never silently pick.**
+
+Read each chosen story in full. Flag any pair whose scopes overlap — overlapping stories must run
+serially or be re-cut, not parallelised. Incidental contact on shared files (configuration wiring,
+docs, build files) is acceptable; it is handled at integration time (Step 6).
+
+**Missing prerequisites are gaps, not work.** If a story needs something that does not exist yet
+(e.g. a controller story whose endpoint has no use case to call), the gap gets its **own backlog
+story** — draft it and suggest it via `/manage-backlog-item`'s *Create a story* operation. Never
+do the missing work inside this run, and never violate an ADR to bridge the gap (e.g. calling a
+component directly because the use case is missing). The affected story is re-cut to what its
+existing prerequisites support, or held out of the batch until the gap story is done.
 
 **Stop. Confirm the selected set with the user before continuing.**
 
 ---
 
-## Step 2 — Create worktrees, mark in progress, launch workers
+## Step 3 — Create worktrees, mark in progress, launch workers
 
 For each story:
 
@@ -55,12 +80,17 @@ For each story:
    - which skill's technical steps to follow up to the red tests (`/develop-controller`
      Steps 0–1, or `/develop-story-e2e` Steps 2–5a);
    - the instruction to **stop after the red tests** — run them, capture the failure, and return a
-     summary (use case fronted, test file, failure output). No production code, no commits, no
-     pushes yet.
+     summary (use case fronted, test file, failure output). Red means the suite **compiles and
+     fails on assertions** (contracts and behaviourless stubs may be created to get there), never
+     a compilation error. No behaviour, no commits, no pushes yet.
+   - the instruction to **report — never fill — any missing prerequisite** it discovers (a missing
+     use case, component method, or event): it stops that part of the work and surfaces the gap in
+     its summary so the orchestrator can suggest a backlog story for it. Bridging a gap by
+     violating an ADR is never an option.
 
 ---
 
-## Step 3 — Checkpoint 1: validate the red tests (batched)
+## Step 4 — Checkpoint 1: validate the red tests (batched)
 
 As workers return, collect their red-test summaries. When the batch is in, present **one review per
 story**: the failing test, what it covers, how it maps to the acceptance criteria.
@@ -77,7 +107,7 @@ Resume each worker via SendMessage:
 
 ---
 
-## Step 4 — Checkpoint 2: final review and PRs (batched)
+## Step 5 — Checkpoint 2: final review and PRs (batched)
 
 When a worker finishes, review its worktree diff — dispatch `architecture-reviewer` and
 `semantics-reviewer` in parallel, pointed at the worktree path, each with the story's acceptance
@@ -96,15 +126,15 @@ findings — and wait for a per-story verdict.**
 
 ---
 
-## Step 5 — Integrate serially
+## Step 6 — Integrate serially
 
-The shared `@Configuration` wiring (ADR-003) guarantees the PRs conflict with each other, so they
-merge **one at a time**:
+Incidental contact on shared files (e.g. `@Configuration` wiring under ADR-003, docs, build files)
+can make the PRs conflict with each other, so they merge **one at a time**:
 
 1. Merge the approved PR into `master` (`gh pr merge`).
-2. Rebase every remaining worktree branch onto the new `master`, resolve the (expected, one-line)
-   configuration conflicts, and re-run that worktree's tests to confirm it is still green. If a
-   rebase changes anything non-trivial, send it back through Checkpoint 2.
+2. Rebase every remaining worktree branch onto the new `master`, resolve any conflicts on the
+   shared files, and re-run that worktree's tests to confirm it is still green. If a rebase
+   changes anything non-trivial, send it back through Checkpoint 2.
 3. Close the merged story via `/manage-backlog-item` with the commit / PR reference.
 4. `git worktree remove` the merged story's worktree and delete its branch.
 
@@ -112,7 +142,7 @@ Repeat until every story is merged or abandoned.
 
 ---
 
-## Step 6 — Wrap up
+## Step 7 — Wrap up
 
 Confirm `.worktrees/` is empty, `master` contains every merged story, and the board matches
 reality (all worked stories closed or returned). Report the final state: stories merged, PRs,

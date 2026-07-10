@@ -48,9 +48,7 @@
     <spotless-maven-plugin.version>3.2.1</spotless-maven-plugin.version>
     <byte-buddy.version>1.18.4</byte-buddy.version>
     <sonar-maven-plugin.version>5.5.0.6356</sonar-maven-plugin.version>
-    <sonar.projectKey>booking-engine</sonar.projectKey>
-    <sonar.organization>juanma-cvega</sonar.organization>
-    <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+    <properties-maven-plugin.version>1.2.1</properties-maven-plugin.version>
     <archunit.version>1.4.2</archunit.version>
   </properties>
 
@@ -354,6 +352,24 @@
           </execution>
         </executions>
       </plugin>
+        <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>properties-maven-plugin</artifactId>
+            <version>${properties-maven-plugin.version}</version>
+            <executions>
+                <execution>
+                    <phase>initialize</phase>
+                    <goals>
+                        <goal>read-project-properties</goal>
+                    </goals>
+                    <configuration>
+                        <files>
+                            <file>${maven.multiModuleProjectDirectory}/sonar-project.properties</file>
+                        </files>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
       <plugin>
         <groupId>org.sonarsource.scanner.maven</groupId>
         <artifactId>sonar-maven-plugin</artifactId>

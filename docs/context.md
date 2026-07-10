@@ -5,6 +5,19 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: Use properties-maven-plugin to load the sonar-project.properties file
+**Date:** Jul 10, 2026
+**Commit:** 2c23f11
+
+**Changed files:**
+- .claude/commands/develop-controller.md
+- .claude/commands/parallel-stories.md
+- .gitignore
+- pom.xml
+- sonar-project.properties
+
+---
+
 ### Latest Commit: Update sonar-project.properties exclusions configuration
 **Date:** Jul 10, 2026
 **Commit:** 9804452

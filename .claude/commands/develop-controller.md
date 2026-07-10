@@ -50,22 +50,26 @@ use-case/domain layer. Controllers and listeners use plain JUnit 5 + Mockito, fo
   directly, invoke its `@EventListener` method with a test message, `verify` the use case was
   called with the translated arguments.
 
-Write the test now. It should fail to compile — the controller/listener, request/response
-records, and factories don't exist yet.
+Write the test now, together with the minimum scaffolding it needs to **compile**: the
+request/response records in `controller/<name>/api/` (pure contracts, no logic) and the
+controller/listener and factory classes as behaviourless stubs (bodies return null / do nothing).
+No `@Configuration` wiring yet. **Red means the suite compiles and runs, failing on assertions** —
+a suite that fails to compile is not yet an executable specification.
 
 **Stop. Present the failing test and wait for approval before continuing.**
 
 ---
 
-## Step 2 — Green: scaffold the adapter
+## Step 2 — Green: implement the adapter
 
-Write the minimum code to pass:
-- Request/response records (or event-to-command mapping) in `controller/<name>/api/` — a
+Fill in the Step 1 stubs with the minimum behaviour to pass:
+- The request/response records (or event-to-command mapping) in `controller/<name>/api/` stay a
   **separate** DTO layer from the component's own `component/<name>/api/` commands/views; never
   reuse one for the other.
-- A small `XCommandFactory` (request/event → use case command) and, for controllers, an
+- Implement the `XCommandFactory` (request/event → use case command) and, for controllers, the
   `XResourceFactory` (use case result → response).
-- The controller or listener class itself, depending only on the use case and the DTOs above.
+- Implement the controller or listener class itself, depending only on the use case and the DTOs
+  above.
 - A `@Configuration` class (`XControllerConfig` / extend `MessageListenersConfig`) that
   `@Autowired`s the **use case bean** (already wired in `impl`'s own `usecase/<component>/
   *UseCaseConfig`) — never the component interface — and builds the adapter's `@Bean`s. Import it
