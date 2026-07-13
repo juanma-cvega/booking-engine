@@ -35,3 +35,41 @@ run = "pre-commit autoupdate"
 [tasks."sonar"]
 description = "Run a sonar scanner analysis"
 run = "sonar-scanner -Dspotless.check.skip=true"
+
+[tasks."dependabot:rebase"]
+description = "Ask Dependabot to rebase (or recreate) every open Dependabot PR, so the auto-merge workflow re-evaluates them. Runs under your own gh identity — no stored token. Usage: mise run dependabot:rebase [rebase|recreate]"
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+
+command="${1:-rebase}"
+case "$command" in
+  rebase|recreate) ;;
+  *) echo "error: expected 'rebase' or 'recreate', got '$command'" >&2; exit 1 ;;
+esac
+
+if ! command -v gh >/dev/null 2>&1; then
+  echo "error: GitHub CLI (gh) is not installed" >&2; exit 1
+fi
+if ! gh auth status >/dev/null 2>&1; then
+  echo "error: not logged in to gh — run 'gh auth login' first" >&2; exit 1
+fi
+
+repo="$(gh repo view --json nameWithOwner -q .nameWithOwner)"
+
+mapfile -t prs < <(
+  gh pr list --repo "$repo" --author "app/dependabot" --state open \
+    --json number --jq '.[].number'
+)
+
+if [ "${#prs[@]}" -eq 0 ]; then
+  echo "No open Dependabot PRs in $repo."
+  exit 0
+fi
+
+echo "Commenting '@dependabot $command' on ${#prs[@]} PR(s) in $repo:"
+for n in "${prs[@]}"; do
+  gh pr comment "$n" --repo "$repo" --body "@dependabot $command"
+  echo "  - #$n"
+done
+'''

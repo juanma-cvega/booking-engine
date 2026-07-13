@@ -149,6 +149,147 @@ mvn sonar:sonar \
 
 ---
 
+## 🤝 Dependabot Auto-Merge
+
+**Location**: `.github/workflows/dependabot-auto-merge.yml`
+
+Dependabot dependency-update PRs are analysed by Claude Code and merged automatically when
+both CI **and** the analysis pass. Anything risky is left for manual review — nothing is
+merged silently.
+
+### How it is triggered
+
+The workflow uses the **`workflow_run`** trigger on the **CI/CD Pipeline** workflow, not
+`pull_request`. This is deliberate:
+
+- Dependabot PRs run with a **read-only token and no repository secrets** on `pull_request`
+  (GitHub's guard against secret exfiltration via a malicious dependency). That context can
+  neither run the analysis (needs `CLAUDE_CODE_OAUTH_TOKEN`) nor merge.
+- `workflow_run` fires **after** CI completes and runs in the **trusted default-branch
+  context** with full secrets and a write-capable token. It also inherently gates on CI
+  having passed — the workflow only proceeds when the pipeline's `conclusion` is `success`.
+
+### The three gates
+
+```
+Dependabot opens PR ──▶ CI/CD Pipeline runs ──▶ completes
+                                                    │ workflow_run
+                                                    ▼
+   guard ──────────▶ analyse ────────────▶ merge
+   CI success +      Claude Code review     Approve + squash-merge
+   Dependabot        (posts a PR comment,   via a scoped GitHub App
+   author/actor +    verdict PASS/FAIL)     identity; delete branch
+   same-repo head
+```
+
+1. **guard** — proceeds only when the CI run succeeded, the author **and** triggering actor
+   are `dependabot[bot]`, and the head is a same-repo (non-fork) `dependabot/*` branch. It
+   re-verifies the PR author against the API as defence in depth.
+2. **analyse** — runs the Claude Code CLI (`claude-sonnet-5`, restricted to the read-only
+   `Read,Grep,Glob` tools) over the diff to flag deprecated/removed APIs, breaking changes,
+   and impacted usages. It posts its findings as a PR comment and emits a `PASS`/`FAIL`
+   verdict. Any error, timeout, or missing verdict is treated as **FAIL** (fail-safe: the PR
+   is not merged).
+3. **merge** — only when the verdict is `PASS`: mints a short-lived token for a dedicated
+   GitHub App, submits an approving review, and squash-merges with branch deletion.
+
+### Why a GitHub App merges (and not `GITHUB_TOKEN`)
+
+`master` requires a Code Owner review (see `.github/CODEOWNERS`), which the default
+`GITHUB_TOKEN` cannot satisfy. A dedicated **GitHub App** on the ruleset **bypass list**
+provides the merge identity — least privilege (`contents` + `pull_requests` write only),
+short-lived tokens, no personal PAT.
+
+The App credentials live **only** in the `dependabot-merge` Actions **environment**, whose
+deployment-branch policy allows the default branch (`master`) exclusively. Because
+`workflow_run` jobs run in the default-branch context they can read them, but any workflow
+added or altered in a PR runs from the PR ref and is **denied** the environment — so it
+cannot borrow the App token to approve its own PR. The secret, not the workflow logic, is the
+security boundary.
+
+### Supply-chain hardening
+
+Both `ci.yml` and this workflow are hardened against dependency worms (e.g. Shai-Hulud):
+
+- **All actions are pinned by commit SHA** (with a `# vN` comment); Dependabot's
+  `github-actions` ecosystem keeps the pins updated.
+- **`step-security/harden-runner`** runs first in every job — `block` with a minimal
+  egress allowlist on the GitHub-API-only jobs (`guard`, `merge`), and `audit` on the
+  broad-egress jobs (CI builds, `analyse`) pending endpoint discovery. See "Promoting
+  harden-runner to block" below.
+- The **Claude Code CLI is pinned to an exact version** and installed in a step with **no
+  secrets in scope**, so an install-time (`postinstall`) compromise cannot read a token; the
+  token is only present when the CLI is actually invoked.
+
+### Required setup
+
+Add these in **Settings**:
+
+| Item | Where | Notes |
+|------|-------|-------|
+| `CLAUDE_CODE_OAUTH_TOKEN` | Actions secret (repo) | Used by the `analyse` job. Set a spend limit and rotate periodically. |
+| GitHub App | Developer settings → GitHub Apps | Permissions: **Contents** + **Pull requests** = Read and write only. Install on this repo. |
+| `MERGE_APP_ID`, `MERGE_APP_PRIVATE_KEY` | **`dependabot-merge` environment** secrets | The App's ID and full `.pem` private key. Environment deployment branches restricted to `master`. |
+| Ruleset bypass | Settings → Rules → Rulesets (`master`) | Add the GitHub App to the **bypass list**. |
+| Actions PR approval | Settings → Actions → General | Enable "Allow GitHub Actions to create and approve pull requests". |
+
+### Promoting harden-runner to `block`
+
+`audit` **records** egress but does not block it. After the first CI run and the first
+Dependabot analysis, open the run's **harden-runner insights**, copy the observed endpoints
+into the job's `allowed-endpoints:`, and switch `egress-policy` to `block`. That is when the
+exfiltration path actually closes.
+
+### Opting a PR out
+
+To stop auto-merge for a specific update, review it manually before CI finishes, or convert
+the analysis to `FAIL` by requesting changes / closing. A `FAIL` verdict (or any analysis
+error) always blocks the merge; the reasoning is visible in the PR comment.
+
+### Operating the auto-merge
+
+**A PR that needs human changes becomes a manual merge — automatically.** The `guard` job
+requires *both* `workflow_run.actor` **and** `triggering_actor` to be `dependabot[bot]`. The
+moment you push a commit to a `dependabot/*` branch to adapt the code, the next CI run's
+triggering actor is **you**, so auto-merge disengages and the PR reverts to a normal manual
+merge (you are the Code Owner). Dependabot also stops managing a branch once a human pushes to
+it. `@dependabot rebase` / `@dependabot recreate` are *not* human pushes — Dependabot performs
+them, so the branch stays auto-merge-eligible; only your own commits disengage it.
+
+**Re-triggering / onboarding existing PRs.** `workflow_run` only fires for CI runs that
+complete *after* this workflow is on `master`, so PRs opened earlier are not evaluated until a
+fresh, Dependabot-authored CI run occurs. Note:
+
+- **Re-running the CI workflow manually does not work** — on a re-run GitHub sets
+  `triggering_actor` to the person who clicked re-run, so the `guard` intentionally skips it.
+  This is the check that stops anyone forcing an auto-merge by re-running CI.
+- **Use a Dependabot command instead**, which makes Dependabot itself produce the new run:
+  **`@dependabot recreate`** (rebuilds the PR + branch, guaranteeing a fresh CI run) is the
+  reliable choice for onboarding. `@dependabot rebase` no-ops when the branch is already up to
+  date, so it may not trigger a run.
+
+**Bulk onboarding (one-off).** After this workflow first lands on `master`, refresh the
+already-open Dependabot PRs from your own machine — under *your* write identity, so no stored
+credential is involved. A mise task wraps this:
+
+```bash
+mise run dependabot:rebase            # comments "@dependabot rebase" on every open Dependabot PR
+mise run dependabot:rebase recreate   # use "recreate" to force a fresh CI run when a branch is already current
+```
+
+It resolves the repo from `gh`, requires you to be logged in (`gh auth login`), and only ever
+comments — it holds no token of its own.
+
+> **Why not a workflow for this?** Dependabot **ignores `@dependabot` commands authored by
+> `github-actions[bot]`** (the default `GITHUB_TOKEN`), so a comment-posting workflow would
+> need a stored PAT or GitHub App whose identity Dependabot accepts — reintroducing a
+> high-value, exfiltration-worthy credential for what is a rare, one-off task. A scheduled
+> version would also remove the last human touchpoint, creating a fully autonomous merge-to-
+> `master` loop. Prefer the local `gh` loop above; it uses your existing identity and adds no
+> secret and no new attack surface.
+
+---
+
 ## 🚀 Setting Up CI/CD
 
 ### 1. GitHub Repository Setup

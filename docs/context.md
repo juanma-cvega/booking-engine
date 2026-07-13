@@ -5,6 +5,16 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: docs(dependabot): document auto-merge flow and add rebase mise task
+**Date:** Jul 13, 2026
+**Commit:** 14e51b3
+
+**Changed files:**
+- docs/CI-CD-SETUP.md
+- mise.toml
+
+---
+
 ### Latest Commit: ci(dependabot): auto-analyse and merge Dependabot PRs, harden workflows
 **Date:** Jul 13, 2026
 **Commit:** 852f916
