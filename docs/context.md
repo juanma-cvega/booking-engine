@@ -5,6 +5,16 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: ci(dependabot): auto-analyse and merge Dependabot PRs, harden workflows
+**Date:** Jul 13, 2026
+**Commit:** 852f916
+
+**Changed files:**
+- .github/workflows/ci.yml
+- .github/workflows/dependabot-auto-merge.yml
+
+---
+
 ### Latest Commit: fix: remove sonar from maven configuration
 **Date:** Jul 10, 2026
 **Commit:** 92d27a0

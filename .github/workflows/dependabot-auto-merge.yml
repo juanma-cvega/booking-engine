@@ -1,0 +1,232 @@
+name: Dependabot Auto-Merge
+
+# Runs after the "CI/CD Pipeline" workflow finishes on a Dependabot pull request.
+# Dependabot PRs run with a read-only token and are denied repository secrets on the
+# `pull_request` event, so we cannot analyse or merge from there. `workflow_run` fires in
+# the trusted context of the base repo (full secrets + a write-capable GITHUB_TOKEN) once
+# CI has completed, which also lets us gate on the CI status checks having passed.
+on:
+  workflow_run:
+    workflows: ["CI/CD Pipeline"]
+    types:
+      - completed
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  # Gate 1: only proceed when CI succeeded on a Dependabot pull request.
+  guard:
+    name: Verify CI passed on a Dependabot PR
+    runs-on: ubuntu-latest
+    if: >
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.actor.login == 'dependabot[bot]' &&
+      github.event.workflow_run.triggering_actor.login == 'dependabot[bot]' &&
+      github.event.workflow_run.head_repository.full_name == github.repository &&
+      startsWith(github.event.workflow_run.head_branch, 'dependabot/')
+    outputs:
+      pr_number: ${{ steps.pr.outputs.number }}
+    steps:
+      - name: Harden the runner
+        uses: step-security/harden-runner@bf7454d06d71f1098171f2acdf0cd4708d7b5920 # v2
+        with:
+          egress-policy: block
+          disable-sudo: true
+          allowed-endpoints: >
+            github.com:443
+            api.github.com:443
+
+      - name: Resolve the pull request for this branch
+        id: pr
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
+        run: |
+          # Re-verify the author against the API (defence in depth): the PR must exist,
+          # be open, and be authored by Dependabot before anything downstream runs.
+          pr=$(gh pr list \
+            --repo "${{ github.repository }}" \
+            --head "$HEAD_BRANCH" \
+            --state open \
+            --author "app/dependabot" \
+            --json number \
+            --jq '.[0].number')
+          if [ -z "$pr" ] || [ "$pr" = "null" ]; then
+            echo "No open Dependabot PR found for branch $HEAD_BRANCH; nothing to do."
+            echo "number=" >> "$GITHUB_OUTPUT"
+          else
+            echo "Resolved PR #$pr"
+            echo "number=$pr" >> "$GITHUB_OUTPUT"
+          fi
+
+  # Gate 2: let Claude Code review the change for deprecations / breaking changes.
+  analyse:
+    name: Analyse PR with Claude Code
+    runs-on: ubuntu-latest
+    needs: guard
+    if: needs.guard.outputs.pr_number != ''
+    outputs:
+      verdict: ${{ steps.review.outputs.verdict }}
+    steps:
+      - name: Harden the runner
+        uses: step-security/harden-runner@bf7454d06d71f1098171f2acdf0cd4708d7b5920 # v2
+        # This job installs a third-party CLI and runs it with CLAUDE_CODE_OAUTH_TOKEN in
+        # scope, so it is the softest target here. Audit first because the npm install and
+        # the CLI's own runtime egress are hard to enumerate up front; after the first run,
+        # lift the observed endpoints (registry.npmjs.org, api.anthropic.com, github.com, …)
+        # into `allowed-endpoints:` and switch to `egress-policy: block`.
+        with:
+          egress-policy: audit
+          disable-sudo: true
+
+      - name: Determine PR head SHA
+        id: meta
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          sha=$(gh pr view "${{ needs.guard.outputs.pr_number }}" \
+            --repo "${{ github.repository }}" \
+            --json headRefOid --jq '.headRefOid')
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+
+      - name: Checkout PR head
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+        with:
+          ref: ${{ steps.meta.outputs.sha }}
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22'
+
+      - name: Install Claude Code CLI
+        # Pin the exact version so the postinstall that runs (node install.cjs, which the
+        # package requires to fetch its binary) is a known, auditable release rather than
+        # whatever "latest" resolves to. Dependabot updates this pin like any dependency.
+        # This step deliberately has no secrets in scope, so an install-time compromise
+        # cannot read a token; the CLI is only invoked with the token in the next step.
+        run: npm install -g @anthropic-ai/claude-code@2.1.207
+
+      - name: Analyse the dependency update
+        id: review
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ needs.guard.outputs.pr_number }}
+        run: |
+          gh pr diff "$PR_NUMBER" --repo "${{ github.repository }}" > pr.diff
+          gh pr view "$PR_NUMBER" --repo "${{ github.repository }}" \
+            --json title,body --jq '"# " + .title + "\n\n" + (.body // "")' > pr.md
+
+          PROMPT=$(cat <<'EOF'
+          You are reviewing a Dependabot dependency-update pull request for this Maven
+          multi-module Java project. The PR title/body is in `pr.md` and the change is in
+          `pr.diff`. Use your read-only tools (Read, Grep, Glob) to inspect how the affected
+          dependency is used across the codebase.
+
+          Assess whether this update is safe to merge automatically. Flag anything that could
+          break the project, specifically:
+            - Removed, renamed, or deprecated APIs the project actually calls.
+            - Breaking changes across a major version bump.
+            - Behavioural changes in transitive dependencies that affect our usage.
+            - Changed minimum Java version or other build requirements.
+
+          A patch/minor bump with no impacted usage is normally a PASS. A major bump, or any
+          update that touches an API the project uses in a breaking way, is a FAIL.
+
+          Write a short, specific rationale. Then, as the very last line of your response,
+          output exactly one of:
+          VERDICT: PASS
+          VERDICT: FAIL
+          EOF
+          )
+
+          set +e
+          claude -p "$PROMPT" \
+            --model claude-sonnet-5 \
+            --allowedTools "Read,Grep,Glob" \
+            --output-format text | tee analysis.txt
+          status=$?
+          set -e
+
+          if [ $status -ne 0 ]; then
+            echo "Claude CLI exited with status $status; treating as FAIL."
+            echo "verdict=FAIL" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          verdict=$(grep -Eio 'VERDICT: (PASS|FAIL)' analysis.txt | tail -n1 | awk '{print $2}')
+          if [ -z "$verdict" ]; then
+            echo "No verdict found in analysis; treating as FAIL."
+            verdict="FAIL"
+          fi
+          echo "verdict=$verdict" >> "$GITHUB_OUTPUT"
+
+      - name: Post analysis as a PR comment
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ needs.guard.outputs.pr_number }}
+        run: |
+          {
+            echo "## 🤖 Claude Code dependency analysis"
+            echo
+            echo "**Verdict:** ${{ steps.review.outputs.verdict || 'FAIL (analysis did not complete)' }}"
+            echo
+            if [ -f analysis.txt ]; then
+              cat analysis.txt
+            fi
+          } > comment.md
+          gh pr comment "$PR_NUMBER" --repo "${{ github.repository }}" --body-file comment.md
+
+  # Both gates passed (CI success is the trigger, analysis is PASS): merge.
+  # The default GITHUB_TOKEN cannot satisfy the "Require review from Code Owners" rule,
+  # so we mint a short-lived token for a dedicated GitHub App that is on the branch
+  # ruleset's bypass list.
+  #
+  # The App credentials live ONLY in the `dependabot-merge` environment, whose deployment
+  # branch policy allows the default branch (master) exclusively. Because `workflow_run`
+  # jobs run in the default-branch context, this job can read them — but any workflow added
+  # or altered in a pull request runs from the PR ref and is denied the environment, so it
+  # cannot borrow the App token to approve its own PR. The secret, not the workflow logic,
+  # is the security boundary.
+  merge:
+    name: Merge PR
+    runs-on: ubuntu-latest
+    needs: [guard, analyse]
+    if: needs.analyse.outputs.verdict == 'PASS'
+    environment: dependabot-merge
+    steps:
+      - name: Harden the runner
+        uses: step-security/harden-runner@bf7454d06d71f1098171f2acdf0cd4708d7b5920 # v2
+        with:
+          egress-policy: block
+          disable-sudo: true
+          allowed-endpoints: >
+            github.com:443
+            api.github.com:443
+
+      - name: Mint GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@fee1f7d63c2ff003460e3d139729b119787bc349 # v2
+        with:
+          app-id: ${{ secrets.MERGE_APP_ID }}
+          private-key: ${{ secrets.MERGE_APP_PRIVATE_KEY }}
+
+      - name: Approve and squash-merge the Dependabot PR
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          PR_NUMBER: ${{ needs.guard.outputs.pr_number }}
+        run: |
+          gh pr review "$PR_NUMBER" \
+            --repo "${{ github.repository }}" \
+            --approve \
+            --body "Approved automatically: CI passed and Claude Code analysis returned PASS."
+          gh pr merge "$PR_NUMBER" \
+            --repo "${{ github.repository }}" \
+            --squash \
+            --delete-branch
