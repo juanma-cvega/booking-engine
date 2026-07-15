@@ -70,6 +70,7 @@ jobs:
     if: needs.guard.outputs.pr_number != ''
     outputs:
       verdict: ${{ steps.review.outputs.verdict }}
+      touches_workflows: ${{ steps.review.outputs.touches_workflows }}
     steps:
       - name: Harden the runner
         uses: step-security/harden-runner@bf7454d06d71f1098171f2acdf0cd4708d7b5920 # v2
@@ -122,6 +123,16 @@ jobs:
           gh pr view "$PR_NUMBER" --repo "${{ github.repository }}" \
             --json title,body --jq '"# " + .title + "\n\n" + (.body // "")' > pr.md
 
+          # A PR that touches .github/workflows/** is still analysed, but never auto-merged:
+          # the merge App is deliberately not granted `workflows` write, so changes to the
+          # secret-bearing pipeline always require a human merge.
+          if gh pr diff "$PR_NUMBER" --repo "${{ github.repository }}" --name-only \
+              | grep -qE '^\.github/workflows/'; then
+            echo "touches_workflows=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "touches_workflows=false" >> "$GITHUB_OUTPUT"
+          fi
+
           PROMPT=$(cat <<'EOF'
           You are reviewing a Dependabot dependency-update pull request for this Maven
           multi-module Java project. The PR title/body is in `pr.md` and the change is in
@@ -171,22 +182,47 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ needs.guard.outputs.pr_number }}
+          VERDICT: ${{ steps.review.outputs.verdict }}
+          TOUCHES_WORKFLOWS: ${{ steps.review.outputs.touches_workflows }}
         run: |
+          verdict="${VERDICT:-FAIL}"
+          if [ "$verdict" = "PASS" ]; then
+            flag="# 🟢 &nbsp; PASS"
+          else
+            flag="# 🔴 &nbsp; FAIL"
+          fi
+
           {
-            echo "## 🤖 Claude Code dependency analysis"
+            echo "$flag"
             echo
-            echo "**Verdict:** ${{ steps.review.outputs.verdict || 'FAIL (analysis did not complete)' }}"
+            if [ "$verdict" = "PASS" ] && [ "$TOUCHES_WORKFLOWS" = "true" ]; then
+              echo "> ⚠️ **Manual merge required.** This PR modifies \`.github/workflows/**\`, so"
+              echo "> it is intentionally **not** auto-merged. Review the analysis below and merge"
+              echo "> it by hand."
+            elif [ "$verdict" = "PASS" ]; then
+              echo "> ✅ CI and analysis both passed — this PR will be **auto-merged**."
+            else
+              echo "> ⛔ This PR will **not** be merged automatically. See the analysis below."
+            fi
+            echo
+            echo "## 🤖 Claude Code dependency analysis"
             echo
             if [ -f analysis.txt ]; then
               cat analysis.txt
+            else
+              echo "_The analysis did not complete; treated as FAIL._"
             fi
           } > comment.md
           gh pr comment "$PR_NUMBER" --repo "${{ github.repository }}" --body-file comment.md
 
-  # Both gates passed (CI success is the trigger, analysis is PASS): merge.
-  # The default GITHUB_TOKEN cannot satisfy the "Require review from Code Owners" rule,
-  # so we mint a short-lived token for a dedicated GitHub App that is on the branch
-  # ruleset's bypass list.
+  # Both gates passed (CI success is the trigger, analysis is PASS) and the PR does not touch
+  # .github/workflows/**: merge. Workflow-file PRs are intentionally excluded — merging them
+  # needs `workflows` write, which the App is deliberately not granted; they are analysed and
+  # flagged for a manual merge instead.
+  #
+  # The default GITHUB_TOKEN cannot satisfy the "Require review from Code Owners" rule, so we
+  # mint a short-lived token for a dedicated GitHub App that is on the branch ruleset's bypass
+  # list.
   #
   # The App credentials live ONLY in the `dependabot-merge` environment, whose deployment
   # branch policy allows the default branch (master) exclusively. Because `workflow_run`
@@ -198,7 +234,9 @@ jobs:
     name: Merge PR
     runs-on: ubuntu-latest
     needs: [guard, analyse]
-    if: needs.analyse.outputs.verdict == 'PASS'
+    if: >
+      needs.analyse.outputs.verdict == 'PASS' &&
+      needs.analyse.outputs.touches_workflows == 'false'
     environment: dependabot-merge
     steps:
       - name: Harden the runner

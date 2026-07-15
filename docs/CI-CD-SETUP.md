@@ -177,9 +177,9 @@ Dependabot opens PR ──▶ CI/CD Pipeline runs ──▶ completes
                                                     ▼
    guard ──────────▶ analyse ────────────▶ merge
    CI success +      Claude Code review     Squash-merge via a scoped
-   Dependabot        (posts a PR comment,   GitHub App identity that
-   author/actor +    verdict PASS/FAIL)     bypasses the ruleset;
-   same-repo head                           delete branch
+   Dependabot        (🟢/🔴 flagged PR      GitHub App that bypasses the
+   author/actor +    comment, verdict       ruleset — only if PASS and the
+   same-repo head    PASS/FAIL)             PR does not touch workflows
 ```
 
 1. **guard** — proceeds only when the CI run succeeded, the author **and** triggering actor
@@ -190,20 +190,35 @@ Dependabot opens PR ──▶ CI/CD Pipeline runs ──▶ completes
    and impacted usages. It posts its findings as a PR comment and emits a `PASS`/`FAIL`
    verdict. Any error, timeout, or missing verdict is treated as **FAIL** (fail-safe: the PR
    is not merged).
-3. **merge** — only when the verdict is `PASS`: mints a short-lived token for a dedicated
-   GitHub App that is a **bypass actor** on the `master` ruleset, and squash-merges with
-   branch deletion. The merge uses `gh pr merge --admin`: because the PR's global state is
-   `BLOCKED` by the Code Owner review rule, `gh` refuses a plain merge client-side, so
-   `--admin` calls the merge endpoint directly where the App's bypass is honoured. No
-   approving review is submitted — an App review does not count toward the Code Owner
-   requirement; the ruleset bypass is what authorises the merge.
+3. **merge** — runs only when the verdict is `PASS` **and** the PR does not touch
+   `.github/workflows/**`. It mints a short-lived token for a dedicated GitHub App that is a
+   **bypass actor** on the `master` ruleset, and squash-merges with branch deletion. The
+   merge uses `gh pr merge --admin`: because the PR's global state is `BLOCKED` by the Code
+   Owner review rule, `gh` refuses a plain merge client-side, so `--admin` calls the merge
+   endpoint directly where the App's bypass is honoured. No approving review is submitted —
+   an App review does not count toward the Code Owner requirement; the ruleset bypass is what
+   authorises the merge.
+
+**Workflow-file PRs are excluded from auto-merge.** `github-actions`-ecosystem Dependabot PRs
+modify `.github/workflows/*`, which an App cannot merge without `workflows` write — a
+permission deliberately withheld so a leaked App key cannot rewrite the CI pipeline. Such PRs
+are still fully analysed by Claude and the comment is flagged **⚠️ Manual merge required**; you
+review and merge them by hand.
+
+Every analysis comment starts with a big status flag — **🟢 PASS** or **🔴 FAIL** — followed
+by whether the PR will be auto-merged, will need a manual merge (workflow files), or will not
+be merged, and then the detailed rationale.
 
 ### Why a GitHub App merges (and not `GITHUB_TOKEN`)
 
 `master` requires a Code Owner review (see `.github/CODEOWNERS`), which the default
 `GITHUB_TOKEN` cannot satisfy. A dedicated **GitHub App** on the ruleset **bypass list**
 provides the merge identity — least privilege (`contents` + `pull_requests` write only),
-short-lived tokens, no personal PAT.
+short-lived tokens, no personal PAT. The App is deliberately **not** granted `workflows`
+write: GitHub refuses to let an App merge changes to `.github/workflows/*` without it, so
+PRs that touch workflow files are analysed and flagged but never auto-merged (see below).
+Withholding that permission keeps the App unable to rewrite the secret-bearing CI pipeline
+even if its key leaks.
 
 The App credentials live **only** in the `dependabot-merge` Actions **environment**, whose
 deployment-branch policy allows the default branch (`master`) exclusively. Because
@@ -233,7 +248,7 @@ Add these in **Settings**:
 | Item | Where | Notes |
 |------|-------|-------|
 | `CLAUDE_CODE_OAUTH_TOKEN` | Actions secret (repo) | Used by the `analyse` job. Set a spend limit and rotate periodically. |
-| GitHub App | Developer settings → GitHub Apps | Permissions: **Contents** + **Pull requests** = Read and write only. Install on this repo. |
+| GitHub App | Developer settings → GitHub Apps | Permissions: **Contents** + **Pull requests** = Read and write only (**not** Workflows — see below). Install on this repo. |
 | `MERGE_APP_ID`, `MERGE_APP_PRIVATE_KEY` | **`dependabot-merge` environment** secrets | The App's ID and full `.pem` private key. Environment deployment branches restricted to `master`. |
 | Ruleset bypass | Settings → Rules → Rulesets (`master`) | Add the GitHub App to the **bypass list** (`bypass_mode: always`). The App ID must match the ruleset's Integration bypass entry and the `MERGE_APP_ID` secret. |
 
