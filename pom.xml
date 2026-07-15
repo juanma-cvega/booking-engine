@@ -26,8 +26,8 @@
     <tomcat7-maven-plugin.version>2.2</tomcat7-maven-plugin.version>
     <spring-boot.version>4.1.0</spring-boot.version>
     <assertj.version>3.27.7</assertj.version>
-    <junit.version>6.0.2</junit.version>
-    <mockito.version>5.21.0</mockito.version>
+    <junit.version>6.1.2</junit.version>
+    <mockito.version>5.23.0</mockito.version>
     <rest-assured.version>6.0.1</rest-assured.version>
     <commons-lang3.version>3.20.0</commons-lang3.version>
     <maven-surefire-plugin.version>3.5.4</maven-surefire-plugin.version>
@@ -40,8 +40,8 @@
     <failsafe-maven-plugin.version>3.1.2</failsafe-maven-plugin.version>
     <commons-collections4.version>4.5.0</commons-collections4.version>
     <guava.version>33.6.0-jre</guava.version>
-    <cucumber.version>7.34.2</cucumber.version>
-    <junit-platform.version>6.0.2</junit-platform.version>
+    <cucumber.version>7.34.4</cucumber.version>
+    <junit-platform.version>6.1.2</junit-platform.version>
     <awaitility.version>4.3.0</awaitility.version>
     <maven-resources-plugin.version>3.4.0</maven-resources-plugin.version>
     <jacoco-maven-plugin.version>0.8.15</jacoco-maven-plugin.version>
