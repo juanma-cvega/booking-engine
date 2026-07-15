@@ -15,6 +15,13 @@ permissions:
   contents: write
   pull-requests: write
 
+# Serialize entire runs: while one PR is being analysed and merged, others wait. Once the
+# winner merges, the losers are behind master and the guard below skips them until Dependabot
+# rebases and re-triggers them — avoiding redundant analysis and untested merges.
+concurrency:
+  group: dependabot-auto-merge
+  cancel-in-progress: false
+
 jobs:
   # Gate 1: only proceed when CI succeeded on a Dependabot pull request.
   guard:
@@ -45,8 +52,8 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
         run: |
-          # Re-verify the author against the API (defence in depth): the PR must exist,
-          # be open, and be authored by Dependabot before anything downstream runs.
+          # Defence in depth: the job's if-condition already checks the actor; re-confirm the
+          # author against the API here.
           pr=$(gh pr list \
             --repo "${{ github.repository }}" \
             --head "$HEAD_BRANCH" \
@@ -57,10 +64,22 @@ jobs:
           if [ -z "$pr" ] || [ "$pr" = "null" ]; then
             echo "No open Dependabot PR found for branch $HEAD_BRANCH; nothing to do."
             echo "number=" >> "$GITHUB_OUTPUT"
-          else
-            echo "Resolved PR #$pr"
-            echo "number=$pr" >> "$GITHUB_OUTPUT"
+            exit 0
           fi
+
+          # Skip a PR that is behind master: it will be rebased and re-triggered, so analysing
+          # or merging it now is wasted work and would merge a combination CI never tested.
+          head=$(gh pr view "$pr" --repo "${{ github.repository }}" \
+            --json headRefOid --jq '.headRefOid')
+          behind=$(gh api "repos/${{ github.repository }}/compare/master...$head" --jq '.behind_by')
+          if [ "${behind:-0}" -gt 0 ]; then
+            echo "PR #$pr is $behind commit(s) behind master; skipping until it is rebased."
+            echo "number=" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          echo "Resolved PR #$pr (up to date with master)"
+          echo "number=$pr" >> "$GITHUB_OUTPUT"
 
   # Gate 2: let Claude Code review the change for deprecations / breaking changes.
   analyse:
@@ -238,9 +257,6 @@ jobs:
       needs.analyse.outputs.verdict == 'PASS' &&
       needs.analyse.outputs.touches_workflows == 'false'
     environment: dependabot-merge
-    concurrency:
-      group: dependabot-auto-merge
-      cancel-in-progress: false
     steps:
       - name: Harden the runner
         uses: step-security/harden-runner@bf7454d06d71f1098171f2acdf0cd4708d7b5920 # v2

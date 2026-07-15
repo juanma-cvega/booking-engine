@@ -5,6 +5,27 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: feat(dependabot): serialize auto-merge runs and skip PRs behind master
+**Date:** Jul 16, 2026
+**Commit:** 8d0de9a
+
+**Changed files:**
+- .github/workflows/dependabot-auto-merge.yml
+- docs/context.md
+
+---
+
+### Latest Commit: feat(dependabot): serialize auto-merges and group updates to avoid conflicts
+**Date:** Jul 15, 2026
+**Commit:** 690d44c
+
+**Changed files:**
+- .github/dependabot.yml
+- .github/workflows/dependabot-auto-merge.yml
+- docs/context.md
+
+---
+
 ### Latest Commit: feat(dependabot): serialize auto-merges and group updates to avoid conflicts
 **Date:** Jul 15, 2026
 **Commit:** 3e7a855
