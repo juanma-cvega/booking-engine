@@ -5,6 +5,15 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: feat(ci): add Claude PR review workflow (interactive @claude + review-on-open)
+**Date:** Jul 16, 2026
+**Commit:** e65a974
+
+**Changed files:**
+- .github/workflows/claude.yml
+
+---
+
 ### Latest Commit: feat(ci): switch harden-runner egress policy to block
 **Date:** Jul 16, 2026
 **Commit:** 3af66d0
