@@ -5,6 +5,26 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: feat(ci): switch harden-runner egress policy to block
+**Date:** Jul 16, 2026
+**Commit:** 3af66d0
+
+**Changed files:**
+- .github/workflows/ci.yml
+- docs/context.md
+
+---
+
+### Latest Commit: feat(dependabot): switch analyse job egress policy to block
+**Date:** Jul 16, 2026
+**Commit:** 94d28e2
+
+**Changed files:**
+- .github/workflows/dependabot-auto-merge.yml
+- docs/context.md
+
+---
+
 ### Latest Commit: feat(dependabot): switch analyse job egress policy to block
 **Date:** Jul 16, 2026
 **Commit:** 62b8502

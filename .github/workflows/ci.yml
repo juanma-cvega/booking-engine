@@ -25,13 +25,26 @@ jobs:
     steps:
       - name: Harden the runner
         uses: step-security/harden-runner@bf7454d06d71f1098171f2acdf0cd4708d7b5920 # v2
-        # Audit mode records all egress without blocking, so the build cannot break. After
-        # the first run, open the run's harden-runner insights, copy the observed endpoints
-        # into `allowed-endpoints:`, and switch `egress-policy` to `block` to stop a
-        # compromised dependency (worm) from exfiltrating SONAR_TOKEN / GITHUB_TOKEN.
+        # The wildcard blob/s3 endpoints are required by the Actions cache/artifacts and Sonar
+        # and cannot be pinned to fixed hosts because the storage accounts rotate; they widen
+        # egress but everything else (arbitrary hosts, the known-bad list) stays blocked.
         with:
-          egress-policy: audit
+          egress-policy: block
           disable-sudo: true
+          allowed-endpoints: >
+            github.com:443
+            api.github.com:443
+            objects.githubusercontent.com:443
+            api.adoptium.net:443
+            repo.maven.apache.org:443
+            keyserver.ubuntu.com:443
+            binaries.sonarsource.com:443
+            sonarcloud.io:443
+            api.sonarcloud.io:443
+            scanner.sonarcloud.io:443
+            *.actions.githubusercontent.com:443
+            *.blob.core.windows.net:443
+            *.s3.eu-central-1.amazonaws.com:443
 
       - name: Checkout code
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -120,13 +133,26 @@ jobs:
     steps:
       - name: Harden the runner
         uses: step-security/harden-runner@bf7454d06d71f1098171f2acdf0cd4708d7b5920 # v2
-        # Audit mode records all egress without blocking, so the build cannot break. After
-        # the first run, open the run's harden-runner insights, copy the observed endpoints
-        # into `allowed-endpoints:`, and switch `egress-policy` to `block` to stop a
-        # compromised dependency (worm) from exfiltrating SONAR_TOKEN / GITHUB_TOKEN.
+        # The wildcard blob/s3 endpoints are required by the Actions cache/artifacts and Sonar
+        # and cannot be pinned to fixed hosts because the storage accounts rotate; they widen
+        # egress but everything else (arbitrary hosts, the known-bad list) stays blocked.
         with:
-          egress-policy: audit
+          egress-policy: block
           disable-sudo: true
+          allowed-endpoints: >
+            github.com:443
+            api.github.com:443
+            objects.githubusercontent.com:443
+            api.adoptium.net:443
+            repo.maven.apache.org:443
+            keyserver.ubuntu.com:443
+            binaries.sonarsource.com:443
+            sonarcloud.io:443
+            api.sonarcloud.io:443
+            scanner.sonarcloud.io:443
+            *.actions.githubusercontent.com:443
+            *.blob.core.windows.net:443
+            *.s3.eu-central-1.amazonaws.com:443
 
       - name: Checkout code
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -164,13 +190,26 @@ jobs:
     steps:
       - name: Harden the runner
         uses: step-security/harden-runner@bf7454d06d71f1098171f2acdf0cd4708d7b5920 # v2
-        # Audit mode records all egress without blocking, so the build cannot break. After
-        # the first run, open the run's harden-runner insights, copy the observed endpoints
-        # into `allowed-endpoints:`, and switch `egress-policy` to `block` to stop a
-        # compromised dependency (worm) from exfiltrating SONAR_TOKEN / GITHUB_TOKEN.
+        # The wildcard blob/s3 endpoints are required by the Actions cache/artifacts and Sonar
+        # and cannot be pinned to fixed hosts because the storage accounts rotate; they widen
+        # egress but everything else (arbitrary hosts, the known-bad list) stays blocked.
         with:
-          egress-policy: audit
+          egress-policy: block
           disable-sudo: true
+          allowed-endpoints: >
+            github.com:443
+            api.github.com:443
+            objects.githubusercontent.com:443
+            api.adoptium.net:443
+            repo.maven.apache.org:443
+            keyserver.ubuntu.com:443
+            binaries.sonarsource.com:443
+            sonarcloud.io:443
+            api.sonarcloud.io:443
+            scanner.sonarcloud.io:443
+            *.actions.githubusercontent.com:443
+            *.blob.core.windows.net:443
+            *.s3.eu-central-1.amazonaws.com:443
 
       - name: Checkout code
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
