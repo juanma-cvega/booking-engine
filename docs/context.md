@@ -5,6 +5,27 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: fix(mise): make dependabot:rebase task parseable by mise's Tera engine
+**Date:** Jul 15, 2026
+**Commit:** f9e6403
+
+**Changed files:**
+- docs/context.md
+- mise.toml
+
+---
+
+### Latest Commit: feat(dependabot): exclude workflow-file PRs from auto-merge, flag analysis
+**Date:** Jul 15, 2026
+**Commit:** 6f71507
+
+**Changed files:**
+- .github/workflows/dependabot-auto-merge.yml
+- docs/CI-CD-SETUP.md
+- docs/context.md
+
+---
+
 ### Latest Commit: feat(dependabot): exclude workflow-file PRs from auto-merge, flag analysis
 **Date:** Jul 15, 2026
 **Commit:** 16b2ba0

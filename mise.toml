@@ -38,14 +38,16 @@ run = "sonar-scanner -Dspotless.check.skip=true"
 
 [tasks."dependabot:rebase"]
 description = "Ask Dependabot to rebase (or recreate) every open Dependabot PR, so the auto-merge workflow re-evaluates them. Runs under your own gh identity — no stored token. Usage: mise run dependabot:rebase [rebase|recreate]"
+# NOTE: mise renders this script through the Tera template engine first, so avoid the
+# token `{#` (e.g. bash's ${#array[@]}) — Tera reads it as a comment-open and fails to parse.
 run = '''
 #!/usr/bin/env bash
 set -euo pipefail
 
-command="${1:-rebase}"
-case "$command" in
+action="${1:-rebase}"
+case "$action" in
   rebase|recreate) ;;
-  *) echo "error: expected 'rebase' or 'recreate', got '$command'" >&2; exit 1 ;;
+  *) echo "error: expected 'rebase' or 'recreate', got '$action'" >&2; exit 1 ;;
 esac
 
 if ! command -v gh >/dev/null 2>&1; then
@@ -56,20 +58,18 @@ if ! gh auth status >/dev/null 2>&1; then
 fi
 
 repo="$(gh repo view --json nameWithOwner -q .nameWithOwner)"
+prs="$(gh pr list --repo "$repo" --author app/dependabot --state open --json number --jq '.[].number')"
 
-mapfile -t prs < <(
-  gh pr list --repo "$repo" --author "app/dependabot" --state open \
-    --json number --jq '.[].number'
-)
-
-if [ "${#prs[@]}" -eq 0 ]; then
+if [ -z "$prs" ]; then
   echo "No open Dependabot PRs in $repo."
   exit 0
 fi
 
-echo "Commenting '@dependabot $command' on ${#prs[@]} PR(s) in $repo:"
-for n in "${prs[@]}"; do
-  gh pr comment "$n" --repo "$repo" --body "@dependabot $command"
+count="$(printf '%s\n' "$prs" | grep -c .)"
+echo "Commenting '@dependabot $action' on $count PR(s) in $repo:"
+printf '%s\n' "$prs" | while IFS= read -r n; do
+  [ -n "$n" ] || continue
+  gh pr comment "$n" --repo "$repo" --body "@dependabot $action"
   echo "  - #$n"
 done
 '''
