@@ -238,6 +238,9 @@ jobs:
       needs.analyse.outputs.verdict == 'PASS' &&
       needs.analyse.outputs.touches_workflows == 'false'
     environment: dependabot-merge
+    concurrency:
+      group: dependabot-auto-merge
+      cancel-in-progress: false
     steps:
       - name: Harden the runner
         uses: step-security/harden-runner@bf7454d06d71f1098171f2acdf0cd4708d7b5920 # v2

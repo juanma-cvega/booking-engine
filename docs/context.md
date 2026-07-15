@@ -5,6 +5,16 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: feat(dependabot): serialize auto-merges and group updates to avoid conflicts
+**Date:** Jul 15, 2026
+**Commit:** 3e7a855
+
+**Changed files:**
+- .github/dependabot.yml
+- .github/workflows/dependabot-auto-merge.yml
+
+---
+
 ### Latest Commit: fix(mise): make dependabot:rebase task parseable by mise's Tera engine
 **Date:** Jul 15, 2026
 **Commit:** f9e6403
