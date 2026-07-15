@@ -5,6 +5,26 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: feat(dependabot): switch analyse job egress policy to block
+**Date:** Jul 16, 2026
+**Commit:** 62b8502
+
+**Changed files:**
+- .github/workflows/dependabot-auto-merge.yml
+- docs/context.md
+
+---
+
+### Latest Commit: feat(dependabot): serialize auto-merge runs and skip PRs behind master
+**Date:** Jul 16, 2026
+**Commit:** 77a5f6b
+
+**Changed files:**
+- .github/workflows/dependabot-auto-merge.yml
+- docs/context.md
+
+---
+
 ### Latest Commit: feat(dependabot): serialize auto-merge runs and skip PRs behind master
 **Date:** Jul 16, 2026
 **Commit:** 8d0de9a
