@@ -217,16 +217,19 @@ jobs:
           app-id: ${{ secrets.MERGE_APP_ID }}
           private-key: ${{ secrets.MERGE_APP_PRIVATE_KEY }}
 
-      - name: Approve and squash-merge the Dependabot PR
+      - name: Squash-merge the Dependabot PR
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
           PR_NUMBER: ${{ needs.guard.outputs.pr_number }}
+        # The App is a bypass actor on the `master` ruleset, so it may merge past the
+        # Code Owner review requirement. `--admin` is required regardless: without it `gh`
+        # refuses client-side because the PR's global merge state is BLOCKED
+        # (REVIEW_REQUIRED); `--admin` calls the merge endpoint directly, which then honours
+        # the App's bypass. No approving review is submitted — an App review does not count
+        # toward the Code Owner requirement anyway; the bypass is what authorises the merge.
         run: |
-          gh pr review "$PR_NUMBER" \
-            --repo "${{ github.repository }}" \
-            --approve \
-            --body "Approved automatically: CI passed and Claude Code analysis returned PASS."
           gh pr merge "$PR_NUMBER" \
             --repo "${{ github.repository }}" \
             --squash \
-            --delete-branch
+            --delete-branch \
+            --admin

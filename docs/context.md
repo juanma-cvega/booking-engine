@@ -5,6 +5,16 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: fix(dependabot): merge with --admin so the App bypass is honoured
+**Date:** Jul 15, 2026
+**Commit:** 4c99939
+
+**Changed files:**
+- .github/workflows/dependabot-auto-merge.yml
+- docs/CI-CD-SETUP.md
+
+---
+
 ### Latest Commit: docs(dependabot): document auto-merge flow and add rebase mise task
 **Date:** Jul 13, 2026
 **Commit:** 14e51b3

@@ -176,10 +176,10 @@ Dependabot opens PR ──▶ CI/CD Pipeline runs ──▶ completes
                                                     │ workflow_run
                                                     ▼
    guard ──────────▶ analyse ────────────▶ merge
-   CI success +      Claude Code review     Approve + squash-merge
-   Dependabot        (posts a PR comment,   via a scoped GitHub App
-   author/actor +    verdict PASS/FAIL)     identity; delete branch
-   same-repo head
+   CI success +      Claude Code review     Squash-merge via a scoped
+   Dependabot        (posts a PR comment,   GitHub App identity that
+   author/actor +    verdict PASS/FAIL)     bypasses the ruleset;
+   same-repo head                           delete branch
 ```
 
 1. **guard** — proceeds only when the CI run succeeded, the author **and** triggering actor
@@ -191,7 +191,12 @@ Dependabot opens PR ──▶ CI/CD Pipeline runs ──▶ completes
    verdict. Any error, timeout, or missing verdict is treated as **FAIL** (fail-safe: the PR
    is not merged).
 3. **merge** — only when the verdict is `PASS`: mints a short-lived token for a dedicated
-   GitHub App, submits an approving review, and squash-merges with branch deletion.
+   GitHub App that is a **bypass actor** on the `master` ruleset, and squash-merges with
+   branch deletion. The merge uses `gh pr merge --admin`: because the PR's global state is
+   `BLOCKED` by the Code Owner review rule, `gh` refuses a plain merge client-side, so
+   `--admin` calls the merge endpoint directly where the App's bypass is honoured. No
+   approving review is submitted — an App review does not count toward the Code Owner
+   requirement; the ruleset bypass is what authorises the merge.
 
 ### Why a GitHub App merges (and not `GITHUB_TOKEN`)
 
@@ -230,8 +235,7 @@ Add these in **Settings**:
 | `CLAUDE_CODE_OAUTH_TOKEN` | Actions secret (repo) | Used by the `analyse` job. Set a spend limit and rotate periodically. |
 | GitHub App | Developer settings → GitHub Apps | Permissions: **Contents** + **Pull requests** = Read and write only. Install on this repo. |
 | `MERGE_APP_ID`, `MERGE_APP_PRIVATE_KEY` | **`dependabot-merge` environment** secrets | The App's ID and full `.pem` private key. Environment deployment branches restricted to `master`. |
-| Ruleset bypass | Settings → Rules → Rulesets (`master`) | Add the GitHub App to the **bypass list**. |
-| Actions PR approval | Settings → Actions → General | Enable "Allow GitHub Actions to create and approve pull requests". |
+| Ruleset bypass | Settings → Rules → Rulesets (`master`) | Add the GitHub App to the **bypass list** (`bypass_mode: always`). The App ID must match the ruleset's Integration bypass entry and the `MERGE_APP_ID` secret. |
 
 ### Promoting harden-runner to `block`
 
