@@ -93,14 +93,14 @@ jobs:
     steps:
       - name: Harden the runner
         uses: step-security/harden-runner@bf7454d06d71f1098171f2acdf0cd4708d7b5920 # v2
-        # This job installs a third-party CLI and runs it with CLAUDE_CODE_OAUTH_TOKEN in
-        # scope, so it is the softest target here. Audit first because the npm install and
-        # the CLI's own runtime egress are hard to enumerate up front; after the first run,
-        # lift the observed endpoints (registry.npmjs.org, api.anthropic.com, github.com, …)
-        # into `allowed-endpoints:` and switch to `egress-policy: block`.
         with:
-          egress-policy: audit
+          egress-policy: block
           disable-sudo: true
+          allowed-endpoints: >
+            github.com:443
+            api.github.com:443
+            registry.npmjs.org:443
+            api.anthropic.com:443
 
       - name: Determine PR head SHA
         id: meta
@@ -137,6 +137,9 @@ jobs:
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ needs.guard.outputs.pr_number }}
+          # Suppress the CLI's telemetry/error reporting so no egress to non-Anthropic hosts
+          # is needed from this token-bearing job.
+          CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: "1"
         run: |
           gh pr diff "$PR_NUMBER" --repo "${{ github.repository }}" > pr.diff
           gh pr view "$PR_NUMBER" --repo "${{ github.repository }}" \
