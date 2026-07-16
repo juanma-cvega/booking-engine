@@ -1,5 +1,6 @@
 package com.jusoft.bookingengine.controller.room.api;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import java.time.DayOfWeek;
@@ -9,5 +10,5 @@ public record CreateRoomRequest(
         @NotNull Long buildingId,
         @NotNull Integer slotDurationInMinutes,
         @NotNull Integer maxSlots,
-        @NotEmpty List<OpenTimeRequest> openTimes,
+        @Valid @NotEmpty List<OpenTimeRequest> openTimes,
         @NotEmpty List<DayOfWeek> availableDays) {}
