@@ -47,8 +47,31 @@
     <jacoco-maven-plugin.version>0.8.15</jacoco-maven-plugin.version>
     <spotless-maven-plugin.version>3.8.0</spotless-maven-plugin.version>
     <byte-buddy.version>1.18.11</byte-buddy.version>
-    <properties-maven-plugin.version>1.2.1</properties-maven-plugin.version>
     <archunit.version>1.4.2</archunit.version>
+    <sonar-maven-plugin.version>5.7.0.6970</sonar-maven-plugin.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+    <!-- SonarCloud analysis. Only settings that cannot be inferred belong here: the scanner
+         derives sources, tests, binaries, libraries, encoding and Java version from the reactor,
+         and declaring them by hand is what silently breaks type resolution.
+         Run: mvn verify sonar:sonar -Dsonar.token=$SONAR_TOKEN -->
+    <sonar.projectKey>booking-engine</sonar.projectKey>
+    <sonar.organization>juanma-cvega</sonar.organization>
+    <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+    <!-- Absolute, not a glob: only impl and controller produce coverage; the test module holds the
+         Cucumber suite and emits no report of its own. -->
+    <sonar.coverage.jacoco.xmlReportPaths>${maven.multiModuleProjectDirectory}/impl/target/site/jacoco/jacoco.xml,${maven.multiModuleProjectDirectory}/controller/target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+    <sonar.exclusions>**/*Config.java,**/api/**/*,**/test/**/*,**/*Test.java,**/*Tests.java</sonar.exclusions>
+    <sonar.coverage.exclusions>**/*Config.java,**/api/**/*,**/test/**/*,**/*Test.java,**/*Tests.java</sonar.coverage.exclusions>
+    <sonar.cpd.exclusions>**/api/**/*</sonar.cpd.exclusions>
+
+    <!-- e1: api/ records trip "unused private field" because only the generated accessors read
+         them. e2: Lombok-generated fields are invisible to the rule. -->
+    <sonar.issue.ignore.multicriteria>e1,e2</sonar.issue.ignore.multicriteria>
+    <sonar.issue.ignore.multicriteria.e1.ruleKey>java:S1170</sonar.issue.ignore.multicriteria.e1.ruleKey>
+    <sonar.issue.ignore.multicriteria.e1.resourceKey>**/api/**/*.java</sonar.issue.ignore.multicriteria.e1.resourceKey>
+    <sonar.issue.ignore.multicriteria.e2.ruleKey>java:S1068</sonar.issue.ignore.multicriteria.e2.ruleKey>
+    <sonar.issue.ignore.multicriteria.e2.resourceKey>**/*.java</sonar.issue.ignore.multicriteria.e2.resourceKey>
   </properties>
 
   <dependencyManagement>
@@ -246,6 +269,11 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
           <version>${maven-surefire-plugin.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.sonarsource.scanner.maven</groupId>
+          <artifactId>sonar-maven-plugin</artifactId>
+          <version>${sonar-maven-plugin.version}</version>
         </plugin>
       </plugins>
     </pluginManagement>

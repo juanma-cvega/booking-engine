@@ -118,12 +118,10 @@ jobs:
 
       - name: SonarQube Scan
         if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
-        uses: SonarSource/sonarqube-scan-action@22918119ff8e1ca75a623e15c8296b6ea4fbe28f # v8.2.1
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          args: >
-            -Dspotless.check.skip=true
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: mvn sonar:sonar
 
   code-quality:
     name: Code Quality Checks

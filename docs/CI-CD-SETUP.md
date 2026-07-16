@@ -90,13 +90,16 @@ mvn jacoco:check
 
 ### SonarQube Properties
 
-Configuration file: `sonar-project.properties`
+Configured in the parent `pom.xml`, in the `<properties>` block. Analysis runs through
+SonarScanner for Maven (`mvn sonar:sonar`), which derives sources, tests, binaries, libraries,
+encoding and the Java version from the reactor — only settings it cannot infer are declared.
 
 **Key Settings**:
-- Java 25 source/target
 - Coverage via JaCoCo XML reports
-- JUnit test reports integration
 - Exclusions for generated code and configs
+- Rule ignores for `api/` records and Lombok-generated fields
+
+Run it locally with `mise run sonar` (needs `SONAR_TOKEN` and a prior `mvn install`).
 
 ### Running SonarQube Locally
 
@@ -403,7 +406,7 @@ mvn jacoco:report
 
 **Missing coverage data**:
 - Verify JaCoCo reports are generated: `target/site/jacoco/jacoco.xml`
-- Check `sonar.coverage.jacoco.xmlReportPaths` in `sonar-project.properties`
+- Check `sonar.coverage.jacoco.xmlReportPaths` in the parent `pom.xml`
 
 ### Dependabot Issues
 
