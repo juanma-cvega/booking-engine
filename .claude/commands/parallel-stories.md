@@ -117,7 +117,9 @@ criteria. Consolidate findings.
 findings — and wait for a per-story verdict.**
 
 - **Approved** → push the branch, open a PR into `master` with `gh` (story summary + Taiga
-  trailers in the body), and add the PR link to the story via `/manage-backlog-item`.
+  trailers in the body — use the story **permalink**, not just the bare ref, whenever the backend
+  returns one; a bare `#NNN` renders as a misleading GitHub link), and add the PR link to the
+  story via `/manage-backlog-item`.
 - **Rejected with feedback** → SendMessage the feedback to the same worker in the same worktree; it
   revises under green and returns to this checkpoint. The worktree is **kept** — it is deleted only
   on merge or explicit abandon.

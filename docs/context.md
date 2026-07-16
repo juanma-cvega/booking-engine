@@ -5,6 +5,27 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: Add claude.yaml to allow Claude Code to review PRs
+**Date:** Jul 16, 2026
+**Commit:** cee9437
+
+**Changed files:**
+- .claude/commands/parallel-stories.md
+- .claude/settings.json
+- docs/context.md
+
+---
+
+### Latest Commit: feat(ci): add Claude PR review workflow (interactive @claude + review-on-open)
+**Date:** Jul 16, 2026
+**Commit:** 5cb669f
+
+**Changed files:**
+- .github/workflows/claude.yml
+- docs/context.md
+
+---
+
 ### Latest Commit: feat(ci): add Claude PR review workflow (interactive @claude + review-on-open)
 **Date:** Jul 16, 2026
 **Commit:** e65a974

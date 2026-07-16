@@ -75,7 +75,12 @@
     "deny": [
       "Bash(rm *)",
       "Bash(rmdir *)",
-      "Bash(git push*)",
+      "Bash(git push* master*)",
+      "Bash(git push* origin master*)",
+      "Bash(git push* HEAD:master*)",
+      "Bash(git -C * push * master*)",
+      "Bash(git -C * push * HEAD:master*)",
+      "Bash(git push* --delete*)",
       "Bash(git reset --hard*)",
       "Bash(git clean*)",
       "Bash(git branch -D*)",
