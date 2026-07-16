@@ -5,6 +5,17 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: ci: review every PR change with Claude, codify the finding triage loop
+**Date:** Jul 16, 2026
+**Commit:** 3d2bc07
+
+**Changed files:**
+- .claude/commands/develop-story-e2e.md
+- .claude/commands/parallel-stories.md
+- .github/workflows/claude.yml
+
+---
+
 ### Latest Commit: Add claude.yaml to allow Claude Code to review PRs
 **Date:** Jul 16, 2026
 **Commit:** cee9437

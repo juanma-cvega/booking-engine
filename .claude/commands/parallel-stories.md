@@ -107,19 +107,42 @@ Resume each worker via SendMessage:
 
 ---
 
-## Step 5 — Checkpoint 2: final review and PRs (batched)
+## Step 5 — Checkpoint 2: review, triage-and-fix loop, then PRs (batched)
 
-When a worker finishes, review its worktree diff — dispatch `architecture-reviewer` and
-`semantics-reviewer` in parallel, pointed at the worktree path, each with the story's acceptance
-criteria. Consolidate findings.
+When a worker finishes, review its worktree diff — dispatch `architecture-reviewer`,
+`semantics-reviewer`, and `security-reviewer` in parallel, pointed at the worktree path, each with
+the story's acceptance criteria. Instruct each reviewer to trace every externally-supplied field
+from the boundary to its first real use — **including into unchanged code** — a defect can be an
+absence in the diff (a missing validation, a missing handler) whose blast radius lives outside it.
 
-**Stop. Present each story's result — diff summary, green tests, architecture check, review
-findings — and wait for a per-story verdict.**
+**Triage-and-fix loop — findings are resolved before the user sees the story.** Run every finding
+through the **finding triage loop defined in `/develop-story-e2e` Step 6** (the generic
+valid/invalid rules, red-test-first fixes, 2-round cap, and triage log live there). The only
+parallel-run specifics: valid fixes are executed by the **story's worker in its worktree**, and
+fixes land in the story's commit while it is still unpublished, or as a follow-up commit once
+pushed.
+
+**Stop. Present each story's result — diff summary, green tests, architecture check, and the
+triage log (findings fixed / findings rejected and why) — and wait for a per-story verdict.** The
+user reviews already-valid work: red tests written during triage are validated here,
+retrospectively, instead of blocking mid-loop (explicitly delegated by the user).
 
 - **Approved** → push the branch, open a PR into `master` with `gh` (story summary + Taiga
   trailers in the body — use the story **permalink**, not just the bare ref, whenever the backend
   returns one; a bare `#NNN` renders as a misleading GitHub link), and add the PR link to the
-  story via `/manage-backlog-item`.
+  story via `/manage-backlog-item`. Then run the **PR review-comment loop** below — a Claude
+  review workflow runs on every opened PR, and its findings must be triaged before the PR is
+  handed to the user.
+
+### PR review-comment loop (after each PR is opened or pushed to)
+
+The repo's GitHub workflow has Claude review every PR on open, and re-review on later pushes. For
+each open PR of this run: wait for the review workflow run to complete (`gh run list` /
+`gh pr checks`), fetch the bot's findings, and run them through the **finding triage loop in
+`/develop-story-e2e` Step 6** (which covers how to fetch PR comments, follow-up commits, re-review
+after a push, and the 2-round cap). The goal: by the time the user looks at a PR, every bot
+finding is either fixed on the branch or answered in the triage log — no manual `@claude` triggers
+needed.
 - **Rejected with feedback** → SendMessage the feedback to the same worker in the same worktree; it
   revises under green and returns to this checkpoint. The worktree is **kept** — it is deleted only
   on merge or explicit abandon.
