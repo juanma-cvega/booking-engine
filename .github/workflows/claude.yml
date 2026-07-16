@@ -10,7 +10,7 @@ on:
   issues:
     types: [opened]
   pull_request:
-    types: [opened, reopened]
+    types: [opened, reopened, synchronize]
 
 jobs:
   # Interactive: respond to @claude mentions. The action itself refuses to act for a
@@ -47,15 +47,19 @@ jobs:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           claude_args: "--model claude-sonnet-5"
 
-  # Automatic review when a PR is opened. Skips forks and Dependabot, which do not receive the
-  # secret on `pull_request` (and Dependabot PRs are already reviewed by the auto-merge
-  # workflow).
+  # Automatic review when a PR is opened or updated. Skips forks and Dependabot, which do not
+  # receive the secret on `pull_request` (and Dependabot PRs are already reviewed by the
+  # auto-merge workflow). Only the latest push per PR is reviewed: a newer push cancels the
+  # in-flight review of the now-stale diff.
   review:
-    name: Review on open
+    name: Review PR changes
     if: >
       github.event_name == 'pull_request' &&
       github.event.pull_request.head.repo.full_name == github.repository &&
       github.actor != 'dependabot[bot]'
+    concurrency:
+      group: claude-review-${{ github.event.pull_request.number }}
+      cancel-in-progress: true
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -82,4 +86,7 @@ jobs:
             Review the pull request diff. Focus on correctness bugs, security issues, and
             compliance with the Architecture Decision Records in docs/design-decisions.md.
             Leave inline review comments on specific lines where warranted, and a short summary.
+            If you have reviewed this PR before (look for previous claude[bot] comments), check
+            whether each earlier finding was addressed by the new commits and say so explicitly,
+            reviewing only the changed code in depth rather than restating the whole diff.
             Do not approve or merge; this review is advisory.

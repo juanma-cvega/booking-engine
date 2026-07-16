@@ -88,7 +88,7 @@ a summary (not full logs). It stays within the module the plan scoped and **neve
 
 ---
 
-## Step 6 — Parallel review of the implementation
+## Step 6 — Parallel review, then the finding triage loop
 
 With the tests green, validate the code from three angles. **Dispatch all three reviewers in a
 single message so they run in parallel** — each against the **plan** and the acceptance criteria,
@@ -98,12 +98,36 @@ each on the model set in its own agent file (`.claude/agents/`):
 - `architecture-reviewer` — does it comply with the ADRs / CLAUDE.md rules?
 - `security-reviewer` — does it enforce the security the plan required, and is it free of new flaws?
 
-Each returns ranked findings against the current working-tree diff. Consolidate them (drop
-duplicates, order by severity).
+Instruct each reviewer to trace every externally-supplied field from the boundary to its first
+real use — **including into unchanged code** — a defect can be an absence in the diff (a missing
+validation, a missing handler) whose blast radius lives outside it.
 
-**Stop. Present the consolidated review to the user.** If findings warrant changes, return to
-Step 5b (fix under green) and re-run the review. Proceed only once the reviews are clean or the user
-accepts the findings.
+Each returns ranked findings against the current working-tree diff. Consolidate them (drop
+duplicates, order by severity), then run every finding through the triage loop below.
+
+### Finding triage loop (generic — used by any flow that reviews story work)
+
+Findings can come from the Step 6 subagents, from the **GitHub Claude review workflow** that runs
+on every opened PR (fetch its output with `gh api` — issue comments, review bodies, and inline
+review comments; keep a per-PR list of handled comment ids so nothing is triaged twice), or from
+any other reviewer. Every finding gets the same treatment:
+
+- **Valid** — it reproduces as a failing test, is within the story's scope, and fixing it violates
+  no ADR and needs no missing prerequisite. Fix it test-first: red test capturing the failure,
+  minimal fix under green (Step 5b), module architecture test, `mvn spotless:apply`. If the
+  story's commits are already pushed to a PR, add a **follow-up commit** carrying the story's
+  Taiga trailers — never amend or force-push published history.
+- **Invalid** — not reproducible, out of the story's scope (suggest a gap/backlog story instead),
+  or fixable only by violating an ADR or the Hard Constraints (e.g. speculative error handling).
+  Record the finding and the rejection rationale in the triage log; the code does not change.
+
+After fixes, re-run the review — re-dispatch the subagents on the updated diff, or, for PR
+findings, push and wait for the PR workflow's fresh review — until a pass yields **no new valid
+findings**. Cap at **2 fix rounds**; anything still open goes to the user as an explicit open
+question, never silently dropped.
+
+**Stop. Present the triage log — findings fixed and findings rejected with their rationale — to
+the user.** Proceed only once the loop is clean or the user rules on the leftovers.
 
 ---
 
