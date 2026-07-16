@@ -5,6 +5,15 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: ci: let the automatic PR review actually post its comment
+**Date:** Jul 16, 2026
+**Commit:** b4bf9c6
+
+**Changed files:**
+- .github/workflows/claude.yml
+
+---
+
 ### Latest Commit: ci: review every PR change with Claude, codify the finding triage loop
 **Date:** Jul 16, 2026
 **Commit:** 3d2bc07
