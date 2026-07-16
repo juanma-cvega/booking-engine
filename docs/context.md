@@ -143,98 +143,29 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 **Changed files:**
 - .github/workflows/claude.yml
 ### Latest Commit: feat(building): expose building creation through a REST controller
+### Latest Commit: test(building): exercise real factory mapping in controller test
 **Date:** Jul 16, 2026
-**Commit:** f025de9
+**Commit:** e85b2f5
 
 **Changed files:**
-- controller/src/main/java/com/jusoft/bookingengine/controller/ControllerConfig.java
-- controller/src/main/java/com/jusoft/bookingengine/controller/GlobalExceptionHandler.java
-- controller/src/main/java/com/jusoft/bookingengine/controller/building/BuildingCommandFactory.java
-- controller/src/main/java/com/jusoft/bookingengine/controller/building/BuildingControllerConfig.java
-- controller/src/main/java/com/jusoft/bookingengine/controller/building/BuildingControllerRest.java
-- controller/src/main/java/com/jusoft/bookingengine/controller/building/BuildingResourceFactory.java
-- controller/src/main/java/com/jusoft/bookingengine/controller/building/api/BuildingResource.java
-- controller/src/main/java/com/jusoft/bookingengine/controller/building/api/CreateBuildingRequest.java
 - controller/src/test/java/com/jusoft/bookingengine/controller/building/BuildingControllerRestTest.java
-- controller/src/test/java/com/jusoft/bookingengine/fixtures/BuildingFixtures.java
+- docs/context.md
 
 ---
 
-### Latest Commit: feat(building): expose building creation through a REST controller
+### Latest Commit: test(building): exercise real factory mapping in controller test
 **Date:** Jul 16, 2026
-**Commit:** 39f8127
+**Commit:** 1c1d4e0
 
 **Changed files:**
-- controller/src/main/java/com/jusoft/bookingengine/controller/ControllerConfig.java
-- controller/src/main/java/com/jusoft/bookingengine/controller/GlobalExceptionHandler.java
-- controller/src/main/java/com/jusoft/bookingengine/controller/building/BuildingCommandFactory.java
-- controller/src/main/java/com/jusoft/bookingengine/controller/building/BuildingControllerConfig.java
-- controller/src/main/java/com/jusoft/bookingengine/controller/building/BuildingControllerRest.java
-- controller/src/main/java/com/jusoft/bookingengine/controller/building/BuildingResourceFactory.java
-- controller/src/main/java/com/jusoft/bookingengine/controller/building/api/BuildingResource.java
-- controller/src/main/java/com/jusoft/bookingengine/controller/building/api/CreateBuildingRequest.java
 - controller/src/test/java/com/jusoft/bookingengine/controller/building/BuildingControllerRestTest.java
-- controller/src/test/java/com/jusoft/bookingengine/fixtures/BuildingFixtures.java
+- docs/context.md
 
 ---
 
 ### Latest Commit: feat(building): expose building creation through a REST controller
 **Date:** Jul 16, 2026
-**Commit:** 1b92a98
-
-**Changed files:**
-- controller/src/main/java/com/jusoft/bookingengine/controller/ControllerConfig.java
-- controller/src/main/java/com/jusoft/bookingengine/controller/GlobalExceptionHandler.java
-- controller/src/main/java/com/jusoft/bookingengine/controller/building/BuildingCommandFactory.java
-- controller/src/main/java/com/jusoft/bookingengine/controller/building/BuildingControllerConfig.java
-- controller/src/main/java/com/jusoft/bookingengine/controller/building/BuildingControllerRest.java
-- controller/src/main/java/com/jusoft/bookingengine/controller/building/BuildingResourceFactory.java
-- controller/src/main/java/com/jusoft/bookingengine/controller/building/api/BuildingResource.java
-- controller/src/main/java/com/jusoft/bookingengine/controller/building/api/CreateBuildingRequest.java
-- controller/src/test/java/com/jusoft/bookingengine/controller/building/BuildingControllerRestTest.java
-- controller/src/test/java/com/jusoft/bookingengine/fixtures/BuildingFixtures.java
-
----
-
-### Latest Commit: feat(building): expose building creation through a REST controller
-**Date:** Jul 10, 2026
-**Commit:** ae100e8
-
-**Changed files:**
-- controller/src/main/java/com/jusoft/bookingengine/controller/ControllerConfig.java
-- controller/src/main/java/com/jusoft/bookingengine/controller/GlobalExceptionHandler.java
-- controller/src/main/java/com/jusoft/bookingengine/controller/building/BuildingCommandFactory.java
-- controller/src/main/java/com/jusoft/bookingengine/controller/building/BuildingControllerConfig.java
-- controller/src/main/java/com/jusoft/bookingengine/controller/building/BuildingControllerRest.java
-- controller/src/main/java/com/jusoft/bookingengine/controller/building/BuildingResourceFactory.java
-- controller/src/main/java/com/jusoft/bookingengine/controller/building/api/BuildingResource.java
-- controller/src/main/java/com/jusoft/bookingengine/controller/building/api/CreateBuildingRequest.java
-- controller/src/test/java/com/jusoft/bookingengine/controller/building/BuildingControllerRestTest.java
-- controller/src/test/java/com/jusoft/bookingengine/fixtures/BuildingFixtures.java
-
----
-
-### Latest Commit: feat(building): expose building creation through a REST controller
-**Date:** Jul 10, 2026
-**Commit:** d2752b6
-
-**Changed files:**
-- controller/src/main/java/com/jusoft/bookingengine/controller/ControllerConfig.java
-- controller/src/main/java/com/jusoft/bookingengine/controller/GlobalExceptionHandler.java
-- controller/src/main/java/com/jusoft/bookingengine/controller/building/BuildingCommandFactory.java
-- controller/src/main/java/com/jusoft/bookingengine/controller/building/BuildingControllerConfig.java
-- controller/src/main/java/com/jusoft/bookingengine/controller/building/BuildingControllerRest.java
-- controller/src/main/java/com/jusoft/bookingengine/controller/building/BuildingResourceFactory.java
-- controller/src/main/java/com/jusoft/bookingengine/controller/building/api/BuildingResource.java
-- controller/src/main/java/com/jusoft/bookingengine/controller/building/api/CreateBuildingRequest.java
-- controller/src/test/java/com/jusoft/bookingengine/controller/building/BuildingControllerRestTest.java
-- controller/src/test/java/com/jusoft/bookingengine/fixtures/BuildingFixtures.java
-
----
-
-### Latest Commit: feat(building): expose building creation through a REST controller
-**Date:** Jul 10, 2026
-**Commit:** 4fd1335
+**Commit:** 2b0b4d4
 
 **Changed files:**
 - controller/src/main/java/com/jusoft/bookingengine/controller/ControllerConfig.java
