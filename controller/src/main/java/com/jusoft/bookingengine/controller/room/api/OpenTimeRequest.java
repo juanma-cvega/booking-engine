@@ -1,3 +1,5 @@
 package com.jusoft.bookingengine.controller.room.api;
 
-public record OpenTimeRequest(String startTime, String endTime) {}
+import jakarta.validation.constraints.NotBlank;
+
+public record OpenTimeRequest(@NotBlank String startTime, @NotBlank String endTime) {}

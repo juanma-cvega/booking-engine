@@ -22,8 +22,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.jusoft.bookingengine.component.building.api.BuildingNotFoundException;
 import com.jusoft.bookingengine.controller.GlobalExceptionHandler;
 import com.jusoft.bookingengine.controller.room.api.CreateRoomRequest;
+import com.jusoft.bookingengine.controller.room.api.OpenTimeRequest;
 import com.jusoft.bookingengine.usecase.room.CreateRoomUseCase;
 import java.time.DayOfWeek;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -109,6 +111,44 @@ class RoomControllerRestTest {
                         post(ROOMS_URL)
                                 .contentType(APPLICATION_JSON)
                                 .content(OBJECT_MAPPER.writeValueAsString(requestWithoutMaxSlots)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void createRoomWithNullOpenTimeStartFails() throws Exception {
+        CreateRoomRequest requestWithNullOpenTimeStart =
+                new CreateRoomRequest(
+                        BUILDING_ID,
+                        SLOT_DURATION_IN_MINUTES,
+                        MAX_SLOTS,
+                        List.of(new OpenTimeRequest(null, "12:00")),
+                        AVAILABLE_DAYS);
+
+        mockMvc.perform(
+                        post(ROOMS_URL)
+                                .contentType(APPLICATION_JSON)
+                                .content(
+                                        OBJECT_MAPPER.writeValueAsString(
+                                                requestWithNullOpenTimeStart)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void createRoomWithMalformedOpenTimeFails() throws Exception {
+        CreateRoomRequest requestWithMalformedOpenTime =
+                new CreateRoomRequest(
+                        BUILDING_ID,
+                        SLOT_DURATION_IN_MINUTES,
+                        MAX_SLOTS,
+                        List.of(new OpenTimeRequest("25:00", "26:00")),
+                        AVAILABLE_DAYS);
+
+        mockMvc.perform(
+                        post(ROOMS_URL)
+                                .contentType(APPLICATION_JSON)
+                                .content(
+                                        OBJECT_MAPPER.writeValueAsString(
+                                                requestWithMalformedOpenTime)))
                 .andExpect(status().isBadRequest());
     }
 
