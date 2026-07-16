@@ -2,7 +2,6 @@ package com.jusoft.bookingengine.controller.building;
 
 import static com.jusoft.bookingengine.fixtures.BuildingFixtures.BUILDING_DESCRIPTION;
 import static com.jusoft.bookingengine.fixtures.BuildingFixtures.BUILDING_ID;
-import static com.jusoft.bookingengine.fixtures.BuildingFixtures.BUILDING_RESOURCE;
 import static com.jusoft.bookingengine.fixtures.BuildingFixtures.BUILDING_VIEW;
 import static com.jusoft.bookingengine.fixtures.BuildingFixtures.CITY;
 import static com.jusoft.bookingengine.fixtures.BuildingFixtures.CREATE_BUILDING_COMMAND;
@@ -25,7 +24,6 @@ import com.jusoft.bookingengine.usecase.building.CreateBuildingUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -38,16 +36,15 @@ class BuildingControllerRestTest {
 
     @Mock private CreateBuildingUseCase mockCreateBuildingUseCase;
 
-    @Mock private BuildingCommandFactory mockBuildingCommandFactory;
-
-    @Mock private BuildingResourceFactory mockBuildingResourceFactory;
-
-    @InjectMocks private BuildingControllerRest buildingControllerRest;
-
     private MockMvc mockMvc;
 
     @BeforeEach
     void setup() {
+        BuildingControllerRest buildingControllerRest =
+                new BuildingControllerRest(
+                        mockCreateBuildingUseCase,
+                        new BuildingCommandFactory(),
+                        new BuildingResourceFactory());
         mockMvc =
                 MockMvcBuilders.standaloneSetup(buildingControllerRest)
                         .setControllerAdvice(new GlobalExceptionHandler())
@@ -56,11 +53,8 @@ class BuildingControllerRestTest {
 
     @Test
     void createBuilding() throws Exception {
-        when(mockBuildingCommandFactory.createFrom(CREATE_BUILDING_REQUEST))
-                .thenReturn(CREATE_BUILDING_COMMAND);
         when(mockCreateBuildingUseCase.createBuildingFrom(CREATE_BUILDING_COMMAND))
                 .thenReturn(BUILDING_VIEW);
-        when(mockBuildingResourceFactory.createFrom(BUILDING_VIEW)).thenReturn(BUILDING_RESOURCE);
 
         mockMvc.perform(
                         post(BUILDINGS_URL)
@@ -93,8 +87,6 @@ class BuildingControllerRestTest {
 
     @Test
     void createBuildingForUnknownClubFails() throws Exception {
-        when(mockBuildingCommandFactory.createFrom(CREATE_BUILDING_REQUEST))
-                .thenReturn(CREATE_BUILDING_COMMAND);
         when(mockCreateBuildingUseCase.createBuildingFrom(CREATE_BUILDING_COMMAND))
                 .thenThrow(new ClubNotFoundException(CLUB_ID));
 
