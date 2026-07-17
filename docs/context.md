@@ -5,6 +5,17 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: chore(agents): scope review subagents to what tooling cannot cover
+**Date:** Jul 17, 2026
+**Commit:** 53d48a1
+
+**Changed files:**
+- .claude/agents/architecture-reviewer.md
+- .claude/agents/security-reviewer.md
+- .claude/agents/semantics-reviewer.md
+
+---
+
 ### Latest Commit: fix(ci): derive Sonar analysis classpath from the Maven reactor
 **Date:** Jul 17, 2026
 **Commit:** 6c23b8f
