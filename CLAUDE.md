@@ -139,13 +139,17 @@ New repository methods follow the signature:
 ### Domain entities
 - Constructors are package-private: `@AllArgsConstructor(access = AccessLevel.PACKAGE)`.
 - Use static factory methods (`of(...)`) as the only creation point.
-- **`@Data` is prohibited on domain entities** — it generates public setters.
-  Use `@Getter` explicitly, or no Lombok at all for mutation-sensitive fields.
+- **`@Data` is allowed on domain entities.** It generates setters only for non-final fields, and
+  every non-static domain field is `final` — enforced by `domain_state_is_final` in the ArchUnit
+  suite. Keeping fields final is what makes `@Data` safe here; that invariant is the rule, not the
+  annotation.
+- **Domain entities are never records.** They carry behaviour, not just state. Records are for DTOs.
 - State transitions return new instances; entities are effectively immutable after
   construction.
 
 ### DTOs (commands, views, events)
-- Must be Java **records**.
+- Must be Java **records** — this is the counterpart to the rule above: records for DTOs, classes
+  for domain entities.
 - Sealed interfaces + records for state hierarchies (see `SlotState` as reference).
 
 ### Events (ADR-007)
@@ -156,7 +160,13 @@ New repository methods follow the signature:
 
 ### In-memory repositories (ADR-004)
 - Every `find` method returns a **defensive copy**.
-- All mutations are wrapped in `LockingTemplate`.
+- **Compound operations must be atomic; single map operations already are.** Every store is a
+  `ConcurrentHashMap`, so an individual `get`/`put`/`remove` needs no lock — `RoomRepositoryInMemory`
+  is correct with no lock at all. An operation that *reads then writes* (check-then-act,
+  read-modify-write) is not atomic on its own and must be guarded, either with `LockingTemplate`
+  (see `SlotRepositoryInMemory`) or by an atomic map operation such as `putIfAbsent` /
+  `computeIfPresent` (see `ClassManagerComponentRepositoryInMemory.execute`). Both forms are
+  acceptable; reaching for a lock around a single `put` is not required.
 
 ---
 

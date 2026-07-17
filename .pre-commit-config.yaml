@@ -1,4 +1,12 @@
 repos:
+  # First, and before the slow hooks: this is the last point at which a secret can be kept out of
+  # git entirely. Sonar also detects secrets, but only after the push — by then the credential is on
+  # the remote and the remedy is rotation, not prevention.
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.30.1
+    hooks:
+      - id: gitleaks
+
   - repo: local
     hooks:
       - id: spotless-check

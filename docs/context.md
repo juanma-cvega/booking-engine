@@ -5,6 +5,31 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: ci: gate the Claude PR review on the build and block secrets pre-commit
+**Date:** Jul 17, 2026
+**Commit:** d46e381
+
+**Changed files:**
+- .github/workflows/ci.yml
+- .github/workflows/claude.yml
+- .pre-commit-config.yaml
+- CLAUDE.md
+- docs/context.md
+
+---
+
+### Latest Commit: ci: gate the Claude PR review on the build and block secrets pre-commit
+**Date:** Jul 17, 2026
+**Commit:** 9abc43f
+
+**Changed files:**
+- .github/workflows/ci.yml
+- .github/workflows/claude.yml
+- .pre-commit-config.yaml
+- CLAUDE.md
+
+---
+
 ### Latest Commit: chore(agents): scope review subagents to what tooling cannot cover
 **Date:** Jul 17, 2026
 **Commit:** 53d48a1

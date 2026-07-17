@@ -229,5 +229,59 @@ jobs:
       - name: Run dependency check
         run: mvn dependency:tree
 
+  # Automatic Claude review of a PR's changes. Gated on build-and-test: a red build skips the
+  # review entirely rather than spending a model call on a diff that does not compile. Skips forks
+  # and Dependabot, which do not receive the secret on `pull_request` (and Dependabot PRs are
+  # already reviewed by the auto-merge workflow). Only the latest push per PR is reviewed: a newer
+  # push cancels the in-flight review of the now-stale diff.
+  claude-review:
+    name: Review PR changes
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    if: >
+      github.event_name == 'pull_request' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.actor != 'dependabot[bot]'
+    concurrency:
+      group: claude-review-${{ github.event.pull_request.number }}
+      cancel-in-progress: true
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+      id-token: write
+
+    steps:
+      # `audit`, not `block` like the jobs above: the Claude action's egress set (API plus
+      # telemetry) is not fixed, and a missing endpoint fails as an opaque hang. This preserves the
+      # policy the job had in claude.yml.
+      - name: Harden the runner
+        uses: step-security/harden-runner@bf7454d06d71f1098171f2acdf0cd4708d7b5920 # v2
+        with:
+          egress-policy: audit
+          disable-sudo: true
+
+      - name: Checkout code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 0
+
+      # track_progress makes the action post/update a PR comment on pull_request events;
+      # without it the agent has no comment tool and the review completes invisibly.
+      - name: Review the pull request
+        uses: anthropics/claude-code-action@12531344451323133b0493233c759991ac61da12 # v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          track_progress: true
+          claude_args: "--model claude-sonnet-5"
+          prompt: |
+            Review the pull request diff. Focus on correctness bugs, security issues, and
+            compliance with the Architecture Decision Records in docs/design-decisions.md.
+            Leave inline review comments on specific lines where warranted, and a short summary.
+            If you have reviewed this PR before (look for previous claude[bot] comments), check
+            whether each earlier finding was addressed by the new commits and say so explicitly,
+            reviewing only the changed code in depth rather than restating the whole diff.
+            Do not approve or merge; this review is advisory.
+
       - name: Check for vulnerable dependencies
         run: mvn versions:display-dependency-updates
