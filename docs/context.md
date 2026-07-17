@@ -5,6 +5,35 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: fix(ci): derive Sonar analysis classpath from the Maven reactor
+**Date:** Jul 17, 2026
+**Commit:** 6c23b8f
+
+**Changed files:**
+- .github/workflows/ci.yml
+- docs/CI-CD-SETUP.md
+- docs/context.md
+- mise.toml
+- pom.xml
+- sonar-project.properties
+- test/src/main/java/empty
+
+---
+
+### Latest Commit: fix(ci): derive Sonar analysis classpath from the Maven reactor
+**Date:** Jul 17, 2026
+**Commit:** 631ac3a
+
+**Changed files:**
+- .github/workflows/ci.yml
+- docs/CI-CD-SETUP.md
+- mise.toml
+- pom.xml
+- sonar-project.properties
+- test/src/main/java/empty
+
+---
+
 ### Latest Commit: ci: let the automatic PR review actually post its comment
 **Date:** Jul 16, 2026
 **Commit:** b4bf9c6
