@@ -5,6 +5,15 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: fix(ci): harden the Dependabot auto-merge workflow against SonarCloud findings
+**Date:** Jul 18, 2026
+**Commit:** 0e0aa68
+
+**Changed files:**
+- .github/workflows/dependabot-auto-merge.yml
+
+---
+
 ### Latest Commit: ci: lint GitHub Actions workflows with actionlint
 **Date:** Jul 18, 2026
 **Commit:** 37649dc
