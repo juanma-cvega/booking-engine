@@ -5,6 +5,15 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: fix: harden-runner requires to whitelist the url for the action lint binary
+**Date:** Jul 18, 2026
+**Commit:** 3095e79
+
+**Changed files:**
+- .github/workflows/ci.yml
+
+---
+
 ### Latest Commit: fix(ci): import only each module's own JaCoCo report in Sonar analysis
 **Date:** Jul 18, 2026
 **Commit:** 81ae387
