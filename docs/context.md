@@ -5,6 +5,53 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: fix(ci): enforce HTTPS on tool downloads (Sonar S6506)
+**Date:** Jul 18, 2026
+**Commit:** 5473de6
+
+**Changed files:**
+- .github/workflows/ci.yml
+- .github/workflows/dependabot-auto-merge.yml
+
+---
+
+### Latest Commit: fix: harden-runner requires to whitelist the url for the action lint binary
+**Date:** Jul 18, 2026
+**Commit:** 3095e79
+
+**Changed files:**
+- .github/workflows/ci.yml
+
+---
+
+### Latest Commit: fix(ci): import only each module's own JaCoCo report in Sonar analysis
+**Date:** Jul 18, 2026
+**Commit:** 81ae387
+
+**Changed files:**
+- pom.xml
+
+---
+
+### Latest Commit: fix(ci): harden the Dependabot auto-merge workflow against SonarCloud findings
+**Date:** Jul 18, 2026
+**Commit:** 0e0aa68
+
+**Changed files:**
+- .github/workflows/dependabot-auto-merge.yml
+
+---
+
+### Latest Commit: ci: lint GitHub Actions workflows with actionlint
+**Date:** Jul 18, 2026
+**Commit:** 37649dc
+
+**Changed files:**
+- .github/workflows/ci.yml
+- .pre-commit-config.yaml
+
+---
+
 ### Latest Commit: ci: gate the Claude PR review on the build and block secrets pre-commit
 **Date:** Jul 17, 2026
 **Commit:** d46e381

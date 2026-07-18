@@ -11,9 +11,10 @@ on:
     types:
       - completed
 
+# Least privilege: the workflow token is read-only at this scope; each job below widens only
+# what it needs. The merge job does its write through a separate GitHub App token, not this one.
 permissions:
-  contents: write
-  pull-requests: write
+  contents: read
 
 # Serialize entire runs: while one PR is being analysed and merged, others wait. Once the
 # winner merges, the losers are behind master and the guard below skips them until Dependabot
@@ -27,11 +28,16 @@ jobs:
   guard:
     name: Verify CI passed on a Dependabot PR
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    # Cheap pre-filters only: run on a successful CI completion for a same-repo dependabot/*
+    # branch. The trust decision — that the PR is genuinely authored by Dependabot — is NOT made
+    # here: actor/triggering_actor identify who triggered the run, not who authored the PR, and
+    # are forgeable. Authorship is verified against the API in the step below.
     if: >
       github.event.workflow_run.event == 'pull_request' &&
       github.event.workflow_run.conclusion == 'success' &&
-      github.event.workflow_run.actor.login == 'dependabot[bot]' &&
-      github.event.workflow_run.triggering_actor.login == 'dependabot[bot]' &&
       github.event.workflow_run.head_repository.full_name == github.repository &&
       startsWith(github.event.workflow_run.head_branch, 'dependabot/')
     outputs:
@@ -52,8 +58,9 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
         run: |
-          # Defence in depth: the job's if-condition already checks the actor; re-confirm the
-          # author against the API here.
+          # Authorship gate: resolve an OPEN PR on this branch whose author is the Dependabot
+          # app, read from the API rather than the (forgeable) event actor. If none matches,
+          # nothing downstream runs.
           pr=$(gh pr list \
             --repo "${{ github.repository }}" \
             --head "$HEAD_BRANCH" \
@@ -86,6 +93,9 @@ jobs:
     name: Analyse PR with Claude Code
     runs-on: ubuntu-latest
     needs: guard
+    permissions:
+      contents: read
+      pull-requests: write
     if: needs.guard.outputs.pr_number != ''
     outputs:
       verdict: ${{ steps.review.outputs.verdict }}
@@ -99,37 +109,50 @@ jobs:
           allowed-endpoints: >
             github.com:443
             api.github.com:443
-            registry.npmjs.org:443
+            downloads.claude.ai:443
             api.anthropic.com:443
 
-      - name: Determine PR head SHA
-        id: meta
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          sha=$(gh pr view "${{ needs.guard.outputs.pr_number }}" \
-            --repo "${{ github.repository }}" \
-            --json headRefOid --jq '.headRefOid')
-          echo "sha=$sha" >> "$GITHUB_OUTPUT"
-
-      - name: Checkout PR head
+      # Deliberately check out the DEFAULT BRANCH, not the PR head. This job runs in the
+      # privileged workflow_run context (secrets + write token), so checking out the PR's code
+      # and letting a tool act on it would let a malicious change run with the repo's privileges.
+      # The analysis only needs (a) how the project currently uses the dependency — which is
+      # master, since a Dependabot PR bumps a version and does not touch src — and (b) the change
+      # itself, which is fetched below as an API-delivered diff, not executed.
+      - name: Checkout the default branch
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
-          ref: ${{ steps.meta.outputs.sha }}
-          fetch-depth: 0
-
-      - name: Set up Node.js
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-        with:
-          node-version: '22'
+          ref: ${{ github.event.repository.default_branch }}
 
       - name: Install Claude Code CLI
-        # Pin the exact version so the postinstall that runs (node install.cjs, which the
-        # package requires to fetch its binary) is a known, auditable release rather than
-        # whatever "latest" resolves to. Dependabot updates this pin like any dependency.
-        # This step deliberately has no secrets in scope, so an install-time compromise
-        # cannot read a token; the CLI is only invoked with the token in the next step.
-        run: npm install -g @anthropic-ai/claude-code@2.1.207
+        # Download the pinned native binary from the signed release bucket and verify it before
+        # use: GPG-verify the manifest (transitively signing every checksum), then check the
+        # binary's SHA256 against it. No npm, so no package lifecycle scripts run — an immutable,
+        # verified artifact rather than an opaque install script. The pin is a static version;
+        # bumping it is a one-line change. This step has no secrets in scope regardless.
+        env:
+          CLAUDE_VERSION: "2.1.207"
+          # Anthropic Claude Code release signing key fingerprint; the manifest signature must
+          # trace back to it. Public value, not a secret.
+          CLAUDE_SIGNING_KEY: "31DDDE24DDFAB679F42D7BD2BAA929FF1A7ECACE" # gitleaks:allow
+        run: |
+          set -euo pipefail
+          base="https://downloads.claude.ai/claude-code-releases/${CLAUDE_VERSION}"
+          # -L follows redirects; --proto '=https' --tlsv1.2 refuses to follow one down to HTTP.
+          dl() { curl --proto '=https' --tlsv1.2 -fsSL "$@"; }
+
+          dl https://downloads.claude.ai/keys/claude-code.asc | gpg --import
+          gpg --fingerprint security@anthropic.com | tr -d ' ' | grep -q "$CLAUDE_SIGNING_KEY"
+
+          dl -O "$base/manifest.json"
+          dl -O "$base/manifest.json.sig"
+          gpg --verify manifest.json.sig manifest.json
+
+          expected=$(jq -r '.platforms["linux-x64"].checksum' manifest.json)
+          dl -o claude "$base/linux-x64/claude"
+          echo "${expected}  claude" | sha256sum -c -
+
+          install -m 0755 claude "$HOME/.local/bin/claude"
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
 
       - name: Analyse the dependency update
         id: review
@@ -256,6 +279,8 @@ jobs:
     name: Merge PR
     runs-on: ubuntu-latest
     needs: [guard, analyse]
+    permissions:
+      contents: read
     if: >
       needs.analyse.outputs.verdict == 'PASS' &&
       needs.analyse.outputs.touches_workflows == 'false'
