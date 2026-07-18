@@ -7,6 +7,13 @@ repos:
     hooks:
       - id: gitleaks
 
+  # Lint GitHub Actions workflows: catches invalid `if:` expressions, bad `uses:` refs, shellcheck
+  # findings in `run:` blocks, and context-typo errors that only surface at runtime otherwise.
+  - repo: https://github.com/rhysd/actionlint
+    rev: v1.7.12
+    hooks:
+      - id: actionlint
+
   - repo: local
     hooks:
       - id: spotless-check

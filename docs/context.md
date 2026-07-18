@@ -5,6 +5,16 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: ci: lint GitHub Actions workflows with actionlint
+**Date:** Jul 18, 2026
+**Commit:** 37649dc
+
+**Changed files:**
+- .github/workflows/ci.yml
+- .pre-commit-config.yaml
+
+---
+
 ### Latest Commit: ci: gate the Claude PR review on the build and block secrets pre-commit
 **Date:** Jul 17, 2026
 **Commit:** d46e381

@@ -14,9 +14,46 @@ env:
   MAVEN_OPTS: -Xmx2048m
 
 jobs:
+  # Runs first and gates the expensive jobs: a malformed workflow (bad if:, broken context ref,
+  # shellcheck finding in a run block) is caught in seconds, before the Java build spins up.
+  workflow-lint:
+    name: Lint GitHub Actions workflows
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Harden the runner
+        uses: step-security/harden-runner@bf7454d06d71f1098171f2acdf0cd4708d7b5920 # v2
+        with:
+          egress-policy: block
+          disable-sudo: true
+          allowed-endpoints: >
+            github.com:443
+            api.github.com:443
+            objects.githubusercontent.com:443
+
+      - name: Checkout code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Run actionlint
+        # Download the pinned release binary and verify its checksum before running — same
+        # verified-artifact approach as the Claude CLI install, no build step or piped installer.
+        env:
+          ACTIONLINT_VERSION: "1.7.12"
+          ACTIONLINT_SHA256: "8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8"
+        run: |
+          set -euo pipefail
+          tarball="actionlint_${ACTIONLINT_VERSION}_linux_amd64.tar.gz"
+          curl -fsSLO "https://github.com/rhysd/actionlint/releases/download/v${ACTIONLINT_VERSION}/${tarball}"
+          echo "${ACTIONLINT_SHA256}  ${tarball}" | sha256sum -c -
+          tar -xzf "$tarball" actionlint
+          ./actionlint -color
+
   build-and-test:
     name: Build and Test
     runs-on: ubuntu-latest
+    needs: workflow-lint
     permissions:
       contents: read
       checks: write
@@ -184,6 +221,7 @@ jobs:
   dependency-check:
     name: Dependency Security Check
     runs-on: ubuntu-latest
+    needs: workflow-lint
 
     steps:
       - name: Harden the runner
