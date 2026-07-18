@@ -58,9 +58,12 @@
     <sonar.projectKey>booking-engine</sonar.projectKey>
     <sonar.organization>juanma-cvega</sonar.organization>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-    <!-- Absolute, not a glob: only impl and controller produce coverage; the test module holds the
-         Cucumber suite and emits no report of its own. -->
-    <sonar.coverage.jacoco.xmlReportPaths>${maven.multiModuleProjectDirectory}/impl/target/site/jacoco/jacoco.xml,${maven.multiModuleProjectDirectory}/controller/target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+    <!-- Relative, so each module imports only its OWN report (resolved against that module's
+         basedir). An absolute cross-module list is inherited by every module and makes each one
+         import every report, then warn that the other modules' classes are "not found in project
+         sources". impl and controller resolve their reports here; test/root have none and are
+         simply skipped. -->
+    <sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
     <sonar.exclusions>**/*Config.java,**/api/**/*,**/test/**/*,**/*Test.java,**/*Tests.java</sonar.exclusions>
     <sonar.coverage.exclusions>**/*Config.java,**/api/**/*,**/test/**/*,**/*Test.java,**/*Tests.java</sonar.coverage.exclusions>
     <sonar.cpd.exclusions>**/api/**/*</sonar.cpd.exclusions>
