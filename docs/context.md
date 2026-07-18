@@ -5,6 +5,16 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: fix(ci): enforce HTTPS on tool downloads (Sonar S6506)
+**Date:** Jul 18, 2026
+**Commit:** 5473de6
+
+**Changed files:**
+- .github/workflows/ci.yml
+- .github/workflows/dependabot-auto-merge.yml
+
+---
+
 ### Latest Commit: fix: harden-runner requires to whitelist the url for the action lint binary
 **Date:** Jul 18, 2026
 **Commit:** 3095e79

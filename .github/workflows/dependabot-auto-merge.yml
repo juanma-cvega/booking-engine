@@ -137,16 +137,18 @@ jobs:
         run: |
           set -euo pipefail
           base="https://downloads.claude.ai/claude-code-releases/${CLAUDE_VERSION}"
+          # -L follows redirects; --proto '=https' --tlsv1.2 refuses to follow one down to HTTP.
+          dl() { curl --proto '=https' --tlsv1.2 -fsSL "$@"; }
 
-          curl -fsSL https://downloads.claude.ai/keys/claude-code.asc | gpg --import
+          dl https://downloads.claude.ai/keys/claude-code.asc | gpg --import
           gpg --fingerprint security@anthropic.com | tr -d ' ' | grep -q "$CLAUDE_SIGNING_KEY"
 
-          curl -fsSLO "$base/manifest.json"
-          curl -fsSLO "$base/manifest.json.sig"
+          dl -O "$base/manifest.json"
+          dl -O "$base/manifest.json.sig"
           gpg --verify manifest.json.sig manifest.json
 
           expected=$(jq -r '.platforms["linux-x64"].checksum' manifest.json)
-          curl -fsSL -o claude "$base/linux-x64/claude"
+          dl -o claude "$base/linux-x64/claude"
           echo "${expected}  claude" | sha256sum -c -
 
           install -m 0755 claude "$HOME/.local/bin/claude"
