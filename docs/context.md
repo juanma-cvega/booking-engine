@@ -5,6 +5,15 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: fix(ci): drop explicit checkout ref to clear Sonar S7631 on master
+**Date:** Jul 19, 2026
+**Commit:** d9d213d
+
+**Changed files:**
+- .github/workflows/dependabot-auto-merge.yml
+
+---
+
 ### Latest Commit: fix(logging): use a logback encoder instead of a deprecated layout
 **Date:** Jul 19, 2026
 **Commit:** daa6dc9
