@@ -5,6 +5,16 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: fix(logging): use a logback encoder instead of a deprecated layout
+**Date:** Jul 19, 2026
+**Commit:** daa6dc9
+
+**Changed files:**
+- impl/src/main/resources/logback.xml
+- test/src/test/resources/logback-test.xml
+
+---
+
 ### Latest Commit: fix(ci): enforce HTTPS on tool downloads (Sonar S6506)
 **Date:** Jul 18, 2026
 **Commit:** 5473de6
