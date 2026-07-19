@@ -5,6 +5,15 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: ci: fail the build when the SonarCloud quality gate is red
+**Date:** Jul 19, 2026
+**Commit:** 4f2e3fb
+
+**Changed files:**
+- .github/workflows/ci.yml
+
+---
+
 ### Latest Commit: fix(ci): drop explicit checkout ref to clear Sonar S7631 on master
 **Date:** Jul 19, 2026
 **Commit:** d9d213d
