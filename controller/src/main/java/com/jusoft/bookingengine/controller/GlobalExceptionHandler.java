@@ -2,8 +2,10 @@ package com.jusoft.bookingengine.controller;
 
 import com.jusoft.bookingengine.component.booking.api.BookingNotFoundException;
 import com.jusoft.bookingengine.component.booking.api.WrongBookingUserException;
+import com.jusoft.bookingengine.component.building.api.BuildingNotFoundException;
 import com.jusoft.bookingengine.component.slot.api.SlotAlreadyReservedException;
 import com.jusoft.bookingengine.component.slot.api.SlotNotOpenException;
+import java.time.format.DateTimeParseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -15,6 +17,16 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BookingNotFoundException.class)
     public ProblemDetail handleBookingNotFoundException(BookingNotFoundException ex) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    @ExceptionHandler(BuildingNotFoundException.class)
+    public ProblemDetail handleBuildingNotFoundException(BuildingNotFoundException ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    @ExceptionHandler(DateTimeParseException.class)
+    public ProblemDetail handleDateTimeParseException(DateTimeParseException ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
     @ExceptionHandler(SlotAlreadyReservedException.class)

@@ -142,6 +142,51 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 **Changed files:**
 - .github/workflows/claude.yml
+### Latest Commit: fix(room): reject invalid nested open times with 400
+**Date:** Jul 16, 2026
+**Commit:** efefd90
+
+**Changed files:**
+- controller/src/main/java/com/jusoft/bookingengine/controller/GlobalExceptionHandler.java
+- controller/src/main/java/com/jusoft/bookingengine/controller/room/api/CreateRoomRequest.java
+- controller/src/main/java/com/jusoft/bookingengine/controller/room/api/OpenTimeRequest.java
+- controller/src/test/java/com/jusoft/bookingengine/controller/room/RoomControllerRestTest.java
+
+---
+
+### Latest Commit: feat(room): expose room creation through a REST controller
+**Date:** Jul 16, 2026
+**Commit:** 93a110f
+
+**Changed files:**
+- controller/src/main/java/com/jusoft/bookingengine/controller/ControllerConfig.java
+- controller/src/main/java/com/jusoft/bookingengine/controller/GlobalExceptionHandler.java
+- controller/src/main/java/com/jusoft/bookingengine/controller/room/RoomCommandFactory.java
+- controller/src/main/java/com/jusoft/bookingengine/controller/room/RoomControllerConfig.java
+- controller/src/main/java/com/jusoft/bookingengine/controller/room/RoomControllerRest.java
+- controller/src/main/java/com/jusoft/bookingengine/controller/room/RoomResourceFactory.java
+- controller/src/main/java/com/jusoft/bookingengine/controller/room/api/CreateRoomRequest.java
+- controller/src/main/java/com/jusoft/bookingengine/controller/room/api/OpenTimeRequest.java
+- controller/src/main/java/com/jusoft/bookingengine/controller/room/api/OpenTimeResource.java
+- controller/src/main/java/com/jusoft/bookingengine/controller/room/api/RoomResource.java
+
+---
+
+### Latest Commit: feat(room): expose room creation through a REST controller
+**Date:** Jul 16, 2026
+**Commit:** 1b4d90f
+
+**Changed files:**
+- controller/src/main/java/com/jusoft/bookingengine/controller/ControllerConfig.java
+- controller/src/main/java/com/jusoft/bookingengine/controller/GlobalExceptionHandler.java
+- controller/src/main/java/com/jusoft/bookingengine/controller/room/RoomCommandFactory.java
+- controller/src/main/java/com/jusoft/bookingengine/controller/room/RoomControllerConfig.java
+- controller/src/main/java/com/jusoft/bookingengine/controller/room/RoomControllerRest.java
+- controller/src/main/java/com/jusoft/bookingengine/controller/room/RoomResourceFactory.java
+- controller/src/main/java/com/jusoft/bookingengine/controller/room/api/CreateRoomRequest.java
+- controller/src/main/java/com/jusoft/bookingengine/controller/room/api/OpenTimeRequest.java
+- controller/src/main/java/com/jusoft/bookingengine/controller/room/api/OpenTimeResource.java
+- controller/src/main/java/com/jusoft/bookingengine/controller/room/api/RoomResource.java
 
 ---
 
