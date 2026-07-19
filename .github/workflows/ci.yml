@@ -159,7 +159,9 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: mvn sonar:sonar
+        # qualitygate.wait polls SonarCloud after submitting and fails the step if the gate is red,
+        # so a regression breaks the build instead of only showing on the PR decoration.
+        run: mvn sonar:sonar -Dsonar.qualitygate.wait=true
 
   code-quality:
     name: Code Quality Checks
