@@ -2,6 +2,7 @@ package com.jusoft.bookingengine.controller;
 
 import com.jusoft.bookingengine.component.booking.api.BookingNotFoundException;
 import com.jusoft.bookingengine.component.booking.api.WrongBookingUserException;
+import com.jusoft.bookingengine.component.club.api.ClubNotFoundException;
 import com.jusoft.bookingengine.component.slot.api.SlotAlreadyReservedException;
 import com.jusoft.bookingengine.component.slot.api.SlotNotOpenException;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BookingNotFoundException.class)
     public ProblemDetail handleBookingNotFoundException(BookingNotFoundException ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    @ExceptionHandler(ClubNotFoundException.class)
+    public ProblemDetail handleClubNotFoundException(ClubNotFoundException ex) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
