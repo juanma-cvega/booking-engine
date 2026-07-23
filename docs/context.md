@@ -5,6 +5,15 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: fix(ci): create the bin directory before installing the Claude CLI
+**Date:** Jul 23, 2026
+**Commit:** 3485488
+
+**Changed files:**
+- .github/workflows/dependabot-auto-merge.yml
+
+---
+
 ### Latest Commit: ci: fail the build when the SonarCloud quality gate is red
 **Date:** Jul 19, 2026
 **Commit:** 4f2e3fb

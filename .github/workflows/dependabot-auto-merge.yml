@@ -145,6 +145,8 @@ jobs:
           dl -o claude "$base/linux-x64/claude"
           echo "${expected}  claude" | sha256sum -c -
 
+          # The directory does not exist on a clean runner image and install will not create it.
+          mkdir -p "$HOME/.local/bin"
           install -m 0755 claude "$HOME/.local/bin/claude"
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
 
