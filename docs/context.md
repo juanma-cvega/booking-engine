@@ -5,6 +5,15 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: chore(agents): make security-reviewer principle-driven, not checklist-driven
+**Date:** Jul 24, 2026
+**Commit:** 5db02fc
+
+**Changed files:**
+- .claude/agents/security-reviewer.md
+
+---
+
 ### Latest Commit: docs: add ADR-011 for Resource records as output-only boundary DTOs
 **Date:** Jul 24, 2026
 **Commit:** 2836240
