@@ -1,6 +1,6 @@
 ---
 name: security-reviewer
-description: Use to review generated code for authorization and access-control flaws — permission/membership checks, ownership, domain input validation, and data exposure through views and events. Read-only.
+description: Use to review generated code for authorization and access-control flaws — unauthenticated actor identity feeding an authorization check, permission/membership checks, ownership, domain input validation, and data exposure through views and events. Read-only.
 tools: Read, Grep, Glob, Bash
 model: sonnet
 ---
