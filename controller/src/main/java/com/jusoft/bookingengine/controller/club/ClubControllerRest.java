@@ -7,10 +7,9 @@ import com.jusoft.bookingengine.controller.club.api.CreateClubRequest;
 import com.jusoft.bookingengine.controller.club.api.CreateJoinRequestRequest;
 import com.jusoft.bookingengine.controller.club.api.JoinRequestResource;
 import com.jusoft.bookingengine.controller.club.api.ReviewJoinRequestRequest;
-import com.jusoft.bookingengine.usecase.club.AcceptJoinRequestUseCase;
 import com.jusoft.bookingengine.usecase.club.CreateClubUseCase;
 import com.jusoft.bookingengine.usecase.club.CreateJoinRequestUseCase;
-import com.jusoft.bookingengine.usecase.club.DenyJoinRequestUseCase;
+import com.jusoft.bookingengine.usecase.club.ReviewJoinRequestUseCase;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -29,22 +28,19 @@ class ClubControllerRest {
 
     private final CreateClubUseCase createClubUseCase;
     private final CreateJoinRequestUseCase createJoinRequestUseCase;
-    private final AcceptJoinRequestUseCase acceptJoinRequestUseCase;
-    private final DenyJoinRequestUseCase denyJoinRequestUseCase;
+    private final ReviewJoinRequestUseCase reviewJoinRequestUseCase;
     private final ClubCommandFactory clubCommandFactory;
     private final ClubResourceFactory clubResourceFactory;
 
     ClubControllerRest(
             CreateClubUseCase createClubUseCase,
             CreateJoinRequestUseCase createJoinRequestUseCase,
-            AcceptJoinRequestUseCase acceptJoinRequestUseCase,
-            DenyJoinRequestUseCase denyJoinRequestUseCase,
+            ReviewJoinRequestUseCase reviewJoinRequestUseCase,
             ClubCommandFactory clubCommandFactory,
             ClubResourceFactory clubResourceFactory) {
         this.createClubUseCase = createClubUseCase;
         this.createJoinRequestUseCase = createJoinRequestUseCase;
-        this.acceptJoinRequestUseCase = acceptJoinRequestUseCase;
-        this.denyJoinRequestUseCase = denyJoinRequestUseCase;
+        this.reviewJoinRequestUseCase = reviewJoinRequestUseCase;
         this.clubCommandFactory = clubCommandFactory;
         this.clubResourceFactory = clubResourceFactory;
     }
@@ -93,16 +89,9 @@ class ClubControllerRest {
                 joinRequestId,
                 request.adminId(),
                 request.decision());
-        switch (request.decision()) {
-            case ACCEPTED ->
-                    acceptJoinRequestUseCase.acceptJoinRequest(
-                            clubCommandFactory.acceptJoinRequestCommandFrom(
-                                    joinRequestId, clubId, request.adminId()));
-            case DENIED ->
-                    denyJoinRequestUseCase.denyJoinRequest(
-                            clubCommandFactory.denyJoinRequestCommandFrom(
-                                    joinRequestId, clubId, request.adminId()));
-        }
+        reviewJoinRequestUseCase.review(
+                clubCommandFactory.reviewJoinRequestCommandFrom(
+                        joinRequestId, clubId, request.adminId(), request.decision()));
         log.info("Review join request finished: joinRequestId={}", joinRequestId);
     }
 }

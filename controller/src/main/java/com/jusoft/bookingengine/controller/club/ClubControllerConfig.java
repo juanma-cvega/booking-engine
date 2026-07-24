@@ -1,9 +1,8 @@
 package com.jusoft.bookingengine.controller.club;
 
-import com.jusoft.bookingengine.usecase.club.AcceptJoinRequestUseCase;
 import com.jusoft.bookingengine.usecase.club.CreateClubUseCase;
 import com.jusoft.bookingengine.usecase.club.CreateJoinRequestUseCase;
-import com.jusoft.bookingengine.usecase.club.DenyJoinRequestUseCase;
+import com.jusoft.bookingengine.usecase.club.ReviewJoinRequestUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,17 +14,14 @@ public class ClubControllerConfig {
 
     @Autowired private CreateJoinRequestUseCase createJoinRequestUseCase;
 
-    @Autowired private AcceptJoinRequestUseCase acceptJoinRequestUseCase;
-
-    @Autowired private DenyJoinRequestUseCase denyJoinRequestUseCase;
+    @Autowired private ReviewJoinRequestUseCase reviewJoinRequestUseCase;
 
     @Bean
     public ClubControllerRest clubControllerRest() {
         return new ClubControllerRest(
                 createClubUseCase,
                 createJoinRequestUseCase,
-                acceptJoinRequestUseCase,
-                denyJoinRequestUseCase,
+                reviewJoinRequestUseCase,
                 clubCommandFactory(),
                 clubResourceFactory());
     }

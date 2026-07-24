@@ -35,10 +35,9 @@ import com.jusoft.bookingengine.controller.club.api.CreateClubRequest;
 import com.jusoft.bookingengine.controller.club.api.CreateJoinRequestRequest;
 import com.jusoft.bookingengine.controller.club.api.Decision;
 import com.jusoft.bookingengine.controller.club.api.ReviewJoinRequestRequest;
-import com.jusoft.bookingengine.usecase.club.AcceptJoinRequestUseCase;
 import com.jusoft.bookingengine.usecase.club.CreateClubUseCase;
 import com.jusoft.bookingengine.usecase.club.CreateJoinRequestUseCase;
-import com.jusoft.bookingengine.usecase.club.DenyJoinRequestUseCase;
+import com.jusoft.bookingengine.usecase.club.ReviewJoinRequestUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -58,9 +57,7 @@ class ClubControllerRestTest {
 
     @Mock private CreateJoinRequestUseCase mockCreateJoinRequestUseCase;
 
-    @Mock private AcceptJoinRequestUseCase mockAcceptJoinRequestUseCase;
-
-    @Mock private DenyJoinRequestUseCase mockDenyJoinRequestUseCase;
+    @Mock private ReviewJoinRequestUseCase mockReviewJoinRequestUseCase;
 
     private MockMvc mockMvc;
 
@@ -70,8 +67,7 @@ class ClubControllerRestTest {
                 new ClubControllerRest(
                         mockCreateClubUseCase,
                         mockCreateJoinRequestUseCase,
-                        mockAcceptJoinRequestUseCase,
-                        mockDenyJoinRequestUseCase,
+                        mockReviewJoinRequestUseCase,
                         new ClubCommandFactory(),
                         new ClubResourceFactory());
         mockMvc =
@@ -174,7 +170,7 @@ class ClubControllerRestTest {
                                                 ACCEPT_JOIN_REQUEST_REQUEST)))
                 .andExpect(status().isNoContent());
 
-        verify(mockAcceptJoinRequestUseCase).acceptJoinRequest(ACCEPT_JOIN_REQUEST_COMMAND);
+        verify(mockReviewJoinRequestUseCase).review(ACCEPT_JOIN_REQUEST_COMMAND);
     }
 
     @Test
@@ -211,8 +207,8 @@ class ClubControllerRestTest {
     @Test
     void acceptJoinRequestByNonAdminIsForbidden() throws Exception {
         doThrow(new ClubAuthorizationException(ADMIN_ID, CLUB_ID))
-                .when(mockAcceptJoinRequestUseCase)
-                .acceptJoinRequest(ACCEPT_JOIN_REQUEST_COMMAND);
+                .when(mockReviewJoinRequestUseCase)
+                .review(ACCEPT_JOIN_REQUEST_COMMAND);
 
         mockMvc.perform(
                         patch(
@@ -230,8 +226,8 @@ class ClubControllerRestTest {
     @Test
     void acceptUnknownJoinRequestIsNotFound() throws Exception {
         doThrow(new JoinRequestNotFoundException(JOIN_REQUEST_ID, CLUB_ID))
-                .when(mockAcceptJoinRequestUseCase)
-                .acceptJoinRequest(ACCEPT_JOIN_REQUEST_COMMAND);
+                .when(mockReviewJoinRequestUseCase)
+                .review(ACCEPT_JOIN_REQUEST_COMMAND);
 
         mockMvc.perform(
                         patch(
@@ -260,14 +256,14 @@ class ClubControllerRestTest {
                                                 DENY_JOIN_REQUEST_REQUEST)))
                 .andExpect(status().isNoContent());
 
-        verify(mockDenyJoinRequestUseCase).denyJoinRequest(DENY_JOIN_REQUEST_COMMAND);
+        verify(mockReviewJoinRequestUseCase).review(DENY_JOIN_REQUEST_COMMAND);
     }
 
     @Test
     void denyJoinRequestByNonAdminIsForbidden() throws Exception {
         doThrow(new ClubAuthorizationException(ADMIN_ID, CLUB_ID))
-                .when(mockDenyJoinRequestUseCase)
-                .denyJoinRequest(DENY_JOIN_REQUEST_COMMAND);
+                .when(mockReviewJoinRequestUseCase)
+                .review(DENY_JOIN_REQUEST_COMMAND);
 
         mockMvc.perform(
                         patch(
@@ -285,8 +281,8 @@ class ClubControllerRestTest {
     @Test
     void denyUnknownJoinRequestIsNotFound() throws Exception {
         doThrow(new JoinRequestNotFoundException(JOIN_REQUEST_ID, CLUB_ID))
-                .when(mockDenyJoinRequestUseCase)
-                .denyJoinRequest(DENY_JOIN_REQUEST_COMMAND);
+                .when(mockReviewJoinRequestUseCase)
+                .review(DENY_JOIN_REQUEST_COMMAND);
 
         mockMvc.perform(
                         patch(

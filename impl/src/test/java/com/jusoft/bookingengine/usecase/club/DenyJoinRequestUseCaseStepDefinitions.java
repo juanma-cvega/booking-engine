@@ -10,9 +10,10 @@ import static org.mockito.Mockito.verifyNoInteractions;
 
 import com.jusoft.bookingengine.component.club.api.ClubAuthorizationException;
 import com.jusoft.bookingengine.component.club.api.ClubManagerComponent;
-import com.jusoft.bookingengine.component.club.api.DenyJoinRequestCommand;
+import com.jusoft.bookingengine.component.club.api.Decision;
 import com.jusoft.bookingengine.component.club.api.JoinRequest;
 import com.jusoft.bookingengine.component.club.api.JoinRequestDeniedEvent;
+import com.jusoft.bookingengine.component.club.api.ReviewJoinRequestCommand;
 import com.jusoft.bookingengine.component.member.api.MemberManagerComponent;
 import com.jusoft.bookingengine.config.AbstractUseCaseStepDefinitions;
 import io.cucumber.java.en.Then;
@@ -25,7 +26,7 @@ public class DenyJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStepDe
 
     @Autowired private ClubManagerComponent clubManagerComponent;
 
-    @Autowired private DenyJoinRequestUseCase denyJoinRequestUseCase;
+    @Autowired private ReviewJoinRequestUseCase reviewJoinRequestUseCase;
 
     @When("^admin (\\d+) denies the join request created by user (\\d+)$")
     public void admin_denies_the_join_request_created_by_user(Long adminId, Long userId) {
@@ -39,8 +40,9 @@ public class DenyJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStepDe
                                                 String.format(
                                                         "Unable to find join request for user %s",
                                                         userId)));
-        denyJoinRequestUseCase.denyJoinRequest(
-                new DenyJoinRequestCommand(joinRequestForUser.id(), clubCreated.id(), adminId));
+        reviewJoinRequestUseCase.review(
+                new ReviewJoinRequestCommand(
+                        joinRequestForUser.id(), clubCreated.id(), adminId, Decision.DENIED));
     }
 
     @When("^user (\\d+) denies the join request created by user (\\d+)$")
@@ -57,18 +59,24 @@ public class DenyJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStepDe
                                                         userId)));
         storeException(
                 () ->
-                        denyJoinRequestUseCase.denyJoinRequest(
-                                new DenyJoinRequestCommand(
-                                        joinRequestForUser.id(), clubCreated.id(), notAdminId)));
+                        reviewJoinRequestUseCase.review(
+                                new ReviewJoinRequestCommand(
+                                        joinRequestForUser.id(),
+                                        clubCreated.id(),
+                                        notAdminId,
+                                        Decision.DENIED)));
     }
 
     @When("^admin (\\d+) denies the non existing join request (\\d+)$")
     public void admin_denies_the_non_existing_join_request(Long adminId, Long joinRequestId) {
         storeException(
                 () ->
-                        denyJoinRequestUseCase.denyJoinRequest(
-                                new DenyJoinRequestCommand(
-                                        joinRequestId, clubCreated.id(), adminId)));
+                        reviewJoinRequestUseCase.review(
+                                new ReviewJoinRequestCommand(
+                                        joinRequestId,
+                                        clubCreated.id(),
+                                        adminId,
+                                        Decision.DENIED)));
     }
 
     @Then("^a notification of a join request denied for user (\\d+) should be published$")

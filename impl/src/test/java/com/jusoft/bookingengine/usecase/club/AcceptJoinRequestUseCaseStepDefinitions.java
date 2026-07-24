@@ -8,12 +8,13 @@ import static com.jusoft.bookingengine.holder.DataHolder.joinRequestsCreated;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verifyNoInteractions;
 
-import com.jusoft.bookingengine.component.club.api.AcceptJoinRequestCommand;
 import com.jusoft.bookingengine.component.club.api.ClubAuthorizationException;
 import com.jusoft.bookingengine.component.club.api.ClubManagerComponent;
+import com.jusoft.bookingengine.component.club.api.Decision;
 import com.jusoft.bookingengine.component.club.api.JoinRequest;
 import com.jusoft.bookingengine.component.club.api.JoinRequestAcceptedEvent;
 import com.jusoft.bookingengine.component.club.api.JoinRequestNotFoundException;
+import com.jusoft.bookingengine.component.club.api.ReviewJoinRequestCommand;
 import com.jusoft.bookingengine.component.member.api.MemberManagerComponent;
 import com.jusoft.bookingengine.config.AbstractUseCaseStepDefinitions;
 import io.cucumber.java.en.Then;
@@ -27,7 +28,7 @@ public class AcceptJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStep
 
     @Autowired private ClubManagerComponent clubManagerComponent;
 
-    @Autowired private AcceptJoinRequestUseCase acceptJoinRequestUseCase;
+    @Autowired private ReviewJoinRequestUseCase reviewJoinRequestUseCase;
 
     @When("^admin (\\d+) accepts the join request created by user (\\d+)$")
     public void admin_accepts_the_join_request_created_by_user(Long adminId, Long userId) {
@@ -39,8 +40,9 @@ public class AcceptJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStep
                                 () ->
                                         new IllegalArgumentException(
                                                 "User does not have a join request created"));
-        acceptJoinRequestUseCase.acceptJoinRequest(
-                new AcceptJoinRequestCommand(joinRequestFromUser.id(), clubCreated.id(), adminId));
+        reviewJoinRequestUseCase.review(
+                new ReviewJoinRequestCommand(
+                        joinRequestFromUser.id(), clubCreated.id(), adminId, Decision.ACCEPTED));
     }
 
     @When("^user (\\d+) accepts the join request created by user (\\d+)$")
@@ -57,18 +59,24 @@ public class AcceptJoinRequestUseCaseStepDefinitions extends AbstractUseCaseStep
                                                         userId)));
         storeException(
                 () ->
-                        acceptJoinRequestUseCase.acceptJoinRequest(
-                                new AcceptJoinRequestCommand(
-                                        joinRequestForUser.id(), clubCreated.id(), notAdminId)));
+                        reviewJoinRequestUseCase.review(
+                                new ReviewJoinRequestCommand(
+                                        joinRequestForUser.id(),
+                                        clubCreated.id(),
+                                        notAdminId,
+                                        Decision.ACCEPTED)));
     }
 
     @When("^admin (\\d+) accepts the non existing join request (.*)$")
     public void admin_accepts_the_non_existing_join_request(Long adminId, Long joinRequestId) {
         storeException(
                 () ->
-                        acceptJoinRequestUseCase.acceptJoinRequest(
-                                new AcceptJoinRequestCommand(
-                                        joinRequestId, clubCreated.id(), adminId)));
+                        reviewJoinRequestUseCase.review(
+                                new ReviewJoinRequestCommand(
+                                        joinRequestId,
+                                        clubCreated.id(),
+                                        adminId,
+                                        Decision.ACCEPTED)));
     }
 
     @Then("^the club should not have the join request for user (\\d+) anymore$")

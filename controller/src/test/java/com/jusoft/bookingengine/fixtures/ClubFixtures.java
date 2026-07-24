@@ -2,12 +2,11 @@ package com.jusoft.bookingengine.fixtures;
 
 import static com.jusoft.bookingengine.fixtures.CommonFixtures.USER_ID_1;
 
-import com.jusoft.bookingengine.component.club.api.AcceptJoinRequestCommand;
 import com.jusoft.bookingengine.component.club.api.ClubView;
 import com.jusoft.bookingengine.component.club.api.CreateClubCommand;
 import com.jusoft.bookingengine.component.club.api.CreateJoinRequestCommand;
-import com.jusoft.bookingengine.component.club.api.DenyJoinRequestCommand;
 import com.jusoft.bookingengine.component.club.api.JoinRequest;
+import com.jusoft.bookingengine.component.club.api.ReviewJoinRequestCommand;
 import com.jusoft.bookingengine.controller.club.api.CreateClubRequest;
 import com.jusoft.bookingengine.controller.club.api.CreateJoinRequestRequest;
 import com.jusoft.bookingengine.controller.club.api.Decision;
@@ -37,10 +36,18 @@ public class ClubFixtures {
     public static final CreateJoinRequestRequest CREATE_JOIN_REQUEST_REQUEST =
             new CreateJoinRequestRequest(USER_ID_1);
 
-    public static final AcceptJoinRequestCommand ACCEPT_JOIN_REQUEST_COMMAND =
-            new AcceptJoinRequestCommand(JOIN_REQUEST_ID, CLUB_ID, ADMIN_ID);
-    public static final DenyJoinRequestCommand DENY_JOIN_REQUEST_COMMAND =
-            new DenyJoinRequestCommand(JOIN_REQUEST_ID, CLUB_ID, ADMIN_ID);
+    public static final ReviewJoinRequestCommand ACCEPT_JOIN_REQUEST_COMMAND =
+            new ReviewJoinRequestCommand(
+                    JOIN_REQUEST_ID,
+                    CLUB_ID,
+                    ADMIN_ID,
+                    com.jusoft.bookingengine.component.club.api.Decision.ACCEPTED);
+    public static final ReviewJoinRequestCommand DENY_JOIN_REQUEST_COMMAND =
+            new ReviewJoinRequestCommand(
+                    JOIN_REQUEST_ID,
+                    CLUB_ID,
+                    ADMIN_ID,
+                    com.jusoft.bookingengine.component.club.api.Decision.DENIED);
     public static final ReviewJoinRequestRequest ACCEPT_JOIN_REQUEST_REQUEST =
             new ReviewJoinRequestRequest(ADMIN_ID, Decision.ACCEPTED);
     public static final ReviewJoinRequestRequest DENY_JOIN_REQUEST_REQUEST =

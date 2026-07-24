@@ -1,9 +1,9 @@
 package com.jusoft.bookingengine.controller.club;
 
-import com.jusoft.bookingengine.component.club.api.AcceptJoinRequestCommand;
 import com.jusoft.bookingengine.component.club.api.CreateClubCommand;
 import com.jusoft.bookingengine.component.club.api.CreateJoinRequestCommand;
-import com.jusoft.bookingengine.component.club.api.DenyJoinRequestCommand;
+import com.jusoft.bookingengine.component.club.api.Decision;
+import com.jusoft.bookingengine.component.club.api.ReviewJoinRequestCommand;
 
 class ClubCommandFactory {
 
@@ -15,13 +15,16 @@ class ClubCommandFactory {
         return new CreateJoinRequestCommand(clubId, userId);
     }
 
-    AcceptJoinRequestCommand acceptJoinRequestCommandFrom(
-            long joinRequestId, long clubId, long adminId) {
-        return new AcceptJoinRequestCommand(joinRequestId, clubId, adminId);
-    }
-
-    DenyJoinRequestCommand denyJoinRequestCommandFrom(
-            long joinRequestId, long clubId, long adminId) {
-        return new DenyJoinRequestCommand(joinRequestId, clubId, adminId);
+    ReviewJoinRequestCommand reviewJoinRequestCommandFrom(
+            long joinRequestId,
+            long clubId,
+            long adminId,
+            com.jusoft.bookingengine.controller.club.api.Decision decision) {
+        Decision componentDecision =
+                switch (decision) {
+                    case ACCEPTED -> Decision.ACCEPTED;
+                    case DENIED -> Decision.DENIED;
+                };
+        return new ReviewJoinRequestCommand(joinRequestId, clubId, adminId, componentDecision);
     }
 }
