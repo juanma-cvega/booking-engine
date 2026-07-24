@@ -150,3 +150,17 @@ commit that implements story work carries the trailers.
 
 Once all the story's acceptance criteria are green, use `/manage-backlog-item` to update or close
 the story with the commit / PR reference.
+
+---
+
+## Step 10 — Return to master
+
+With the story closed, leave the checkout ready for the next one:
+
+```bash
+git checkout master && git pull
+```
+
+Do this every time, including when the story's PR has not merged yet — the next story branches from
+an up-to-date `master`, never from the finished story's branch. If the working tree is dirty, stop
+and surface it rather than discarding or stashing the changes.

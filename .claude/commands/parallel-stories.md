@@ -157,11 +157,13 @@ Incidental contact on shared files (e.g. `@Configuration` wiring under ADR-003, 
 can make the PRs conflict with each other, so they merge **one at a time**:
 
 1. Merge the approved PR into `master` (`gh pr merge`).
-2. Rebase every remaining worktree branch onto the new `master`, resolve any conflicts on the
+2. Refresh the main checkout: `git checkout master && git pull` — this is the `master` the
+   remaining branches rebase onto, and it must include the merge just made.
+3. Rebase every remaining worktree branch onto the new `master`, resolve any conflicts on the
    shared files, and re-run that worktree's tests to confirm it is still green. If a rebase
    changes anything non-trivial, send it back through Checkpoint 2.
-3. Close the merged story via `/manage-backlog-item` with the commit / PR reference.
-4. `git worktree remove` the merged story's worktree and delete its branch.
+4. Close the merged story via `/manage-backlog-item` with the commit / PR reference.
+5. `git worktree remove` the merged story's worktree and delete its branch.
 
 Repeat until every story is merged or abandoned.
 

@@ -47,6 +47,18 @@ Co-authored-by: Claude <claude@anthropic.com>
 - Scope the subject to the component/area touched (`booking`, `slot`, `auction`, …).
 - One story may span several commits; every commit that implements story work carries the trailers.
 
+### Finishing a story — return to master
+Once a story is closed, **switch back to `master` and pull**:
+
+```bash
+git checkout master && git pull
+```
+
+The next story starts from an up-to-date default branch, not from the finished story's branch. Do
+this every time a story is closed — including when its PR has not merged yet, so the branch is left
+behind rather than built on. If the working tree is dirty, stop and surface it instead of
+discarding or stashing the changes silently.
+
 ---
 
 ## TDD Approach (mandatory for all code changes)

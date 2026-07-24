@@ -92,6 +92,11 @@ Use when the work is committed or merged. Add the commit or PR reference to the 
 to the appropriate review/done status. Do not close a story whose acceptance criteria are not all
 green.
 
+After a story is closed, the caller returns the checkout to an up-to-date default branch
+(`git checkout master && git pull`) — see CLAUDE.md, *Finishing a story — return to master*. In the
+worktree-based `/parallel-stories` flow that refresh happens in the main checkout, not the
+worktree.
+
 ---
 
 ## Checkpoints

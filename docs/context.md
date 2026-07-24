@@ -5,6 +5,18 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: chore: ensure after any commits to a branch that close a story, the project goes back to master and pull latest changes
+**Date:** Jul 24, 2026
+**Commit:** 059c324
+
+**Changed files:**
+- .claude/commands/develop-story-e2e.md
+- .claude/commands/manage-backlog-item.md
+- .claude/commands/parallel-stories.md
+- CLAUDE.md
+
+---
+
 ### Latest Commit: fix(ci): create the bin directory before installing the Claude CLI
 **Date:** Jul 23, 2026
 **Commit:** 3485488
