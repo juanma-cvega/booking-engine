@@ -533,6 +533,89 @@ decomposed toward services, per ADR-002's stated future, not before.
 
 ---
 
+## ADR-011: Resource Records Are Terminal, Output-Only Boundary DTOs
+
+**Status**: Active
+
+**Context**:
+ADR-004 requires repositories to return defensive copies, and `api/` records with collection
+fields (Views, Commands, Events — e.g. `component/club/api/ClubView`) extend that discipline into
+their compact constructors (`admins = Set.copyOf(admins)`), because those records can be retained
+and passed onward through use cases and controllers. `controller/*/api/*Resource` records — the
+DTOs returned directly from REST controllers — are built the same way, as records, but reviewing
+`ClubResource.admins()` (a `Set<Long>` field with no defensive copy in sight) raised the question
+of whether that same copying discipline should extend to them too. It happened to be safe only
+because the `Set<Long>` it stores already arrived pre-copied from `ClubView` — an accident of what
+the current factory happens to pass in, not a guarantee `ClubResource` itself provides.
+
+**Decision**:
+`Resource` records in the `controller` module are a distinct category from `api/` records
+(Views, Commands, Events), with different rules:
+
+1. **No defensive copying is required.** A `Resource`'s constructor may store a
+   constructor-supplied collection directly, without wrapping it in `Set.copyOf`/`List.copyOf`/etc.
+2. **Fields are final by construction.** `Resource` types must be Java records (never classes),
+   which already guarantees every component is final — no separate enforcement is needed beyond
+   the existing "DTOs must be records" rule.
+3. **A `Resource` may be used for nothing other than the request/response boundary.** It is
+   produced by a `*ResourceFactory` from a `View`/`Command`/`Event`, returned directly by a
+   controller or listener, and serialized by the framework. It is never passed as an argument to a
+   use case or component, never retained across requests, and never read back by application code.
+
+**Rationale**:
+Defensive copying exists to stop a second party from holding a reference to the same mutable
+collection and corrupting shared state the original caller believes is theirs alone — a threat
+that requires the object to outlive the moment it's handed off. Restriction #3 makes that
+structurally impossible for a `Resource`: it is constructed once per request, handed to the
+framework for serialization, and goes out of scope. Copying at that point would defend against a
+scenario that cannot occur, given the restriction — unlike an `api/` record, which by design can be
+retained and passed onward, and therefore must copy defensively (ADR-004; Effective Java, Item 50).
+
+**Implementation Example**:
+```java
+// component/club/api/ClubView.java — an api/ record: can be retained/passed onward, must copy
+public record ClubView(long id, String name, String description, Set<Long> admins) {
+    public ClubView {
+        ...
+        admins = Set.copyOf(admins);
+    }
+}
+
+// controller/club/api/ClubResource.java — a Resource: terminal, serialize-and-discard, no copy needed
+public record ClubResource(long clubId, String name, String description, Set<Long> admins) {}
+```
+
+**Benefits**:
+- **No wasted allocations**: a type that is serialized once and discarded doesn't need a copy no
+  one will ever mutate.
+- **A rule instead of an accident**: `ClubResource.admins()` was safe only because `ClubView`
+  happened to have already copied it — nothing about `ClubResource` itself guaranteed that for a
+  future factory pulling from a different source. This ADR makes the exemption a documented,
+  verifiable decision instead of something only provable by tracing where each field came from.
+- **Keeps the real guarantee where it belongs**: the defensive-copy discipline stays on `api/`
+  records (ADR-004's rationale), which are the types that can actually be retained and shared.
+
+**Trade-offs**:
+- **Unenforced today**: `ControllerArchitectureRulesTest` does not currently check restriction #3
+  (that no `Resource` type is used as a use case/component parameter, field, or return type outside
+  the controller module) or restriction #1 (absence of defensive copying is a non-rule, so there's
+  nothing to check there). A future ArchUnit rule could verify #3; until then, this is a convention
+  reviewers must apply by hand.
+- **Depends on discipline elsewhere**: if a `*ResourceFactory` is ever changed to pull a mutable
+  collection from somewhere other than an already-copied `api/` record, that specific field would
+  become genuinely unsafe under the old "it happens to work" reasoning — which is exactly why this
+  ADR states the rule as "terminal, so copying doesn't matter," not "safe because upstream already
+  copied."
+
+**References**:
+- Effective Java (3rd Edition), Item 50: "Make defensive copies when needed"
+- Clean Architecture, Chapter 23: "Presenters and Humble Objects"
+- ADR-004: Defensive Copying in Repositories
+- ADR-006: Component-Based Architecture
+- ADR-010: Controllers and Consumers as Thin Adapters Over Use Cases
+
+---
+
 ## Summary
 
 These architectural decisions prioritize:

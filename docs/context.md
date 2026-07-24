@@ -5,6 +5,15 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: docs: add ADR-011 for Resource records as output-only boundary DTOs
+**Date:** Jul 24, 2026
+**Commit:** 2836240
+
+**Changed files:**
+- docs/design-decisions.md
+
+---
+
 ### Latest Commit: chore: ensure after any commits to a branch that close a story, the project goes back to master and pull latest changes
 **Date:** Jul 24, 2026
 **Commit:** 059c324
