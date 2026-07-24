@@ -14,6 +14,7 @@ import com.jusoft.bookingengine.usecase.club.DenyJoinRequestUseCase;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -80,41 +81,28 @@ class ClubControllerRest {
         return joinRequestResource;
     }
 
-    @PostMapping(
-            value = "/{clubId}/join-requests/{joinRequestId}/accept",
-            consumes = "application/json")
+    @PatchMapping(value = "/{clubId}/join-requests/{joinRequestId}", consumes = "application/json")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void accept(
+    public void review(
             @PathVariable long clubId,
             @PathVariable long joinRequestId,
             @Valid @RequestBody ReviewJoinRequestRequest request) {
         log.info(
-                "Accept join request received: clubId={}, joinRequestId={}, adminId={}",
+                "Review join request received: clubId={}, joinRequestId={}, adminId={}, decision={}",
                 clubId,
                 joinRequestId,
-                request.adminId());
-        acceptJoinRequestUseCase.acceptJoinRequest(
-                clubCommandFactory.acceptJoinRequestCommandFrom(
-                        joinRequestId, clubId, request.adminId()));
-        log.info("Accept join request finished: joinRequestId={}", joinRequestId);
-    }
-
-    @PostMapping(
-            value = "/{clubId}/join-requests/{joinRequestId}/deny",
-            consumes = "application/json")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deny(
-            @PathVariable long clubId,
-            @PathVariable long joinRequestId,
-            @Valid @RequestBody ReviewJoinRequestRequest request) {
-        log.info(
-                "Deny join request received: clubId={}, joinRequestId={}, adminId={}",
-                clubId,
-                joinRequestId,
-                request.adminId());
-        denyJoinRequestUseCase.denyJoinRequest(
-                clubCommandFactory.denyJoinRequestCommandFrom(
-                        joinRequestId, clubId, request.adminId()));
-        log.info("Deny join request finished: joinRequestId={}", joinRequestId);
+                request.adminId(),
+                request.decision());
+        switch (request.decision()) {
+            case ACCEPTED ->
+                    acceptJoinRequestUseCase.acceptJoinRequest(
+                            clubCommandFactory.acceptJoinRequestCommandFrom(
+                                    joinRequestId, clubId, request.adminId()));
+            case DENIED ->
+                    denyJoinRequestUseCase.denyJoinRequest(
+                            clubCommandFactory.denyJoinRequestCommandFrom(
+                                    joinRequestId, clubId, request.adminId()));
+        }
+        log.info("Review join request finished: joinRequestId={}", joinRequestId);
     }
 }

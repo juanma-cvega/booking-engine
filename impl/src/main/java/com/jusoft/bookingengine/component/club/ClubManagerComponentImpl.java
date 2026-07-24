@@ -56,7 +56,7 @@ class ClubManagerComponentImpl implements ClubManagerComponent {
         JoinRequest joinRequest =
                 repository.removeJoinRequest(
                         command.clubId(),
-                        club -> club.acceptAccessRequest(command),
+                        club -> club.removeJoinRequest(command.adminId(), command.joinRequestId()),
                         () -> new ClubNotFoundException(command.clubId()));
         messagePublisher.publish(
                 new JoinRequestAcceptedEvent(
@@ -68,7 +68,7 @@ class ClubManagerComponentImpl implements ClubManagerComponent {
         JoinRequest joinRequest =
                 repository.removeJoinRequest(
                         command.clubId(),
-                        club -> club.denyAccessRequest(command),
+                        club -> club.removeJoinRequest(command.adminId(), command.joinRequestId()),
                         () -> new ClubNotFoundException(command.clubId()));
         messagePublisher.publish(
                 new JoinRequestDeniedEvent(

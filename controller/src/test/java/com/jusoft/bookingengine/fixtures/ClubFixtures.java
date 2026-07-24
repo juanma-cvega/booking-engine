@@ -10,6 +10,7 @@ import com.jusoft.bookingengine.component.club.api.DenyJoinRequestCommand;
 import com.jusoft.bookingengine.component.club.api.JoinRequest;
 import com.jusoft.bookingengine.controller.club.api.CreateClubRequest;
 import com.jusoft.bookingengine.controller.club.api.CreateJoinRequestRequest;
+import com.jusoft.bookingengine.controller.club.api.Decision;
 import com.jusoft.bookingengine.controller.club.api.ReviewJoinRequestRequest;
 import java.util.Set;
 import lombok.experimental.UtilityClass;
@@ -40,6 +41,8 @@ public class ClubFixtures {
             new AcceptJoinRequestCommand(JOIN_REQUEST_ID, CLUB_ID, ADMIN_ID);
     public static final DenyJoinRequestCommand DENY_JOIN_REQUEST_COMMAND =
             new DenyJoinRequestCommand(JOIN_REQUEST_ID, CLUB_ID, ADMIN_ID);
-    public static final ReviewJoinRequestRequest REVIEW_JOIN_REQUEST_REQUEST =
-            new ReviewJoinRequestRequest(ADMIN_ID);
+    public static final ReviewJoinRequestRequest ACCEPT_JOIN_REQUEST_REQUEST =
+            new ReviewJoinRequestRequest(ADMIN_ID, Decision.ACCEPTED);
+    public static final ReviewJoinRequestRequest DENY_JOIN_REQUEST_REQUEST =
+            new ReviewJoinRequestRequest(ADMIN_ID, Decision.DENIED);
 }

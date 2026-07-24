@@ -1,9 +1,7 @@
 package com.jusoft.bookingengine.component.club;
 
 import com.google.common.collect.Sets;
-import com.jusoft.bookingengine.component.club.api.AcceptJoinRequestCommand;
 import com.jusoft.bookingengine.component.club.api.ClubAuthorizationException;
-import com.jusoft.bookingengine.component.club.api.DenyJoinRequestCommand;
 import com.jusoft.bookingengine.component.club.api.JoinRequest;
 import com.jusoft.bookingengine.component.club.api.JoinRequestNotFoundException;
 import java.util.HashSet;
@@ -54,25 +52,15 @@ class Club {
         return new HashSet<>(joinRequests);
     }
 
-    JoinRequest acceptAccessRequest(AcceptJoinRequestCommand acceptJoinRequestCommand) {
-        return removeAccessRequestIfAllowed(
-                acceptJoinRequestCommand.adminId(), acceptJoinRequestCommand.joinRequestId());
-    }
-
-    JoinRequest denyAccessRequest(DenyJoinRequestCommand denyJoinRequestCommand) {
-        return removeAccessRequestIfAllowed(
-                denyJoinRequestCommand.adminId(), denyJoinRequestCommand.joinRequestId());
-    }
-
-    private JoinRequest removeAccessRequestIfAllowed(long userId, long accessRequestId) {
-        if (!isAdmin(userId)) {
-            throw new ClubAuthorizationException(userId, id);
+    JoinRequest removeJoinRequest(long adminId, long joinRequestId) {
+        if (!isAdmin(adminId)) {
+            throw new ClubAuthorizationException(adminId, id);
         }
         JoinRequest joinRequest =
                 joinRequests.stream()
-                        .filter(request -> request.id() == accessRequestId)
+                        .filter(request -> request.id() == joinRequestId)
                         .findFirst()
-                        .orElseThrow(() -> new JoinRequestNotFoundException(accessRequestId, id));
+                        .orElseThrow(() -> new JoinRequestNotFoundException(joinRequestId, id));
         joinRequests.remove(joinRequest);
         return joinRequest;
     }

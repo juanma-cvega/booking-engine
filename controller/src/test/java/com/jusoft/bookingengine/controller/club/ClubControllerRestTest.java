@@ -1,6 +1,7 @@
 package com.jusoft.bookingengine.controller.club;
 
 import static com.jusoft.bookingengine.fixtures.ClubFixtures.ACCEPT_JOIN_REQUEST_COMMAND;
+import static com.jusoft.bookingengine.fixtures.ClubFixtures.ACCEPT_JOIN_REQUEST_REQUEST;
 import static com.jusoft.bookingengine.fixtures.ClubFixtures.ADMIN_ID;
 import static com.jusoft.bookingengine.fixtures.ClubFixtures.CLUB_DESCRIPTION;
 import static com.jusoft.bookingengine.fixtures.ClubFixtures.CLUB_ID;
@@ -11,9 +12,9 @@ import static com.jusoft.bookingengine.fixtures.ClubFixtures.CREATE_CLUB_REQUEST
 import static com.jusoft.bookingengine.fixtures.ClubFixtures.CREATE_JOIN_REQUEST_COMMAND;
 import static com.jusoft.bookingengine.fixtures.ClubFixtures.CREATE_JOIN_REQUEST_REQUEST;
 import static com.jusoft.bookingengine.fixtures.ClubFixtures.DENY_JOIN_REQUEST_COMMAND;
+import static com.jusoft.bookingengine.fixtures.ClubFixtures.DENY_JOIN_REQUEST_REQUEST;
 import static com.jusoft.bookingengine.fixtures.ClubFixtures.JOIN_REQUEST;
 import static com.jusoft.bookingengine.fixtures.ClubFixtures.JOIN_REQUEST_ID;
-import static com.jusoft.bookingengine.fixtures.ClubFixtures.REVIEW_JOIN_REQUEST_REQUEST;
 import static com.jusoft.bookingengine.fixtures.CommonFixtures.USER_ID_1;
 import static com.jusoft.bookingengine.util.HelpUtils.OBJECT_MAPPER;
 import static org.hamcrest.CoreMatchers.is;
@@ -21,6 +22,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -31,6 +33,7 @@ import com.jusoft.bookingengine.component.club.api.JoinRequestNotFoundException;
 import com.jusoft.bookingengine.controller.GlobalExceptionHandler;
 import com.jusoft.bookingengine.controller.club.api.CreateClubRequest;
 import com.jusoft.bookingengine.controller.club.api.CreateJoinRequestRequest;
+import com.jusoft.bookingengine.controller.club.api.Decision;
 import com.jusoft.bookingengine.controller.club.api.ReviewJoinRequestRequest;
 import com.jusoft.bookingengine.usecase.club.AcceptJoinRequestUseCase;
 import com.jusoft.bookingengine.usecase.club.CreateClubUseCase;
@@ -49,9 +52,7 @@ class ClubControllerRestTest {
 
     private static final String CLUBS_URL = "/clubs";
     private static final String JOIN_REQUESTS_URL_TEMPLATE = "/clubs/%s/join-requests";
-    private static final String ACCEPT_JOIN_REQUEST_URL_TEMPLATE =
-            "/clubs/%s/join-requests/%s/accept";
-    private static final String DENY_JOIN_REQUEST_URL_TEMPLATE = "/clubs/%s/join-requests/%s/deny";
+    private static final String REVIEW_JOIN_REQUEST_URL_TEMPLATE = "/clubs/%s/join-requests/%s";
 
     @Mock private CreateClubUseCase mockCreateClubUseCase;
 
@@ -162,26 +163,48 @@ class ClubControllerRestTest {
     @Test
     void acceptJoinRequest() throws Exception {
         mockMvc.perform(
-                        post(String.format(
-                                        ACCEPT_JOIN_REQUEST_URL_TEMPLATE, CLUB_ID, JOIN_REQUEST_ID))
+                        patch(
+                                        String.format(
+                                                REVIEW_JOIN_REQUEST_URL_TEMPLATE,
+                                                CLUB_ID,
+                                                JOIN_REQUEST_ID))
                                 .contentType(APPLICATION_JSON)
                                 .content(
                                         OBJECT_MAPPER.writeValueAsString(
-                                                REVIEW_JOIN_REQUEST_REQUEST)))
+                                                ACCEPT_JOIN_REQUEST_REQUEST)))
                 .andExpect(status().isNoContent());
 
         verify(mockAcceptJoinRequestUseCase).acceptJoinRequest(ACCEPT_JOIN_REQUEST_COMMAND);
     }
 
     @Test
-    void acceptJoinRequestWithNullAdminIdFails() throws Exception {
+    void reviewJoinRequestWithNullAdminIdFails() throws Exception {
         mockMvc.perform(
-                        post(String.format(
-                                        ACCEPT_JOIN_REQUEST_URL_TEMPLATE, CLUB_ID, JOIN_REQUEST_ID))
+                        patch(
+                                        String.format(
+                                                REVIEW_JOIN_REQUEST_URL_TEMPLATE,
+                                                CLUB_ID,
+                                                JOIN_REQUEST_ID))
                                 .contentType(APPLICATION_JSON)
                                 .content(
                                         OBJECT_MAPPER.writeValueAsString(
-                                                new ReviewJoinRequestRequest(null))))
+                                                new ReviewJoinRequestRequest(
+                                                        null, Decision.ACCEPTED))))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void reviewJoinRequestWithNullDecisionFails() throws Exception {
+        mockMvc.perform(
+                        patch(
+                                        String.format(
+                                                REVIEW_JOIN_REQUEST_URL_TEMPLATE,
+                                                CLUB_ID,
+                                                JOIN_REQUEST_ID))
+                                .contentType(APPLICATION_JSON)
+                                .content(
+                                        OBJECT_MAPPER.writeValueAsString(
+                                                new ReviewJoinRequestRequest(ADMIN_ID, null))))
                 .andExpect(status().isBadRequest());
     }
 
@@ -192,12 +215,15 @@ class ClubControllerRestTest {
                 .acceptJoinRequest(ACCEPT_JOIN_REQUEST_COMMAND);
 
         mockMvc.perform(
-                        post(String.format(
-                                        ACCEPT_JOIN_REQUEST_URL_TEMPLATE, CLUB_ID, JOIN_REQUEST_ID))
+                        patch(
+                                        String.format(
+                                                REVIEW_JOIN_REQUEST_URL_TEMPLATE,
+                                                CLUB_ID,
+                                                JOIN_REQUEST_ID))
                                 .contentType(APPLICATION_JSON)
                                 .content(
                                         OBJECT_MAPPER.writeValueAsString(
-                                                REVIEW_JOIN_REQUEST_REQUEST)))
+                                                ACCEPT_JOIN_REQUEST_REQUEST)))
                 .andExpect(status().isForbidden());
     }
 
@@ -208,39 +234,33 @@ class ClubControllerRestTest {
                 .acceptJoinRequest(ACCEPT_JOIN_REQUEST_COMMAND);
 
         mockMvc.perform(
-                        post(String.format(
-                                        ACCEPT_JOIN_REQUEST_URL_TEMPLATE, CLUB_ID, JOIN_REQUEST_ID))
+                        patch(
+                                        String.format(
+                                                REVIEW_JOIN_REQUEST_URL_TEMPLATE,
+                                                CLUB_ID,
+                                                JOIN_REQUEST_ID))
                                 .contentType(APPLICATION_JSON)
                                 .content(
                                         OBJECT_MAPPER.writeValueAsString(
-                                                REVIEW_JOIN_REQUEST_REQUEST)))
+                                                ACCEPT_JOIN_REQUEST_REQUEST)))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     void denyJoinRequest() throws Exception {
         mockMvc.perform(
-                        post(String.format(
-                                        DENY_JOIN_REQUEST_URL_TEMPLATE, CLUB_ID, JOIN_REQUEST_ID))
+                        patch(
+                                        String.format(
+                                                REVIEW_JOIN_REQUEST_URL_TEMPLATE,
+                                                CLUB_ID,
+                                                JOIN_REQUEST_ID))
                                 .contentType(APPLICATION_JSON)
                                 .content(
                                         OBJECT_MAPPER.writeValueAsString(
-                                                REVIEW_JOIN_REQUEST_REQUEST)))
+                                                DENY_JOIN_REQUEST_REQUEST)))
                 .andExpect(status().isNoContent());
 
         verify(mockDenyJoinRequestUseCase).denyJoinRequest(DENY_JOIN_REQUEST_COMMAND);
-    }
-
-    @Test
-    void denyJoinRequestWithNullAdminIdFails() throws Exception {
-        mockMvc.perform(
-                        post(String.format(
-                                        DENY_JOIN_REQUEST_URL_TEMPLATE, CLUB_ID, JOIN_REQUEST_ID))
-                                .contentType(APPLICATION_JSON)
-                                .content(
-                                        OBJECT_MAPPER.writeValueAsString(
-                                                new ReviewJoinRequestRequest(null))))
-                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -250,12 +270,15 @@ class ClubControllerRestTest {
                 .denyJoinRequest(DENY_JOIN_REQUEST_COMMAND);
 
         mockMvc.perform(
-                        post(String.format(
-                                        DENY_JOIN_REQUEST_URL_TEMPLATE, CLUB_ID, JOIN_REQUEST_ID))
+                        patch(
+                                        String.format(
+                                                REVIEW_JOIN_REQUEST_URL_TEMPLATE,
+                                                CLUB_ID,
+                                                JOIN_REQUEST_ID))
                                 .contentType(APPLICATION_JSON)
                                 .content(
                                         OBJECT_MAPPER.writeValueAsString(
-                                                REVIEW_JOIN_REQUEST_REQUEST)))
+                                                DENY_JOIN_REQUEST_REQUEST)))
                 .andExpect(status().isForbidden());
     }
 
@@ -266,12 +289,15 @@ class ClubControllerRestTest {
                 .denyJoinRequest(DENY_JOIN_REQUEST_COMMAND);
 
         mockMvc.perform(
-                        post(String.format(
-                                        DENY_JOIN_REQUEST_URL_TEMPLATE, CLUB_ID, JOIN_REQUEST_ID))
+                        patch(
+                                        String.format(
+                                                REVIEW_JOIN_REQUEST_URL_TEMPLATE,
+                                                CLUB_ID,
+                                                JOIN_REQUEST_ID))
                                 .contentType(APPLICATION_JSON)
                                 .content(
                                         OBJECT_MAPPER.writeValueAsString(
-                                                REVIEW_JOIN_REQUEST_REQUEST)))
+                                                DENY_JOIN_REQUEST_REQUEST)))
                 .andExpect(status().isNotFound());
     }
 }
