@@ -558,7 +558,8 @@ the current factory happens to pass in, not a guarantee `ClubResource` itself pr
    which already guarantees every component is final — no separate enforcement is needed beyond
    the existing "DTOs must be records" rule.
 3. **A `Resource` may be used for nothing other than the request/response boundary.** It is
-   produced by a `*ResourceFactory` from a `View`/`Command`/`Event`, returned directly by a
+   constructed at the boundary from a `View`/`Command`/`Event` — directly by the controller or
+   listener, or by a `*ResourceFactory` where the mapping is non-trivial — returned directly by a
    controller or listener, and serialized by the framework. It is never passed as an argument to a
    use case or component, never retained across requests, and never read back by application code.
 
@@ -601,7 +602,7 @@ public record ClubResource(long clubId, String name, String description, Set<Lon
   the controller module) or restriction #1 (absence of defensive copying is a non-rule, so there's
   nothing to check there). A future ArchUnit rule could verify #3; until then, this is a convention
   reviewers must apply by hand.
-- **Depends on discipline elsewhere**: if a `*ResourceFactory` is ever changed to pull a mutable
+- **Depends on discipline elsewhere**: if resource construction is ever changed to pull a mutable
   collection from somewhere other than an already-copied `api/` record, that specific field would
   become genuinely unsafe under the old "it happens to work" reasoning — which is exactly why this
   ADR states the rule as "terminal, so copying doesn't matter," not "safe because upstream already

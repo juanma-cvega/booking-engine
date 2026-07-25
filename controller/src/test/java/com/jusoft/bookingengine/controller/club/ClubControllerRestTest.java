@@ -33,7 +33,7 @@ import com.jusoft.bookingengine.component.club.api.JoinRequestNotFoundException;
 import com.jusoft.bookingengine.controller.GlobalExceptionHandler;
 import com.jusoft.bookingengine.controller.club.api.CreateClubRequest;
 import com.jusoft.bookingengine.controller.club.api.CreateJoinRequestRequest;
-import com.jusoft.bookingengine.controller.club.api.Decision;
+import com.jusoft.bookingengine.controller.club.api.DecisionRequest;
 import com.jusoft.bookingengine.controller.club.api.ReviewJoinRequestRequest;
 import com.jusoft.bookingengine.usecase.club.CreateClubUseCase;
 import com.jusoft.bookingengine.usecase.club.CreateJoinRequestUseCase;
@@ -67,9 +67,7 @@ class ClubControllerRestTest {
                 new ClubControllerRest(
                         mockCreateClubUseCase,
                         mockCreateJoinRequestUseCase,
-                        mockReviewJoinRequestUseCase,
-                        new ClubCommandFactory(),
-                        new ClubResourceFactory());
+                        mockReviewJoinRequestUseCase);
         mockMvc =
                 MockMvcBuilders.standaloneSetup(clubControllerRest)
                         .setControllerAdvice(new GlobalExceptionHandler())
@@ -185,7 +183,7 @@ class ClubControllerRestTest {
                                 .content(
                                         OBJECT_MAPPER.writeValueAsString(
                                                 new ReviewJoinRequestRequest(
-                                                        null, Decision.ACCEPTED))))
+                                                        null, DecisionRequest.ACCEPTED))))
                 .andExpect(status().isBadRequest());
     }
 

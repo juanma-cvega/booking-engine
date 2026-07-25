@@ -1,7 +1,10 @@
 package com.jusoft.bookingengine.controller.club;
 
 import com.jusoft.bookingengine.component.club.api.ClubView;
+import com.jusoft.bookingengine.component.club.api.CreateClubCommand;
+import com.jusoft.bookingengine.component.club.api.CreateJoinRequestCommand;
 import com.jusoft.bookingengine.component.club.api.JoinRequest;
+import com.jusoft.bookingengine.component.club.api.ReviewJoinRequestCommand;
 import com.jusoft.bookingengine.controller.club.api.ClubResource;
 import com.jusoft.bookingengine.controller.club.api.CreateClubRequest;
 import com.jusoft.bookingengine.controller.club.api.CreateJoinRequestRequest;
@@ -29,20 +32,14 @@ class ClubControllerRest {
     private final CreateClubUseCase createClubUseCase;
     private final CreateJoinRequestUseCase createJoinRequestUseCase;
     private final ReviewJoinRequestUseCase reviewJoinRequestUseCase;
-    private final ClubCommandFactory clubCommandFactory;
-    private final ClubResourceFactory clubResourceFactory;
 
     ClubControllerRest(
             CreateClubUseCase createClubUseCase,
             CreateJoinRequestUseCase createJoinRequestUseCase,
-            ReviewJoinRequestUseCase reviewJoinRequestUseCase,
-            ClubCommandFactory clubCommandFactory,
-            ClubResourceFactory clubResourceFactory) {
+            ReviewJoinRequestUseCase reviewJoinRequestUseCase) {
         this.createClubUseCase = createClubUseCase;
         this.createJoinRequestUseCase = createJoinRequestUseCase;
         this.reviewJoinRequestUseCase = reviewJoinRequestUseCase;
-        this.clubCommandFactory = clubCommandFactory;
-        this.clubResourceFactory = clubResourceFactory;
     }
 
     @PostMapping(consumes = "application/json", produces = "application/json")
@@ -54,9 +51,10 @@ class ClubControllerRest {
                 request.adminId());
         ClubView club =
                 createClubUseCase.createClubFrom(
-                        clubCommandFactory.createClubCommandFrom(
+                        new CreateClubCommand(
                                 request.name(), request.description(), request.adminId()));
-        ClubResource clubResource = clubResourceFactory.createFrom(club);
+        ClubResource clubResource =
+                new ClubResource(club.id(), club.name(), club.description(), club.admins());
         log.info("Create club request finished: club={}", clubResource);
         return clubResource;
     }
@@ -71,8 +69,9 @@ class ClubControllerRest {
         log.info("Create join request received: clubId={}, userId={}", clubId, request.userId());
         JoinRequest joinRequest =
                 createJoinRequestUseCase.createJoinRequest(
-                        clubCommandFactory.createJoinRequestCommandFrom(clubId, request.userId()));
-        JoinRequestResource joinRequestResource = clubResourceFactory.createFrom(joinRequest);
+                        new CreateJoinRequestCommand(clubId, request.userId()));
+        JoinRequestResource joinRequestResource =
+                new JoinRequestResource(joinRequest.id(), joinRequest.userId());
         log.info("Create join request finished: joinRequest={}", joinRequestResource);
         return joinRequestResource;
     }
@@ -90,8 +89,8 @@ class ClubControllerRest {
                 request.adminId(),
                 request.decision());
         reviewJoinRequestUseCase.review(
-                clubCommandFactory.reviewJoinRequestCommandFrom(
-                        joinRequestId, clubId, request.adminId(), request.decision()));
+                new ReviewJoinRequestCommand(
+                        joinRequestId, clubId, request.adminId(), request.decision().toDecision()));
         log.info("Review join request finished: joinRequestId={}", joinRequestId);
     }
 }
