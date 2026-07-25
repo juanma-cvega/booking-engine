@@ -12,9 +12,7 @@ public interface ClubManagerComponent {
 
     ClubView findByName(String name);
 
-    void acceptAccessRequest(AcceptJoinRequestCommand acceptJoinRequestCommand);
-
-    void denyAccessRequest(DenyJoinRequestCommand acceptAccessRequestCommand);
+    void reviewAccessRequest(ReviewJoinRequestCommand command);
 
     Set<JoinRequest> findJoinRequests(long clubId, long adminId);
 
