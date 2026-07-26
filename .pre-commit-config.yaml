@@ -31,12 +31,3 @@ repos:
         language: system
         pass_filenames: false
         types: [java]
-
-      - id: update-context-md
-        name: Update context.md with commit info
-        description: Appends the latest commit's info to docs/context.md
-        entry: scripts/update-context-md.sh
-        language: script
-        pass_filenames: false
-        always_run: true
-        stages: [post-commit]
