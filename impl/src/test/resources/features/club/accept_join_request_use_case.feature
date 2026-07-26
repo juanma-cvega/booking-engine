@@ -12,7 +12,7 @@ Feature: As an admin of a club, I want to be able to accept a join request from 
     Given a club with name CLUB_NAME is created by user 1
     And user 2 issues a join request
     And that sets the background
-    When user 3 accepts the join request created by user 2
+    When an unauthorized user 3 accepts the join request created by user 2
     Then the user 3 should be notified he has no rights to accept join requests
     And the club should have the join request for user 2
     And a notification of a join request accepted shouldn't be published

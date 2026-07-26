@@ -1,6 +1,5 @@
 package com.jusoft.bookingengine.component.club;
 
-import com.jusoft.bookingengine.component.club.api.AcceptJoinRequestCommand;
 import com.jusoft.bookingengine.component.club.api.ClubAuthorizationException;
 import com.jusoft.bookingengine.component.club.api.ClubCreatedEvent;
 import com.jusoft.bookingengine.component.club.api.ClubManagerComponent;
@@ -9,11 +8,11 @@ import com.jusoft.bookingengine.component.club.api.ClubView;
 import com.jusoft.bookingengine.component.club.api.ClubWithNameNotFoundException;
 import com.jusoft.bookingengine.component.club.api.CreateClubCommand;
 import com.jusoft.bookingengine.component.club.api.CreateJoinRequestCommand;
-import com.jusoft.bookingengine.component.club.api.DenyJoinRequestCommand;
 import com.jusoft.bookingengine.component.club.api.JoinRequest;
 import com.jusoft.bookingengine.component.club.api.JoinRequestAcceptedEvent;
 import com.jusoft.bookingengine.component.club.api.JoinRequestCreatedEvent;
 import com.jusoft.bookingengine.component.club.api.JoinRequestDeniedEvent;
+import com.jusoft.bookingengine.component.club.api.ReviewJoinRequestCommand;
 import com.jusoft.bookingengine.publisher.MessagePublisher;
 import java.util.Set;
 import lombok.AccessLevel;
@@ -52,27 +51,25 @@ class ClubManagerComponentImpl implements ClubManagerComponent {
     }
 
     @Override
-    public void acceptAccessRequest(AcceptJoinRequestCommand command) {
+    public void reviewAccessRequest(ReviewJoinRequestCommand command) {
         JoinRequest joinRequest =
                 repository.removeJoinRequest(
                         command.clubId(),
-                        club -> club.acceptAccessRequest(command),
+                        club -> club.removeJoinRequest(command.adminId(), command.joinRequestId()),
                         () -> new ClubNotFoundException(command.clubId()));
         messagePublisher.publish(
-                new JoinRequestAcceptedEvent(
-                        command.joinRequestId(), joinRequest.userId(), command.clubId()));
-    }
-
-    @Override
-    public void denyAccessRequest(DenyJoinRequestCommand command) {
-        JoinRequest joinRequest =
-                repository.removeJoinRequest(
-                        command.clubId(),
-                        club -> club.denyAccessRequest(command),
-                        () -> new ClubNotFoundException(command.clubId()));
-        messagePublisher.publish(
-                new JoinRequestDeniedEvent(
-                        command.joinRequestId(), joinRequest.userId(), command.clubId()));
+                switch (command.decision()) {
+                    case ACCEPTED ->
+                            new JoinRequestAcceptedEvent(
+                                    command.joinRequestId(),
+                                    joinRequest.userId(),
+                                    command.clubId());
+                    case DENIED ->
+                            new JoinRequestDeniedEvent(
+                                    command.joinRequestId(),
+                                    joinRequest.userId(),
+                                    command.clubId());
+                });
     }
 
     @Override

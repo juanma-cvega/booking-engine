@@ -16,13 +16,8 @@ public class ClubUseCaseConfig {
     }
 
     @Bean
-    public AcceptJoinRequestUseCase acceptJoinRequestUseCase() {
-        return new AcceptJoinRequestUseCase(clubManagerComponent);
-    }
-
-    @Bean
-    public DenyJoinRequestUseCase denyJoinRequestUseCase() {
-        return new DenyJoinRequestUseCase(clubManagerComponent);
+    public ReviewJoinRequestUseCase reviewJoinRequestUseCase() {
+        return new ReviewJoinRequestUseCase(clubManagerComponent);
     }
 
     @Bean

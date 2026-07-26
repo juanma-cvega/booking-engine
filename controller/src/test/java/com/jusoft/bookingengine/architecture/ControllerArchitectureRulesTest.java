@@ -13,7 +13,6 @@ import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ArchRule;
 import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /** Enforces the ADRs governing this module (ADR-003, ADR-010). */
@@ -32,14 +31,22 @@ class ControllerArchitectureRulesTest {
 
     // ── ADR-010: controllers/listeners are thin adapters over use cases ──
 
-    @Disabled(
-            "BookingControllerRest still depends on BookingManagerComponent directly; fix tracked as its own story")
+    /**
+     * TODO The two booking classes below are the only remaining ADR-010 violations: both depend on
+     * BookingManagerComponent directly. They are excluded by name rather than by package so that
+     * any new booking class is still checked. Delete both exclusions and this comment when #217
+     * lands — the rule must then hold with no exceptions.*
+     */
     @Test
     void controllers_and_listeners_do_not_depend_on_manager_components() {
         ArchRule rule =
                 noClasses()
                         .that()
                         .resideInAnyPackage(CONTROLLER_OWNED_PACKAGES)
+                        .and()
+                        .doNotHaveSimpleName("BookingControllerRest")
+                        .and()
+                        .doNotHaveSimpleName("BookingControllerConfig")
                         .should()
                         .dependOnClassesThat(nameMatching(".*ManagerComponent"))
                         .as(
