@@ -31,10 +31,12 @@ class ControllerArchitectureRulesTest {
 
     // ── ADR-010: controllers/listeners are thin adapters over use cases ──
 
-    // The two booking classes below are the only remaining ADR-010 violations: both depend on
-    // BookingManagerComponent directly. They are excluded by name rather than by package so that
-    // any new booking class is still checked. Delete both exclusions and this comment when #217
-    // lands — the rule must then hold with no exceptions.
+    /**
+     * TODO The two booking classes below are the only remaining ADR-010 violations: both depend on
+     * BookingManagerComponent directly. They are excluded by name rather than by package so that
+     * any new booking class is still checked. Delete both exclusions and this comment when #217
+     * lands — the rule must then hold with no exceptions.*
+     */
     @Test
     void controllers_and_listeners_do_not_depend_on_manager_components() {
         ArchRule rule =
