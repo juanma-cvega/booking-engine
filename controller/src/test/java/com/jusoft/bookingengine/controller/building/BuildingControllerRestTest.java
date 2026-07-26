@@ -83,6 +83,38 @@ class BuildingControllerRestTest {
     }
 
     @Test
+    void createBuildingWithMissingStreetFails() throws Exception {
+        assertRejected(
+                new CreateBuildingRequest(CLUB_ID, null, ZIP_CODE, CITY, BUILDING_DESCRIPTION));
+    }
+
+    @Test
+    void createBuildingWithMissingZipCodeFails() throws Exception {
+        assertRejected(
+                new CreateBuildingRequest(CLUB_ID, STREET, null, CITY, BUILDING_DESCRIPTION));
+    }
+
+    @Test
+    void createBuildingWithMissingCityFails() throws Exception {
+        assertRejected(
+                new CreateBuildingRequest(CLUB_ID, STREET, ZIP_CODE, null, BUILDING_DESCRIPTION));
+    }
+
+    @Test
+    void createBuildingWithBlankCityFails() throws Exception {
+        assertRejected(
+                new CreateBuildingRequest(CLUB_ID, STREET, ZIP_CODE, "  ", BUILDING_DESCRIPTION));
+    }
+
+    private void assertRejected(CreateBuildingRequest request) throws Exception {
+        mockMvc.perform(
+                        post(BUILDINGS_URL)
+                                .contentType(APPLICATION_JSON)
+                                .content(OBJECT_MAPPER.writeValueAsString(request)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     void createBuildingForUnknownClubFails() throws Exception {
         when(mockCreateBuildingUseCase.createBuildingFrom(CREATE_BUILDING_COMMAND))
                 .thenThrow(new ClubNotFoundException(CLUB_ID));
