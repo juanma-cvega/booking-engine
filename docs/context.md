@@ -5,6 +5,24 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: chore(ci): name the merge App client id secret MERGE_APP_CLIENT_ID
+**Date:** Jul 26, 2026
+**Commit:** f02b26e
+
+**Changed files:**
+- .github/workflows/dependabot-auto-merge.yml
+
+---
+
+### Latest Commit: chore(ci): mint the merge token with client-id, not the deprecated app-id
+**Date:** Jul 26, 2026
+**Commit:** bfd3b8c
+
+**Changed files:**
+- .github/workflows/dependabot-auto-merge.yml
+
+---
+
 ### Latest Commit: fix(auction): pin the clock before the auction is created in finish-auction scenarios
 **Date:** Jul 26, 2026
 **Commit:** 9700c36
