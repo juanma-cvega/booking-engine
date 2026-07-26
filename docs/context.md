@@ -5,6 +5,15 @@ A Java 25 booking engine project using Maven multi-module architecture, Spring B
 
 ## Recent Changes (Last 2 Weeks)
 
+### Latest Commit: fix(auction): pin the clock before the auction is created in finish-auction scenarios
+**Date:** Jul 26, 2026
+**Commit:** 9700c36
+
+**Changed files:**
+- impl/src/test/resources/features/auction/finish_auction_use_case.feature
+
+---
+
 ### Latest Commit: fix(agents): mention unauthenticated-identity check in security-reviewer's description
 **Date:** Jul 24, 2026
 **Commit:** 33115d9

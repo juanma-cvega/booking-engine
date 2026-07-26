@@ -6,6 +6,7 @@ Feature: As a user, I want to know the result of an auction I bid for
     And a building is created
     And a room is created
     And a slot is created
+    And current time is 08:00
 
   Scenario: As a user, I shouldn't win an auction if there is someone with a better criteria when the auction is configured
   to make the winner the person with less bookings within a period of time
