@@ -1,5 +1,7 @@
 package com.jusoft.bookingengine.controller.building;
 
+import com.jusoft.bookingengine.component.building.api.BuildingView;
+import com.jusoft.bookingengine.component.building.api.CreateBuildingCommand;
 import com.jusoft.bookingengine.controller.building.api.BuildingResource;
 import com.jusoft.bookingengine.controller.building.api.CreateBuildingRequest;
 import com.jusoft.bookingengine.usecase.building.CreateBuildingUseCase;
@@ -16,23 +18,24 @@ import org.springframework.web.bind.annotation.RestController;
 class BuildingControllerRest {
 
     private final CreateBuildingUseCase createBuildingUseCase;
-    private final BuildingCommandFactory buildingCommandFactory;
-    private final BuildingResourceFactory buildingResourceFactory;
 
-    BuildingControllerRest(
-            CreateBuildingUseCase createBuildingUseCase,
-            BuildingCommandFactory buildingCommandFactory,
-            BuildingResourceFactory buildingResourceFactory) {
+    BuildingControllerRest(CreateBuildingUseCase createBuildingUseCase) {
         this.createBuildingUseCase = createBuildingUseCase;
-        this.buildingCommandFactory = buildingCommandFactory;
-        this.buildingResourceFactory = buildingResourceFactory;
     }
 
     @PostMapping(consumes = "application/json", produces = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
     public BuildingResource create(@Valid @RequestBody CreateBuildingRequest request) {
-        return buildingResourceFactory.createFrom(
+        BuildingView building =
                 createBuildingUseCase.createBuildingFrom(
-                        buildingCommandFactory.createFrom(request)));
+                        new CreateBuildingCommand(
+                                request.clubId(), request.toAddress(), request.description()));
+        return new BuildingResource(
+                building.id(),
+                building.clubId(),
+                building.address().getStreet(),
+                building.address().getZipCode(),
+                building.address().getCity(),
+                building.description());
     }
 }

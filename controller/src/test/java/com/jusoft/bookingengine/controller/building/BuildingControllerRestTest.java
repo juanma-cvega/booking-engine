@@ -41,10 +41,7 @@ class BuildingControllerRestTest {
     @BeforeEach
     void setup() {
         BuildingControllerRest buildingControllerRest =
-                new BuildingControllerRest(
-                        mockCreateBuildingUseCase,
-                        new BuildingCommandFactory(),
-                        new BuildingResourceFactory());
+                new BuildingControllerRest(mockCreateBuildingUseCase);
         mockMvc =
                 MockMvcBuilders.standaloneSetup(buildingControllerRest)
                         .setControllerAdvice(new GlobalExceptionHandler())

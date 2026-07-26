@@ -7,9 +7,5 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 @Configuration
-@Import({
-    BookingControllerConfig.class,
-    ClubControllerConfig.class,
-    BuildingControllerConfig.class
-})
+@Import({BookingControllerConfig.class, ClubControllerConfig.class, BuildingControllerConfig.class})
 public class ControllerConfig {}
