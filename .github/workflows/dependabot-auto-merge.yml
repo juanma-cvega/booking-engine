@@ -17,8 +17,8 @@ permissions:
   contents: read
 
 # Serialize entire runs: while one PR is being analysed and merged, others wait. Once the
-# winner merges, the losers are behind master and the guard below skips them until Dependabot
-# rebases and re-triggers them — avoiding redundant analysis and untested merges.
+# winner merges, the losers are behind master and the guard below asks Dependabot to rebase them,
+# which re-triggers CI and this workflow — avoiding redundant analysis and untested merges.
 concurrency:
   group: dependabot-auto-merge
   cancel-in-progress: false
@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      pull-requests: read
+      pull-requests: write
     # Cheap pre-filters only: run on a successful CI completion for a same-repo dependabot/*
     # branch. The trust decision — that the PR is genuinely authored by Dependabot — is NOT made
     # here: actor/triggering_actor identify who triggered the run, not who authored the PR, and
@@ -74,13 +74,30 @@ jobs:
             exit 0
           fi
 
-          # Skip a PR that is behind master: it will be rebased and re-triggered, so analysing
-          # or merging it now is wasted work and would merge a combination CI never tested.
+          # A PR behind master must not be analysed or merged: that would merge a combination CI
+          # never tested. Ask Dependabot to rebase rather than only skipping — Dependabot rebases
+          # on its own just for conflicts or a changed manifest, so a PR that is merely behind
+          # (a github-actions update while master moves on Java code) would otherwise sit here
+          # forever, never pushed, never re-triggering CI, never re-entering this workflow.
           head=$(gh pr view "$pr" --repo "${{ github.repository }}" \
             --json headRefOid --jq '.headRefOid')
           behind=$(gh api "repos/${{ github.repository }}/compare/master...$head" --jq '.behind_by')
           if [ "${behind:-0}" -gt 0 ]; then
-            echo "PR #$pr is $behind commit(s) behind master; skipping until it is rebased."
+            echo "PR #$pr is $behind commit(s) behind master; asking Dependabot to rebase it."
+
+            # One ask per head SHA. Several CI runs can complete on the same commit, and each
+            # re-enters this guard; the marker keeps that from posting duplicate commands. Once
+            # Dependabot rebases, the head changes and a fresh ask is allowed.
+            marker="<!-- auto-merge:rebase-requested:$head -->"
+            asked=$(gh pr view "$pr" --repo "${{ github.repository }}" \
+              --json comments --jq "[.comments[] | select(.body | contains(\"$marker\"))] | length")
+            if [ "${asked:-0}" -gt 0 ]; then
+              echo "Rebase already requested for $head; not asking again."
+            else
+              gh pr comment "$pr" --repo "${{ github.repository }}" \
+                --body "$marker"$'\n'"@dependabot rebase"
+            fi
+
             echo "number=" >> "$GITHUB_OUTPUT"
             exit 0
           fi
@@ -115,7 +132,7 @@ jobs:
       # No ref: on workflow_run, checkout defaults to the default branch, never the PR head, so
       # this privileged job never runs untrusted PR code. Do not add a ref.
       - name: Checkout the default branch
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Install Claude Code CLI
         # Download the pinned native binary from the signed release bucket and verify it before
