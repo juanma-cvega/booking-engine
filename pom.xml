@@ -40,7 +40,7 @@
     <failsafe-maven-plugin.version>3.1.2</failsafe-maven-plugin.version>
     <commons-collections4.version>4.5.0</commons-collections4.version>
     <guava.version>33.6.0-jre</guava.version>
-    <cucumber.version>7.34.4</cucumber.version>
+    <cucumber.version>7.34.6</cucumber.version>
     <junit-platform.version>6.1.2</junit-platform.version>
     <awaitility.version>4.3.0</awaitility.version>
     <maven-resources-plugin.version>3.5.0</maven-resources-plugin.version>
