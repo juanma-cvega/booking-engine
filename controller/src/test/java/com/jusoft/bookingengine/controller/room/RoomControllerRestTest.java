@@ -46,10 +46,7 @@ class RoomControllerRestTest {
     @BeforeEach
     void setup() {
         RoomControllerRest roomControllerRest =
-                new RoomControllerRest(
-                        mockCreateRoomUseCase,
-                        new RoomCommandFactory(FIXED_CLOCK),
-                        new RoomResourceFactory());
+                new RoomControllerRest(mockCreateRoomUseCase, FIXED_CLOCK);
         mockMvc =
                 MockMvcBuilders.standaloneSetup(roomControllerRest)
                         .setControllerAdvice(new GlobalExceptionHandler())
