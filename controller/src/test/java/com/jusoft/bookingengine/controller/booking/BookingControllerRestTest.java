@@ -28,13 +28,16 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.jusoft.bookingengine.component.booking.api.BookingManagerComponent;
 import com.jusoft.bookingengine.component.booking.api.BookingNotFoundException;
 import com.jusoft.bookingengine.component.booking.api.WrongBookingUserException;
 import com.jusoft.bookingengine.component.slot.api.SlotAlreadyReservedException;
 import com.jusoft.bookingengine.component.slot.api.SlotNotOpenException;
 import com.jusoft.bookingengine.controller.GlobalExceptionHandler;
 import com.jusoft.bookingengine.controller.booking.api.CreateBookingRequest;
+import com.jusoft.bookingengine.usecase.booking.CancelBookingUseCase;
+import com.jusoft.bookingengine.usecase.booking.CreateBookingUseCase;
+import com.jusoft.bookingengine.usecase.booking.FindBookingUseCase;
+import com.jusoft.bookingengine.usecase.booking.GetBookingsUseCase;
 import java.util.StringJoiner;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -54,9 +57,13 @@ class BookingControllerRestTest {
     private static final String BOOKING_URL_TEMPLATE = "/user/%s/booking/%s";
     private static final String GET_FOR_URL_TEMPLATE = "/user/%s";
 
-    @Mock private BookingManagerComponent mockBookingManagerComponent;
+    @Mock private CreateBookingUseCase mockCreateBookingUseCase;
 
-    @Mock private BookingCommandFactory mockBookingCommandFactory;
+    @Mock private CancelBookingUseCase mockCancelBookingUseCase;
+
+    @Mock private FindBookingUseCase mockFindBookingUseCase;
+
+    @Mock private GetBookingsUseCase mockGetBookingsUseCase;
 
     @Mock private BookingResourceFactory mockBookingResourceFactory;
 
@@ -74,9 +81,7 @@ class BookingControllerRestTest {
 
     @Test
     void book() throws Exception {
-        when(mockBookingCommandFactory.createFrom(SLOT_ID_1, USER_ID_1))
-                .thenReturn(CREATE_BOOKING_COMMAND);
-        when(mockBookingManagerComponent.book(CREATE_BOOKING_COMMAND)).thenReturn(BOOKING_1);
+        when(mockCreateBookingUseCase.book(CREATE_BOOKING_COMMAND)).thenReturn(BOOKING_1);
         when(mockBookingResourceFactory.createFrom(BOOKING_1)).thenReturn(BOOKING_RESOURCE_1);
 
         String createUrl = String.format(CREATE_BOOKING_URL_TEMPLATE, ROOM_ID, SLOT_ID_1);
@@ -103,12 +108,12 @@ class BookingControllerRestTest {
         mockMvc.perform(delete(urlTemplate).contentType(APPLICATION_JSON))
                 .andExpect(status().isNoContent());
 
-        verify(mockBookingManagerComponent).cancel(USER_ID_1, BOOKING_ID_1);
+        verify(mockCancelBookingUseCase).cancel(USER_ID_1, BOOKING_ID_1);
     }
 
     @Test
     void find() throws Exception {
-        when(mockBookingManagerComponent.find(BOOKING_ID_1)).thenReturn(BOOKING_1);
+        when(mockFindBookingUseCase.find(BOOKING_ID_1)).thenReturn(BOOKING_1);
         when(mockBookingResourceFactory.createFrom(BOOKING_1)).thenReturn(BOOKING_RESOURCE_1);
 
         String findUrl = String.format(BOOKING_URL_TEMPLATE, USER_ID_1, BOOKING_ID_1);
@@ -125,7 +130,7 @@ class BookingControllerRestTest {
 
     @Test
     void getFor() throws Exception {
-        when(mockBookingManagerComponent.findAllBy(USER_ID_1)).thenReturn(BOOKINGS);
+        when(mockGetBookingsUseCase.getBookingsFor(USER_ID_1)).thenReturn(BOOKINGS);
         when(mockBookingResourceFactory.createFrom(BOOKINGS)).thenReturn(BOOKING_RESOURCES);
 
         String cancelUrl = String.format(GET_FOR_URL_TEMPLATE, USER_ID_1);
@@ -163,7 +168,7 @@ class BookingControllerRestTest {
 
     @Test
     void bookingNotFoundException() throws Exception {
-        when(mockBookingManagerComponent.find(BOOKING_ID_1))
+        when(mockFindBookingUseCase.find(BOOKING_ID_1))
                 .thenThrow(new BookingNotFoundException(BOOKING_ID_1));
 
         String findUrl = String.format(BOOKING_URL_TEMPLATE, USER_ID_1, BOOKING_ID_1);
@@ -177,9 +182,7 @@ class BookingControllerRestTest {
         String createUrl = String.format(CREATE_BOOKING_URL_TEMPLATE, ROOM_ID, SLOT_ID_1);
         String urlTemplate =
                 new StringJoiner(FORTHSLASH).add(BOOKINGS_URL).add(createUrl).toString();
-        when(mockBookingCommandFactory.createFrom(SLOT_ID_1, USER_ID_1))
-                .thenReturn(CREATE_BOOKING_COMMAND);
-        when(mockBookingManagerComponent.book(CREATE_BOOKING_COMMAND))
+        when(mockCreateBookingUseCase.book(CREATE_BOOKING_COMMAND))
                 .thenThrow(
                         new SlotAlreadyReservedException(SLOT_ID_1, SLOT_USER, ANOTHER_SLOT_USER));
 
@@ -192,9 +195,7 @@ class BookingControllerRestTest {
 
     @Test
     void slotAlreadyStarted() throws Exception {
-        when(mockBookingCommandFactory.createFrom(SLOT_ID_1, USER_ID_1))
-                .thenReturn(CREATE_BOOKING_COMMAND);
-        when(mockBookingManagerComponent.book(CREATE_BOOKING_COMMAND))
+        when(mockCreateBookingUseCase.book(CREATE_BOOKING_COMMAND))
                 .thenThrow(new SlotNotOpenException(SLOT_ID_1));
 
         String createUrl = String.format(CREATE_BOOKING_URL_TEMPLATE, ROOM_ID, SLOT_ID_1);
@@ -209,9 +210,7 @@ class BookingControllerRestTest {
 
     @Test
     void wrongBookingUser() throws Exception {
-        when(mockBookingCommandFactory.createFrom(SLOT_ID_1, USER_ID_1))
-                .thenReturn(CREATE_BOOKING_COMMAND);
-        when(mockBookingManagerComponent.book(CREATE_BOOKING_COMMAND))
+        when(mockCreateBookingUseCase.book(CREATE_BOOKING_COMMAND))
                 .thenThrow(new WrongBookingUserException(USER_ID_1, USER_ID_2, BOOKING_ID_1));
 
         String createUrl = String.format(CREATE_BOOKING_URL_TEMPLATE, ROOM_ID, SLOT_ID_1);
