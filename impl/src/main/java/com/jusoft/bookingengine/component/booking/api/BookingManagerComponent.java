@@ -12,6 +12,8 @@ public interface BookingManagerComponent {
 
     BookingView find(long bookingId);
 
+    BookingView find(long userId, long bookingId);
+
     List<BookingView> findAllBy(long userId);
 
     List<BookingView> findBookingsUntilFor(ZonedDateTime endTime, Set<Long> users);
