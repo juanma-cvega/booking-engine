@@ -27,6 +27,7 @@ public class GlobalExceptionHandler {
     public ProblemDetail handleRoomNotFoundException(RoomNotFoundException ex) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
     }
+
     @ExceptionHandler(BuildingNotFoundException.class)
     public ProblemDetail handleBuildingNotFoundException(BuildingNotFoundException ex) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());

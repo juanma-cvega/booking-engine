@@ -1,6 +1,5 @@
 package com.jusoft.bookingengine.controller.slot;
 
-import com.jusoft.bookingengine.component.slot.api.SlotView;
 import com.jusoft.bookingengine.controller.slot.api.CreateSlotRequest;
 import com.jusoft.bookingengine.usecase.slot.CreateSlotUseCase;
 import jakarta.validation.Valid;
@@ -16,18 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 class SlotControllerRest {
 
     private final CreateSlotUseCase createSlotUseCase;
-    private final SlotResourceFactory slotResourceFactory;
 
-    SlotControllerRest(
-            CreateSlotUseCase createSlotUseCase, SlotResourceFactory slotResourceFactory) {
+    SlotControllerRest(CreateSlotUseCase createSlotUseCase) {
         this.createSlotUseCase = createSlotUseCase;
-        this.slotResourceFactory = slotResourceFactory;
     }
 
     @PostMapping(consumes = "application/json", produces = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
     public SlotResource create(@Valid @RequestBody CreateSlotRequest request) {
-        SlotView slot = createSlotUseCase.createSlotFor(request.roomId());
-        return slotResourceFactory.createFrom(slot);
+        return SlotResource.from(createSlotUseCase.createSlotFor(request.roomId()));
     }
 }
