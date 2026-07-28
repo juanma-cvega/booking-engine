@@ -35,9 +35,9 @@ public class BookingFixtures {
             new CreateBookingCommand(USER_ID_1, SlotFixtures.SLOT_ID_1);
 
     public static final BookingResource BOOKING_RESOURCE_1 =
-            new BookingResource(BOOKING_ID_1, BOOKING_TIME, SlotFixtures.SLOT_RESOURCE_1);
+            new BookingResource(BOOKING_ID_1, USER_ID_1, BOOKING_TIME, SlotFixtures.SLOT_ID_1);
     public static final BookingResource BOOKING_RESOURCE_2 =
-            new BookingResource(BOOKING_ID_2, BOOKING_TIME, SlotFixtures.SLOT_RESOURCE_1);
+            new BookingResource(BOOKING_ID_2, USER_ID_1, BOOKING_TIME, SlotFixtures.SLOT_ID_2);
     public static final BookingResources BOOKING_RESOURCES =
             new BookingResources(asList(BOOKING_RESOURCE_1, BOOKING_RESOURCE_2));
 

@@ -17,10 +17,6 @@ public class BookingControllerConfig {
             FindBookingUseCase findBookingUseCase,
             GetBookingsUseCase getBookingsUseCase) {
         return new BookingControllerRest(
-                createBookingUseCase,
-                cancelBookingUseCase,
-                findBookingUseCase,
-                getBookingsUseCase,
-                new BookingResourceFactory());
+                createBookingUseCase, cancelBookingUseCase, findBookingUseCase, getBookingsUseCase);
     }
 }

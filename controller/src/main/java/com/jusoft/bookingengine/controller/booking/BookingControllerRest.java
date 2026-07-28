@@ -30,19 +30,16 @@ class BookingControllerRest {
     private final CancelBookingUseCase cancelBookingUseCase;
     private final FindBookingUseCase findBookingUseCase;
     private final GetBookingsUseCase getBookingsUseCase;
-    private final BookingResourceFactory bookingResourceFactory;
 
     BookingControllerRest(
             CreateBookingUseCase createBookingUseCase,
             CancelBookingUseCase cancelBookingUseCase,
             FindBookingUseCase findBookingUseCase,
-            GetBookingsUseCase getBookingsUseCase,
-            BookingResourceFactory bookingResourceFactory) {
+            GetBookingsUseCase getBookingsUseCase) {
         this.createBookingUseCase = createBookingUseCase;
         this.cancelBookingUseCase = cancelBookingUseCase;
         this.findBookingUseCase = findBookingUseCase;
         this.getBookingsUseCase = getBookingsUseCase;
-        this.bookingResourceFactory = bookingResourceFactory;
     }
 
     @PostMapping(
@@ -61,7 +58,7 @@ class BookingControllerRest {
                 command.getUserId());
         BookingView booking =
                 createBookingUseCase.book(new CreateBookingCommand(command.getUserId(), slotId));
-        BookingResource bookingResource = bookingResourceFactory.createFrom(booking);
+        BookingResource bookingResource = BookingResource.from(booking);
         log.info("Create booking request finished: booking={}", bookingResource);
         return bookingResource;
     }
@@ -78,7 +75,7 @@ class BookingControllerRest {
     public BookingResource find(@PathVariable long userId, @PathVariable long bookingId) {
         log.info("Find booking request received: userId={}, bookingId={}", userId, bookingId);
         BookingView booking = findBookingUseCase.find(bookingId);
-        BookingResource bookingResource = bookingResourceFactory.createFrom(booking);
+        BookingResource bookingResource = BookingResource.from(booking);
         log.info("Find booking request finished: booking={}", bookingResource);
         return bookingResource;
     }
@@ -87,7 +84,8 @@ class BookingControllerRest {
     public BookingResources getFor(@PathVariable long userId) {
         log.info("Create booking request received: userId={}", userId);
         List<BookingView> bookings = getBookingsUseCase.getBookingsFor(userId);
-        BookingResources bookingResources = bookingResourceFactory.createFrom(bookings);
+        BookingResources bookingResources =
+                new BookingResources(bookings.stream().map(BookingResource::from).toList());
         log.info(
                 "Create booking request finished: userId={}, bookings={}",
                 userId,

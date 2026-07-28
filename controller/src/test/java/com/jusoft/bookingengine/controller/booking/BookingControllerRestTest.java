@@ -4,8 +4,6 @@ import static com.jusoft.bookingengine.fixtures.BookingFixtures.BOOKINGS;
 import static com.jusoft.bookingengine.fixtures.BookingFixtures.BOOKING_1;
 import static com.jusoft.bookingengine.fixtures.BookingFixtures.BOOKING_ID_1;
 import static com.jusoft.bookingengine.fixtures.BookingFixtures.BOOKING_ID_2;
-import static com.jusoft.bookingengine.fixtures.BookingFixtures.BOOKING_RESOURCES;
-import static com.jusoft.bookingengine.fixtures.BookingFixtures.BOOKING_RESOURCE_1;
 import static com.jusoft.bookingengine.fixtures.BookingFixtures.BOOKING_TIME;
 import static com.jusoft.bookingengine.fixtures.BookingFixtures.CREATE_BOOKING_COMMAND;
 import static com.jusoft.bookingengine.fixtures.BookingFixtures.CREATE_BOOKING_REQUEST;
@@ -13,10 +11,9 @@ import static com.jusoft.bookingengine.fixtures.CommonFixtures.USER_ID_1;
 import static com.jusoft.bookingengine.fixtures.CommonFixtures.USER_ID_2;
 import static com.jusoft.bookingengine.fixtures.RoomFixtures.ROOM_ID;
 import static com.jusoft.bookingengine.fixtures.SlotFixtures.ANOTHER_SLOT_USER;
-import static com.jusoft.bookingengine.fixtures.SlotFixtures.END_TIME;
 import static com.jusoft.bookingengine.fixtures.SlotFixtures.SLOT_ID_1;
+import static com.jusoft.bookingengine.fixtures.SlotFixtures.SLOT_ID_2;
 import static com.jusoft.bookingengine.fixtures.SlotFixtures.SLOT_USER;
-import static com.jusoft.bookingengine.fixtures.SlotFixtures.START_TIME;
 import static com.jusoft.bookingengine.util.HelpUtils.OBJECT_MAPPER;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.Mockito.verify;
@@ -65,8 +62,6 @@ class BookingControllerRestTest {
 
     @Mock private GetBookingsUseCase mockGetBookingsUseCase;
 
-    @Mock private BookingResourceFactory mockBookingResourceFactory;
-
     @InjectMocks private BookingControllerRest bookingControllerRest;
 
     private MockMvc mockMvc;
@@ -82,7 +77,6 @@ class BookingControllerRestTest {
     @Test
     void book() throws Exception {
         when(mockCreateBookingUseCase.book(CREATE_BOOKING_COMMAND)).thenReturn(BOOKING_1);
-        when(mockBookingResourceFactory.createFrom(BOOKING_1)).thenReturn(BOOKING_RESOURCE_1);
 
         String createUrl = String.format(CREATE_BOOKING_URL_TEMPLATE, ROOM_ID, SLOT_ID_1);
         String urlTemplate =
@@ -93,11 +87,9 @@ class BookingControllerRestTest {
                                 .content(OBJECT_MAPPER.writeValueAsString(CREATE_BOOKING_REQUEST)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.bookingId", is((int) BOOKING_ID_1)))
+                .andExpect(jsonPath("$.userId", is(USER_ID_1.intValue())))
                 .andExpect(jsonPath("$.bookingTime", is((int) BOOKING_TIME)))
-                .andExpect(jsonPath("$.slot.slotId", is((int) SLOT_ID_1)))
-                .andExpect(jsonPath("$.slot.roomId", is((int) ROOM_ID)))
-                .andExpect(jsonPath("$.slot.startDate", is((int) START_TIME)))
-                .andExpect(jsonPath("$.slot.endDate", is((int) END_TIME)));
+                .andExpect(jsonPath("$.slotId", is((int) SLOT_ID_1)));
     }
 
     @Test
@@ -114,24 +106,20 @@ class BookingControllerRestTest {
     @Test
     void find() throws Exception {
         when(mockFindBookingUseCase.find(BOOKING_ID_1)).thenReturn(BOOKING_1);
-        when(mockBookingResourceFactory.createFrom(BOOKING_1)).thenReturn(BOOKING_RESOURCE_1);
 
         String findUrl = String.format(BOOKING_URL_TEMPLATE, USER_ID_1, BOOKING_ID_1);
         String urlTemplate = new StringJoiner(FORTHSLASH).add(BOOKINGS_URL).add(findUrl).toString();
         mockMvc.perform(get(urlTemplate).contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.bookingId", is((int) BOOKING_ID_1)))
+                .andExpect(jsonPath("$.userId", is(USER_ID_1.intValue())))
                 .andExpect(jsonPath("$.bookingTime", is((int) BOOKING_TIME)))
-                .andExpect(jsonPath("$.slot.slotId", is((int) SLOT_ID_1)))
-                .andExpect(jsonPath("$.slot.roomId", is((int) ROOM_ID)))
-                .andExpect(jsonPath("$.slot.startDate", is((int) START_TIME)))
-                .andExpect(jsonPath("$.slot.endDate", is((int) END_TIME)));
+                .andExpect(jsonPath("$.slotId", is((int) SLOT_ID_1)));
     }
 
     @Test
     void getFor() throws Exception {
         when(mockGetBookingsUseCase.getBookingsFor(USER_ID_1)).thenReturn(BOOKINGS);
-        when(mockBookingResourceFactory.createFrom(BOOKINGS)).thenReturn(BOOKING_RESOURCES);
 
         String cancelUrl = String.format(GET_FOR_URL_TEMPLATE, USER_ID_1);
         String urlTemplate =
@@ -139,17 +127,13 @@ class BookingControllerRestTest {
         mockMvc.perform(get(urlTemplate).contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.bookings[0].bookingId", is((int) BOOKING_ID_1)))
+                .andExpect(jsonPath("$.bookings[0].userId", is(USER_ID_1.intValue())))
                 .andExpect(jsonPath("$.bookings[0].bookingTime", is((int) BOOKING_TIME)))
-                .andExpect(jsonPath("$.bookings[0].slot.slotId", is((int) SLOT_ID_1)))
-                .andExpect(jsonPath("$.bookings[0].slot.roomId", is((int) ROOM_ID)))
-                .andExpect(jsonPath("$.bookings[0].slot.startDate", is((int) START_TIME)))
-                .andExpect(jsonPath("$.bookings[0].slot.endDate", is((int) END_TIME)))
+                .andExpect(jsonPath("$.bookings[0].slotId", is((int) SLOT_ID_1)))
                 .andExpect(jsonPath("$.bookings[1].bookingId", is((int) BOOKING_ID_2)))
+                .andExpect(jsonPath("$.bookings[1].userId", is(USER_ID_1.intValue())))
                 .andExpect(jsonPath("$.bookings[1].bookingTime", is((int) BOOKING_TIME)))
-                .andExpect(jsonPath("$.bookings[1].slot.slotId", is((int) SLOT_ID_1)))
-                .andExpect(jsonPath("$.bookings[1].slot.roomId", is((int) ROOM_ID)))
-                .andExpect(jsonPath("$.bookings[1].slot.startDate", is((int) START_TIME)))
-                .andExpect(jsonPath("$.bookings[1].slot.endDate", is((int) END_TIME)));
+                .andExpect(jsonPath("$.bookings[1].slotId", is((int) SLOT_ID_2)));
     }
 
     @Test
