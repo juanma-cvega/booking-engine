@@ -53,14 +53,6 @@ class BookingManagerComponentImpl implements BookingManagerComponent {
     }
 
     @Override
-    public BookingView find(long bookingId) {
-        return bookingRepository
-                .find(bookingId)
-                .map(bookingFactory::create)
-                .orElseThrow(() -> new BookingNotFoundException(bookingId));
-    }
-
-    @Override
     public BookingView find(long userId, long bookingId) {
         return bookingRepository
                 .find(bookingId)
