@@ -1,8 +1,10 @@
 package com.jusoft.bookingengine.controller.slot;
 
+import static com.jusoft.bookingengine.util.TimeUtil.getTimeFrom;
 import static org.apache.commons.lang3.builder.ToStringStyle.JSON_STYLE;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.jusoft.bookingengine.component.slot.api.SlotView;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -19,6 +21,14 @@ public class SlotResource {
         this.roomId = roomId;
         this.startDate = startDate;
         this.endDate = endDate;
+    }
+
+    public static SlotResource from(SlotView slot) {
+        return new SlotResource(
+                slot.id(),
+                slot.roomId(),
+                getTimeFrom(slot.openDate().getStartTime()),
+                getTimeFrom(slot.openDate().getEndTime()));
     }
 
     @JsonCreator

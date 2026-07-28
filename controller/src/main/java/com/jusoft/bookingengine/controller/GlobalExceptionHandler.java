@@ -6,6 +6,7 @@ import com.jusoft.bookingengine.component.building.api.BuildingNotFoundException
 import com.jusoft.bookingengine.component.club.api.ClubAuthorizationException;
 import com.jusoft.bookingengine.component.club.api.ClubNotFoundException;
 import com.jusoft.bookingengine.component.club.api.JoinRequestNotFoundException;
+import com.jusoft.bookingengine.component.room.api.RoomNotFoundException;
 import com.jusoft.bookingengine.component.slot.api.SlotAlreadyReservedException;
 import com.jusoft.bookingengine.component.slot.api.SlotNotOpenException;
 import java.time.format.DateTimeParseException;
@@ -19,6 +20,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BookingNotFoundException.class)
     public ProblemDetail handleBookingNotFoundException(BookingNotFoundException ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    @ExceptionHandler(RoomNotFoundException.class)
+    public ProblemDetail handleRoomNotFoundException(RoomNotFoundException ex) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
