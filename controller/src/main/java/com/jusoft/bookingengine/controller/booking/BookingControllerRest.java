@@ -74,7 +74,7 @@ class BookingControllerRest {
     @GetMapping(value = "/user/{userId}/booking/{bookingId}", produces = "application/json")
     public BookingResource find(@PathVariable long userId, @PathVariable long bookingId) {
         log.info("Find booking request received: userId={}, bookingId={}", userId, bookingId);
-        BookingView booking = findBookingUseCase.find(bookingId);
+        BookingView booking = findBookingUseCase.find(userId, bookingId);
         BookingResource bookingResource = BookingResource.from(booking);
         log.info("Find booking request finished: booking={}", bookingResource);
         return bookingResource;

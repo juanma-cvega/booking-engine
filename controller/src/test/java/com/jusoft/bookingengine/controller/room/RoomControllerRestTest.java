@@ -150,6 +150,76 @@ class RoomControllerRestTest {
     }
 
     @Test
+    void createRoomWithMissingSlotDurationFails() throws Exception {
+        CreateRoomRequest requestWithoutSlotDuration =
+                new CreateRoomRequest(
+                        BUILDING_ID, null, MAX_SLOTS, OPEN_TIME_REQUESTS, AVAILABLE_DAYS);
+
+        mockMvc.perform(
+                        post(ROOMS_URL)
+                                .contentType(APPLICATION_JSON)
+                                .content(
+                                        OBJECT_MAPPER.writeValueAsString(
+                                                requestWithoutSlotDuration)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void createRoomWithEmptyOpenTimesFails() throws Exception {
+        CreateRoomRequest requestWithoutOpenTimes =
+                new CreateRoomRequest(
+                        BUILDING_ID,
+                        SLOT_DURATION_IN_MINUTES,
+                        MAX_SLOTS,
+                        List.of(),
+                        AVAILABLE_DAYS);
+
+        mockMvc.perform(
+                        post(ROOMS_URL)
+                                .contentType(APPLICATION_JSON)
+                                .content(OBJECT_MAPPER.writeValueAsString(requestWithoutOpenTimes)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void createRoomWithEmptyAvailableDaysFails() throws Exception {
+        CreateRoomRequest requestWithoutAvailableDays =
+                new CreateRoomRequest(
+                        BUILDING_ID,
+                        SLOT_DURATION_IN_MINUTES,
+                        MAX_SLOTS,
+                        OPEN_TIME_REQUESTS,
+                        List.of());
+
+        mockMvc.perform(
+                        post(ROOMS_URL)
+                                .contentType(APPLICATION_JSON)
+                                .content(
+                                        OBJECT_MAPPER.writeValueAsString(
+                                                requestWithoutAvailableDays)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void createRoomWithNullOpenTimeEndFails() throws Exception {
+        CreateRoomRequest requestWithNullOpenTimeEnd =
+                new CreateRoomRequest(
+                        BUILDING_ID,
+                        SLOT_DURATION_IN_MINUTES,
+                        MAX_SLOTS,
+                        List.of(new OpenTimeRequest("08:00", null)),
+                        AVAILABLE_DAYS);
+
+        mockMvc.perform(
+                        post(ROOMS_URL)
+                                .contentType(APPLICATION_JSON)
+                                .content(
+                                        OBJECT_MAPPER.writeValueAsString(
+                                                requestWithNullOpenTimeEnd)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     void createRoomForUnknownBuildingFails() throws Exception {
         when(mockCreateRoomUseCase.createRoom(CREATE_ROOM_COMMAND))
                 .thenThrow(new BuildingNotFoundException(BUILDING_ID));

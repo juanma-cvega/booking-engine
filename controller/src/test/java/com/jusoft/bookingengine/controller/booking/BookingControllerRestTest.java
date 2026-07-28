@@ -145,7 +145,7 @@ class BookingControllerRestTest {
 
     @Test
     void findBooking() throws Exception {
-        when(mockFindBookingUseCase.find(BOOKING_ID_1)).thenReturn(BOOKING_1);
+        when(mockFindBookingUseCase.find(USER_ID_1, BOOKING_ID_1)).thenReturn(BOOKING_1);
 
         String findUrl = String.format(BOOKING_URL_TEMPLATE, USER_ID_1, BOOKING_ID_1);
         String urlTemplate = new StringJoiner(FORTHSLASH).add(BOOKINGS_URL).add(findUrl).toString();
@@ -191,8 +191,20 @@ class BookingControllerRestTest {
     }
 
     @Test
+    void findBookingForWrongUserFails() throws Exception {
+        doThrow(new WrongBookingUserException(USER_ID_2, USER_ID_1, BOOKING_ID_1))
+                .when(mockFindBookingUseCase)
+                .find(USER_ID_2, BOOKING_ID_1);
+
+        String findUrl = String.format(BOOKING_URL_TEMPLATE, USER_ID_2, BOOKING_ID_1);
+        String urlTemplate = new StringJoiner(FORTHSLASH).add(BOOKINGS_URL).add(findUrl).toString();
+        mockMvc.perform(get(urlTemplate).contentType(APPLICATION_JSON))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
     void findBookingForUnknownBookingFails() throws Exception {
-        when(mockFindBookingUseCase.find(BOOKING_ID_1))
+        when(mockFindBookingUseCase.find(USER_ID_1, BOOKING_ID_1))
                 .thenThrow(new BookingNotFoundException(BOOKING_ID_1));
 
         String findUrl = String.format(BOOKING_URL_TEMPLATE, USER_ID_1, BOOKING_ID_1);
