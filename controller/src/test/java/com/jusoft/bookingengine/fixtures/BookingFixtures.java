@@ -6,7 +6,6 @@ import static java.util.Arrays.asList;
 
 import com.jusoft.bookingengine.component.booking.api.BookingCreatedEvent;
 import com.jusoft.bookingengine.component.booking.api.BookingView;
-import com.jusoft.bookingengine.component.booking.api.CreateBookingCommand;
 import com.jusoft.bookingengine.controller.booking.BookingResources;
 import com.jusoft.bookingengine.controller.booking.api.BookingResource;
 import com.jusoft.bookingengine.util.TimeUtil;
@@ -29,9 +28,6 @@ public class BookingFixtures {
     public static final BookingView BOOKING_2 =
             new BookingView(BOOKING_ID_2, USER_ID_1, BOOKING_TIME_DATE, SlotFixtures.SLOT_ID_2);
     public static final List<BookingView> BOOKINGS = asList(BOOKING_1, BOOKING_2);
-
-    public static final CreateBookingCommand CREATE_BOOKING_COMMAND =
-            new CreateBookingCommand(USER_ID_1, SlotFixtures.SLOT_ID_1);
 
     public static final BookingResource BOOKING_RESOURCE_1 =
             new BookingResource(BOOKING_ID_1, USER_ID_1, BOOKING_TIME, SlotFixtures.SLOT_ID_1);
