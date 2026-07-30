@@ -16,6 +16,19 @@ Manages time slots within a room. A slot represents a bookable unit of time.
 
 The internal `SlotState` interface is package-private. The public `api.SlotState` enum is the view representation — `SlotStateFactory` maps between the two.
 
+## User flow — reserving a slot
+
+Reserving a slot is the user-facing booking action.
+
+1. The reserve use case is the guarded entry point. Its prerequisites — the slot is
+   available and open, the user is a member of the club, the user is authorized for the
+   room — each refuse with a distinct notification.
+2. A successful reservation transitions the slot and publishes an event carrying the
+   slot, the user, and the kind of reservation (person or class).
+
+This component also reacts to a booking cancellation by making the slot available
+again.
+
 ## Events published
 | Event | When |
 |---|---|
