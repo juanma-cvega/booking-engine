@@ -9,7 +9,6 @@ import com.jusoft.bookingengine.component.booking.api.BookingView;
 import com.jusoft.bookingengine.component.booking.api.CreateBookingCommand;
 import com.jusoft.bookingengine.controller.booking.BookingResources;
 import com.jusoft.bookingengine.controller.booking.api.BookingResource;
-import com.jusoft.bookingengine.controller.booking.api.CreateBookingRequest;
 import com.jusoft.bookingengine.util.TimeUtil;
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -41,8 +40,6 @@ public class BookingFixtures {
     public static final BookingResources BOOKING_RESOURCES =
             new BookingResources(asList(BOOKING_RESOURCE_1, BOOKING_RESOURCE_2));
 
-    public static final CreateBookingRequest CREATE_BOOKING_REQUEST =
-            new CreateBookingRequest(USER_ID_1);
     public static final BookingCreatedEvent BOOKING_CREATED_EVENT =
             new BookingCreatedEvent(BOOKING_ID_1, USER_ID_1, SLOT_ID_1);
 }
