@@ -131,10 +131,14 @@ the user.** Proceed only once the loop is clean or the user rules on the leftove
 
 ---
 
-## Step 7 — Update documentation
+## Step 7 — Update the flow documentation
 
-Apply the plan's `COMPONENT.md` additions for the component(s) touched, so the docs match the new
-behaviour.
+Apply the plan's `COMPONENT.md` additions for the component(s) touched, following the
+*Component flow documentation* rules in CLAUDE.md: design level, user-facing commands vs
+reactions to events, events published and reacted to — never class names, never event
+consumers, never gaps. Any change to a user-visible flow, and any flow discovery made
+during the story, lands here in the same change; gaps found become stories via
+`/manage-backlog-item`, attached to the component's epic or a transverse one.
 
 ---
 
