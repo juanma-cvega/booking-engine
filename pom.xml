@@ -47,7 +47,7 @@
     <jacoco-maven-plugin.version>0.8.15</jacoco-maven-plugin.version>
     <spotless-maven-plugin.version>3.9.0</spotless-maven-plugin.version>
     <byte-buddy.version>1.18.11</byte-buddy.version>
-    <archunit.version>1.4.2</archunit.version>
+    <archunit.version>1.5.0</archunit.version>
     <sonar-maven-plugin.version>5.7.0.6970</sonar-maven-plugin.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
