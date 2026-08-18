@@ -70,6 +70,15 @@ jobs:
       source: ${{ steps.filter.outputs.source }}
 
     steps:
+      - name: Harden the runner
+        uses: step-security/harden-runner@05e31511f85b41b11d1cf0ef85d0992719546e2c # v2
+        with:
+          egress-policy: block
+          disable-sudo: true
+          allowed-endpoints: >
+            github.com:443
+            api.github.com:443
+
       # No checkout: the file list comes from the API, so this job never clones the repo.
       - name: Classify the changed paths
         id: filter
