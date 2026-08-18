@@ -71,7 +71,10 @@ existing prerequisites support, or held out of the batch until the gap story is 
 
 For each story:
 
-1. `git worktree add .worktrees/us<ref>-<slug> -b us<ref>-<slug> master`
+1. `git fetch origin` once, then per story
+   `git worktree add .worktrees/us<ref>-<slug> -b us<ref>-<slug> origin/master`.
+   Branch from `origin/master`, never the local `master` ref — the primary checkout is often
+   behind, and a worktree started from a stale base pays for it as conflicts at integration.
 2. Move the story to *In Progress* via `/manage-backlog-item` (the orchestrator owns **all** board
    operations — workers never touch the board).
 3. Spawn a background worker with everything it needs in the prompt:
