@@ -29,7 +29,14 @@ jobs:
     name: Verify CI passed on a Dependabot PR
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      # `contents: write` is what Dependabot reads as "push access"; without it, it refuses the
+      # `@dependabot rebase` command posted below with "only users with push access can use that
+      # command". Scoped to this job alone — the workflow default stays read, and `analyse` and
+      # `merge` do not widen it. The blast radius is bounded by the `master` ruleset, which
+      # requires a reviewed PR and does not list `github-actions` as a bypass actor, and by
+      # `workflows` write being a separate scope that nothing here holds. This job checks out no
+      # code and runs none, so there is no untrusted-execution path to the elevated token.
+      contents: write
       pull-requests: write
     # Cheap pre-filters only: run on a successful CI completion for a same-repo dependabot/*
     # branch. The trust decision — that the PR is genuinely authored by Dependabot — is NOT made
@@ -44,7 +51,7 @@ jobs:
       pr_number: ${{ steps.pr.outputs.number }}
     steps:
       - name: Harden the runner
-        uses: step-security/harden-runner@bf7454d06d71f1098171f2acdf0cd4708d7b5920 # v2
+        uses: step-security/harden-runner@05e31511f85b41b11d1cf0ef85d0992719546e2c # v2
         with:
           egress-policy: block
           disable-sudo: true
@@ -119,7 +126,7 @@ jobs:
       touches_workflows: ${{ steps.review.outputs.touches_workflows }}
     steps:
       - name: Harden the runner
-        uses: step-security/harden-runner@bf7454d06d71f1098171f2acdf0cd4708d7b5920 # v2
+        uses: step-security/harden-runner@05e31511f85b41b11d1cf0ef85d0992719546e2c # v2
         with:
           egress-policy: block
           disable-sudo: true
@@ -300,7 +307,7 @@ jobs:
     environment: dependabot-merge
     steps:
       - name: Harden the runner
-        uses: step-security/harden-runner@bf7454d06d71f1098171f2acdf0cd4708d7b5920 # v2
+        uses: step-security/harden-runner@05e31511f85b41b11d1cf0ef85d0992719546e2c # v2
         with:
           egress-policy: block
           disable-sudo: true
