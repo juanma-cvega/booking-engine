@@ -97,7 +97,7 @@ jobs:
               --jq '.files[].filename')
           fi
           echo "Changed files:"
-          echo "$files" | sed 's/^/  /'
+          echo "$files"
 
           # Allow-list of paths that cannot change compiled output or Sonar findings; grep -v finds
           # anything outside it. Unrecognised paths — pom.xml, impl/**, controller/**, a new module
