@@ -36,12 +36,13 @@ jobs:
       # `workflows` write being a separate scope that nothing here holds. This job checks out no
       # code and runs none, so there is no untrusted-execution path to the elevated token.
       contents: write
-      # Read, not write: this job only lists and inspects pull requests now that it no longer
-      # comments on them. GitHub does not document which permission update-branch requires and the
-      # X-Accepted-GitHub-Permissions header is not returned for the token types available here, so
-      # `read` is the unverified half of this job's permissions — if the call turns out to need
-      # `pull-requests: write`, the update fails and the job goes red rather than failing quietly.
-      pull-requests: read
+      # `pull-requests: write` is required by update-branch — not optional, and not reducible to
+      # `read`. The endpoint answers `X-Accepted-GitHub-Permissions: pull_requests=write`, and a
+      # token holding `contents: write` with only `pull-requests: read` gets 403 "Resource not
+      # accessible by integration". Measured both directions on 2026-08-24 against PR #104.
+      # `contents: write` is still needed alongside it: the REST docs require an app making this
+      # request to also be able to write the head repository's contents.
+      pull-requests: write
     # Cheap pre-filters only: run on a successful CI completion for a same-repo dependabot/*
     # branch. The trust decision — that the PR is genuinely authored by Dependabot — is NOT made
     # here: actor/triggering_actor identify who triggered the run, not who authored the PR, and
