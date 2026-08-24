@@ -50,6 +50,7 @@ jobs:
     outputs:
       pr_number: ${{ steps.pr.outputs.number }}
       is_major: ${{ steps.pr.outputs.is_major }}
+      head_sha: ${{ steps.pr.outputs.head_sha }}
     steps:
       - name: Harden the runner
         uses: step-security/harden-runner@05e31511f85b41b11d1cf0ef85d0992719546e2c # v2
@@ -131,6 +132,7 @@ jobs:
             is_major=false
           fi
           echo "is_major=$is_major" >> "$GITHUB_OUTPUT"
+          echo "head_sha=$head" >> "$GITHUB_OUTPUT"
 
           echo "Resolved PR #$pr (up to date with master)"
           echo "number=$pr" >> "$GITHUB_OUTPUT"
@@ -203,10 +205,34 @@ jobs:
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ needs.guard.outputs.pr_number }}
+          HEAD_SHA: ${{ needs.guard.outputs.head_sha }}
           # Suppress the CLI's telemetry/error reporting so no egress to non-Anthropic hosts
           # is needed from this token-bearing job.
           CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: "1"
         run: |
+          # A FAIL sticks to the commit it was made on. The verdict is a non-deterministic
+          # judgement and every CI completion re-enters this workflow, so without this each run is
+          # another attempt and the merge job takes the first PASS — best-of-N on a safety gate.
+          # On PR #58 the same major bump returned FAIL three times and PASS on the fourth, which
+          # merged it. Re-judging a *new* commit is correct and still happens; re-judging the same
+          # one until it agrees is not.
+          #
+          # A read failure here leaves `prior` empty and the analysis simply runs, so a broken API
+          # call cannot silently pin a PR to FAIL for ever.
+          prior=$(gh pr view "$PR_NUMBER" --repo "${{ github.repository }}" --json comments \
+            --jq "[.comments[] | select(.body | contains(\"<!-- auto-merge:verdict:$HEAD_SHA:FAIL -->\"))] | length") || prior=""
+          if [ "${prior:-0}" -gt 0 ]; then
+            echo "Analysis already returned FAIL for $HEAD_SHA; keeping that verdict."
+            {
+              echo "verdict=FAIL"
+              echo "touches_workflows=false"
+              # The verdict is already on the PR; posting it again on every CI completion for the
+              # same commit is what produced the run of identical comments on #58.
+              echo "already_judged=true"
+            } >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
           gh pr diff "$PR_NUMBER" --repo "${{ github.repository }}" > pr.diff
           gh pr view "$PR_NUMBER" --repo "${{ github.repository }}" \
             --json title,body --jq '"# " + .title + "\n\n" + (.body // "")' > pr.md
@@ -266,13 +292,14 @@ jobs:
           echo "verdict=$verdict" >> "$GITHUB_OUTPUT"
 
       - name: Post analysis as a PR comment
-        if: always()
+        if: always() && steps.review.outputs.already_judged != 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ needs.guard.outputs.pr_number }}
           VERDICT: ${{ steps.review.outputs.verdict }}
           TOUCHES_WORKFLOWS: ${{ steps.review.outputs.touches_workflows }}
           IS_MAJOR: ${{ needs.guard.outputs.is_major }}
+          HEAD_SHA: ${{ needs.guard.outputs.head_sha }}
         run: |
           verdict="${VERDICT:-FAIL}"
           if [ "$verdict" = "PASS" ]; then
@@ -282,6 +309,9 @@ jobs:
           fi
 
           {
+            # Machine-readable record of this verdict against the commit it was made on. The run
+            # above reads it back to keep a FAIL from being re-rolled into a PASS.
+            echo "<!-- auto-merge:verdict:${HEAD_SHA}:${verdict} -->"
             echo "$flag"
             echo
             if [ "$verdict" = "PASS" ] && { [ "$IS_MAJOR" = "true" ] || [ "$TOUCHES_WORKFLOWS" = "true" ]; }; then
