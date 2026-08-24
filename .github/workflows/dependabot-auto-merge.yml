@@ -29,15 +29,19 @@ jobs:
     name: Verify CI passed on a Dependabot PR
     runs-on: ubuntu-latest
     permissions:
-      # `contents: write` is what Dependabot reads as "push access"; without it, it refuses the
-      # `@dependabot rebase` command posted below with "only users with push access can use that
-      # command". Scoped to this job alone — the workflow default stays read, and `analyse` and
-      # `merge` do not widen it. The blast radius is bounded by the `master` ruleset, which
+      # `contents: write` authorises the update-branch call below, which pushes the base's commits
+      # onto the PR head. Scoped to this job alone — the workflow default stays read, and `analyse`
+      # and `merge` do not widen it. The blast radius is bounded by the `master` ruleset, which
       # requires a reviewed PR and does not list `github-actions` as a bypass actor, and by
       # `workflows` write being a separate scope that nothing here holds. This job checks out no
       # code and runs none, so there is no untrusted-execution path to the elevated token.
       contents: write
-      pull-requests: write
+      # Read, not write: this job only lists and inspects pull requests now that it no longer
+      # comments on them. GitHub does not document which permission update-branch requires and the
+      # X-Accepted-GitHub-Permissions header is not returned for the token types available here, so
+      # `read` is the unverified half of this job's permissions — if the call turns out to need
+      # `pull-requests: write`, the update fails and the job goes red rather than failing quietly.
+      pull-requests: read
     # Cheap pre-filters only: run on a successful CI completion for a same-repo dependabot/*
     # branch. The trust decision — that the PR is genuinely authored by Dependabot — is NOT made
     # here: actor/triggering_actor identify who triggered the run, not who authored the PR, and
