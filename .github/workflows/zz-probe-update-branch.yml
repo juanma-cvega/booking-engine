@@ -1,0 +1,45 @@
+name: Probe update-branch permissions
+
+# Throwaway. Determines whether a workflow GITHUB_TOKEN with the guard job's exact permissions
+# can call the update-branch API. Delete with the branch once it has reported.
+on:
+  push:
+    branches:
+      - test-update-branch
+
+permissions: {}
+
+jobs:
+  probe:
+    name: Call update-branch as the guard would
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: read
+
+    steps:
+      - name: Call update-branch
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          set -uo pipefail
+
+          pr=$(gh pr list --repo "$REPO" --head "$BRANCH" --state open --json number --jq '.[0].number')
+          head=$(gh pr view "$pr" --repo "$REPO" --json headRefOid --jq '.headRefOid')
+          behind=$(gh api "repos/$REPO/compare/master...$head" --jq '.behind_by')
+          echo "PR #$pr, head $head, behind_by $behind"
+
+          echo "--- PUT /pulls/$pr/update-branch ---"
+          gh api --method PUT "repos/$REPO/pulls/$pr/update-branch" \
+            --field expected_head_sha="$head" -i > resp.txt 2>&1 || true
+          grep -iE '^HTTP/|^x-accepted-github-permissions|"message"' resp.txt || cat resp.txt
+
+          status=$(grep -oiE '^HTTP/[0-9.]+ [0-9]+' resp.txt | head -1 | awk '{print $2}')
+          echo "=== VERDICT ==="
+          if [ "${status:-000}" = "202" ]; then
+            echo "PASS: contents:write + pull-requests:read is sufficient for update-branch."
+          else
+            echo "FAIL: update-branch returned ${status:-unknown} with contents:write + pull-requests:read."
+          fi
