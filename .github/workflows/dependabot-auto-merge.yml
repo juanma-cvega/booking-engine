@@ -193,7 +193,7 @@ jobs:
           # is third-party text that reaches the prompt deciding auto-merge. Keeping it in a
           # separate, explicitly-labelled file is what lets the prompt below frame it as data.
           gh pr view "$PR_NUMBER" --repo "${{ github.repository }}" \
-            --jq '.body // ""' --json body > pr-body-untrusted.md
+            --json body --jq '.body // ""' > pr-body-untrusted.md
 
           # A PR that touches .github/workflows/** is still analysed, but never auto-merged:
           # the merge App is deliberately not granted `workflows` write, so changes to the
