@@ -116,7 +116,10 @@ jobs:
           # merged it 23 seconds later. Dependabot records the semver level in its own commit
           # metadata, so gate on that rather than on an opinion. Unreadable metadata counts as
           # major, because the safe direction here is to withhold the merge.
-          commits=$(gh api "repos/${{ github.repository }}/pulls/$pr/commits" \
+          # --paginate: without it only the first page (30 commits) is read, and a major trailer
+          # past that point would come back as `is_major=false` — silently failing open, which is
+          # the one direction this gate must never fail in.
+          commits=$(gh api --paginate "repos/${{ github.repository }}/pulls/$pr/commits" \
             --jq '.[].commit.message' 2>/dev/null) || commits=""
           if [ -z "$commits" ]; then
             echo "Could not read commit metadata for PR #$pr; treating it as a major update."
@@ -281,16 +284,22 @@ jobs:
           {
             echo "$flag"
             echo
-            if [ "$verdict" = "PASS" ] && [ "$IS_MAJOR" = "true" ]; then
-              echo "> ⚠️ **Manual merge required — major version update.** Dependabot's own commit"
-              echo "> metadata reports \`version-update:semver-major\` for at least one dependency"
-              echo "> in this PR, so it is **never** auto-merged whatever the analysis concludes."
-              echo "> A major bump is the case most likely to break the build in ways a diff does"
-              echo "> not show. Review it by hand."
-            elif [ "$verdict" = "PASS" ] && [ "$TOUCHES_WORKFLOWS" = "true" ]; then
-              echo "> ⚠️ **Manual merge required.** This PR modifies \`.github/workflows/**\`, so"
-              echo "> it is intentionally **not** auto-merged. Review the analysis below and merge"
-              echo "> it by hand."
+            if [ "$verdict" = "PASS" ] && { [ "$IS_MAJOR" = "true" ] || [ "$TOUCHES_WORKFLOWS" = "true" ]; }; then
+              # Both can hold at once — a github-actions major bump lives in the workflow YAML it
+              # updates — so report every reason rather than only the first one matched.
+              echo "> ⚠️ **Manual merge required.** This PR is intentionally **not** auto-merged,"
+              echo "> whatever the analysis concludes:"
+              echo ">"
+              if [ "$IS_MAJOR" = "true" ]; then
+                echo "> - Dependabot's commit metadata reports \`version-update:semver-major\` for at"
+                echo ">   least one dependency. A major bump is the case most likely to break the"
+                echo ">   build in ways the diff does not show."
+              fi
+              if [ "$TOUCHES_WORKFLOWS" = "true" ]; then
+                echo "> - It modifies \`.github/workflows/**\`, the secret-bearing pipeline."
+              fi
+              echo ">"
+              echo "> Review the analysis below and merge it by hand."
             elif [ "$verdict" = "PASS" ]; then
               echo "> ✅ CI and analysis both passed — this PR will be **auto-merged**."
             else
