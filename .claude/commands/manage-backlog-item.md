@@ -57,6 +57,11 @@ caller (e.g. `/start-story`) presents them and the user chooses. Do not pick one
 
 Use when no existing story authorises the work (CLAUDE.md requires every change to map to a story).
 
+Also use it for **flow gaps** discovered while developing or documenting — an unwired
+reaction, a missing guard, a missing entry point. Per CLAUDE.md's component flow
+documentation rules they are recorded as stories, attached to the component's epic or a
+transverse one (e.g. security) — never as notes in `COMPONENT.md`.
+
 ### Step 1 — Draft the story
 Gather the intent from the user, then write it well:
 
