@@ -50,7 +50,7 @@ public class CancelBookingUseCaseStepDefinitions extends AbstractUseCaseStepDefi
     @Then("^the user (.*) should not see that booking in his list$")
     public void the_user_should_not_see_that_booking_in_his_list(Long userId) {
         assertThatExceptionOfType(BookingNotFoundException.class)
-                .isThrownBy(() -> bookingManagerComponent.find(bookingCreated.id()));
+                .isThrownBy(() -> bookingManagerComponent.find(userId, bookingCreated.id()));
     }
 
     @Then("^the user should be notified the booking is already started$")

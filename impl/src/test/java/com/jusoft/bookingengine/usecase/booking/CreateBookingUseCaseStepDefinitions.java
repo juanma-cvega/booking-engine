@@ -32,7 +32,7 @@ public class CreateBookingUseCaseStepDefinitions extends AbstractUseCaseStepDefi
 
     @Then("^the slot should be booked by the user (.*)$")
     public void the_slot_should_be_booked_by_the_user(Long userId) {
-        BookingView booking = bookingManagerComponent.find(bookingCreated.id());
+        BookingView booking = bookingManagerComponent.find(userId, bookingCreated.id());
         assertThat(booking.slotId()).isEqualTo(bookingCreated.slotId());
         assertThat(booking.userId()).isEqualTo(bookingCreated.userId());
         assertThat(booking.bookingTime()).isEqualTo(bookingCreated.bookingTime());

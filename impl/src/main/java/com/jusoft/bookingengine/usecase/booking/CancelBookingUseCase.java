@@ -13,7 +13,7 @@ public class CancelBookingUseCase {
     private final SlotManagerComponent slotManagerComponent;
 
     public void cancel(long userId, long bookingId) {
-        BookingView booking = bookingManagerComponent.find(bookingId);
+        BookingView booking = bookingManagerComponent.find(userId, bookingId);
         if (!slotManagerComponent.isSlotOpen(booking.slotId())) {
             throw new SlotNotOpenException(booking.slotId());
         }
