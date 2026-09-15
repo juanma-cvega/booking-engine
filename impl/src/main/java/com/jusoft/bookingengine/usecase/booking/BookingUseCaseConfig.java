@@ -27,4 +27,9 @@ public class BookingUseCaseConfig {
     public GetBookingsUseCase getBookingsUseCase() {
         return new GetBookingsUseCase(bookingManagerComponent);
     }
+
+    @Bean
+    public FindBookingUseCase findBookingUseCase() {
+        return new FindBookingUseCase(bookingManagerComponent);
+    }
 }

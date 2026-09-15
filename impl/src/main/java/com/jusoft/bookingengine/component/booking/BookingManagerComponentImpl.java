@@ -12,6 +12,7 @@ import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
@@ -52,11 +53,22 @@ class BookingManagerComponentImpl implements BookingManagerComponent {
     }
 
     @Override
-    public BookingView find(long bookingId) {
+    public BookingView find(long userId, long bookingId) {
         return bookingRepository
                 .find(bookingId)
+                .map(returnBookingIfOwner(userId))
                 .map(bookingFactory::create)
                 .orElseThrow(() -> new BookingNotFoundException(bookingId));
+    }
+
+    private UnaryOperator<Booking> returnBookingIfOwner(long userId) {
+        return bookingFound -> {
+            if (!bookingFound.isOwner(userId)) {
+                throw new WrongBookingUserException(
+                        userId, bookingFound.getUserId(), bookingFound.getId());
+            }
+            return bookingFound;
+        };
     }
 
     @Override
