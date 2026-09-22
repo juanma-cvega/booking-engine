@@ -10,7 +10,7 @@ public interface BookingManagerComponent {
 
     void cancel(long userId, long bookingId);
 
-    BookingView find(long bookingId);
+    BookingView find(long userId, long bookingId);
 
     List<BookingView> findAllBy(long userId);
 

@@ -102,6 +102,18 @@ class ClubControllerRestTest {
     }
 
     @Test
+    void createClubWithBlankNameFails() throws Exception {
+        mockMvc.perform(
+                        post(CLUBS_URL)
+                                .contentType(APPLICATION_JSON)
+                                .content(
+                                        OBJECT_MAPPER.writeValueAsString(
+                                                new CreateClubRequest(
+                                                        "   ", CLUB_DESCRIPTION, ADMIN_ID))))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     void createClubWithNullAdminIdFails() throws Exception {
         mockMvc.perform(
                         post(CLUBS_URL)
