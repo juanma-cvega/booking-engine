@@ -46,6 +46,7 @@ public class DataHolder {
     public static BookingView bookingCreated;
     public static List<BookingView> bookingsCreated = new ArrayList<>();
     public static List<BookingView> bookingsFetched = new ArrayList<>();
+    public static BookingView bookingFound;
     public static AuctionView auctionCreated;
     public static ClubView clubCreated;
     public static BuildingView buildingCreated;
@@ -83,6 +84,7 @@ public class DataHolder {
         bookingCreated = null;
         bookingsCreated = new ArrayList<>();
         bookingsFetched = new ArrayList<>();
+        bookingFound = null;
         auctionCreated = null;
         clubCreated = null;
         buildingCreated = null;
