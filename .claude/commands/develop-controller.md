@@ -88,3 +88,13 @@ Run, in the `controller` module:
 - `mvn spotless:apply` before presenting.
 
 **Stop. Present the passing tests and the architecture check for final review.**
+
+---
+
+## Step 4 — Update the flow documentation
+
+A controller makes a command user-reachable; a listener wires a reaction. If that
+changes a component's place in the user-visible flow — or exposes that the documented
+flow was wrong or incomplete — update the affected `COMPONENT.md` files in the same
+change, following the *Component flow documentation* rules in CLAUDE.md. Gaps
+discovered become stories via `/manage-backlog-item`, never documentation notes.
