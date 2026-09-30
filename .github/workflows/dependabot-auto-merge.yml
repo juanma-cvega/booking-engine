@@ -29,14 +29,19 @@ jobs:
     name: Verify CI passed on a Dependabot PR
     runs-on: ubuntu-latest
     permissions:
-      # `contents: write` is what Dependabot reads as "push access"; without it, it refuses the
-      # `@dependabot rebase` command posted below with "only users with push access can use that
-      # command". Scoped to this job alone — the workflow default stays read, and `analyse` and
-      # `merge` do not widen it. The blast radius is bounded by the `master` ruleset, which
+      # `contents: write` authorises the update-branch call below, which pushes the base's commits
+      # onto the PR head. Scoped to this job alone — the workflow default stays read, and `analyse`
+      # and `merge` do not widen it. The blast radius is bounded by the `master` ruleset, which
       # requires a reviewed PR and does not list `github-actions` as a bypass actor, and by
       # `workflows` write being a separate scope that nothing here holds. This job checks out no
       # code and runs none, so there is no untrusted-execution path to the elevated token.
       contents: write
+      # `pull-requests: write` is required by update-branch — not optional, and not reducible to
+      # `read`. The endpoint answers `X-Accepted-GitHub-Permissions: pull_requests=write`, and a
+      # token holding `contents: write` with only `pull-requests: read` gets 403 "Resource not
+      # accessible by integration". Measured both directions on 2026-08-24 against PR #104.
+      # `contents: write` is still needed alongside it: the REST docs require an app making this
+      # request to also be able to write the head repository's contents.
       pull-requests: write
     # Cheap pre-filters only: run on a successful CI completion for a same-repo dependabot/*
     # branch. The trust decision — that the PR is genuinely authored by Dependabot — is NOT made
@@ -82,29 +87,36 @@ jobs:
           fi
 
           # A PR behind master must not be analysed or merged: that would merge a combination CI
-          # never tested. Ask Dependabot to rebase rather than only skipping — Dependabot rebases
-          # on its own just for conflicts or a changed manifest, so a PR that is merely behind
-          # (a github-actions update while master moves on Java code) would otherwise sit here
+          # never tested. Bring it up to date rather than only skipping — Dependabot rebases on its
+          # own just for conflicts or a changed manifest, so a PR that is merely behind (a
+          # github-actions update while master moves on Java code) would otherwise sit here
           # forever, never pushed, never re-triggering CI, never re-entering this workflow.
+          #
+          # Do NOT go back to posting `@dependabot rebase` from this job. Dependabot checks the
+          # commenting *account* for collaborator push access, and github-actions[bot] fails that
+          # lookup whatever the token may do — verified on 2026-08-24, when PRs #100 and #102 were
+          # both refused while this job held `contents: write`. update-branch is a plain REST call
+          # authorised against the token's own scopes, which is why it works where the comment
+          # cannot.
           head=$(gh pr view "$pr" --repo "${{ github.repository }}" \
             --json headRefOid --jq '.headRefOid')
           behind=$(gh api "repos/${{ github.repository }}/compare/master...$head" --jq '.behind_by')
           if [ "${behind:-0}" -gt 0 ]; then
-            echo "PR #$pr is $behind commit(s) behind master; asking Dependabot to rebase it."
+            echo "PR #$pr is $behind commit(s) behind master; updating its branch."
 
-            # One ask per head SHA. Several CI runs can complete on the same commit, and each
-            # re-enters this guard; the marker keeps that from posting duplicate commands. Once
-            # Dependabot rebases, the head changes and a fresh ask is allowed.
-            marker="<!-- auto-merge:rebase-requested:$head -->"
-            asked=$(gh pr view "$pr" --repo "${{ github.repository }}" \
-              --json comments --jq "[.comments[] | select(.body | contains(\"$marker\"))] | length")
-            if [ "${asked:-0}" -gt 0 ]; then
-              echo "Rebase already requested for $head; not asking again."
-            else
-              gh pr comment "$pr" --repo "${{ github.repository }}" \
-                --body "$marker"$'\n'"@dependabot rebase"
+            # expected_head_sha makes this a compare-and-swap: several CI runs can complete on the
+            # same commit and each re-enters this guard, so a stale caller must not update a head
+            # it never inspected. A mismatch fails the call, which fails the job below.
+            if ! gh api --method PUT \
+              "repos/${{ github.repository }}/pulls/$pr/update-branch" \
+              --field expected_head_sha="$head"; then
+              echo "::error::Could not update PR #$pr onto master. It stays behind and will not" \
+                "be merged; the branch needs updating by hand."
+              exit 1
             fi
 
+            # Merges base into head, so the push that follows re-triggers CI and re-enters this
+            # workflow with the PR up to date. Nothing downstream should run on this pass.
             echo "number=" >> "$GITHUB_OUTPUT"
             exit 0
           fi
