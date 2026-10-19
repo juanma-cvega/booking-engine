@@ -32,7 +32,7 @@
     <commons-lang3.version>3.21.0</commons-lang3.version>
     <maven-surefire-plugin.version>3.6.0</maven-surefire-plugin.version>
     <maven-failsafe-plugin.version>3.6.0</maven-failsafe-plugin.version>
-    <hibernate-validator.version>9.1.4.Final</hibernate-validator.version>
+    <hibernate-validator.version>9.1.5.Final</hibernate-validator.version>
     <json-path.version>3.0.0</json-path.version>
     <logback-classic.version>1.6.5</logback-classic.version>
     <slf4j-api.version>2.0.20</slf4j-api.version>
@@ -46,7 +46,7 @@
     <maven-resources-plugin.version>3.5.0</maven-resources-plugin.version>
     <jacoco-maven-plugin.version>0.8.15</jacoco-maven-plugin.version>
     <spotless-maven-plugin.version>3.10.4</spotless-maven-plugin.version>
-    <byte-buddy.version>1.18.14</byte-buddy.version>
+    <byte-buddy.version>1.18.15</byte-buddy.version>
     <archunit.version>1.5.1</archunit.version>
     <sonar-maven-plugin.version>5.8.0.7211</sonar-maven-plugin.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
