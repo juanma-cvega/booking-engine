@@ -51,7 +51,7 @@ jobs:
       pr_number: ${{ steps.pr.outputs.number }}
     steps:
       - name: Harden the runner
-        uses: step-security/harden-runner@05e31511f85b41b11d1cf0ef85d0992719546e2c # v2
+        uses: step-security/harden-runner@ccd8616d44fd3846e67624a50d5aad6d37bf2d25 # v2
         with:
           egress-policy: block
           disable-sudo: true
@@ -126,7 +126,7 @@ jobs:
       touches_workflows: ${{ steps.review.outputs.touches_workflows }}
     steps:
       - name: Harden the runner
-        uses: step-security/harden-runner@05e31511f85b41b11d1cf0ef85d0992719546e2c # v2
+        uses: step-security/harden-runner@ccd8616d44fd3846e67624a50d5aad6d37bf2d25 # v2
         with:
           egress-policy: block
           disable-sudo: true
@@ -307,7 +307,7 @@ jobs:
     environment: dependabot-merge
     steps:
       - name: Harden the runner
-        uses: step-security/harden-runner@05e31511f85b41b11d1cf0ef85d0992719546e2c # v2
+        uses: step-security/harden-runner@ccd8616d44fd3846e67624a50d5aad6d37bf2d25 # v2
         with:
           egress-policy: block
           disable-sudo: true
@@ -321,7 +321,7 @@ jobs:
         # the numeric App ID. The numeric one is still what the master ruleset's
         # bypass entry matches on, so the two are not interchangeable anywhere.
         id: app-token
-        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
         with:
           client-id: ${{ secrets.MERGE_APP_CLIENT_ID }}
           private-key: ${{ secrets.MERGE_APP_PRIVATE_KEY }}
