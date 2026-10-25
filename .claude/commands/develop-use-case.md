@@ -73,3 +73,16 @@ Write the domain logic that makes the failing tests pass.
 
 Implement exactly what the tests require. No extra fields, methods, or classes beyond
 what is needed to go green.
+
+---
+
+## Step 5 — Update the flow documentation
+
+If the use case added or altered a user-facing command, a reaction to an event, or an
+event a component publishes, update the `COMPONENT.md` of every component touched —
+following the *Component flow documentation* rules in CLAUDE.md (design level; commands
+vs reactions; publishes / reacts-to; never class names, never consumers, never gaps).
+
+Any gap discovered on the way (an unwired reaction, a missing guard, a missing entry
+point) becomes a story via `/manage-backlog-item`, attached to the component's epic or a
+transverse one — never a note in the documentation.
