@@ -17,7 +17,7 @@ class Booking {
 
     private final long slotId;
 
-    boolean isOwner(Long requestUserId) {
+    boolean isOwner(long requestUserId) {
         return requestUserId == userId;
     }
 }
