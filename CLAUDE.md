@@ -180,6 +180,32 @@ New repository methods follow the signature:
   `computeIfPresent` (see `ClassManagerComponentRepositoryInMemory.execute`). Both forms are
   acceptable; reaching for a lock around a single `put` is not required.
 
+### Component flow documentation (COMPONENT.md)
+
+Every component directory carries a `COMPONENT.md`. Besides invariants, it records the
+component's place in the **user-visible flow**, written at design level — it describes
+what the code *should* do, and it is the entry point for anyone, human or LLM, new to
+the component.
+
+- From the user's point of view: which operations are **user-facing commands** (guarded
+  — prerequisites and refusals) and which are **reactions to events** (unguarded — the
+  guarded command that produced the event already validated everything).
+- The events it **publishes** (what they announce and carry, at design level) and the
+  events it **reacts to**, with the reaction. **Never who consumes its events**: events
+  are asynchronous and decoupled, and consumers change without the publisher knowing.
+  Flows are reconstructed by linking documents — the slot document says reserving
+  publishes a slot-reserved event; the booking document says it reacts to a slot
+  reservation by creating the booking.
+- **Never name classes, methods, files, or endpoints** — those go stale first. Lean on
+  the naming conventions to point at code ("the use case that creates the booking",
+  "the slot-reserved event").
+- **Never document gaps or wiring status.** A discovered gap becomes a story, attached
+  to the component's epic or a transverse one (e.g. security); left in the document it
+  goes stale and misleads future work.
+
+Any change that alters a flow — and any discovery that reveals one — updates the
+affected `COMPONENT.md` files in the same change.
+
 ---
 
 ## Linting and formatting
@@ -208,4 +234,7 @@ Never present code for review that fails `spotless:check`.
   is non-obvious.
 - Do not write production code before the story's tests exist, fail, and have been validated by
   the user.
+- Do not alter or wire a user-visible flow, and do not leave a flow discovery
+  unrecorded: the affected `COMPONENT.md` files update in the same change, and gaps
+  become stories, never documentation.
 - Do not proceed past a checkpoint without explicit approval.
