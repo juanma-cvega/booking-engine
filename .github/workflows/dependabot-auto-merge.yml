@@ -49,6 +49,7 @@ jobs:
       startsWith(github.event.workflow_run.head_branch, 'dependabot/')
     outputs:
       pr_number: ${{ steps.pr.outputs.number }}
+      is_major: ${{ steps.pr.outputs.is_major }}
     steps:
       - name: Harden the runner
         uses: step-security/harden-runner@05e31511f85b41b11d1cf0ef85d0992719546e2c # v2
@@ -108,6 +109,28 @@ jobs:
             echo "number=" >> "$GITHUB_OUTPUT"
             exit 0
           fi
+
+          # A major bump is analysed but never auto-merged. The verdict that would otherwise gate
+          # it is a non-deterministic judgement re-rolled on every CI completion: on PR #58 the
+          # same major bump returned FAIL three times and PASS on the fourth, and the fourth
+          # merged it 23 seconds later. Dependabot records the semver level in its own commit
+          # metadata, so gate on that rather than on an opinion. Unreadable metadata counts as
+          # major, because the safe direction here is to withhold the merge.
+          # --paginate: without it only the first page (30 commits) is read, and a major trailer
+          # past that point would come back as `is_major=false` — silently failing open, which is
+          # the one direction this gate must never fail in.
+          commits=$(gh api --paginate "repos/${{ github.repository }}/pulls/$pr/commits" \
+            --jq '.[].commit.message' 2>/dev/null) || commits=""
+          if [ -z "$commits" ]; then
+            echo "Could not read commit metadata for PR #$pr; treating it as a major update."
+            is_major=true
+          elif printf '%s\n' "$commits" | grep -q 'update-type: version-update:semver-major'; then
+            echo "PR #$pr contains a major version update; it will not be auto-merged."
+            is_major=true
+          else
+            is_major=false
+          fi
+          echo "is_major=$is_major" >> "$GITHUB_OUTPUT"
 
           echo "Resolved PR #$pr (up to date with master)"
           echo "number=$pr" >> "$GITHUB_OUTPUT"
@@ -249,6 +272,7 @@ jobs:
           PR_NUMBER: ${{ needs.guard.outputs.pr_number }}
           VERDICT: ${{ steps.review.outputs.verdict }}
           TOUCHES_WORKFLOWS: ${{ steps.review.outputs.touches_workflows }}
+          IS_MAJOR: ${{ needs.guard.outputs.is_major }}
         run: |
           verdict="${VERDICT:-FAIL}"
           if [ "$verdict" = "PASS" ]; then
@@ -260,10 +284,22 @@ jobs:
           {
             echo "$flag"
             echo
-            if [ "$verdict" = "PASS" ] && [ "$TOUCHES_WORKFLOWS" = "true" ]; then
-              echo "> ⚠️ **Manual merge required.** This PR modifies \`.github/workflows/**\`, so"
-              echo "> it is intentionally **not** auto-merged. Review the analysis below and merge"
-              echo "> it by hand."
+            if [ "$verdict" = "PASS" ] && { [ "$IS_MAJOR" = "true" ] || [ "$TOUCHES_WORKFLOWS" = "true" ]; }; then
+              # Both can hold at once — a github-actions major bump lives in the workflow YAML it
+              # updates — so report every reason rather than only the first one matched.
+              echo "> ⚠️ **Manual merge required.** This PR is intentionally **not** auto-merged,"
+              echo "> whatever the analysis concludes:"
+              echo ">"
+              if [ "$IS_MAJOR" = "true" ]; then
+                echo "> - Dependabot's commit metadata reports \`version-update:semver-major\` for at"
+                echo ">   least one dependency. A major bump is the case most likely to break the"
+                echo ">   build in ways the diff does not show."
+              fi
+              if [ "$TOUCHES_WORKFLOWS" = "true" ]; then
+                echo "> - It modifies \`.github/workflows/**\`, the secret-bearing pipeline."
+              fi
+              echo ">"
+              echo "> Review the analysis below and merge it by hand."
             elif [ "$verdict" = "PASS" ]; then
               echo "> ✅ CI and analysis both passed — this PR will be **auto-merged**."
             else
@@ -303,7 +339,8 @@ jobs:
       contents: read
     if: >
       needs.analyse.outputs.verdict == 'PASS' &&
-      needs.analyse.outputs.touches_workflows == 'false'
+      needs.analyse.outputs.touches_workflows == 'false' &&
+      needs.guard.outputs.is_major == 'false'
     environment: dependabot-merge
     steps:
       - name: Harden the runner
