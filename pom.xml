@@ -34,7 +34,7 @@
     <maven-failsafe-plugin.version>3.6.1</maven-failsafe-plugin.version>
     <hibernate-validator.version>9.1.6.Final</hibernate-validator.version>
     <json-path.version>3.0.0</json-path.version>
-    <logback-classic.version>1.6.6</logback-classic.version>
+    <logback-classic.version>1.6.8</logback-classic.version>
     <slf4j-api.version>2.0.20</slf4j-api.version>
     <java.version>25</java.version>
     <failsafe-maven-plugin.version>3.1.2</failsafe-maven-plugin.version>
@@ -48,7 +48,7 @@
     <spotless-maven-plugin.version>3.11.0</spotless-maven-plugin.version>
     <byte-buddy.version>1.18.17</byte-buddy.version>
     <archunit.version>1.5.1</archunit.version>
-    <sonar-maven-plugin.version>5.8.0.7211</sonar-maven-plugin.version>
+    <sonar-maven-plugin.version>5.9.0.7382</sonar-maven-plugin.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
     <!-- SonarCloud analysis. Only settings that cannot be inferred belong here: the scanner
